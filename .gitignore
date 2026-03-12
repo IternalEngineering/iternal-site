@@ -1,0 +1,8 @@
+.DS_Store
+*.bak
+.claude/
+.playwright-mcp/
+Iternal Logos/
+iternal-review.html
+node_modules/
+.vercel/

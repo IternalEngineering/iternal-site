@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tech4Good — Case Study — Iternal AI</title>
+<meta name="description" content="How Iternal built an AI platform connecting technology resources with social impact organisations across the UK.">
+<meta name="robots" content="index, follow">
+<meta property="og:title" content="Tech4Good — Case Study — Iternal AI">
+<meta property="og:description" content="How Iternal built an AI platform connecting technology resources with social impact organisations across the UK.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://iternal.life/case-tech4good.html">
+<meta property="og:image" content="https://iternal.life/og-image.png">
+<meta property="og:site_name" content="Iternal AI">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Tech4Good — Case Study — Iternal AI">
+<meta name="twitter:description" content="How Iternal built an AI platform connecting technology resources with social impact organisations across the UK.">
+<meta name="twitter:image" content="https://iternal.life/og-image.png">
+<link rel="canonical" href="https://iternal.life/case-tech4good.html">
+<link rel="icon" href="assets/icon-navy.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;700;900&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = localStorage.getItem('theme');
+  if (!t) t = matchMedia('(prefers-color-scheme:light)').matches ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<style>
+/* ============================================================
+   TOKENS  (shared across all Iternal pages)
+   ============================================================ */
+:root {
+  --tan:    #e26713;
+  --gold:   #e0a614;
+  --navy:   #0a2156;
+  --blue:   #1d6a91;
+  --aqua:   #0bafaa;
+  --dark:   #060f26;
+  --deep:   #07133a;
+  --surf:   #0c1d4e;
+  --surf2:  #0f2258;
+
+  --tan-glow:  rgba(226,103,19,0.18);
+  --gold-glow: rgba(224,166,20,0.12);
+  --aqua-glow: rgba(11,175,170,0.12);
+
+  --border:  rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.14);
+
+  --t1:     #ffffff;
+  --t2:     rgba(255,255,255,0.82);
+  --t3:     rgba(255,255,255,0.72);
+  --t4:     rgba(255,255,255,0.62);
+  --t5:     rgba(255,255,255,0.50);
+
+  --text:   rgba(255,255,255,0.82);
+  --muted:  rgba(255,255,255,0.62);
+  --white:  #ffffff;
+
+  --sunrise: linear-gradient(135deg, #e26713 0%, #e0a614 100%);
+  --dawn:    linear-gradient(160deg, #0bafaa 0%, #1d6a91 50%, #0a2156 100%);
+
+  --f:   'Maven Pro', sans-serif;
+  --max: 1160px;
+  --px:  64px;
+}
+
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
+.skip-link { position:absolute; top:-100%; left:16px; background:var(--tan); color:var(--dark); padding:10px 18px; border-radius:3px; font-weight:700; font-size:14px; z-index:999; text-decoration:none; }
+.skip-link:focus { top:12px; }
+:focus-visible { outline:2px solid var(--tan); outline-offset:3px; }
+html { scroll-behavior:smooth; }
+body {
+  background: var(--dark);
+  color: var(--text);
+  font-family: var(--f);
+  overflow-x: hidden;
+  cursor: none;
+}
+a { text-decoration: none; }
+
+/* ── Custom cursor ── */
+#cur {
+  position: fixed; width:10px; height:10px;
+  border-radius:50%; pointer-events:none; z-index:9999;
+  background: var(--tan);
+  transform: translate(-50%,-50%);
+  transition: width .25s, height .25s, background .25s, opacity .25s;
+  mix-blend-mode: screen;
+}
+#cur.big { width:48px; height:48px; background: rgba(226,103,19,0.25); }
+
+/* ============================================================
+   MESH GRADIENT BACKGROUND
+   ============================================================ */
+#mesh {
+  position: fixed; inset:0; z-index:0;
+  pointer-events: none; overflow:hidden;
+}
+.blob {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0;
+  animation: blobFloat linear infinite;
+}
+.blob-1 {
+  width:700px; height:700px;
+  top:-15%; right:-10%;
+  background: radial-gradient(circle, rgba(226,103,19,0.22) 0%, transparent 70%);
+  animation-duration: 18s; animation-delay: 0s; opacity:.50;
+  animation-name: blob1;
+}
+.blob-2 {
+  width:500px; height:500px;
+  top:30%; left:-8%;
+  background: radial-gradient(circle, rgba(224,166,20,0.14) 0%, transparent 70%);
+  animation-duration: 22s; animation-delay: -8s; opacity:.40;
+  animation-name: blob2;
+}
+.blob-3 {
+  width:600px; height:600px;
+  bottom:-10%; right:5%;
+  background: radial-gradient(circle, rgba(11,175,170,0.12) 0%, transparent 70%);
+  animation-duration: 26s; animation-delay: -14s; opacity:.35;
+  animation-name: blob3;
+}
+.blob-4 {
+  width:900px; height:900px;
+  top:10%; left:20%;
+  background: radial-gradient(circle, rgba(29,106,145,0.1) 0%, transparent 65%);
+  animation-duration: 30s; animation-delay: -5s; opacity:.30;
+  animation-name: blob4;
+}
+@keyframes blob1 {
+  0%   { transform: translate(0,0) scale(1); }
+  33%  { transform: translate(-40px, 60px) scale(1.08); }
+  66%  { transform: translate(30px, -40px) scale(0.95); }
+  100% { transform: translate(0,0) scale(1); }
+}
+@keyframes blob2 {
+  0%   { transform: translate(0,0) scale(1); }
+  25%  { transform: translate(60px, -30px) scale(1.1); }
+  75%  { transform: translate(-20px, 50px) scale(0.93); }
+  100% { transform: translate(0,0) scale(1); }
+}
+@keyframes blob3 {
+  0%   { transform: translate(0,0) scale(1); }
+  40%  { transform: translate(-50px, -60px) scale(1.06); }
+  80%  { transform: translate(40px, 30px) scale(0.97); }
+  100% { transform: translate(0,0) scale(1); }
+}
+@keyframes blob4 {
+  0%   { transform: translate(0,0) scale(1) rotate(0deg); }
+  50%  { transform: translate(20px, 20px) scale(1.04) rotate(3deg); }
+  100% { transform: translate(0,0) scale(1) rotate(0deg); }
+}
+
+#grain {
+  position:fixed; inset:0; z-index:1; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");
+  opacity:.45;
+}
+
+nav, main, footer { position:relative; z-index:2; }
+
+/* ============================================================
+   NAV
+   ============================================================ */
+nav {
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  height:68px; display:flex; align-items:center; justify-content:space-between;
+  padding:0 var(--px);
+  background: rgba(6,15,38,0);
+  backdrop-filter:blur(0px);
+  border-bottom:1px solid rgba(255,255,255,0);
+  transition: background .4s, backdrop-filter .4s, border-color .4s;
+}
+nav.scrolled {
+  background: rgba(6,15,38,0.9);
+  backdrop-filter: blur(24px);
+  border-color: var(--border);
+}
+.nav-logo {
+  display:flex; align-items:center;
+}
+.nav-logo img { height:28px; width:auto; }
+.nav-logo .logo-light { display:none; }
+html[data-theme="light"] .nav-logo .logo-dark { display:none; }
+html[data-theme="light"] .nav-logo .logo-light { display:inline; }
+.nav-links {
+  display:flex; align-items:center; gap:36px; list-style:none;
+}
+.nav-links a {
+  font-size:13px; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase;
+  color:var(--white); transition:color .2s;
+  position:relative;
+}
+.nav-links a:hover { color:var(--tan); }
+.nav-links a::after {
+  content:''; position:absolute; bottom:-4px; left:0;
+  width:0; height:1px; background:var(--tan);
+  transition:width .25s;
+}
+.nav-links a:hover::after { width:100%; }
+.nav-links a.active { color:var(--tan); }
+.nav-links a.active::after { width:100%; }
+
+.nav-btn {
+  background: var(--sunrise);
+  color:var(--white); font-family:var(--f);
+  font-size:12px; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase;
+  padding:10px 22px; border-radius:3px;
+  border:none; cursor:none;
+  transition: opacity .2s, transform .15s, box-shadow .2s;
+}
+.nav-btn:hover {
+  opacity:.88; transform:translateY(-1px);
+  box-shadow: 0 8px 28px rgba(226,103,19,.3);
+}
+
+/* ============================================================
+   SHARED
+   ============================================================ */
+.w { max-width:var(--max); margin:0 auto; padding:0 var(--px); }
+.ey {
+  font-size:12px; font-weight:700;
+  letter-spacing:.18em; text-transform:uppercase;
+  color:var(--aqua);
+  display:flex; align-items:center; gap:12px;
+}
+.ey::before { content:''; width:18px; height:1px; background:var(--aqua); display:block; }
+
+.sec-h {
+  font-size:clamp(38px, 4.5vw, 58px);
+  font-weight:900; line-height:1.04; letter-spacing:-.025em;
+  color:var(--t1);
+}
+.sec-h em {
+  font-style: normal;
+  background:var(--sunrise);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* ============================================================
+   CASE STUDY PAGE — HERO
+   ============================================================ */
+.cs-hero {
+  padding:180px 0 80px;
+  border-bottom:1px solid var(--border);
+}
+.cs-back {
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:12px; font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--t4);
+  margin-bottom:40px; transition:color .2s;
+}
+.cs-back:hover { color:var(--tan); }
+.cs-back svg { transform:rotate(180deg); }
+.cs-sector {
+  font-size:12px; font-weight:700; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--tan);
+  margin-bottom:16px;
+}
+.cs-h1 {
+  font-size:clamp(42px, 6vw, 72px);
+  font-weight:900; line-height:.97; letter-spacing:-.03em;
+  color:var(--t1); margin-bottom:28px;
+}
+.cs-h1 em {
+  font-style:normal;
+  background:var(--sunrise);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.cs-intro {
+  font-size:clamp(17px, 1.8vw, 21px); font-weight:400;
+  color:var(--t2); max-width:640px; line-height:1.7;
+}
+
+/* ============================================================
+   CASE STUDY — IMAGE PLACEHOLDER
+   ============================================================ */
+.cs-img-section { padding:80px 0; }
+.cs-ph {
+  width:100%; aspect-ratio:16/8; background:var(--surf);
+  border:1px solid var(--border); border-radius:4px;
+  position:relative; overflow:hidden;
+  display:flex; align-items:center; justify-content:center;
+}
+.cs-ph-hatch {
+  position:absolute; inset:0;
+  background:repeating-linear-gradient(
+    -45deg, transparent, transparent 8px,
+    rgba(255,255,255,0.015) 8px, rgba(255,255,255,0.015) 9px
+  );
+}
+.cs-ph-lbl {
+  font-size:14px; font-weight:700; color:var(--t4);
+  letter-spacing:.06em; text-transform:uppercase;
+  position:relative; z-index:1;
+}
+
+/* ============================================================
+   CASE STUDY — DETAILS GRID
+   ============================================================ */
+.cs-details { padding:0 0 100px; }
+.cs-grid {
+  display:grid; grid-template-columns:1fr 2fr; gap:80px;
+  align-items:start;
+}
+.cs-meta-group { margin-bottom:36px; }
+.cs-meta-label {
+  font-size:11px; font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--t4);
+  margin-bottom:8px;
+}
+.cs-meta-value {
+  font-size:16px; font-weight:500; color:var(--t1); line-height:1.5;
+}
+.cs-body h2 {
+  font-size:clamp(28px, 3vw, 38px); font-weight:900;
+  color:var(--t1); margin-bottom:24px; line-height:1.1;
+  letter-spacing:-.02em;
+}
+.cs-body p {
+  font-size:17px; font-weight:400; line-height:1.78;
+  color:var(--t2); margin-bottom:22px;
+}
+.cs-body p:last-child { margin-bottom:0; }
+.cs-body strong { color:var(--white); font-weight:700; }
+
+.cs-highlights {
+  margin-top:48px; display:grid; grid-template-columns:repeat(3,1fr); gap:2px;
+}
+.cs-hl {
+  padding:32px 28px; background:var(--deep);
+  border:1px solid var(--border); text-align:center;
+}
+.cs-hl-val {
+  font-size:32px; font-weight:900; color:var(--tan);
+  margin-bottom:6px; letter-spacing:-.02em;
+}
+.cs-hl-lbl {
+  font-size:13px; font-weight:500; color:var(--t3);
+}
+
+/* ============================================================
+   CLOSING CTA
+   ============================================================ */
+.closing {
+  padding:140px 0; text-align:center;
+  background:rgba(7,19,58,.5);
+  border-top:1px solid var(--border);
+}
+.closing-h {
+  font-size:clamp(36px, 5vw, 64px);
+  font-weight:900; line-height:.97; letter-spacing:-.03em;
+  max-width:760px; margin:0 auto 34px; color:var(--t1);
+}
+.closing-h em {
+  font-style:normal;
+  background:var(--sunrise);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.closing-sub {
+  font-size:18px; font-weight:400; color:var(--t2);
+  max-width:460px; margin:0 auto 52px; line-height:1.65;
+}
+.btn-sun {
+  display:inline-flex; align-items:center; gap:12px;
+  background:var(--sunrise); color:var(--white);
+  font-family:var(--f); font-size:14px; font-weight:700;
+  letter-spacing:.04em; padding:16px 32px; border-radius:3px;
+  border:none; cursor:none; white-space:nowrap;
+  transition: transform .15s, box-shadow .25s, opacity .2s;
+}
+.btn-sun:hover {
+  transform:translateY(-2px);
+  box-shadow: 0 14px 44px rgba(226,103,19,.38);
+}
+.btn-sun svg { transition:transform .2s; }
+.btn-sun:hover svg { transform:translateX(4px); }
+
+.btn-line {
+  display:inline-flex; align-items:center; gap:10px;
+  color:var(--t4);
+  font-family:var(--f); font-size:13px; font-weight:700;
+  letter-spacing:.08em; text-transform:uppercase;
+  padding:14px 24px;
+  border-bottom:1px solid rgba(255,255,255,.18);
+  cursor:none; white-space:nowrap;
+  transition:color .2s, border-color .2s;
+}
+.btn-line:hover { color:var(--white); border-color:var(--tan); }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  border-top:1px solid var(--border);
+  padding:60px var(--px);
+  background:rgba(6,15,38,.6);
+}
+.footer-in {
+  max-width:var(--max); margin:0 auto;
+  display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:60px;
+}
+.f-logo {
+  margin-bottom:16px;
+}
+.f-logo img { height:24px; width:auto; }
+.f-logo .logo-light { display:none; }
+html[data-theme="light"] .f-logo .logo-dark { display:none; }
+html[data-theme="light"] .f-logo .logo-light { display:inline; }
+.f-desc { font-size:14px; color:var(--t3); line-height:1.75; max-width:270px; }
+.f-col-lbl {
+  font-size:11px; font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--t4);
+  margin-bottom:18px; display:block;
+}
+.f-links { list-style:none; display:flex; flex-direction:column; gap:12px; }
+.f-links a {
+  font-size:15px; font-weight:500; color:var(--t3);
+  transition:color .2s;
+}
+.f-links a:hover { color:var(--tan); }
+.f-bot {
+  max-width:var(--max); margin:40px auto 0;
+  padding-top:28px; border-top:1px solid var(--border);
+  display:flex; justify-content:space-between; align-items:center;
+}
+.f-copy { font-size:13px; color:var(--t4); }
+.f-built { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--t5); }
+
+/* ============================================================
+   SCROLL REVEAL
+   ============================================================ */
+.rv { opacity:0; transform:translateY(22px); transition:opacity .65s ease, transform .65s ease; }
+.rv-left { opacity:0; transform:translateX(-30px); transition:opacity .7s ease, transform .7s ease; }
+.rv-right { opacity:0; transform:translateX(30px); transition:opacity .7s ease, transform .7s ease; }
+.rv-scale { opacity:0; transform:scale(0.92); transition:opacity .7s ease, transform .7s ease; }
+.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; transform:translate(0) scale(1); }
+.d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; }
+.d3 { transition-delay:.3s; } .d4 { transition-delay:.4s; }
+
+/* ── Hamburger button ── */
+.nav-hamburger {
+  display:none; flex-direction:column; justify-content:center;
+  gap:5px; width:32px; height:32px;
+  background:none; border:none; cursor:none; z-index:201; padding:4px;
+}
+.nav-hamburger span {
+  display:block; width:100%; height:2px;
+  background:var(--white); border-radius:2px;
+  transition:transform .3s, opacity .3s;
+}
+.nav-hamburger.open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity:0; }
+.nav-hamburger.open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+
+/* ── Mobile nav overlay ── */
+.mobile-nav {
+  display:none; position:fixed; inset:0; top:68px; z-index:99;
+  background:rgba(6,15,38,0.97); backdrop-filter:blur(24px);
+  flex-direction:column; align-items:center; justify-content:center; gap:32px;
+  opacity:0; transition:opacity .3s;
+}
+.mobile-nav.open { display:flex; opacity:1; }
+.mobile-nav a {
+  font-size:20px; font-weight:700; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--white); transition:color .2s;
+}
+.mobile-nav a:hover, .mobile-nav a.active { color:var(--tan); }
+.mobile-nav .mob-cta {
+  margin-top:16px; background:var(--sunrise); color:var(--white);
+  font-size:14px; font-weight:700; letter-spacing:.04em;
+  padding:14px 28px; border-radius:3px;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:1024px) {
+  :root { --px:32px; }
+  .cs-grid { grid-template-columns:1fr; gap:48px; }
+  .cs-highlights { grid-template-columns:repeat(3,1fr); }
+  .footer-in { grid-template-columns:1fr 1fr; }
+}
+@media (max-width:900px) {
+  :root { --px:20px; }
+  nav { padding:0 20px; }
+  .nav-links { display:none; }
+  .nav-btn { display:none; }
+  .nav-hamburger { display:flex; }
+  .cs-highlights { grid-template-columns:1fr; }
+  .footer-in { grid-template-columns:1fr; gap:36px; }
+  .f-bot { flex-direction:column; gap:10px; }
+  body { cursor:auto; }
+  #cur { display:none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .blob-1,.blob-2,.blob-3,.blob-4 { animation:none !important; }
+  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
+}
+
+/* ============================================================
+   LIGHT THEME
+   ============================================================ */
+html[data-theme="light"] {
+  --dark:   #f4f1ec;
+  --deep:   #eae6df;
+  --surf:   rgba(10,33,86,0.04);
+  --surf2:  rgba(10,33,86,0.06);
+  --t1:     #0a2156;
+  --t2:     rgba(10,33,86,0.78);
+  --t3:     rgba(10,33,86,0.55);
+  --t4:     rgba(10,33,86,0.40);
+  --t5:     rgba(10,33,86,0.28);
+  --text:   rgba(10,33,86,0.78);
+  --muted:  rgba(10,33,86,0.40);
+  --white:  #0a2156;
+  --border: rgba(10,33,86,0.08);
+  --border2:rgba(10,33,86,0.14);
+  --tan-glow:  rgba(226,103,19,0.10);
+  --gold-glow: rgba(224,166,20,0.06);
+  --aqua-glow: rgba(11,175,170,0.06);
+}
+html[data-theme="light"] body { transition:background-color .3s, color .3s; }
+html[data-theme="light"] #cur { mix-blend-mode:multiply; }
+html[data-theme="light"] .blob { filter:blur(100px); }
+html[data-theme="light"] .blob-1 { background:radial-gradient(circle,rgba(226,103,19,0.10) 0%,transparent 70%); opacity:.70; }
+html[data-theme="light"] .blob-2 { background:radial-gradient(circle,rgba(224,166,20,0.08) 0%,transparent 70%); opacity:.60; }
+html[data-theme="light"] .blob-3 { background:radial-gradient(circle,rgba(11,175,170,0.07) 0%,transparent 70%); opacity:.50; }
+html[data-theme="light"] .blob-4 { background:radial-gradient(circle,rgba(29,106,145,0.05) 0%,transparent 65%); opacity:.40; }
+html[data-theme="light"] #grain { opacity:.20; }
+html[data-theme="light"] nav { border-bottom-color:rgba(10,33,86,0); }
+html[data-theme="light"] nav.scrolled { background:rgba(244,241,236,0.88); border-color:var(--border); }
+html[data-theme="light"] .btn-line { border-bottom-color:rgba(10,33,86,0.18); }
+html[data-theme="light"] .nav-btn { color:#ffffff; }
+html[data-theme="light"] .btn-sun { color:#ffffff; }
+html[data-theme="light"] .mobile-nav .mob-cta { color:#ffffff; }
+html[data-theme="light"] .mobile-nav { background:rgba(244,241,236,0.97); }
+html[data-theme="light"] footer { background:rgba(244,241,236,0.6); }
+html[data-theme="light"] .cs-ph-hatch { background:repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(10,33,86,0.02) 8px, rgba(10,33,86,0.02) 9px); }
+html[data-theme="light"] .closing { background:rgba(10,33,86,0.03); }
+
+/* Theme toggle */
+.theme-toggle {
+  background:none; border:none; cursor:none;
+  padding:6px; display:flex; align-items:center; justify-content:center;
+  color:var(--white); transition:color .2s;
+}
+.theme-toggle:hover { color:var(--tan); }
+.theme-toggle svg { width:20px; height:20px; }
+html[data-theme="dark"] .icon-sun { display:none; }
+html[data-theme="light"] .icon-moon { display:none; }
+@media (max-width:900px) {
+  .theme-toggle { color:var(--white); position:absolute; right:56px; top:50%; transform:translateY(-50%); }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+
+<!-- ===== MESH + GRAIN ===== -->
+<div id="mesh">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="blob blob-4"></div>
+</div>
+<div id="grain"></div>
+
+<!-- ===== CUSTOM CURSOR ===== -->
+<div id="cur"></div>
+
+<!-- ===== NAV ===== -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo" aria-label="Iternal — home">
+    <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
+    <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#work">Work</a></li>
+    <li><a href="services.html">What We Do</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="insights.html">Insights</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-btn">Book a Call</a>
+  <button class="theme-toggle" aria-label="Toggle light/dark mode">
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  </button>
+  <button class="nav-hamburger" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <a href="index.html">Home</a>
+  <a href="index.html#work">Work</a>
+  <a href="services.html">What We Do</a>
+  <a href="about.html">About</a>
+  <a href="insights.html">Insights</a>
+  <a href="contact.html">Contact</a>
+  <a href="contact.html" class="mob-cta">Book a Call</a>
+</div>
+
+<main id="main">
+
+<!-- ===== HERO ===== -->
+<section class="cs-hero">
+  <div class="w">
+    <a href="index.html#work" class="cs-back rv">
+      <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Back to Work
+    </a>
+    <div class="cs-sector rv d1">Social Impact &middot; AI Platform</div>
+    <h1 class="cs-h1 rv d2">Tech4Good:<br><em>AI for Social Change</em></h1>
+    <p class="cs-intro rv d3">AI-powered platform connecting technology resources and expertise with social impact organisations across the UK, accelerating the reach of good tech.</p>
+  </div>
+</section>
+
+<!-- ===== IMAGE PLACEHOLDER ===== -->
+<section class="cs-img-section">
+  <div class="w">
+    <div class="cs-ph rv-scale">
+      <div class="cs-ph-hatch"></div>
+      <span class="cs-ph-lbl">Screenshot: Tech4Good Platform</span>
+    </div>
+  </div>
+</section>
+
+<!-- ===== DETAILS ===== -->
+<section class="cs-details">
+  <div class="w">
+    <div class="cs-grid">
+      <div class="rv-left">
+        <div class="cs-meta-group">
+          <div class="cs-meta-label">Client</div>
+          <div class="cs-meta-value">Tech4Good</div>
+        </div>
+        <div class="cs-meta-group">
+          <div class="cs-meta-label">Sector</div>
+          <div class="cs-meta-value">Social Impact &middot; AI Platform</div>
+        </div>
+        <div class="cs-meta-group">
+          <div class="cs-meta-label">Delivered</div>
+          <div class="cs-meta-value">Ongoing partnership</div>
+        </div>
+        <div class="cs-meta-group">
+          <div class="cs-meta-label">Status</div>
+          <div class="cs-meta-value">Live: connecting orgs across the UK</div>
+        </div>
+        <div class="cs-meta-group">
+          <div class="cs-meta-label">Stack</div>
+          <div class="cs-meta-value">AI Platform &middot; Matching Engine &middot; Cloud Infrastructure</div>
+        </div>
+      </div>
+      <div class="cs-body rv-right d1">
+        <h2>The Challenge</h2>
+        <p>The UK has no shortage of technology talent or social impact organisations doing vital work. What it lacks is an efficient way to connect the two. Tech4Good needed a platform that could intelligently match technology resources and expertise with the organisations that need them most, at scale, and without the manual overhead that had previously limited their reach.</p>
+
+        <h2>What We Built</h2>
+        <p>Iternal designed and built an AI-powered matching and discovery platform that connects technology providers with social impact organisations across the UK. <strong>The system uses intelligent profiling and semantic matching to surface relevant connections</strong>, replacing what was previously a manual, relationship-driven process with something that scales.</p>
+        <p>The platform handles everything from organisation onboarding and capability profiling to automated matching and recommendation. It's built to grow with the network, improving its recommendations as more organisations join and more successful partnerships are completed.</p>
+
+        <h2>The Outcome</h2>
+        <p>Tech4Good is a flagship example of Iternal's approach to purpose-driven AI, building systems that extend the reach of organisations doing meaningful work, not just optimising commercial operations. <strong>The platform is live and actively connecting technology expertise with social impact organisations</strong> across the UK, accelerating partnerships that would previously have taken months to form.</p>
+      </div>
+    </div>
+
+    <div class="cs-highlights rv d2">
+      <div class="cs-hl">
+        <div class="cs-hl-val">UK-wide</div>
+        <div class="cs-hl-lbl">Connecting orgs across the country</div>
+      </div>
+      <div class="cs-hl">
+        <div class="cs-hl-val">AI-driven</div>
+        <div class="cs-hl-lbl">Intelligent matching and discovery</div>
+      </div>
+      <div class="cs-hl">
+        <div class="cs-hl-val">Scalable</div>
+        <div class="cs-hl-lbl">Growing with the network</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="closing" aria-label="Get started">
+  <div class="w">
+    <h2 class="closing-h rv">Interested in what AI could do for <em>your organisation?</em></h2>
+    <p class="closing-sub rv d1">Discovery calls are 30 minutes, focused and free.</p>
+    <div class="rv-scale d2">
+      <a href="contact.html" class="btn-sun">
+        Book a Discovery Call
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="index.html#work" class="btn-line">See more work</a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-in">
+    <div>
+      <div class="f-logo">
+        <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
+        <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
+      </div>
+      <p class="f-desc">Specialist agentic AI consultancy and product studio. Building the systems that run tomorrow's organisations. Today.</p>
+    </div>
+    <div>
+      <span class="f-col-lbl">Navigation</span>
+      <ul class="f-links">
+        <li><a href="index.html#work">Work</a></li>
+        <li><a href="services.html">What We Do</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="insights.html">Insights</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <span class="f-col-lbl">Get In Touch</span>
+      <ul class="f-links">
+        <li><a href="mailto:hello@iternal.life">hello@iternal.life</a></li>
+        <li><a href="https://iternal.app" target="_blank" rel="noopener noreferrer">iternal.app</a></li>
+        <li><a href="https://linkedin.com/company/iternal" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        <li><a href="contact.html">Book a Call</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="f-bot" style="padding:28px var(--px) 0">
+    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Bristol, UK</span>
+    <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
+  </div>
+</footer>
+
+<script>
+/* ── Custom cursor ── */
+const cur = document.getElementById('cur');
+let mx = 0, my = 0, cx = 0, cy = 0;
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+function moveCur() {
+  cx += (mx - cx) * 0.18; cy += (my - cy) * 0.18;
+  cur.style.left = cx + 'px'; cur.style.top = cy + 'px';
+  requestAnimationFrame(moveCur);
+}
+moveCur();
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => cur.classList.add('big'));
+  el.addEventListener('mouseleave', () => cur.classList.remove('big'));
+});
+
+/* ── Nav scroll ── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ── Mobile nav toggle ── */
+const hamburger = document.querySelector('.nav-hamburger');
+const mobileNav = document.getElementById('mobileNav');
+hamburger.addEventListener('click', () => {
+  const isOpen = hamburger.classList.toggle('open');
+  mobileNav.classList.toggle('open');
+  hamburger.setAttribute('aria-expanded', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && mobileNav.classList.contains('open')){
+    mobileNav.classList.remove('open');
+    hamburger.setAttribute('aria-expanded','false');
+  }
+});
+
+/* ── Theme toggle ── */
+(function(){
+  const toggle = document.querySelector('.theme-toggle');
+  if(toggle){
+    toggle.addEventListener('click', function(){
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+  }
+  matchMedia('(prefers-color-scheme:light)').addEventListener('change', function(e){
+    if(!localStorage.getItem('theme')){
+      document.documentElement.setAttribute('data-theme', e.matches ? 'light' : 'dark');
+    }
+  });
+})();
+
+/* ── Scroll reveal ── */
+const rvEls = document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale');
+const rvObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('on'); rvObs.unobserve(e.target); }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+rvEls.forEach(el => rvObs.observe(el));
+
+/* ── Hero parallax ── */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const mesh = document.getElementById('mesh');
+  if(!mesh) return;
+  let ticking = false;
+  window.addEventListener('scroll', function(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      const sy = window.scrollY;
+      if(sy <= window.innerHeight){
+        mesh.style.transform = 'translateY(' + (sy * -0.08) + 'px)';
+      }
+      ticking = false;
+    });
+  }, {passive: true});
+})();
+</script>
+</body>
+</html>
