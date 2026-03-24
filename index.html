@@ -641,6 +641,19 @@ html[data-theme="light"] .orb-logo { filter:none; }
 }
 .ph-sub { font-size:13px; color:var(--t4); position:relative; z-index:1; text-align:center; padding:0 20px; }
 
+.ph-teaser {
+  background: radial-gradient(ellipse at 30% 50%, rgba(218,145,50,.12) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 60%, rgba(218,145,50,.08) 0%, transparent 50%),
+              var(--surf);
+  border:1px solid rgba(218,145,50,.2);
+}
+.ph-teaser .ph-launch {
+  font-size:clamp(18px,2.5vw,28px); font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--warm);
+  position:relative; z-index:1;
+  text-shadow: 0 0 40px rgba(218,145,50,.3);
+}
+
 .card-badge {
   position:absolute; top:18px; right:18px;
   background:rgba(6,15,38,.88);
@@ -1278,14 +1291,13 @@ html[data-theme="light"] .icon-moon { display:none; }
     <div class="work-feat rv-scale d1">
       <div class="card">
         <div class="card-img xl">
-          <div class="ph"><div class="ph-hatch"></div><span class="ph-tag">Screenshot: Good News London</span><span class="ph-sub">launching May 2026</span></div>
+          <div class="ph ph-teaser"><span class="ph-launch">Coming May 2026</span></div>
           <span class="card-badge">Local Government</span>
         </div>
         <div class="card-body">
           <div class="card-sec"><span class="cdot"></span><span class="csec">Civic AI Platform</span></div>
-          <h3 class="card-h">Good News London: Greater London Authority</h3>
-          <p class="card-p">Pan-London AI platform with the Greater London Authority. Launching May 2026.</p>
-          <a href="case-good-news-london.html" class="card-lnk">Full Case Study <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <h3 class="card-h">Greater London Authority</h3>
+          <p class="card-p">Pan-London AI platform. Launching May 2026.</p>
         </div>
       </div>
       <div class="card">
