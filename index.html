@@ -654,6 +654,11 @@ html[data-theme="light"] .orb-logo { filter:none; }
   text-shadow: 0 0 40px rgba(218,145,50,.3);
 }
 
+.card-screenshot {
+  width:100%; height:100%; object-fit:cover; object-position:top center;
+  position:absolute; inset:0; border-radius:4px;
+}
+
 .card-badge {
   position:absolute; top:18px; right:18px;
   background:rgba(6,15,38,.88);
@@ -1302,7 +1307,7 @@ html[data-theme="light"] .icon-moon { display:none; }
       </div>
       <div class="card">
         <div class="card-img md">
-          <div class="ph"><div class="ph-hatch"></div><span class="ph-tag">Screenshot: CivicNetZero</span><span class="ph-sub">city carbon intelligence</span></div>
+          <img src="assets/screenshot-civicnetzero.png" alt="CivicNetZero platform" class="card-screenshot">
           <span class="card-badge">Civic Innovation</span>
         </div>
         <div class="card-body">
@@ -1316,7 +1321,7 @@ html[data-theme="light"] .icon-moon { display:none; }
 
     <div class="work-3 rv d2" style="margin-top:20px">
       <div class="card">
-        <div class="card-img sm"><div class="ph"><div class="ph-hatch"></div><span class="ph-tag">bPlaced</span></div><span class="card-badge">Welfare</span></div>
+        <div class="card-img sm"><img src="assets/screenshot-bplaced.png" alt="bPlaced platform" class="card-screenshot"><span class="card-badge">Welfare</span></div>
         <div class="card-body">
           <div class="card-sec"><span class="cdot"></span><span class="csec">AI Matching</span></div>
           <h3 class="card-h">bPlaced: Social Care</h3>
@@ -1325,7 +1330,7 @@ html[data-theme="light"] .icon-moon { display:none; }
         </div>
       </div>
       <div class="card">
-        <div class="card-img sm"><div class="ph"><div class="ph-hatch"></div><span class="ph-tag">NHS</span></div><span class="card-badge">Health</span></div>
+        <div class="card-img sm"><img src="assets/screenshot-nhs.png" alt="Bristol Children's Hospital - Digital Diary" class="card-screenshot"><span class="card-badge">Health</span></div>
         <div class="card-body">
           <div class="card-sec"><span class="cdot"></span><span class="csec">MedTech AI</span></div>
           <h3 class="card-h">NHS: Pathway Intelligence</h3>
@@ -1334,7 +1339,7 @@ html[data-theme="light"] .icon-moon { display:none; }
         </div>
       </div>
       <div class="card">
-        <div class="card-img sm"><div class="ph"><div class="ph-hatch"></div><span class="ph-tag">Tech4Good</span></div><span class="card-badge">Social Impact</span></div>
+        <div class="card-img sm"><div class="ph ph-teaser" style="background:linear-gradient(135deg, #00875A 0%, #004D2F 100%);"><span class="ph-launch" style="color:#fff;text-shadow:none;font-size:clamp(14px,2vw,20px);">Tech4Good South West</span></div><span class="card-badge">Social Impact</span></div>
         <div class="card-body">
           <div class="card-sec"><span class="cdot"></span><span class="csec">AI for Social Change</span></div>
           <h3 class="card-h">Tech4Good: AI Platform</h3>
