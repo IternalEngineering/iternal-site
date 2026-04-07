@@ -886,7 +886,7 @@ footer {
 }
 .footer-in {
   max-width:var(--max); margin:0 auto;
-  display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:60px;
+  display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:48px;
 }
 .f-logo {
   margin-bottom:16px;
@@ -1164,6 +1164,7 @@ html[data-theme="light"] .icon-moon { display:none; }
   <ul class="nav-links">
     <li><a href="#work">Work</a></li>
     <li><a href="services.html">What We Do</a></li>
+    <li><a href="services.html#aeo-geo">AEO / GEO</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="insights.html">Insights</a></li>
     <li><a href="contact.html">Contact</a></li>
@@ -1181,6 +1182,7 @@ html[data-theme="light"] .icon-moon { display:none; }
   <a href="index.html" class="active">Home</a>
   <a href="index.html#work">Work</a>
   <a href="services.html">What We Do</a>
+  <a href="services.html#aeo-geo">AEO / GEO</a>
   <a href="about.html">About</a>
   <a href="insights.html">Insights</a>
   <a href="contact.html">Contact</a>
@@ -1195,18 +1197,18 @@ html[data-theme="light"] .icon-moon { display:none; }
   <canvas id="hero-canvas"></canvas>
   <div class="hero-in w">
     <h1 class="hero-h1">
-      <span class="word w-normal" data-i="0">We&nbsp;</span><span class="word w-normal" data-i="1">build&nbsp;</span><span class="word w-normal" data-i="2">Agentic&nbsp;</span><span class="word w-normal" data-i="3">AI</span><br>
-      <span class="word w-dim" data-i="3">that&nbsp;</span><span class="word w-dim" data-i="4">actually</span><br>
-      <span class="word w-grad" data-i="5">works.</span>
+      <span class="word w-normal" data-i="0">We&nbsp;</span><span class="word w-normal" data-i="1">build&nbsp;</span><span class="word w-normal" data-i="2">AI&nbsp;</span><span class="word w-normal" data-i="3">that</span><br>
+      <span class="word w-dim" data-i="4">actually&nbsp;</span><span class="word w-dim" data-i="5">works&nbsp;</span><span class="word w-dim" data-i="6">—&nbsp;</span><span class="word w-dim" data-i="7">for</span><br>
+      <span class="word w-grad" data-i="8">businesses&nbsp;</span><span class="word w-grad" data-i="9">that&nbsp;</span><span class="word w-grad" data-i="10">need&nbsp;</span><span class="word w-grad" data-i="11">it&nbsp;</span><span class="word w-grad" data-i="12">to.</span>
     </h1>
 
     <div class="hero-body">
       <p class="hero-p">
-        Most AI projects stall between proof-of-concept and production. Iternal specialises in the gap, building systems that are <strong>live inside the NHS, the Greater London Authority and civic infrastructure across three continents.</strong>
+        We help SMEs and growing businesses adopt AI without the hype — automating workflows, building custom AI agents, and making sure you show up in AI-generated answers. <strong>The same team that ships AI inside the NHS and the Greater London Authority.</strong>
       </p>
       <div class="hero-actions">
-        <a href="#work" class="btn-sun">
-          See Our Work
+        <a href="#pillars" class="btn-sun">
+          See What We Do
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
         <a href="contact.html" class="btn-line">
@@ -1221,21 +1223,25 @@ html[data-theme="light"] .icon-moon { display:none; }
 
 <!-- ===== CLIENTS ===== -->
 <section id="clients" aria-label="Clients">
-  <p class="cl-label">Trusted by organisations who can't afford to get AI wrong</p>
+  <p class="cl-label">Trusted across the public sector and growing UK businesses</p>
   <div style="overflow:hidden">
     <div class="cl-track">
       <div class="cl-item"><span class="cl-name">NHS</span><span class="cl-sec">Health &amp; MedTech</span></div>
       <div class="cl-item"><span class="cl-name">Kew Gardens</span><span class="cl-sec">Science &amp; Research</span></div>
       <div class="cl-item"><span class="cl-name">GLA</span><span class="cl-sec">Local Government</span></div>
+      <div class="cl-item"><span class="cl-name">SMEs</span><span class="cl-sec">Professional Services</span></div>
       <div class="cl-item"><span class="cl-name">CivicNetZero</span><span class="cl-sec">Civic Innovation</span></div>
       <div class="cl-item"><span class="cl-name">bPlaced</span><span class="cl-sec">Social Care</span></div>
       <div class="cl-item"><span class="cl-name">First Bank UK</span><span class="cl-sec">Financial Services</span></div>
+      <div class="cl-item"><span class="cl-name">Growth-stage</span><span class="cl-sec">Retail &amp; Ecommerce</span></div>
       <div class="cl-item"><span class="cl-name">NHS</span><span class="cl-sec">Health &amp; MedTech</span></div>
       <div class="cl-item"><span class="cl-name">Kew Gardens</span><span class="cl-sec">Science &amp; Research</span></div>
       <div class="cl-item"><span class="cl-name">GLA</span><span class="cl-sec">Local Government</span></div>
+      <div class="cl-item"><span class="cl-name">SMEs</span><span class="cl-sec">Professional Services</span></div>
       <div class="cl-item"><span class="cl-name">CivicNetZero</span><span class="cl-sec">Civic Innovation</span></div>
       <div class="cl-item"><span class="cl-name">bPlaced</span><span class="cl-sec">Social Care</span></div>
       <div class="cl-item"><span class="cl-name">First Bank UK</span><span class="cl-sec">Financial Services</span></div>
+      <div class="cl-item"><span class="cl-name">Growth-stage</span><span class="cl-sec">Retail &amp; Ecommerce</span></div>
     </div>
   </div>
 </section>
@@ -1275,7 +1281,7 @@ html[data-theme="light"] .icon-moon { display:none; }
         </p>
         <div class="pts">
           <div class="pt"><span class="pt-n">01</span><div><div class="pt-h">Agentic, not just generative</div><p class="pt-p">Systems that plan, orchestrate, and deliver outcomes inside real-world infrastructure.</p></div></div>
-          <div class="pt"><span class="pt-n">02</span><div><div class="pt-h">Live systems, not pilots</div><p class="pt-p">Good News London launching with the GLA in May. CivicNetZero runs across three continents.</p></div></div>
+          <div class="pt"><span class="pt-n">02</span><div><div class="pt-h">Live systems, not pilots</div><p class="pt-p">Working across NHS, GLA and commercial clients — every system we ship is in production, not on a slide.</p></div></div>
           <div class="pt"><span class="pt-n">03</span><div><div class="pt-h">Senior team on every project</div><p class="pt-p">The people who scoped it build it. No account management layer, no junior bench.</p></div></div>
         </div>
       </div>
@@ -1288,7 +1294,8 @@ html[data-theme="light"] .icon-moon { display:none; }
   <div class="w">
     <div class="sec-head rv">
       <div>
-        <h2 class="sec-h2">AI in production,<br>not in PowerPoint.</h2>
+        <h2 class="sec-h2">Reference builds.<br>Patterns that travel.</h2>
+        <p class="sec-sub">Our public-sector and civic work proves the patterns. The same agents, automations and integrations apply directly to commercial businesses.</p>
       </div>
       <a href="services.html#cases" class="btn-line">View All <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
@@ -1297,103 +1304,104 @@ html[data-theme="light"] .icon-moon { display:none; }
       <div class="card">
         <div class="card-img xl">
           <div class="ph ph-teaser"><span class="ph-launch">Coming May 2026</span></div>
-          <span class="card-badge">Local Government</span>
+          <span class="card-badge">Workflow Automation</span>
         </div>
         <div class="card-body">
-          <div class="card-sec"><span class="cdot"></span><span class="csec">Civic AI Platform</span></div>
+          <div class="card-sec"><span class="cdot"></span><span class="csec">Local Government · Content Pipelines</span></div>
           <h3 class="card-h">Greater London Authority</h3>
-          <p class="card-p">Pan-London AI platform. Launching May 2026.</p>
+          <p class="card-p">Pan-London AI platform automating editorial and discovery pipelines. The same automation pattern works for any business publishing content at scale. Launching May 2026.</p>
         </div>
       </div>
       <div class="card">
         <div class="card-img md">
           <img src="assets/screenshot-civicnetzero.png" alt="CivicNetZero platform" class="card-screenshot">
-          <span class="card-badge">Civic Innovation</span>
+          <span class="card-badge">Agentic AI</span>
         </div>
         <div class="card-body">
-          <div class="card-sec"><span class="cdot"></span><span class="csec">Agentic Infrastructure</span></div>
+          <div class="card-sec"><span class="cdot"></span><span class="csec">Civic Innovation · Multi-agent Matching</span></div>
           <h3 class="card-h">CivicNetZero</h3>
-          <p class="card-p">First-of-its-kind platform identifying city climate projects and connecting them with delivery partners and finance. Live across multiple city networks.</p>
+          <p class="card-p">Multi-agent platform connecting climate projects with delivery partners and finance. The same matching engine pattern works for B2B sales, recruitment and procurement. Live across multiple city networks.</p>
         </div>
       </div>
     </div>
 
     <div class="work-3 rv d2" style="margin-top:20px">
       <div class="card">
-        <div class="card-img sm"><img src="assets/screenshot-bplaced.png" alt="bPlaced platform" class="card-screenshot"><span class="card-badge">Welfare</span></div>
+        <div class="card-img sm"><img src="assets/screenshot-bplaced.png" alt="bPlaced platform" class="card-screenshot"><span class="card-badge">AI Integration</span></div>
         <div class="card-body">
-          <div class="card-sec"><span class="cdot"></span><span class="csec">AI Matching</span></div>
+          <div class="card-sec"><span class="cdot"></span><span class="csec">Social Care · Enterprise Security</span></div>
           <h3 class="card-h">bPlaced: Smarter Care</h3>
-          <p class="card-p">Connecting local authorities with care providers for better, faster placements for young people.</p>
+          <p class="card-p">AI matching at enterprise security standards — connecting local authorities with care providers. The same approach applies to any two-sided marketplace.</p>
         </div>
       </div>
       <div class="card">
-        <div class="card-img sm"><img src="assets/screenshot-nhs.png" alt="Bristol Children's Hospital - Digital Diary" class="card-screenshot"><span class="card-badge">Health</span></div>
+        <div class="card-img sm"><img src="assets/screenshot-nhs.png" alt="Bristol Children's Hospital - Digital Diary" class="card-screenshot"><span class="card-badge">AI Implementation</span></div>
         <div class="card-body">
-          <div class="card-sec"><span class="cdot"></span><span class="csec">MedTech AI</span></div>
+          <div class="card-sec"><span class="cdot"></span><span class="csec">NHS · Regulated Environments</span></div>
           <h3 class="card-h">Bristol Children's Hospital</h3>
-          <p class="card-p">Supporting parents of sick children. Co-designed with clinicians, full NHS security compliance.</p>
+          <p class="card-p">AI deployed inside one of the most regulated environments in the UK. If it works here, it works in financial services, legal and healthcare.</p>
         </div>
       </div>
       <div class="card">
-        <div class="card-img sm"><div class="ph ph-teaser" style="background:linear-gradient(135deg, #00875A 0%, #004D2F 100%);"><span class="ph-launch" style="color:#fff;text-shadow:none;font-size:clamp(14px,2vw,20px);">Tech4Good South West</span></div><span class="card-badge">Social Impact</span></div>
+        <div class="card-img sm"><div class="ph ph-teaser" style="background:linear-gradient(135deg, #00875A 0%, #004D2F 100%);"><span class="ph-launch" style="color:#fff;text-shadow:none;font-size:clamp(14px,2vw,20px);">Tech4Good South West</span></div><span class="card-badge">AI Implementation</span></div>
         <div class="card-body">
-          <div class="card-sec"><span class="cdot"></span><span class="csec">AI for Social Change</span></div>
+          <div class="card-sec"><span class="cdot"></span><span class="csec">Social Impact · Knowledge Platforms</span></div>
           <h3 class="card-h">Tech4Good South West</h3>
-          <p class="card-p">AI advisory for industry-leading Living Labs programmes with Age UK and others.</p>
+          <p class="card-p">AI advisory for industry-leading Living Labs programmes with Age UK and others. Same playbook we use to help SMEs adopt AI without the hype.</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== SERVICES ===== -->
-<section id="svcs">
+<!-- ===== PILLARS ===== -->
+<section id="pillars">
   <div class="w">
     <div class="sec-head rv">
       <div>
-        <h2 class="sec-h2">Three ways to work<br>with Iternal.</h2>
+        <h2 class="sec-h2">Three ways AI<br>actually earns its keep.</h2>
+        <p class="sec-sub">Whether you're a 10-person team or a 200-person business, this is where AI starts paying for itself.</p>
       </div>
     </div>
     <div class="svcs-grid rv d1">
       <div class="svc">
         <div class="svc-top-line"></div>
         <span class="svc-n">01</span>
-        <h3 class="svc-h">Agentic AI Builds</h3>
-        <p class="svc-p">End-to-end design and delivery of production agentic AI systems, from brief to live deployment, including security compliance and full stack integration.</p>
+        <h3 class="svc-h">AI Implementation</h3>
+        <p class="svc-p">We help your team actually use AI — the right tools, set up properly, integrated into the systems you already run. No shelfware, no PowerPoint.</p>
         <div class="svc-tags">
-          <span class="svc-tag">Autonomous workflow systems</span>
-          <span class="svc-tag">AI-powered civic platforms</span>
-          <span class="svc-tag">Multi-agent orchestration</span>
-          <span class="svc-tag">RAG and knowledge systems</span>
+          <span class="svc-tag">Tool selection &amp; rollout</span>
+          <span class="svc-tag">Integration with your existing systems</span>
+          <span class="svc-tag">Team training &amp; adoption</span>
+          <span class="svc-tag">Security &amp; compliance</span>
         </div>
-        <a href="services.html" class="svc-cta">Learn More <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="services.html#ai-implementation" class="svc-cta">Learn More <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
       <div class="svc">
         <div class="svc-top-line"></div>
         <span class="svc-n">02</span>
-        <h3 class="svc-h">AI Strategy &amp; Advisory</h3>
-        <p class="svc-p">Sprint engagements and fractional advisory for leadership teams navigating the shift to AI-first operations. Make the right decisions before committing to a build.</p>
+        <h3 class="svc-h">Automation &amp; AI Agents</h3>
+        <p class="svc-p">We build custom AI agents that take repetitive work off your plate and run end-to-end business processes for you. Quotes, onboarding, reporting, follow-ups — handled.</p>
         <div class="svc-tags">
-          <span class="svc-tag">AI readiness assessments</span>
-          <span class="svc-tag">Board-level AI strategy</span>
-          <span class="svc-tag">Vendor and platform selection</span>
-          <span class="svc-tag">Team capability building</span>
+          <span class="svc-tag">Custom AI agents</span>
+          <span class="svc-tag">End-to-end workflow automation</span>
+          <span class="svc-tag">Document &amp; data processing</span>
+          <span class="svc-tag">Inbox, CRM &amp; ops integrations</span>
         </div>
-        <a href="services.html" class="svc-cta">Learn More <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="services.html#automation-agents" class="svc-cta">Learn More <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
       <div class="svc">
         <div class="svc-top-line"></div>
         <span class="svc-n">03</span>
-        <h3 class="svc-h">AI Augmentation</h3>
-        <p class="svc-p">Embed Iternal's augmented delivery model inside your team. We install the tools, workflows and agent infrastructure so your people operate at a level they couldn't reach alone.</p>
+        <h3 class="svc-h">AEO &amp; GEO</h3>
+        <p class="svc-p">We make sure ChatGPT, Google AI and other answer engines find your business — and describe it the way you want. The new SEO, except your customers are asking AI instead of Google.</p>
         <div class="svc-tags">
-          <span class="svc-tag">Internal agent deployment</span>
-          <span class="svc-tag">Team workflow automation</span>
-          <span class="svc-tag">AI toolchain setup</span>
-          <span class="svc-tag">Ongoing support</span>
+          <span class="svc-tag">Answer Engine Optimisation audit</span>
+          <span class="svc-tag">Content &amp; structured data</span>
+          <span class="svc-tag">Brand presence in AI answers</span>
+          <span class="svc-tag">Ongoing monitoring</span>
         </div>
-        <a href="services.html" class="svc-cta">Learn More <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="services.html#aeo-geo" class="svc-cta">Learn More <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
     </div>
   </div>
@@ -1430,7 +1438,7 @@ html[data-theme="light"] .icon-moon { display:none; }
 <section id="cta" aria-label="Get in touch">
   <div class="w">
     <div class="cta-in rv-scale">
-      <h2 class="cta-h">If you're building something that needs AI done <span class="warm">properly</span>, let's talk.</h2>
+      <h2 class="cta-h">Want AI that <span class="warm">earns its keep?</span><br>Let's have a chat.</h2>
       <p class="cta-p">We usually have space for one or two new client engagements each quarter. Discovery calls are 30 minutes, focused and free. If there's a fit, we'll tell you quickly. If there isn't, we'll tell you that too.</p>
       <div class="cta-row">
         <a href="contact.html" class="btn-sun">
@@ -1454,13 +1462,21 @@ html[data-theme="light"] .icon-moon { display:none; }
         <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
         <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
       </div>
-      <p class="f-desc">Specialist agentic AI consultancy and product studio. Building the systems that run tomorrow's organisations. Today.</p>
+      <p class="f-desc">The AI partner for SMEs and growing UK businesses. We help you adopt AI, automate the boring stuff, and show up in AI-generated answers.</p>
+    </div>
+    <div>
+      <span class="f-col-lbl">Services</span>
+      <ul class="f-links">
+        <li><a href="services.html#ai-implementation">AI Implementation</a></li>
+        <li><a href="services.html#automation-agents">Automation &amp; AI Agents</a></li>
+        <li><a href="services.html#aeo-geo">AEO / GEO</a></li>
+        <li><a href="services.html">All Services</a></li>
+      </ul>
     </div>
     <div>
       <span class="f-col-lbl">Navigation</span>
       <ul class="f-links">
         <li><a href="#work">Work</a></li>
-        <li><a href="services.html">What We Do</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="insights.html">Insights</a></li>
         <li><a href="contact.html">Contact</a></li>
