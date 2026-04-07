@@ -556,7 +556,7 @@ section { padding:100px 0; border-bottom:1px solid var(--border); }
    FOOTER
    ============================================================ */
 footer { border-top:1px solid var(--border); padding:60px var(--px); background:rgba(6,15,38,.6); }
-.footer-in { max-width:var(--max); margin:0 auto; display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:60px; }
+.footer-in { max-width:var(--max); margin:0 auto; display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:48px; }
 .f-logo { margin-bottom:16px; }
 .f-logo img { height:24px; width:auto; }
 .f-logo .logo-light { display:none; }
@@ -613,7 +613,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   border-bottom:1px solid var(--border);
 }
 .sec-grid {
-  display:grid; grid-template-columns:repeat(4,1fr);
+  display:grid; grid-template-columns:repeat(3,1fr);
   gap:1px; background:var(--border);
   border:1px solid var(--border); margin-top:60px;
 }
@@ -800,6 +800,7 @@ html[data-theme="light"] .icon-moon { display:none; }
   <ul class="nav-links">
     <li><a href="index.html#work">Work</a></li>
     <li><a href="services.html" class="active">What We Do</a></li>
+    <li><a href="services.html#aeo-geo">AEO / GEO</a></li>
     <li><a href="about.html">About</a></li>
     <li><a href="insights.html">Insights</a></li>
     <li><a href="contact.html">Contact</a></li>
@@ -817,6 +818,7 @@ html[data-theme="light"] .icon-moon { display:none; }
   <a href="index.html">Home</a>
   <a href="index.html#work">Work</a>
   <a href="services.html" class="active">What We Do</a>
+  <a href="services.html#aeo-geo">AEO / GEO</a>
   <a href="about.html">About</a>
   <a href="insights.html">Insights</a>
   <a href="contact.html">Contact</a>
@@ -830,15 +832,15 @@ html[data-theme="light"] .icon-moon { display:none; }
   <canvas id="hero-canvas"></canvas>
   <div class="page-hero-in">
     <h1 class="page-hero-h rv d1">
-      From your first<br>automation to full<br>
-      <span class="grad">enterprise AI.</span>
+      Three ways AI<br>actually
+      <span class="grad">earns its keep.</span>
     </h1>
     <p class="page-hero-sub rv d2">
-      Iternal works across the full spectrum of AI capability, from simple workflow automations that save your team hours each week, to <strong>complex multi-agent systems running inside enterprise infrastructure</strong> across three continents. We meet you where you are.
+      We help SMEs and growing UK businesses adopt AI properly. <strong>Three core services</strong> — getting AI into your day-to-day, automating the boring stuff with custom agents, and making sure ChatGPT and Google AI describe your business the way you want.
     </p>
     <div class="hero-ctas rv d3">
-      <a href="#tiers" class="btn-sun">
-        See Our Services
+      <a href="#pillars" class="btn-sun">
+        See the three pillars
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
       <a href="#cta" class="btn-outline">Book a Discovery Call</a>
@@ -847,12 +849,77 @@ html[data-theme="light"] .icon-moon { display:none; }
   </div>
 </div>
 
-<!-- ===== SERVICE TIERS ===== -->
-<section id="tiers" aria-label="Service tiers">
+<!-- ===== PILLARS ===== -->
+<section id="pillars" aria-label="Service pillars">
   <div class="w">
     <div class="sec-intro rv">
-      <h2 class="sec-h">Five ways to work<br>with Iternal.</h2>
-      <p class="sec-sub">Every engagement starts with understanding your real problem. Whether you need hands-on builds, strategic guidance or team capability building, we'll tell you honestly which fits.</p>
+      <h2 class="sec-h">The three pillars.</h2>
+      <p class="sec-sub">Every Iternal engagement maps to one (or more) of these. Plain English. No jargon. No buzzwords for the sake of buzzwords.</p>
+    </div>
+
+    <!-- Pillar 1 -->
+    <div id="ai-implementation" class="tier rv d1" style="margin-bottom:24px">
+      <div class="tier-accent"></div>
+      <span class="tier-tag">Pillar 01</span>
+      <h3 class="tier-name">AI Implementation</h3>
+      <p class="tier-desc">We help your team actually use AI — the right tools, set up properly, integrated into the systems you already run. No shelfware, no PowerPoint.</p>
+      <div class="tier-ideal">What this looks like in practice</div>
+      <ul class="tier-list">
+        <li>Picking the right AI tools for your team — and ignoring the ones that are hype</li>
+        <li>Connecting AI to the systems you already use (CRM, inbox, docs, spreadsheets)</li>
+        <li>Training your people so they actually use it after we leave</li>
+        <li>Setting up sensible guardrails — security, privacy, what AI can and can't touch</li>
+        <li>Reviewing what's working after 30 and 90 days</li>
+      </ul>
+      <p class="tier-desc" style="margin-top:14px"><strong>Typical engagement:</strong> 4–8 week implementation, optional retainer after.</p>
+      <a href="#cta" class="tier-cta">Talk about implementation <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+
+    <!-- Pillar 2 -->
+    <div id="automation-agents" class="tier featured rv d2" style="margin-bottom:24px">
+      <div class="tier-accent"></div>
+      <div class="tier-popular">★ Most Requested</div>
+      <span class="tier-tag" style="color:var(--tan)">Pillar 02</span>
+      <h3 class="tier-name">Automation &amp; AI Agents</h3>
+      <p class="tier-desc">We build custom AI agents that take repetitive work off your plate and run end-to-end business processes for you. Quotes, onboarding, reporting, follow-ups — handled.</p>
+      <div class="tier-ideal">What this looks like in practice</div>
+      <ul class="tier-list">
+        <li>An agent that drafts and sends quotes from incoming enquiries</li>
+        <li>Customer onboarding that runs itself — emails, accounts, document collection</li>
+        <li>Inbox triage that reads, categorises and replies to routine messages</li>
+        <li>Weekly reports built from your data, sent to the right people automatically</li>
+        <li>Document processing — invoices, contracts, applications — turned into structured data</li>
+      </ul>
+      <p class="tier-desc" style="margin-top:14px"><strong>Typical engagement:</strong> 2–6 weeks per agent. Most clients start with one and add more.</p>
+      <a href="#cta" class="tier-cta">Talk about an agent build <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+
+    <!-- Pillar 3 -->
+    <div id="aeo-geo" class="tier rv d3" style="margin-bottom:24px">
+      <div class="tier-accent"></div>
+      <span class="tier-tag">Pillar 03</span>
+      <h3 class="tier-name">AEO &amp; GEO</h3>
+      <p class="tier-desc">We make sure ChatGPT, Google AI and other answer engines find your business — and describe it the way you want. The new SEO, except your customers are asking AI instead of Google.</p>
+      <div class="tier-ideal">What this looks like in practice</div>
+      <ul class="tier-list">
+        <li>Auditing how ChatGPT, Claude, Gemini and Perplexity currently describe your business</li>
+        <li>Fixing the underlying content and structured data that AI engines read</li>
+        <li>Building authority signals AI models actually trust</li>
+        <li>Monitoring how your brand shows up in AI answers month over month</li>
+        <li>Catching and correcting wrong information AI is spreading about you</li>
+      </ul>
+      <p class="tier-desc" style="margin-top:14px"><strong>Typical engagement:</strong> Audit + 90-day plan, then ongoing monthly retainer.</p>
+      <a href="services/aeo-geo.html" class="tier-cta">See the full AEO / GEO page <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICE TIERS ===== -->
+<section id="tiers" aria-label="How we engage">
+  <div class="w">
+    <div class="sec-intro rv">
+      <h2 class="sec-h">How we engage.</h2>
+      <p class="sec-sub">The three pillars above are what we deliver. These are the shapes those engagements typically take — pick the one that matches where you are right now.</p>
     </div>
     <div class="tier-grid rv d1">
 
@@ -1013,14 +1080,16 @@ html[data-theme="light"] .icon-moon { display:none; }
   <div class="w">
     <div class="sec-head rv">
       <div>
-        <h2 class="sec-h">Sectors where AI needs<br>to be right first time.</h2>
+        <h2 class="sec-h">Sectors we know.</h2>
       </div>
     </div>
     <div class="sec-grid rv d1">
-      <div class="sec-c"><span class="sec-ico">🏛️</span><div class="sec-name">Civic Innovation</div><p class="sec-desc">Smart city platforms, public service AI, citizen-facing tools, local government automation, net-zero infrastructure.</p></div>
-      <div class="sec-c"><span class="sec-ico">🏥</span><div class="sec-name">Health &amp; MedTech</div><p class="sec-desc">Patient pathway intelligence, clinical workflow automation, NHS-compliant AI infrastructure, health data systems.</p></div>
-      <div class="sec-c"><span class="sec-ico">💷</span><div class="sec-name">Financial Services</div><p class="sec-desc">Risk intelligence, agentic advisory systems, compliance automation, AI-augmented client services.</p></div>
-      <div class="sec-c"><span class="sec-ico">🌱</span><div class="sec-name">Sustainability</div><p class="sec-desc">Carbon intelligence platforms, ESG data systems, conservation AI, climate action tooling for governments and NGOs.</p></div>
+      <div class="sec-c"><span class="sec-ico">💼</span><div class="sec-name">Professional Services &amp; SMEs</div><p class="sec-desc">Consultancies, agencies, legal, accounting, B2B services. Where AI agents replace hours of admin every week.</p></div>
+      <div class="sec-c"><span class="sec-ico">🛒</span><div class="sec-name">Retail &amp; Ecommerce</div><p class="sec-desc">Customer service automation, content generation, inventory and ops workflows, AI-driven merchandising.</p></div>
+      <div class="sec-c"><span class="sec-ico">💷</span><div class="sec-name">Financial Services</div><p class="sec-desc">Risk intelligence, advisory automation, compliance workflows, AI-augmented client services.</p></div>
+      <div class="sec-c"><span class="sec-ico">🏥</span><div class="sec-name">Health &amp; MedTech</div><p class="sec-desc">Patient pathway intelligence, clinical workflow automation, NHS-compliant AI infrastructure.</p></div>
+      <div class="sec-c"><span class="sec-ico">🏛️</span><div class="sec-name">Civic &amp; Public Sector</div><p class="sec-desc">Smart city platforms, public service AI, citizen-facing tools, local government automation.</p></div>
+      <div class="sec-c"><span class="sec-ico">🌱</span><div class="sec-name">Sustainability</div><p class="sec-desc">Carbon intelligence platforms, ESG data systems, climate action tooling for governments and NGOs.</p></div>
     </div>
   </div>
 </section>
@@ -1133,8 +1202,8 @@ html[data-theme="light"] .icon-moon { display:none; }
 <section id="cases" aria-label="Case studies">
   <div class="w">
     <div class="sec-intro rv">
-      <h2 class="sec-h">AI that actually shipped.</h2>
-      <p class="sec-sub">Every project below is live, in use, and delivering real outcomes for real organisations. Not demos. Not pilots.</p>
+      <h2 class="sec-h">Reference builds.<br>Patterns that travel.</h2>
+      <p class="sec-sub">Our public-sector and civic work proves the patterns. The same agents, automations and integrations apply directly to commercial businesses — and the commercial case studies are coming next.</p>
     </div>
 
     <!-- Featured: Tech4Good -->
@@ -1145,7 +1214,7 @@ html[data-theme="light"] .icon-moon { display:none; }
         <div class="case-sector-dot" style="position:relative;z-index:1;"></div>
       </div>
       <div class="case-featured-body">
-        <div class="case-sector">Social Impact · AI Platform</div>
+        <div class="case-sector">AI Implementation · Knowledge Platforms</div>
         <h3 class="case-name" style="font-size:26px; margin-bottom:14px;">Tech4Good: AI for Social Change</h3>
         <div class="case-result">
           <div>
@@ -1162,7 +1231,7 @@ html[data-theme="light"] .icon-moon { display:none; }
       <div class="case">
         <div class="case-ph"><div class="case-ph-hatch"></div><div class="case-ph-lbl">Good News London: GLA</div><div class="case-sector-dot"></div></div>
         <div class="case-body">
-          <div class="case-sector">Civic AI · Local Government</div>
+          <div class="case-sector">Workflow Automation · Local Government</div>
           <h3 class="case-name">Good News London: Greater London Authority</h3>
           <div class="case-result">
             <div>
@@ -1177,7 +1246,7 @@ html[data-theme="light"] .icon-moon { display:none; }
       <div class="case">
         <div class="case-ph"><div class="case-ph-hatch"></div><div class="case-ph-lbl">CivicNetZero</div><div class="case-sector-dot"></div></div>
         <div class="case-body">
-          <div class="case-sector">Agentic Infrastructure · Sustainability</div>
+          <div class="case-sector">Agentic AI · Multi-agent Matching</div>
           <h3 class="case-name">CivicNetZero: Global Carbon Intelligence</h3>
           <div class="case-result">
             <div>
@@ -1192,7 +1261,7 @@ html[data-theme="light"] .icon-moon { display:none; }
       <div class="case">
         <div class="case-ph"><div class="case-ph-hatch"></div><div class="case-ph-lbl">bPlaced</div><div class="case-sector-dot"></div></div>
         <div class="case-body">
-          <div class="case-sector">AI Matching · Social Care</div>
+          <div class="case-sector">AI Integration · Enterprise Security</div>
           <h3 class="case-name">bPlaced: Social Care Platform</h3>
           <div class="case-result">
             <div>
@@ -1202,6 +1271,32 @@ html[data-theme="light"] .icon-moon { display:none; }
           </div>
           <p class="case-desc">Production AI platform for one of the UK's most sensitive welfare sectors. Built to enterprise security standards from day one.</p>
           <a href="case-bplaced.html" class="case-lnk">Case Study <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+
+      <!-- Commercial placeholders — coming 2026 -->
+      <div class="case">
+        <div class="case-ph"><div class="case-ph-hatch"></div><div class="case-ph-lbl">Coming 2026</div><div class="case-sector-dot"></div></div>
+        <div class="case-body">
+          <div class="case-sector">Automation &amp; AI Agents · Professional Services</div>
+          <h3 class="case-name">Quote-to-cash agent for a UK consultancy</h3>
+          <p class="case-desc">A custom AI agent that drafts proposals from incoming enquiries, routes them for sign-off, and follows up automatically. Live case study coming later this year.</p>
+        </div>
+      </div>
+      <div class="case">
+        <div class="case-ph"><div class="case-ph-hatch"></div><div class="case-ph-lbl">Coming 2026</div><div class="case-sector-dot"></div></div>
+        <div class="case-body">
+          <div class="case-sector">AI Implementation · Ecommerce &amp; Retail</div>
+          <h3 class="case-name">AI-powered customer ops for a growing retailer</h3>
+          <p class="case-desc">Customer service triage, content generation and back-office automation rolled out across a multi-site retail business. Live case study coming later this year.</p>
+        </div>
+      </div>
+      <div class="case">
+        <div class="case-ph"><div class="case-ph-hatch"></div><div class="case-ph-lbl">Coming 2026</div><div class="case-sector-dot"></div></div>
+        <div class="case-body">
+          <div class="case-sector">AEO / GEO · Financial Services</div>
+          <h3 class="case-name">Brand visibility in AI answers for a financial advisor</h3>
+          <p class="case-desc">From invisible in ChatGPT to consistently cited as the trusted local expert. Audit, content overhaul and ongoing monitoring. Live case study coming later this year.</p>
         </div>
       </div>
     </div>
@@ -1216,6 +1311,14 @@ html[data-theme="light"] .icon-moon { display:none; }
     </div>
     <div class="faq-grid">
       <div class="faq-item rv-left d1">
+        <div class="faq-q">We're a 20-person business, not an enterprise. Is Iternal for us?</div>
+        <div class="faq-a">Yes — explicitly. Most of our work this year is with SMEs and growing businesses between 10 and 200 people. Our three pillars (AI Implementation, Automation &amp; AI Agents, AEO/GEO) are built for exactly this size of business. <strong>The civic and NHS work is how we proved the patterns. The patterns are what you actually buy.</strong></div>
+      </div>
+      <div class="faq-item rv-right d1">
+        <div class="faq-q">What's AEO / GEO and why should we care?</div>
+        <div class="faq-a">AEO (Answer Engine Optimisation) and GEO (Generative Engine Optimisation) are about making sure ChatGPT, Google AI, Claude and Perplexity find your business and describe it accurately. <strong>Your customers are increasingly asking AI instead of Google.</strong> If you're invisible in those answers — or worse, being described wrong — you're losing leads you'll never see. <a href="services/aeo-geo.html">More on the dedicated AEO / GEO page.</a></div>
+      </div>
+      <div class="faq-item rv-left d2">
         <div class="faq-q">Do we have to start with an agentic build, or can we start small?</div>
         <div class="faq-a">Start small if that's what makes sense. Many of our best client relationships began with a simple chatbot or workflow automation. <strong>The point is to start with something real, see it work, and grow from there.</strong> The Discovery Workshop is specifically designed to help you figure out the right first step.</div>
       </div>
@@ -1271,13 +1374,21 @@ html[data-theme="light"] .icon-moon { display:none; }
         <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
         <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
       </div>
-      <p class="f-desc">Specialist agentic AI consultancy and product studio. Building the systems that run tomorrow's organisations. Today.</p>
+      <p class="f-desc">The AI partner for SMEs and growing UK businesses. We help you adopt AI, automate the boring stuff, and show up in AI-generated answers.</p>
+    </div>
+    <div>
+      <span class="f-col-lbl">Services</span>
+      <ul class="f-links">
+        <li><a href="services.html#ai-implementation">AI Implementation</a></li>
+        <li><a href="services.html#automation-agents">Automation &amp; AI Agents</a></li>
+        <li><a href="services.html#aeo-geo">AEO / GEO</a></li>
+        <li><a href="services/aeo-geo.html">AEO / GEO deep-dive</a></li>
+      </ul>
     </div>
     <div>
       <span class="f-col-lbl">Navigation</span>
       <ul class="f-links">
         <li><a href="index.html#work">Work</a></li>
-        <li><a href="services.html">What We Do</a></li>
         <li><a href="about.html">About</a></li>
         <li><a href="insights.html">Insights</a></li>
         <li><a href="contact.html">Contact</a></li>
