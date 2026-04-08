@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AEO &amp; GEO — Get found in AI answers | Iternal</title>
-<meta name="description" content="Make sure ChatGPT, Google AI, Claude and Perplexity find your business and describe it the way you want. Iternal's Answer Engine Optimisation service for SMEs and growing UK businesses.">
+<title>Free AI Visibility Check — see what ChatGPT says about your business | Iternal</title>
+<meta name="description" content="Free 30-minute video call. We run live AI visibility checks on your business — and your top competitors — in front of you. Find out what ChatGPT, Claude, Gemini and Perplexity are saying about you, where you're invisible, and where the easy wins are.">
 <meta name="robots" content="index, follow">
-<meta property="og:title" content="AEO &amp; GEO — Get found in AI answers | Iternal">
-<meta property="og:description" content="Make sure ChatGPT, Google AI, Claude and Perplexity find your business and describe it the way you want. Iternal's Answer Engine Optimisation service.">
+<meta property="og:title" content="Free AI Visibility Check — see what ChatGPT says about your business | Iternal">
+<meta property="og:description" content="Free 30-minute video call. We run live AI visibility checks on your business in front of you — find out what AI is saying, where you're invisible, and where the easy wins are.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://iternal.life/services/aeo-geo.html">
+<meta property="og:url" content="https://iternal.life/ai-visibility-check.html">
 <meta property="og:image" content="https://iternal.life/og-image.png">
 <meta property="og:site_name" content="Iternal AI">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="AEO &amp; GEO — Get found in AI answers | Iternal">
-<meta name="twitter:description" content="Make sure ChatGPT, Google AI, Claude and Perplexity find your business and describe it the way you want.">
+<meta name="twitter:title" content="Free AI Visibility Check — see what ChatGPT says about your business | Iternal">
+<meta name="twitter:description" content="Free 30-minute video call. We run live AI visibility checks on your business in front of you.">
 <meta name="twitter:image" content="https://iternal.life/og-image.png">
-<link rel="canonical" href="https://iternal.life/services/aeo-geo.html">
-<link rel="icon" href="../assets/icon-navy.png" type="image/png">
+<link rel="canonical" href="https://iternal.life/ai-visibility-check.html">
+<link rel="icon" href="assets/icon-navy.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Maven+Pro:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -777,6 +777,126 @@ html[data-theme="light"] .icon-moon { display:none; }
 @media (max-width:900px) {
   .theme-toggle { color:var(--white); position:absolute; right:56px; top:50%; transform:translateY(-50%); }
 }
+
+/* ============================================================
+   PAGE-LOCAL: visibility-check landing
+   ============================================================ */
+.vc-form-wrap {
+  max-width:680px; margin:0 auto;
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--border2);
+  border-radius:6px;
+  padding:48px 52px;
+  position:relative;
+}
+.vc-form-wrap::before {
+  content:""; position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg, var(--tan), var(--gold));
+  border-radius:6px 6px 0 0;
+}
+.vc-form-head { margin-bottom:32px; text-align:center; }
+.vc-form-head h3 { font-size:24px; font-weight:900; color:var(--white); margin-bottom:8px; line-height:1.2; }
+.vc-form-head p { font-size:14px; color:var(--t3); line-height:1.65; }
+.vc-form-row { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-bottom:18px; }
+.vc-form-field { margin-bottom:18px; }
+.vc-form-field:last-of-type { margin-bottom:0; }
+.vc-form-wrap label {
+  display:block; font-size:11px; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase;
+  color:var(--t4); margin-bottom:8px;
+}
+.vc-form-wrap label span { color:var(--tan); margin-left:2px; }
+.vc-form-wrap input[type="text"],
+.vc-form-wrap input[type="email"],
+.vc-form-wrap input[type="url"],
+.vc-form-wrap textarea {
+  width:100%; background:rgba(255,255,255,.04);
+  border:1px solid var(--border2); border-radius:2px;
+  font-family:var(--f); font-size:15px; font-weight:500;
+  color:var(--white); padding:13px 16px;
+  transition:border-color .2s, background .2s, box-shadow .2s;
+  appearance:none; -webkit-appearance:none; cursor:none;
+}
+.vc-form-wrap input::placeholder, .vc-form-wrap textarea::placeholder { color:var(--t4); }
+.vc-form-wrap input:focus, .vc-form-wrap textarea:focus {
+  outline:none; border-color:var(--tan);
+  background:rgba(255,255,255,.06);
+  box-shadow:0 0 0 3px rgba(226,103,19,.1);
+}
+.vc-form-wrap textarea { resize:vertical; min-height:90px; line-height:1.6; }
+.vc-submit-btn {
+  width:100%; padding:18px 32px; margin-top:8px;
+  background:linear-gradient(135deg, var(--tan), var(--gold));
+  color:var(--white);
+  font-family:var(--f); font-size:15px; font-weight:900;
+  letter-spacing:.04em; border:none; border-radius:3px;
+  cursor:none; display:flex; align-items:center; justify-content:center; gap:12px;
+  transition:transform .15s, box-shadow .25s, opacity .2s;
+}
+.vc-submit-btn:hover { transform:translateY(-2px); box-shadow:0 14px 44px rgba(226,103,19,.4); }
+.vc-submit-btn:active { transform:translateY(0); }
+.vc-form-privacy {
+  margin-top:16px; font-size:12px; color:var(--t4);
+  text-align:center; line-height:1.6;
+}
+.vc-form-success {
+  display:none; text-align:center; padding:40px 20px;
+}
+.vc-form-success.show { display:block; }
+.vc-form-wrap.submitted form { display:none; }
+.vc-form-wrap.submitted .vc-form-success { display:block; }
+.vc-form-wrap.submitted .vc-form-head { display:none; }
+.vc-success-icon {
+  width:56px; height:56px; border-radius:50%;
+  background:rgba(11,175,170,.12); border:1px solid rgba(11,175,170,.3);
+  display:flex; align-items:center; justify-content:center;
+  margin:0 auto 20px;
+}
+.vc-success-icon svg { width:24px; height:24px; stroke:var(--aqua); fill:none; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+.vc-success-h { font-size:22px; font-weight:900; color:var(--white); margin-bottom:10px; }
+.vc-success-p { font-size:15px; color:var(--t3); line-height:1.7; }
+
+/* hook stat strip */
+.vc-stats {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+  background:var(--border2); border:1px solid var(--border2);
+  margin:50px auto; max-width:900px;
+}
+.vc-stat { background:var(--surf); padding:32px 24px; text-align:center; }
+.vc-stat-n { font-size:38px; font-weight:900; color:var(--tan); line-height:1; margin-bottom:10px; letter-spacing:-.02em; }
+.vc-stat-l { font-size:13px; color:var(--t3); line-height:1.5; }
+
+/* call-flow steps */
+.vc-flow { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; margin-top:50px; }
+.vc-flow-step { padding:28px 24px; border:1px solid var(--border2); border-radius:4px; background:rgba(255,255,255,.02); position:relative; }
+.vc-flow-n { font-size:13px; font-weight:900; color:var(--tan); letter-spacing:.1em; margin-bottom:12px; }
+.vc-flow-h { font-size:17px; font-weight:900; color:var(--white); margin-bottom:8px; line-height:1.3; }
+.vc-flow-p { font-size:13px; color:var(--t3); line-height:1.6; }
+
+/* light theme */
+html[data-theme="light"] .vc-form-wrap { background:rgba(255,255,255,.6); border-color:rgba(10,33,86,.12); }
+html[data-theme="light"] .vc-form-head h3 { color:var(--navy); }
+html[data-theme="light"] .vc-form-wrap input[type="text"],
+html[data-theme="light"] .vc-form-wrap input[type="email"],
+html[data-theme="light"] .vc-form-wrap input[type="url"],
+html[data-theme="light"] .vc-form-wrap textarea {
+  background:rgba(255,255,255,.7); border-color:rgba(10,33,86,.18); color:var(--navy);
+}
+html[data-theme="light"] .vc-stats { background:rgba(10,33,86,.12); border-color:rgba(10,33,86,.12); }
+html[data-theme="light"] .vc-stat { background:rgba(244,241,236,1); }
+html[data-theme="light"] .vc-flow-step { background:rgba(255,255,255,.6); border-color:rgba(10,33,86,.12); }
+html[data-theme="light"] .vc-flow-h { color:var(--navy); }
+html[data-theme="light"] .vc-success-h { color:var(--navy); }
+
+@media (max-width:780px) {
+  .vc-form-wrap { padding:36px 28px; }
+  .vc-form-row { grid-template-columns:1fr; gap:0; }
+  .vc-stats { grid-template-columns:1fr; }
+  .vc-flow { grid-template-columns:1fr 1fr; }
+}
+@media (max-width:520px) {
+  .vc-flow { grid-template-columns:1fr; }
+}
 </style>
 </head>
 <body>
@@ -793,19 +913,19 @@ html[data-theme="light"] .icon-moon { display:none; }
 
 <!-- ===== NAV ===== -->
 <nav id="nav">
-  <a href="../index.html" class="nav-logo" aria-label="Iternal — home">
-    <img src="../assets/logo-white.png" alt="Iternal" class="logo-dark">
-    <img src="../assets/logo-navy.png" alt="Iternal" class="logo-light">
+  <a href="index.html" class="nav-logo" aria-label="Iternal — home">
+    <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
+    <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
   </a>
   <ul class="nav-links">
-    <li><a href="../index.html#work">Work</a></li>
-    <li><a href="../services.html">What We Do</a></li>
-    <li><a href="../services.html#aeo-geo" class="active">AEO / GEO</a></li>
-    <li><a href="../about.html">About</a></li>
-    <li><a href="../insights.html">Insights</a></li>
-    <li><a href="../contact.html">Contact</a></li>
+    <li><a href="index.html#work">Work</a></li>
+    <li><a href="services.html">What We Do</a></li>
+    <li><a href="services.html#aeo-geo">AEO / GEO</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="insights.html">Insights</a></li>
+    <li><a href="contact.html">Contact</a></li>
   </ul>
-  <a href="../contact.html" class="nav-btn">Book a Call</a>
+  <a href="contact.html" class="nav-btn">Book a Call</a>
   <button class="theme-toggle" aria-label="Toggle light/dark mode">
     <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
     <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -815,14 +935,14 @@ html[data-theme="light"] .icon-moon { display:none; }
   </button>
 </nav>
 <div class="mobile-nav" id="mobileNav">
-  <a href="../index.html">Home</a>
-  <a href="../index.html#work">Work</a>
-  <a href="../services.html">What We Do</a>
-  <a href="../services.html#aeo-geo" class="active">AEO / GEO</a>
-  <a href="../about.html">About</a>
-  <a href="../insights.html">Insights</a>
-  <a href="../contact.html">Contact</a>
-  <a href="../contact.html" class="mob-cta">Book a Call</a>
+  <a href="index.html">Home</a>
+  <a href="index.html#work">Work</a>
+  <a href="services.html">What We Do</a>
+  <a href="services.html#aeo-geo">AEO / GEO</a>
+  <a href="about.html">About</a>
+  <a href="insights.html">Insights</a>
+  <a href="contact.html">Contact</a>
+  <a href="contact.html" class="mob-cta">Book a Call</a>
 </div>
 
 <main id="main">
@@ -832,109 +952,167 @@ html[data-theme="light"] .icon-moon { display:none; }
   <canvas id="hero-canvas"></canvas>
   <div class="page-hero-in">
     <h1 class="page-hero-h rv d1">
-      Get found in<br>
-      <span class="grad">AI answers.</span>
+      Your customers<br>are asking ChatGPT.<br>
+      <span class="grad">What's it saying back?</span>
     </h1>
     <p class="page-hero-sub rv d2">
-      Your customers are increasingly asking ChatGPT, Google AI, Claude and Perplexity instead of Google. <strong>If you're invisible in those answers — or being described wrong — you're losing leads you'll never see.</strong> AEO and GEO fix that.
+      Free, 30 minutes, on a video call. We run live AI visibility checks on your business — and your top competitors — in front of you. <strong>You'll leave with a clear picture of what AI is saying about you, where you're invisible, and where the easy wins are.</strong>
     </p>
     <div class="hero-ctas rv d3">
-      <a href="../ai-visibility-check.html" class="btn-sun">
-        Get a free AI visibility check
+      <a href="#book" class="btn-sun">
+        Book my free check
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a href="#what" class="btn-outline">What is AEO / GEO?</a>
+      <a href="#what-happens" class="btn-outline">What happens on the call</a>
     </div>
   </div>
 </div>
 
-<!-- ===== WHAT IS IT ===== -->
-<section id="what" aria-label="What is AEO/GEO">
+<!-- ===== STAT STRIP ===== -->
+<section aria-label="Why this matters">
+  <div class="w">
+    <div class="vc-stats rv">
+      <div class="vc-stat">
+        <div class="vc-stat-n">800M+</div>
+        <div class="vc-stat-l">Weekly ChatGPT users<br>looking for answers</div>
+      </div>
+      <div class="vc-stat">
+        <div class="vc-stat-n">1</div>
+        <div class="vc-stat-l">Answer AI gives.<br>Not 10 blue links.</div>
+      </div>
+      <div class="vc-stat">
+        <div class="vc-stat-n">63%</div>
+        <div class="vc-stat-l">Of business owners<br>have never checked</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHAT HAPPENS ===== -->
+<section id="what-happens" aria-label="What happens on the call">
   <div class="w">
     <div class="sec-intro rv">
-      <h2 class="sec-h">The new SEO,<br>except your customers<br>are asking AI.</h2>
-      <p class="sec-sub">AEO (Answer Engine Optimisation) and GEO (Generative Engine Optimisation) are about being the business that AI engines recommend, cite and describe accurately when someone asks them a question.</p>
+      <h2 class="sec-h">What happens on the call.</h2>
+      <p class="sec-sub">No slides. No pitch deck. Just us, sharing a screen, running real AI engines against your real business while you watch. Four steps in 30 minutes.</p>
     </div>
 
-    <div class="tier rv d1" style="margin-bottom:24px">
-      <div class="tier-accent"></div>
-      <span class="tier-tag">In plain English</span>
-      <h3 class="tier-name">Two acronyms, one job.</h3>
-      <p class="tier-desc"><strong>AEO</strong> is about answer engines like ChatGPT, Perplexity and Google's AI Overviews — making sure they find you and represent you correctly when a customer asks a question in your space.</p>
-      <p class="tier-desc"><strong>GEO</strong> is the broader practice of optimising for generative AI as a discovery channel, including how AI models are trained on and cite your content over time.</p>
-      <p class="tier-desc">In practice they overlap. We treat them as one service because the work is the same: <strong>make your business legible to AI, build the authority signals AI trusts, and check what AI is actually saying about you.</strong></p>
+    <div class="vc-flow rv d1">
+      <div class="vc-flow-step">
+        <div class="vc-flow-n">STEP 01</div>
+        <h3 class="vc-flow-h">We run your business through 4 AI engines</h3>
+        <p class="vc-flow-p">ChatGPT, Claude, Gemini and Perplexity. Live, on screen-share. You see exactly what each one says when someone asks about businesses like yours.</p>
+      </div>
+      <div class="vc-flow-step">
+        <div class="vc-flow-n">STEP 02</div>
+        <h3 class="vc-flow-h">We do the same for your top competitors</h3>
+        <p class="vc-flow-p">Side-by-side. You'll see who's already showing up, who AI is recommending instead of you, and what they're being praised for.</p>
+      </div>
+      <div class="vc-flow-step">
+        <div class="vc-flow-n">STEP 03</div>
+        <h3 class="vc-flow-h">We flag what AI is getting wrong</h3>
+        <p class="vc-flow-p">Most businesses are described inaccurately by AI — wrong services, outdated info, mixed up with competitors. We surface it so you can fix it.</p>
+      </div>
+      <div class="vc-flow-step">
+        <div class="vc-flow-n">STEP 04</div>
+        <h3 class="vc-flow-h">You leave with 3 specific quick wins</h3>
+        <p class="vc-flow-p">Not "AI is important". Three concrete things you could do in the next 30 days to start showing up — and showing up properly.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ===== WHY IT MATTERS ===== -->
-<section id="why" aria-label="Why it matters now">
+<section aria-label="Why it matters">
   <div class="w">
     <div class="sec-intro rv">
       <h2 class="sec-h">Why this matters now.</h2>
-      <p class="sec-sub">If your customers are starting to ask AI instead of Google — and they are — then "show up in AI answers" is the same problem "show up on Google" was fifteen years ago. The window to get ahead of it is now, while most of your competitors haven't noticed.</p>
-    </div>
-    <div class="sec-grid rv d1">
-      <div class="sec-c"><span class="sec-ico">🔎</span><div class="sec-name">AI is the new search</div><p class="sec-desc">ChatGPT alone now handles billions of search-style queries a month. People ask it for recommendations, comparisons and "who should I hire for X" the same way they used to ask Google.</p></div>
-      <div class="sec-c"><span class="sec-ico">🤖</span><div class="sec-name">AI gives one answer</div><p class="sec-desc">Search gave 10 blue links. AI gives one answer. If that answer doesn't include you, it doesn't matter how good your website is — you're not in the conversation.</p></div>
-      <div class="sec-c"><span class="sec-ico">⚠️</span><div class="sec-name">AI gets things wrong</div><p class="sec-desc">AI often describes businesses inaccurately — wrong services, outdated info, mixed up with competitors. Most business owners have never even checked what AI is saying about them.</p></div>
-      <div class="sec-c"><span class="sec-ico">📈</span><div class="sec-name">First movers win</div><p class="sec-desc">In any new discovery channel, the businesses that move first build authority that's hard to displace later. AEO right now looks a lot like SEO in 2010.</p></div>
-      <div class="sec-c"><span class="sec-ico">🏷️</span><div class="sec-name">Reputation is at stake</div><p class="sec-desc">AI is increasingly the first place people learn about your brand. What it says about you is your new shop window — except you don't currently control it.</p></div>
-      <div class="sec-c"><span class="sec-ico">💷</span><div class="sec-name">It's measurable</div><p class="sec-desc">We track how your brand shows up in AI answers month over month, so you can see exactly what's working and what isn't. No vanity metrics.</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== WHAT WE DO ===== -->
-<section id="how" aria-label="What we do">
-  <div class="w">
-    <div class="sec-intro rv">
-      <h2 class="sec-h">What we do for you.</h2>
-      <p class="sec-sub">A clear three-stage process. We start with an audit so you know where you stand, then optimise the things that move the needle, then keep monitoring as the AI landscape shifts.</p>
+      <p class="sec-sub">This isn't a five-years-from-now thing. Your customers are already asking AI for recommendations. The businesses showing up now are building authority that's hard to displace later.</p>
     </div>
 
     <div class="tier rv d1" style="margin-bottom:24px">
       <div class="tier-accent"></div>
-      <span class="tier-tag">Stage 01</span>
-      <h3 class="tier-name">Audit</h3>
-      <p class="tier-desc">We map exactly how ChatGPT, Claude, Gemini, Perplexity and Google AI Overviews currently describe your business — and your competitors. You get a clear, honest report of where you're invisible, where you're being misrepresented, and where the quick wins are.</p>
-      <ul class="tier-list">
-        <li>Brand visibility scoring across 5+ major AI engines</li>
-        <li>Side-by-side comparison with your top 3 competitors</li>
-        <li>List of factual errors AI is currently spreading about you</li>
-        <li>Prioritised opportunities ranked by effort and impact</li>
-      </ul>
-      <p class="tier-desc" style="margin-top:14px"><strong>Typical engagement:</strong> 1–2 weeks, fixed price.</p>
+      <span class="tier-tag">The honest version</span>
+      <h3 class="tier-name">Three things most business owners don't know.</h3>
+      <p class="tier-desc"><strong>1. AI is the new search.</strong> ChatGPT alone now handles billions of search-style queries a month. People ask it "who should I hire to do X" the same way they used to ask Google.</p>
+      <p class="tier-desc"><strong>2. AI gives one answer.</strong> Search gave 10 blue links and you could be number 7. AI gives one answer. If that answer doesn't include you, it doesn't matter how good your website is — you're not in the conversation.</p>
+      <p class="tier-desc"><strong>3. AI is probably already wrong about you.</strong> We've yet to run a check where the AI engines got everything right. Wrong services, outdated info, confused with competitors. You can't fix what you don't know.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== WHO IT'S FOR ===== -->
+<section aria-label="Who it's for">
+  <div class="w">
+    <div class="sec-intro rv">
+      <h2 class="sec-h">Who this is for.</h2>
+    </div>
+    <div class="sec-grid rv d1">
+      <div class="sec-c"><span class="sec-ico">✅</span><div class="sec-name">UK SMEs &amp; growing businesses</div><p class="sec-desc">Ten to two hundred people, anywhere in the UK. Service businesses, ecommerce, professional services, B2B.</p></div>
+      <div class="sec-c"><span class="sec-ico">✅</span><div class="sec-name">Anyone whose customers Google them</div><p class="sec-desc">If your prospects research you online before they buy, they're starting to ask AI as well. You need to be in both conversations.</p></div>
+      <div class="sec-c"><span class="sec-ico">✅</span><div class="sec-name">Owners and marketing leads</div><p class="sec-desc">You don't need to be technical. We translate everything into plain English and walk you through it as we go.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== BOOK FORM ===== -->
+<section id="book" aria-label="Book your free visibility check">
+  <div class="w">
+    <div class="sec-intro rv">
+      <h2 class="sec-h">Book your free<br>visibility check.</h2>
+      <p class="sec-sub">Tell us where to send the calendar invite. We'll come back within one working day with a couple of slot options.</p>
     </div>
 
-    <div class="tier featured rv d2" style="margin-bottom:24px">
-      <div class="tier-accent"></div>
-      <div class="tier-popular">★ Most Requested</div>
-      <span class="tier-tag" style="color:var(--tan)">Stage 02</span>
-      <h3 class="tier-name">Optimise</h3>
-      <p class="tier-desc">We fix the underlying content, structured data and authority signals AI engines actually read. This is the work that moves you from "missing" to "cited as the trusted answer". Done as a fixed-scope 90-day plan after the audit.</p>
-      <ul class="tier-list">
-        <li>Content rewrites and net-new pages targeting the questions your customers are actually asking AI</li>
-        <li>Structured data and schema fixes that make your site machine-readable</li>
-        <li>Authority and citation building across the sources AI models trust</li>
-        <li>Wikipedia, Wikidata and knowledge-graph clean-up where relevant</li>
-        <li>Correcting factual errors AI is currently spreading</li>
-      </ul>
-      <p class="tier-desc" style="margin-top:14px"><strong>Typical engagement:</strong> 90-day delivery, fixed scope.</p>
-    </div>
+    <div class="vc-form-wrap rv d1" id="vcFormWrap">
+      <div class="vc-form-head">
+        <h3>Free · 30 minutes · No pitch deck</h3>
+        <p>We'll run the audit live, on a video call, while you watch.</p>
+      </div>
+      <form id="vcForm" method="POST" action="https://formsubmit.co/ajax/paul@iternal.life">
+        <input type="hidden" name="_captcha" value="false">
+        <input type="hidden" name="_subject" value="AI Visibility Check booking — iternal.life">
+        <input type="hidden" name="source" value="ai-visibility-check">
+        <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
 
-    <div class="tier rv d3" style="margin-bottom:24px">
-      <div class="tier-accent"></div>
-      <span class="tier-tag">Stage 03</span>
-      <h3 class="tier-name">Monitor</h3>
-      <p class="tier-desc">AI engines change weekly. The right answer this month isn't the right answer next month. We monitor how your brand shows up across the major AI engines, send you a monthly report, and act on anything that needs fixing — before it costs you a lead.</p>
-      <ul class="tier-list">
-        <li>Monthly visibility tracking across all major AI engines</li>
-        <li>Alerting when your brand is mentioned inaccurately</li>
-        <li>Ongoing content updates as the AI landscape shifts</li>
-        <li>Quarterly strategy review with a real human (not a dashboard)</li>
-      </ul>
-      <p class="tier-desc" style="margin-top:14px"><strong>Typical engagement:</strong> Monthly retainer, cancel any time.</p>
+        <div class="vc-form-row">
+          <div class="vc-form-field">
+            <label for="vc-name">Your name <span>*</span></label>
+            <input type="text" id="vc-name" name="name" placeholder="Jane Smith" required aria-required="true">
+          </div>
+          <div class="vc-form-field">
+            <label for="vc-email">Email <span>*</span></label>
+            <input type="email" id="vc-email" name="email" placeholder="jane@company.com" required aria-required="true">
+          </div>
+        </div>
+
+        <div class="vc-form-field">
+          <label for="vc-business">Business name <span>*</span></label>
+          <input type="text" id="vc-business" name="business" placeholder="Acme Ltd" required aria-required="true">
+        </div>
+
+        <div class="vc-form-field">
+          <label for="vc-url">Business website <span>*</span></label>
+          <input type="url" id="vc-url" name="website" placeholder="https://acme.co.uk" required aria-required="true">
+        </div>
+
+        <div class="vc-form-field">
+          <label for="vc-notes">Anything specific you'd like us to look at? <span style="color:var(--t5);text-transform:none;letter-spacing:0;font-weight:500">(optional)</span></label>
+          <textarea id="vc-notes" name="notes" placeholder="e.g. competitors to check against, services you want to be known for, products you sell"></textarea>
+        </div>
+
+        <button type="submit" class="vc-submit-btn">
+          Book my free check
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <p class="vc-form-privacy">We respond to all enquiries within one working day. Your details are only used to schedule the call — never shared, never used for marketing.</p>
+      </form>
+
+      <div class="vc-form-success">
+        <div class="vc-success-icon">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        </div>
+        <h3 class="vc-success-h">You're in. We'll be in touch.</h3>
+        <p class="vc-success-p">Thanks — we've got your details. We'll come back within one working day with a couple of slot options. In the meantime, if you want to skip the queue, drop us a line at <a href="mailto:hello@iternal.life" style="color:var(--tan)">hello@iternal.life</a>.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -947,37 +1125,37 @@ html[data-theme="light"] .icon-moon { display:none; }
     </div>
     <div class="faq-grid">
       <div class="faq-item rv-left d1">
-        <div class="faq-q">Is AEO / GEO just SEO with a new name?</div>
-        <div class="faq-a">No. SEO optimises for ranking in a list of links. AEO optimises for being <strong>the answer</strong> AI gives. The work overlaps (good content, clean structure, authority) but the goal, the metrics and a lot of the tactics are genuinely different. SEO experts who haven't retooled won't get you there.</div>
+        <div class="faq-q">Is this actually free?</div>
+        <div class="faq-a">Yes, completely. No catch, no card needed, no follow-up sales sequence. We run a small number of these every week because they're a much better way for us to start a conversation than cold outreach. <strong>If there's a fit at the end, great. If not, you've still walked away with three quick wins you can act on yourself.</strong></div>
       </div>
       <div class="faq-item rv-right d1">
-        <div class="faq-q">How do you measure whether it's working?</div>
-        <div class="faq-a">We test the actual questions your customers ask, against the actual AI engines they use, every month. <strong>You see your visibility score climb (or not) in plain numbers.</strong> No dashboards full of vanity metrics. If it's not working, we'll tell you.</div>
+        <div class="faq-q">What do I need to bring?</div>
+        <div class="faq-a">Nothing. Just turn up. If you've got 2-3 competitors you'd like us to check against, send them ahead of the call so we can include them. Otherwise we'll pick them based on your sector.</div>
       </div>
       <div class="faq-item rv-left d2">
-        <div class="faq-q">How long until we see results?</div>
-        <div class="faq-a">The audit takes 1–2 weeks. Quick wins from the optimise stage often show up within 30 days. Meaningful, defensible improvement in AI visibility usually takes <strong>60–120 days</strong>, depending on how competitive your space is and how well-known you currently are.</div>
+        <div class="faq-q">Will you try to sell me something at the end?</div>
+        <div class="faq-a">Honestly — only if you ask. The point of the call is the audit, not the pitch. If what we find suggests we could help further, we'll say so. If it suggests you don't need us, we'll say that too. <strong>You'll know within five minutes whether we're trying to be useful or trying to be salesy.</strong></div>
       </div>
       <div class="faq-item rv-right d2">
-        <div class="faq-q">Do we need to be doing AEO and SEO?</div>
-        <div class="faq-a">Yes — for now. Most of your customers still use Google for some queries. Our work strengthens both at once because the underlying content and authority improvements are good for both kinds of search. <strong>You don't have to choose.</strong></div>
+        <div class="faq-q">What if my business is too small / too niche?</div>
+        <div class="faq-a">Niche is usually <em>better</em>. The smaller and more specific your space, the easier it is to dominate AI answers in it — and the more valuable each lead is. If you genuinely think you're too small to benefit, book the call anyway and we'll tell you straight.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ===== CTA ===== -->
-<section id="cta" aria-label="Get in touch">
+<!-- ===== FINAL CTA ===== -->
+<section id="cta" aria-label="Final call to action">
   <div class="w">
     <div class="cta-in rv-scale">
-      <h2 class="cta-h">Find out what AI is<br>saying about you. <span class="warm">Free.</span></h2>
-      <p class="cta-p">A 30-minute call where we run a quick live audit on your business in front of you, show you what ChatGPT and friends are currently saying, and tell you honestly whether AEO is worth investing in for your stage. No pitch deck.</p>
+      <h2 class="cta-h">30 minutes.<br>Free. <span class="warm">Surprisingly useful.</span></h2>
+      <p class="cta-p">We run a handful of these every week and they've turned into some of our best client relationships — and just as often, into great conversations that didn't lead anywhere but left both sides smarter.</p>
       <div class="cta-row">
-        <a href="../ai-visibility-check.html" class="btn-sun">
-          Get a free AI visibility check
+        <a href="#book" class="btn-sun">
+          Book my free check
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
-        <a href="../services.html" class="btn-outline">Or see all our services</a>
+        <a href="services/aeo-geo.html" class="btn-outline">Or read about AEO / GEO first</a>
       </div>
       <p class="cta-note">We respond to all enquiries within one working day.</p>
     </div>
@@ -991,27 +1169,27 @@ html[data-theme="light"] .icon-moon { display:none; }
   <div class="footer-in">
     <div>
       <div class="f-logo">
-        <img src="../assets/logo-white.png" alt="Iternal" class="logo-dark">
-        <img src="../assets/logo-navy.png" alt="Iternal" class="logo-light">
+        <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
+        <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
       </div>
       <p class="f-desc">The AI partner for SMEs and growing UK businesses. We help you adopt AI, automate the boring stuff, and show up in AI-generated answers.</p>
     </div>
     <div>
       <span class="f-col-lbl">Services</span>
       <ul class="f-links">
-        <li><a href="../services.html#ai-implementation">AI Implementation</a></li>
-        <li><a href="../services.html#automation-agents">Automation &amp; AI Agents</a></li>
-        <li><a href="../services.html#aeo-geo">AEO / GEO</a></li>
-        <li><a href="aeo-geo.html">AEO / GEO deep-dive</a></li>
+        <li><a href="services.html#ai-implementation">AI Implementation</a></li>
+        <li><a href="services.html#automation-agents">Automation &amp; AI Agents</a></li>
+        <li><a href="services.html#aeo-geo">AEO / GEO</a></li>
+        <li><a href="services/aeo-geo.html">AEO / GEO deep-dive</a></li>
       </ul>
     </div>
     <div>
       <span class="f-col-lbl">Navigation</span>
       <ul class="f-links">
-        <li><a href="../index.html#work">Work</a></li>
-        <li><a href="../about.html">About</a></li>
-        <li><a href="../insights.html">Insights</a></li>
-        <li><a href="../contact.html">Contact</a></li>
+        <li><a href="index.html#work">Work</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="insights.html">Insights</a></li>
+        <li><a href="contact.html">Contact</a></li>
       </ul>
     </div>
     <div>
@@ -1020,7 +1198,7 @@ html[data-theme="light"] .icon-moon { display:none; }
         <li><a href="mailto:hello@iternal.life">hello@iternal.life</a></li>
         <li><a href="https://iternal.app" target="_blank" rel="noopener noreferrer">iternal.app</a></li>
         <li><a href="https://linkedin.com/company/iternal" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-        <li><a href="../contact.html">Book a Call</a></li>
+        <li><a href="contact.html">Book a Call</a></li>
       </ul>
     </div>
   </div>
@@ -1159,6 +1337,34 @@ document.querySelectorAll('.case,.tier').forEach(card=>{
       ticking = false;
     });
   }, {passive: true});
+})();
+
+/* ── Visibility-check form submit ── */
+(function(){
+  var form = document.getElementById('vcForm');
+  var wrap = document.getElementById('vcFormWrap');
+  if(!form || !wrap) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var btn = form.querySelector('.vc-submit-btn');
+    if(btn){ btn.disabled = true; btn.style.opacity = 0.6; btn.firstChild.textContent = 'Sending… '; }
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    }).then(function(r){
+      if(r.ok){
+        wrap.classList.add('submitted');
+        wrap.scrollIntoView({behavior:'smooth', block:'start'});
+      } else {
+        if(btn){ btn.disabled = false; btn.style.opacity = 1; btn.firstChild.textContent = 'Try again '; }
+        alert("Something went wrong sending your details. Please email hello@iternal.life and we'll book you in directly.");
+      }
+    }).catch(function(){
+      if(btn){ btn.disabled = false; btn.style.opacity = 1; btn.firstChild.textContent = 'Try again '; }
+      alert("Couldn't reach the form server. Please email hello@iternal.life and we'll book you in directly.");
+    });
+  });
 })();
 </script>
 </body>
