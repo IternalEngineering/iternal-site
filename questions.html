@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Engagement Terms — Iternal AI</title>
-<meta name="description" content="Iternal's engagement terms in plain English: £750 all in, £325 to start, and exactly what signing begins.">
+<title>Your Project Questions — Iternal AI</title>
+<meta name="description" content="Tell us about your project. Answer the first few questions to unlock your call booking — the rest make the call sharper.">
 <meta name="robots" content="noindex, follow">
-<meta property="og:title" content="Engagement Terms — Iternal AI">
-<meta property="og:description" content="Iternal's engagement terms in plain English: £750 all in, £325 to start, and exactly what signing begins.">
+<meta property="og:title" content="Your Project Questions — Iternal AI">
+<meta property="og:description" content="Tell us about your project. Answer the first few questions to unlock your call booking.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://iternal.life/terms.html">
+<meta property="og:url" content="https://iternal.life/questions.html">
 <meta property="og:image" content="https://iternal.life/og-image.png">
 <meta property="og:site_name" content="Iternal AI">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Engagement Terms — Iternal AI">
-<meta name="twitter:description" content="Iternal's engagement terms in plain English.">
+<meta name="twitter:title" content="Your Project Questions — Iternal AI">
+<meta name="twitter:description" content="Tell us about your project. Answer the first few questions to unlock your call booking.">
 <meta name="twitter:image" content="https://iternal.life/og-image.png">
-<link rel="canonical" href="https://iternal.life/terms.html">
+<link rel="canonical" href="https://iternal.life/questions.html">
 <link rel="icon" href="assets/icon-navy.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -599,7 +599,7 @@ html[data-theme="light"] .icon-moon { display:none; }
 <main id="main">
 
 <!-- ===== HERO (two-column: text + form) ===== -->
-<div class="page-hero" aria-label="Engagement terms">
+<div class="page-hero" aria-label="Project sign-up">
   <canvas id="hero-canvas"></canvas>
   <div class="page-hero-in">
 
@@ -607,12 +607,12 @@ html[data-theme="light"] .icon-moon { display:none; }
     <div class="hero-left">
       <div>
         <h1 class="page-hero-h rv d1">
-          The terms,<br>
-          <span class="dim">in plain</span><br>
-          English.
+          Help us<br>
+          <span class="dim">prepare</span><br>
+          your call.
         </h1>
         <p class="page-hero-sub rv d2">
-          Before any money changes hands, this page tells you exactly what signing starts, what it costs, and what happens if we miss. Read it, then continue to secure payment when you're ready.
+          A few questions about your organisation and what the site has to do. Answer the first few and you can book your call — everything after that is optional, but each answer makes the call (and your concepts) sharper.
         </p>
       </div>
 
@@ -648,7 +648,7 @@ html[data-theme="light"] .icon-moon { display:none; }
 
       <div class="response-note rv d4">
         <div class="response-note-icon">⚡</div>
-        <p><strong>Questions before you agree?</strong> Email <a href="mailto:hello@iternal.life" style="color:var(--tan)">hello@iternal.life</a> or <a href="contact.html" style="color:var(--tan)">book a call</a> — we'd rather talk it through than have you guess.</p>
+        <p><strong>Your answers save in this browser as you go.</strong> Close the tab, come back later, carry on. Skip anything you're not sure about — "I don't know yet" is a perfectly good answer for the call.</p>
       </div>
     </div>
 
@@ -656,41 +656,39 @@ html[data-theme="light"] .icon-moon { display:none; }
     <div class="rv-right d1" id="form">
       <div class="form-wrap" id="formWrap">
 
-        <div class="form-inner">
+        <div class="form-inner" id="quiz">
           <div class="form-head">
-            <h2>The engagement at a glance</h2>
-            <p>This is the whole deal. No small print elsewhere.</p>
+            <h2 id="quizProgress">Question 1</h2>
+            <p id="quizStatus">The first few unlock your call booking.</p>
           </div>
 
-          <div style="display:flex; flex-direction:column; gap:26px; font-size:15px; line-height:1.7; color:var(--t2)">
-            <div>
-              <div style="font-weight:700; color:var(--white); margin-bottom:6px">The price</div>
-              <p style="margin:0">The full cost is <strong style="color:var(--white)">£750</strong>. That covers everything described below: the questions, the call, your concepts, refining the one you pick, and launch. If we offer optional extras in future, they'll be priced separately and clearly — nothing gets added without you choosing it.</p>
-            </div>
+          <div id="quizBody"><!-- question rendered here --></div>
 
-            <div>
-              <div style="font-weight:700; color:var(--white); margin-bottom:6px">£325 to start</div>
-              <p style="margin:0">You pay <strong style="color:var(--white)">£325</strong> when you sign, through Stripe's secure checkout. That's what commissions the work below. The remaining £425 is invoiced when your site goes live.</p>
-            </div>
-
-            <div>
-              <div style="font-weight:700; color:var(--white); margin-bottom:6px">What signing starts</div>
-              <p style="margin:0">You answer a short set of questions about your organisation and what the site has to do, we talk it through on a call, and then we design and build <strong style="color:var(--white)">two or three working concepts</strong> — real pages you can click through. You pick the one that fits, and refine it with us until it's yours.</p>
-            </div>
-
-            <div>
-              <div style="font-weight:700; color:var(--white); margin-bottom:6px">If no concept fits</div>
-              <p style="margin:0"><span style="color:var(--tan); border-bottom:1px dashed var(--tan)">Policy to be confirmed</span> — this section will state plainly what happens to your deposit if none of the concepts is right.</p>
-            </div>
-          </div>
-
-          <div class="form-submit" style="margin-top:34px">
-            <button type="button" class="submit-btn" id="payBtn" disabled style="opacity:.55" aria-disabled="true">
-              Continue to Secure Payment
+          <div class="form-submit" style="display:flex; gap:16px; align-items:center; flex-wrap:wrap">
+            <button type="button" class="submit-btn" id="quizNext">
+              Next
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <p class="form-privacy">The secure Stripe checkout opens from here once payments go live. You'll accept these terms on the payment page itself; card details are handled by Stripe, never by us. Straight after payment you'll be taken to your project questions.</p>
+            <button type="button" id="quizBack" style="background:none; border:none; color:var(--t3); font-family:inherit; font-size:14px; font-weight:700; text-decoration:underline; text-underline-offset:3px; cursor:none" hidden>Back</button>
           </div>
+
+          <div id="unlockPanel" hidden aria-live="polite" style="margin-top:26px; padding:18px 20px; border:1px solid var(--tan); border-radius:6px">
+            <div style="font-weight:700; color:var(--tan); margin-bottom:6px">Your call is unlocked</div>
+            <p style="font-size:14px; color:var(--t2); margin:0 0 12px; line-height:1.6">That's enough for us to prepare properly. Book your call now, or keep answering — every extra answer sharpens the concepts.</p>
+            <a id="bookBtn" href="contact.html" style="color:var(--tan); font-weight:700; text-decoration:underline; text-underline-offset:3px">Book your call →</a>
+          </div>
+
+          <p class="form-privacy" style="margin-top:22px">Answers save in this browser as you go, and reach us when you book the call or finish. No newsletters, no noise.</p>
+        </div>
+
+        <!-- Success state -->
+        <div class="form-success" aria-live="polite" role="status">
+          <div class="success-icon">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <h3 class="success-h">Answers sent.</h3>
+          <p class="success-p">Thank you — that's exactly what we need to make the call count. If you haven't already, the last step before we start is booking it.</p>
+          <p class="success-p" style="margin-top:16px"><a id="bookBtnSuccess" href="contact.html" style="color:var(--tan); font-weight:700; text-decoration:underline; text-underline-offset:3px">Book your call →</a></p>
         </div>
 
       </div>
@@ -700,35 +698,35 @@ html[data-theme="light"] .icon-moon { display:none; }
 </div>
 
 <!-- ===== GOOD REASONS ===== -->
-<div class="reasons-section" aria-label="How the engagement works">
-  <div class="reasons-lbl rv">Why it works this way</div>
+<div class="reasons-section" aria-label="Why these questions">
+  <div class="reasons-lbl rv">Why these questions</div>
   <div class="reason-grid">
     <div class="reason rv d1">
       <span class="reason-n">01</span>
       <div class="reason-body">
-        <div class="reason-title">The deposit buys real work</div>
-        <div class="reason-desc">£325 on signing commissions two or three working versions of your site — designed, built and clickable. It's not a reservation fee.</div>
+        <div class="reason-title">The call starts further ahead</div>
+        <div class="reason-desc">With your answers in front of us, the 30 minutes goes on decisions, not introductions.</div>
       </div>
     </div>
     <div class="reason rv d2">
       <span class="reason-n">02</span>
       <div class="reason-body">
-        <div class="reason-title">The balance waits for launch</div>
-        <div class="reason-desc">The remaining £425 is only invoiced when your site is live and you've signed it off. Our incentive and yours point the same way.</div>
+        <div class="reason-title">Your concepts come from them</div>
+        <div class="reason-desc">The two or three versions we design are shaped directly by what you tell us here — audience, feel, pages, purpose.</div>
       </div>
     </div>
     <div class="reason rv d3">
       <span class="reason-n">03</span>
       <div class="reason-body">
-        <div class="reason-title">You choose, we don't presume</div>
-        <div class="reason-desc">Concepts exist so the big decisions are made by looking at real pages, not by imagining them from a proposal document.</div>
+        <div class="reason-title">Skipping is allowed</div>
+        <div class="reason-desc">Only the first few are needed to book the call. Everything else can be skipped, and "don't know yet" is a useful answer in itself.</div>
       </div>
     </div>
     <div class="reason rv d4">
       <span class="reason-n">04</span>
       <div class="reason-body">
-        <div class="reason-title">Payment is handled by Stripe</div>
-        <div class="reason-desc">Card details go to Stripe's secure checkout, never to us. You accept these terms there, and the receipt is theirs too.</div>
+        <div class="reason-title">Nothing is lost</div>
+        <div class="reason-desc">Answers save in your browser as you type. Close the tab mid-thought and pick up where you left off.</div>
       </div>
     </div>
   </div>
@@ -958,6 +956,148 @@ document.head.appendChild(style);
       ticking = false;
     });
   }, {passive: true});
+})();
+</script>
+
+<script>
+/* ── Call-prep question wizard ── */
+(function(){
+  var BOOKING_URL = 'contact.html'; // ponytail: swap for the Calendly/Cal.com booking URL when it exists
+  var SEND_TO = 'https://formsubmit.co/ajax/paul@iternal.life';
+  var STORE = 'iternal_call_prep';
+
+  // core:true questions must all be answered to unlock the call booking.
+  var QUESTIONS = [
+    { id:'email',    core:true,  type:'email',    label:'Your work email', hint:'So we can match your answers to your sign-up.', ph:'jane@company.com' },
+    { id:'mainJob',  core:true,  type:'choice',   label:"What's the site's main job?", options:['Introduce the organisation','Sell products or services','Take bookings or enquiries','Publish news or content','Something else'] },
+    { id:'hasSite',  core:true,  type:'text',     label:'Do you have a website today?', hint:'Paste the address — or just say no.', ph:'https://yoursite.com, or "no"' },
+    { id:'audience', core:true,  type:'textarea', label:'Who do you most want the site to reach?', ph:'e.g. local families, procurement teams, funders, first-time customers…' },
+    { id:'timeline', core:true,  type:'choice',   label:'When would you like to launch?', options:['As soon as possible','Within a month','In the next few months','No fixed date'] },
+    { id:'mustDo',   type:'textarea', label:"When someone visits, what's the one thing you'd like them to do?", ph:'e.g. get in touch, book, buy, sign up, just understand what we do…' },
+    { id:'pages',    type:'multi',    label:'Which pages do you think you need?', hint:'Pick any — we’ll advise on the rest.', options:['Home','About','Services','Contact','News or blog','FAQ','Other'] },
+    { id:'branding', type:'choice',   label:'Do you have branding — a logo, colours?', options:['Yes — logo and colours','Some of it','Not yet'] },
+    { id:'feel',     type:'text',     label:'Three words for how the site should feel.', ph:'e.g. warm, credible, quick' },
+    { id:'admired',  type:'textarea', label:'Two or three sites you like the look of.', hint:'Any sites at all — they don’t need to be in your field.', ph:'Paste addresses or names' },
+    { id:'content',  type:'choice',   label:'Who writes the words?', options:['We’d like you to write them','I’ll draft, you polish','I have the content ready'] },
+    { id:'wrong',    type:'textarea', label:'If you have a site now — what does it get wrong?', ph:'Slow, dated, hard to update, says the wrong thing…' },
+    { id:'anything', type:'textarea', label:'Anything else we should know before the call?', ph:'Constraints, deadlines, politics, ideas — anything' }
+  ];
+
+  var body = document.getElementById('quizBody');
+  if (!body) return;
+  var progress = document.getElementById('quizProgress');
+  var status = document.getElementById('quizStatus');
+  var nextBtn = document.getElementById('quizNext');
+  var backBtn = document.getElementById('quizBack');
+  var unlockPanel = document.getElementById('unlockPanel');
+  var bookBtn = document.getElementById('bookBtn');
+  var answers = {};
+  try { answers = JSON.parse(localStorage.getItem(STORE)) || {}; } catch(e) {}
+  var step = 0;
+  var partialSent = false;
+
+  function save(){ try { localStorage.setItem(STORE, JSON.stringify(answers)); } catch(e) {} }
+  function answered(q){ var v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!(v && String(v).trim()); }
+  function coreDone(){ return QUESTIONS.filter(function(q){ return q.core; }).every(answered); }
+  function esc(s){ var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+  function render(){
+    var q = QUESTIONS[step];
+    progress.textContent = 'Question ' + (step + 1) + ' of ' + QUESTIONS.length;
+    status.textContent = q.core ? 'Needed to unlock your call booking.' : 'Optional — skip if you’re not sure.';
+    var h = '<div class="form-field"><label for="qi">' + esc(q.label) + (q.core ? ' <span>*</span>' : '') + '</label>';
+    if (q.hint) h += '<p style="font-size:13px; color:var(--t3); margin:0 0 10px">' + esc(q.hint) + '</p>';
+    if (q.type === 'textarea') {
+      h += '<textarea id="qi" placeholder="' + esc(q.ph || '') + '"></textarea>';
+    } else if (q.type === 'choice' || q.type === 'multi') {
+      h += '<div class="budget-chips" id="qChips">' + q.options.map(function(o){
+        return '<button type="button" class="budget-chip" data-val="' + esc(o) + '">' + esc(o) + '</button>';
+      }).join('') + '</div>';
+    } else {
+      h += '<input type="' + (q.type === 'email' ? 'email' : 'text') + '" id="qi" placeholder="' + esc(q.ph || '') + '">';
+    }
+    h += '</div>';
+    body.innerHTML = h;
+
+    var input = document.getElementById('qi');
+    if (input) {
+      input.value = answers[q.id] || '';
+      input.addEventListener('input', function(){ answers[q.id] = input.value; save(); refreshUnlock(); });
+      input.addEventListener('keydown', function(e){ if (e.key === 'Enter' && q.type !== 'textarea') { e.preventDefault(); next(); } });
+      input.focus();
+    }
+    var chips = document.getElementById('qChips');
+    if (chips) {
+      var current = answers[q.id] || (q.type === 'multi' ? [] : '');
+      chips.querySelectorAll('.budget-chip').forEach(function(chip){
+        var val = chip.dataset.val;
+        if (q.type === 'multi' ? current.indexOf(val) > -1 : current === val) chip.classList.add('selected');
+        chip.addEventListener('click', function(){
+          if (q.type === 'multi') {
+            var list = answers[q.id] || [];
+            var i = list.indexOf(val);
+            if (i > -1) list.splice(i, 1); else list.push(val);
+            answers[q.id] = list;
+            chip.classList.toggle('selected');
+          } else {
+            answers[q.id] = val;
+            chips.querySelectorAll('.budget-chip').forEach(function(c){ c.classList.remove('selected'); });
+            chip.classList.add('selected');
+          }
+          save(); refreshUnlock();
+        });
+      });
+    }
+    backBtn.hidden = step === 0;
+    nextBtn.innerHTML = (step === QUESTIONS.length - 1 ? 'Finish' : (QUESTIONS[step].core ? 'Next' : 'Next / skip')) +
+      ' <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    refreshUnlock();
+  }
+
+  function refreshUnlock(){
+    var open = coreDone();
+    unlockPanel.hidden = !open;
+    if (open) status.textContent = QUESTIONS[step].core ? 'Answered — your call is unlocked.' : 'Optional — skip if you’re not sure.';
+  }
+
+  function send(kind){
+    var fd = new FormData();
+    fd.append('_captcha', 'false');
+    fd.append('_subject', 'Call prep answers (' + kind + ') — ' + (answers.email || 'no email'));
+    QUESTIONS.forEach(function(q){
+      var v = answers[q.id];
+      if (v === undefined || v === null || v === '') return;
+      fd.append(q.id, Array.isArray(v) ? v.join(', ') : v);
+    });
+    return fetch(SEND_TO, { method:'POST', body: fd, headers: { 'Accept':'application/json' } });
+  }
+
+  function next(){
+    var q = QUESTIONS[step];
+    if (q.core && !answered(q)) { status.textContent = 'This one’s needed before the call — a rough answer is fine.'; return; }
+    if (q.type === 'email' && answers.email && answers.email.indexOf('@') === -1) { status.textContent = 'That email doesn’t look right.'; return; }
+    if (step < QUESTIONS.length - 1) { step++; render(); return; }
+    // Finish: send everything, show success
+    nextBtn.style.opacity = '.6'; nextBtn.style.pointerEvents = 'none';
+    send('complete').then(function(res){
+      if (!res.ok) throw new Error('send failed');
+      document.getElementById('formWrap').classList.add('submitted');
+    }).catch(function(){
+      nextBtn.style.opacity = '1'; nextBtn.style.pointerEvents = 'auto';
+      status.textContent = 'Sending failed — please try again, or email your answers to hello@iternal.life.';
+    });
+  }
+
+  nextBtn.addEventListener('click', next);
+  backBtn.addEventListener('click', function(){ if (step > 0) { step--; render(); } });
+  bookBtn.href = BOOKING_URL;
+  var bookBtnSuccess = document.getElementById('bookBtnSuccess');
+  if (bookBtnSuccess) bookBtnSuccess.href = BOOKING_URL;
+  bookBtn.addEventListener('click', function(){
+    if (!partialSent) { partialSent = true; try { send('partial'); } catch(e) {} }
+  });
+
+  render();
 })();
 </script>
 </body>
