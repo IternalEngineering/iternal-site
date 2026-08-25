@@ -1085,15 +1085,29 @@ document.head.appendChild(style);
     });
   });
 
-  var external = BOOKING_URL.indexOf('http') === 0;
+  var external = BOOKING_URL.indexOf('http') === 0; // true once the Calendly URL is in
   var bookBtnSuccess = document.getElementById('bookBtnSuccess');
   [bookBtn, bookBtnSuccess].forEach(function(a){
     if (!a) return;
     a.href = BOOKING_URL;
-    if (external) { a.target = '_blank'; a.rel = 'noopener'; } // Calendly opens in a new tab — their answers stay put
-  });
-  bookBtn.addEventListener('click', function(){
-    if (!partialSent) { partialSent = true; try { send('partial'); } catch(e) {} }
+    if (external) {
+      a.target = '_blank'; a.rel = 'noopener'; // Calendly opens in a new tab — their answers stay put
+      if (a === bookBtn) a.addEventListener('click', function(){
+        if (!partialSent) { partialSent = true; try { send('partial'); } catch(e) {} }
+      });
+    } else {
+      // No Calendly yet: clicking sends the answers and confirms right here —
+      // never a second form asking what they've already told us.
+      a.textContent = 'Request your call →';
+      a.addEventListener('click', function(e){
+        e.preventDefault();
+        if (!partialSent) { partialSent = true; try { send('partial'); } catch(err) {} }
+        var p = document.createElement('p');
+        p.style.cssText = 'color:var(--tan); font-weight:700; font-size:14px; margin:0';
+        p.textContent = 'Done — we’ll email you times for your call within one working day.';
+        a.replaceWith(p);
+      });
+    }
   });
 
   refresh();
