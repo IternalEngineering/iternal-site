@@ -505,6 +505,12 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   .cs-highlights { grid-template-columns:repeat(3,1fr); }
   .footer-in { grid-template-columns:1fr 1fr; }
 }
+/* Six nav items need more room: switch to the menu earlier than 900px */
+@media (max-width:1020px) {
+  .nav-links { display:none; }
+  .nav-btn { display:none; }
+  .nav-hamburger { display:flex; }
+}
 @media (max-width:900px) {
   :root { --px:20px; }
   nav { padding:0 20px; }

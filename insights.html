@@ -352,6 +352,12 @@ html[data-theme="light"] #insights-list { background:rgba(10,33,86,0.03); }
 html[data-theme="dark"] .icon-sun { display:none; }
 html[data-theme="light"] .icon-moon { display:none; }
 
+/* Six nav items need more room: switch to the menu earlier than 900px */
+@media (max-width:1020px) {
+  .nav-links { display:none; }
+  .nav-btn { display:none; }
+  .nav-hamburger { display:flex; }
+}
 @media (max-width:900px) {
   .theme-toggle { color:var(--white); position:absolute; right:56px; top:50%; transform:translateY(-50%); }
 }
