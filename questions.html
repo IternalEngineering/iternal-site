@@ -940,7 +940,7 @@ document.head.appendChild(style);
 <script>
 /* ── Call-prep question wizard ── */
 (function(){
-  var BOOKING_URL = 'contact.html'; // ponytail: swap for the Calendly/Cal.com booking URL when it exists
+  var BOOKING_URL = 'contact.html'; // DECIDED: Calendly. Paste the calendly.com event URL here when Robbie supplies it.
   var SEND_TO = 'https://formsubmit.co/ajax/paul@iternal.life';
   var STORE = 'iternal_call_prep';
 
@@ -1085,9 +1085,13 @@ document.head.appendChild(style);
     });
   });
 
-  bookBtn.href = BOOKING_URL;
+  var external = BOOKING_URL.indexOf('http') === 0;
   var bookBtnSuccess = document.getElementById('bookBtnSuccess');
-  if (bookBtnSuccess) bookBtnSuccess.href = BOOKING_URL;
+  [bookBtn, bookBtnSuccess].forEach(function(a){
+    if (!a) return;
+    a.href = BOOKING_URL;
+    if (external) { a.target = '_blank'; a.rel = 'noopener'; } // Calendly opens in a new tab — their answers stay put
+  });
   bookBtn.addEventListener('click', function(){
     if (!partialSent) { partialSent = true; try { send('partial'); } catch(e) {} }
   });
