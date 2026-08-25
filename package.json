@@ -1,0 +1,11 @@
+{
+  "name": "iternal-site",
+  "private": true,
+  "description": "Iternal company site (static). Tooling only — the site itself has no build step.",
+  "scripts": {
+    "screenshots": "node tools/screenshots.js"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.0.0"
+  }
+}

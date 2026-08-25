@@ -1,0 +1,31 @@
+name: Refresh live-site screenshots
+
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest # Chrome preinstalled at /usr/bin/google-chrome
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install --no-audit --no-fund
+      - run: node tools/screenshots.js
+      - name: Commit refreshed screenshots
+        run: |
+          git add assets/screenshot-*.png
+          if git diff --staged --quiet; then
+            echo "No visual changes this week."
+          else
+            git config user.name "screenshot-bot"
+            git config user.email "actions@github.com"
+            git commit -m "Refresh live-site screenshots (weekly)"
+            git push
+          fi
