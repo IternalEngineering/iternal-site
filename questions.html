@@ -658,27 +658,34 @@ html[data-theme="light"] .icon-moon { display:none; }
 
         <div class="form-inner" id="quiz">
           <div class="form-head">
-            <h2 id="quizProgress">Question 1</h2>
-            <p id="quizStatus">The first few unlock your call booking.</p>
+            <h2>The essentials</h2>
+            <p id="quizStatus">These five unlock your call booking.</p>
           </div>
 
-          <div id="quizBody"><!-- question rendered here --></div>
-
-          <div class="form-submit" style="display:flex; gap:16px; align-items:center; flex-wrap:wrap">
-            <button type="button" class="submit-btn" id="quizNext">
-              Next
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <button type="button" id="quizBack" style="background:none; border:none; color:var(--t3); font-family:inherit; font-size:14px; font-weight:700; text-decoration:underline; text-underline-offset:3px; cursor:none" hidden>Back</button>
-          </div>
+          <div id="coreBody"></div>
 
           <div id="unlockPanel" hidden aria-live="polite" style="margin-top:26px; padding:18px 20px; border:1px solid var(--tan); border-radius:6px">
             <div style="font-weight:700; color:var(--tan); margin-bottom:6px">Your call is unlocked</div>
-            <p style="font-size:14px; color:var(--t2); margin:0 0 12px; line-height:1.6">That's enough for us to prepare properly. Book your call now, or keep answering — every extra answer sharpens the concepts.</p>
+            <p style="font-size:14px; color:var(--t2); margin:0 0 12px; line-height:1.6">That's enough for us to prepare properly. Book your call now, or answer a few more below — every extra answer sharpens the concepts.</p>
             <a id="bookBtn" href="contact.html" style="color:var(--tan); font-weight:700; text-decoration:underline; text-underline-offset:3px">Book your call →</a>
           </div>
 
-          <p class="form-privacy" style="margin-top:22px">Answers save in this browser as you go, and reach us when you book the call or finish. No newsletters, no noise.</p>
+          <div class="form-head" style="margin-top:40px">
+            <h2>Worth answering if you can</h2>
+            <p>All optional. Open any question you feel like answering — skip the rest.</p>
+          </div>
+
+          <div id="optBody"></div>
+
+          <div class="form-submit" style="display:flex; gap:16px; align-items:center; flex-wrap:wrap">
+            <button type="button" class="submit-btn" id="quizSend">
+              Send Answers
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <span id="sendNote" style="font-size:13px; color:var(--t3)"></span>
+          </div>
+
+          <p class="form-privacy" style="margin-top:22px">Answers save in this browser as you go, and reach us when you book the call or send them. No newsletters, no noise.</p>
         </div>
 
         <!-- Success state -->
@@ -987,17 +994,16 @@ document.head.appendChild(style);
     { id:'anything', type:'textarea', label:'Anything else we should know before the call?', ph:'Constraints, deadlines, politics, ideas — anything' }
   ];
 
-  var body = document.getElementById('quizBody');
-  if (!body) return;
-  var progress = document.getElementById('quizProgress');
-  var status = document.getElementById('quizStatus');
-  var nextBtn = document.getElementById('quizNext');
-  var backBtn = document.getElementById('quizBack');
+  var coreBody = document.getElementById('coreBody');
+  if (!coreBody) return;
+  var optBody = document.getElementById('optBody');
+  var statusEl = document.getElementById('quizStatus');
+  var sendBtn = document.getElementById('quizSend');
+  var sendNote = document.getElementById('sendNote');
   var unlockPanel = document.getElementById('unlockPanel');
   var bookBtn = document.getElementById('bookBtn');
   var answers = {};
   try { answers = JSON.parse(localStorage.getItem(STORE)) || {}; } catch(e) {}
-  var step = 0;
   var partialSent = false;
 
   function save(){ try { localStorage.setItem(STORE, JSON.stringify(answers)); } catch(e) {} }
@@ -1005,32 +1011,29 @@ document.head.appendChild(style);
   function coreDone(){ return QUESTIONS.filter(function(q){ return q.core; }).every(answered); }
   function esc(s){ var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
 
-  function render(){
-    var q = QUESTIONS[step];
-    progress.textContent = 'Question ' + (step + 1) + ' of ' + QUESTIONS.length;
-    status.textContent = q.core ? 'Needed to unlock your call booking.' : 'Optional — skip if you’re not sure.';
-    var h = '<div class="form-field"><label for="qi">' + esc(q.label) + (q.core ? ' <span>*</span>' : '') + '</label>';
+  function fieldHTML(q, omitLabel){
+    var h = '<div class="form-field">';
+    if (!omitLabel) h += '<label for="qi-' + q.id + '">' + esc(q.label) + (q.core ? ' <span>*</span>' : '') + '</label>';
     if (q.hint) h += '<p style="font-size:13px; color:var(--t3); margin:0 0 10px">' + esc(q.hint) + '</p>';
     if (q.type === 'textarea') {
-      h += '<textarea id="qi" placeholder="' + esc(q.ph || '') + '"></textarea>';
+      h += '<textarea id="qi-' + q.id + '" placeholder="' + esc(q.ph || '') + '"></textarea>';
     } else if (q.type === 'choice' || q.type === 'multi') {
-      h += '<div class="budget-chips" id="qChips">' + q.options.map(function(o){
+      h += '<div class="budget-chips" data-q="' + q.id + '">' + q.options.map(function(o){
         return '<button type="button" class="budget-chip" data-val="' + esc(o) + '">' + esc(o) + '</button>';
       }).join('') + '</div>';
     } else {
-      h += '<input type="' + (q.type === 'email' ? 'email' : 'text') + '" id="qi" placeholder="' + esc(q.ph || '') + '">';
+      h += '<input type="' + (q.type === 'email' ? 'email' : 'text') + '" id="qi-' + q.id + '" placeholder="' + esc(q.ph || '') + '">';
     }
-    h += '</div>';
-    body.innerHTML = h;
+    return h + '</div>';
+  }
 
-    var input = document.getElementById('qi');
+  function wire(q, root){
+    var input = root.querySelector('#qi-' + q.id);
     if (input) {
       input.value = answers[q.id] || '';
-      input.addEventListener('input', function(){ answers[q.id] = input.value; save(); refreshUnlock(); });
-      input.addEventListener('keydown', function(e){ if (e.key === 'Enter' && q.type !== 'textarea') { e.preventDefault(); next(); } });
-      input.focus();
+      input.addEventListener('input', function(){ answers[q.id] = input.value; save(); refresh(); });
     }
-    var chips = document.getElementById('qChips');
+    var chips = root.querySelector('[data-q="' + q.id + '"]');
     if (chips) {
       var current = answers[q.id] || (q.type === 'multi' ? [] : '');
       chips.querySelectorAll('.budget-chip').forEach(function(chip){
@@ -1048,20 +1051,42 @@ document.head.appendChild(style);
             chips.querySelectorAll('.budget-chip').forEach(function(c){ c.classList.remove('selected'); });
             chip.classList.add('selected');
           }
-          save(); refreshUnlock();
+          save(); refresh();
         });
       });
     }
-    backBtn.hidden = step === 0;
-    nextBtn.innerHTML = (step === QUESTIONS.length - 1 ? 'Finish' : (QUESTIONS[step].core ? 'Next' : 'Next / skip')) +
-      ' <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    refreshUnlock();
   }
 
-  function refreshUnlock(){
+  // The five essentials: always-visible fields.
+  QUESTIONS.filter(function(q){ return q.core; }).forEach(function(q){
+    var d = document.createElement('div');
+    d.innerHTML = fieldHTML(q, false);
+    coreBody.appendChild(d);
+    wire(q, d);
+  });
+
+  // The rest: native <details> rows — click a question to open and answer it.
+  QUESTIONS.filter(function(q){ return !q.core; }).forEach(function(q){
+    var d = document.createElement('details');
+    d.dataset.q = q.id;
+    d.style.cssText = 'border-bottom:1px solid rgba(128,128,128,.22)';
+    d.innerHTML =
+      '<summary style="cursor:none; padding:14px 4px; font-size:15px; font-weight:700; color:var(--t2)">' + esc(q.label) +
+      ' <span data-done style="color:var(--tan); font-weight:400; font-size:12px; margin-left:6px"></span></summary>' +
+      '<div style="padding:2px 4px 18px">' + fieldHTML(q, true) + '</div>';
+    optBody.appendChild(d);
+    wire(q, d);
+  });
+
+  function refresh(){
     var open = coreDone();
     unlockPanel.hidden = !open;
-    if (open) status.textContent = QUESTIONS[step].core ? 'Answered — your call is unlocked.' : 'Optional — skip if you’re not sure.';
+    statusEl.textContent = open ? 'All five answered — your call is unlocked.' : 'These five unlock your call booking.';
+    optBody.querySelectorAll('details').forEach(function(d){
+      var q = QUESTIONS.filter(function(x){ return x.id === d.dataset.q; })[0];
+      d.querySelector('[data-done]').textContent = answered(q) ? '· answered' : '';
+    });
+    sendNote.textContent = '';
   }
 
   function send(kind){
@@ -1076,24 +1101,19 @@ document.head.appendChild(style);
     return fetch(SEND_TO, { method:'POST', body: fd, headers: { 'Accept':'application/json' } });
   }
 
-  function next(){
-    var q = QUESTIONS[step];
-    if (q.core && !answered(q)) { status.textContent = 'This one’s needed before the call — a rough answer is fine.'; return; }
-    if (q.type === 'email' && answers.email && answers.email.indexOf('@') === -1) { status.textContent = 'That email doesn’t look right.'; return; }
-    if (step < QUESTIONS.length - 1) { step++; render(); return; }
-    // Finish: send everything, show success
-    nextBtn.style.opacity = '.6'; nextBtn.style.pointerEvents = 'none';
+  sendBtn.addEventListener('click', function(){
+    if (!coreDone()) { sendNote.textContent = 'The five essentials above are needed first — rough answers are fine.'; return; }
+    if (answers.email && answers.email.indexOf('@') === -1) { sendNote.textContent = 'That email doesn’t look right.'; return; }
+    sendBtn.style.opacity = '.6'; sendBtn.style.pointerEvents = 'none';
     send('complete').then(function(res){
       if (!res.ok) throw new Error('send failed');
       document.getElementById('formWrap').classList.add('submitted');
     }).catch(function(){
-      nextBtn.style.opacity = '1'; nextBtn.style.pointerEvents = 'auto';
-      status.textContent = 'Sending failed — please try again, or email your answers to hello@iternal.life.';
+      sendBtn.style.opacity = '1'; sendBtn.style.pointerEvents = 'auto';
+      sendNote.textContent = 'Sending failed — please try again, or email your answers to hello@iternal.life.';
     });
-  }
+  });
 
-  nextBtn.addEventListener('click', next);
-  backBtn.addEventListener('click', function(){ if (step > 0) { step--; render(); } });
   bookBtn.href = BOOKING_URL;
   var bookBtnSuccess = document.getElementById('bookBtnSuccess');
   if (bookBtnSuccess) bookBtnSuccess.href = BOOKING_URL;
@@ -1101,7 +1121,7 @@ document.head.appendChild(style);
     if (!partialSent) { partialSent = true; try { send('partial'); } catch(e) {} }
   });
 
-  render();
+  refresh();
 })();
 </script>
 </body>
