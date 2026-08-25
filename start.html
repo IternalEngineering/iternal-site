@@ -803,7 +803,7 @@ window.addEventListener('scroll', () => {
 const cur = document.getElementById('cur');
 let mx=0,my=0,cx=0,cy=0;
 document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
-(function move(){cx+=(mx-cx)*.5;cy+=(my-cy)*.5;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(move)})();
+(function move(){cx+=(mx-cx)*1;cy+=(my-cy)*1;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(move)})();
 document.querySelectorAll('a,button,input,select,textarea,.reason,.budget-chip').forEach(el=>{
   el.addEventListener('mouseenter',()=>cur.classList.add('big'));
   el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
