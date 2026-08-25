@@ -916,7 +916,6 @@ document.head.appendChild(style);
 (function(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const mesh = document.getElementById('mesh');
-  const heroContent = document.querySelector('.hero-left');
   const heroSection = document.querySelector('#hero, .page-hero');
   if(!mesh || !heroSection) return;
   const limit = heroSection.offsetHeight || window.innerHeight;
@@ -928,15 +927,6 @@ document.head.appendChild(style);
       const sy = window.scrollY;
       if(sy <= limit){
         mesh.style.transform = 'translateY(' + (sy * -0.08) + 'px)';
-        if(heroContent){
-          if(window.innerWidth > 1024){
-            heroContent.style.transform = 'translateY(' + (sy * 0.35) + 'px)';
-            heroContent.style.opacity = 1 - (sy / limit) * 0.6;
-          } else {
-            heroContent.style.transform = '';
-            heroContent.style.opacity = '';
-          }
-        }
       }
       ticking = false;
     });
