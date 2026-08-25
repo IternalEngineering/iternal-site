@@ -22,7 +22,6 @@ const SHOTS = [
   { file: 'screenshot-goodnews.png', url: 'https://goodnews.london.gov.uk', width: 1440, height: 900 },
   { file: 'screenshot-goodnews-mobile.png', url: 'https://goodnews.london.gov.uk', width: 390, height: 844, mobile: true },
   { file: 'screenshot-tech4good.png', url: 'https://tech4goodsouthwest.org', width: 1440, height: 900 },
-  { file: 'screenshot-wiseall.png', url: 'https://wiseall.co.uk', width: 1440, height: 900 },
 ];
 
 // Remove fixed/sticky cookie-consent overlays without accepting anything.
