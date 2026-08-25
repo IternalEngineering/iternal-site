@@ -165,9 +165,10 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .page-hero-in {
   max-width:var(--max); margin:0 auto;
   position:relative; z-index:2;
-  display:grid; grid-template-columns:1fr 1.1fr; gap:60px; align-items:start;
+  display:grid; grid-template-columns:1fr; gap:52px; align-items:start;
 }
-.hero-left { display:flex; flex-direction:column; gap:32px; padding-top:16px; }
+.hero-left { display:flex; flex-direction:column; gap:32px; padding-top:16px; max-width:860px; }
+#formWrap { max-width:860px; }
 .page-hero-h {
   font-size:clamp(44px,6vw,80px); font-weight:900;
   line-height:.93; letter-spacing:-.04em;
@@ -614,36 +615,6 @@ html[data-theme="light"] .icon-moon { display:none; }
         <p class="page-hero-sub rv d2">
           A few questions about your organisation and what the site has to do. Answer the first few and you can book your call — everything after that is optional, but each answer makes the call (and your concepts) sharper.
         </p>
-      </div>
-
-      <div class="contact-details rv d3">
-        <a href="mailto:hello@iternal.life" class="contact-detail">
-          <div class="detail-icon">
-            <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          </div>
-          <div>
-            <div class="detail-label">Email</div>
-            <div class="detail-value">hello@iternal.life</div>
-          </div>
-        </a>
-        <div class="contact-detail">
-          <div class="detail-icon">
-            <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-          </div>
-          <div>
-            <div class="detail-label">Based in</div>
-            <div class="detail-value">Bristol, UK, working globally</div>
-          </div>
-        </div>
-        <a href="https://linkedin.com/company/iternal" target="_blank" rel="noopener noreferrer" class="contact-detail">
-          <div class="detail-icon">
-            <svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
-          </div>
-          <div>
-            <div class="detail-label">LinkedIn</div>
-            <div class="detail-value">Iternal Ltd</div>
-          </div>
-        </a>
       </div>
 
       <div class="response-note rv d4">
