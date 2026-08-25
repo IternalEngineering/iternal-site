@@ -257,6 +257,7 @@ label span { color:var(--tan); margin-left:2px; }
 
 input[type="text"],
 input[type="email"],
+input[type="url"],
 select,
 textarea {
   width:100%; background:rgba(255,255,255,.04);
@@ -488,6 +489,7 @@ html[data-theme="light"] .form-wrap { background:rgba(255,255,255,0.6); }
 /* Form inputs, selects, textareas */
 html[data-theme="light"] input[type="text"],
 html[data-theme="light"] input[type="email"],
+html[data-theme="light"] input[type="url"],
 html[data-theme="light"] select,
 html[data-theme="light"] textarea {
   background:rgba(255,255,255,0.6);
@@ -689,7 +691,7 @@ html[data-theme="light"] .icon-moon { display:none; }
 
           <div class="form-field">
             <label for="website">Existing website, if you have one</label>
-            <input type="text" id="website" name="existingWebsite" placeholder="https://yoursite.com">
+            <input type="url" id="website" name="existingWebsite" placeholder="https://yoursite.com">
           </div>
 
           <div class="form-submit">
@@ -837,6 +839,13 @@ document.querySelectorAll('.budget-chip').forEach(chip=>{
     chip.classList.add('selected');
     document.getElementById('budgetHidden').value = chip.dataset.val;
   });
+});
+
+/* ── Bare domains pass URL validation ── */
+const siteField = document.getElementById('website');
+if (siteField) siteField.addEventListener('blur', () => {
+  const v = siteField.value.trim();
+  if (v && v.includes('.') && !/^https?:\/\//i.test(v)) siteField.value = 'https://' + v;
 });
 
 /* ── Form submit via FormSubmit ── */
