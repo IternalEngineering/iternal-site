@@ -980,6 +980,8 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 }
 @media (max-width:900px) {
   :root { --px:20px; }
+  .hero-actions { flex-direction:column; align-items:stretch; gap:16px; }
+  .hero-actions a { justify-content:center; }
   nav { padding:0 20px; }
   .nav-links { display:none; }
   .nav-btn { display:none; }
@@ -1359,10 +1361,12 @@ html[data-theme="light"] .icon-moon { display:none; }
       </div>
     </div>
 
-    <div class="rv" style="margin-top:52px; display:flex; align-items:baseline; gap:28px; flex-wrap:wrap">
-      <p style="font-size:15px; color:var(--t3); margin:0">Everything above was designed and built by our team, and runs in production today.</p>
-      <a href="contact.html" class="btn-line">Talk to us about yours <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    </div>
+    <a href="start.html" class="rv" style="margin-top:24px; display:block; padding:34px 30px; border:1px dashed var(--tan); border-radius:6px; text-decoration:none; position:relative">
+      <div class="card-sec" style="margin-bottom:10px"><span class="cdot"></span><span class="csec">Your Project</span></div>
+      <h3 class="card-h" style="margin-bottom:8px">Start your own</h3>
+      <p class="card-p" style="margin-bottom:14px">Everything above was designed and built by our team, and runs in production today. Yours could be next.</p>
+      <span class="btn-line">Start a Project <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </a>
   </div>
 </section>
 
