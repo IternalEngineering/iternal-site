@@ -618,7 +618,7 @@ html[data-theme="light"] .icon-moon { display:none; }
       </div>
 
       <div class="response-note rv d4">
-            <p><strong>Your answers save in this browser as you go.</strong> Close the tab, come back later, carry on. Skip anything you're not sure about — "I don't know yet" is a perfectly good answer for the call.</p>
+            <p><strong>Skip anything you're not sure about.</strong> "I don't know yet" is a perfectly good answer for the call — only the first five questions are needed to book it.</p>
       </div>
     </div>
 
@@ -655,7 +655,7 @@ html[data-theme="light"] .icon-moon { display:none; }
             <span id="sendNote" style="font-size:13px; color:var(--t3)"></span>
           </div>
 
-          <p class="form-privacy" style="margin-top:22px">Answers save in this browser as you go, and reach us when you book the call or send them. No newsletters, no noise.</p>
+          <p class="form-privacy" style="margin-top:22px">Your answers reach us when you book the call or send them. No newsletters, no noise.</p>
         </div>
 
         <!-- Success state -->
@@ -929,7 +929,7 @@ document.head.appendChild(style);
   var unlockPanel = document.getElementById('unlockPanel');
   var bookBtn = document.getElementById('bookBtn');
   var answers = {};
-  try { answers = JSON.parse(localStorage.getItem(STORE)) || {}; } catch(e) {}
+  try { answers = JSON.parse(sessionStorage.getItem(STORE)) || {}; } catch(e) {}
   var partialSent = false;
 
   // Arriving from Stripe (the Payment Link redirects to questions.html?paid=1):
@@ -941,7 +941,7 @@ document.head.appendChild(style);
     if (heroSub) heroSub.textContent = 'Payment received — thank you. Finally, we just need you to answer a few questions, plus some optional ones that help us prepare properly for your call. The first five unlock the booking.';
   }
 
-  function save(){ try { localStorage.setItem(STORE, JSON.stringify(answers)); } catch(e) {} }
+  function save(){ try { sessionStorage.setItem(STORE, JSON.stringify(answers)); } catch(e) {} }
   function answered(q){ var v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!(v && String(v).trim()); }
   function coreDone(){ return QUESTIONS.filter(function(q){ return q.core; }).every(answered); }
   function esc(s){ var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
@@ -1042,6 +1042,7 @@ document.head.appendChild(style);
     sendBtn.style.opacity = '.6'; sendBtn.style.pointerEvents = 'none';
     send('complete').then(function(res){
       if (!res.ok) throw new Error('send failed');
+      try { sessionStorage.removeItem(STORE); } catch(e) {}
       document.getElementById('formWrap').classList.add('submitted');
     }).catch(function(){
       sendBtn.style.opacity = '1'; sendBtn.style.pointerEvents = 'auto';
