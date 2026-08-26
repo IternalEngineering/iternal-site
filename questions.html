@@ -903,7 +903,7 @@ document.head.appendChild(style);
   var QUESTIONS = [
     { id:'email',    core:true,  type:'email',    label:'Your work email', hint:'So we can match your answers to your sign-up.', ph:'jane@company.com' },
     { id:'mainJob',  core:true,  type:'choice',   label:"What's the site's main job?", options:['Introduce the organisation','Sell products or services','Take bookings or enquiries','Publish news or content','Something else'] },
-    { id:'hasSite',  core:true,  type:'text',     label:'Do you have a website today?', hint:'Paste the address — or just say no.', ph:'https://yoursite.com, or "no"' },
+    { id:'hasSite',  core:true,  type:'text',     label:'Do you have a website today?', hint:'Paste the address, or tap the button.', ph:'https://yoursite.com', optOut:'No website yet' },
     { id:'audience', core:true,  type:'textarea', label:'Who do you most want the site to reach?', ph:'e.g. local families, procurement teams, funders, first-time customers…' },
     { id:'timeline', core:true,  type:'choice',   label:'When would you like to launch?', options:['As soon as possible','Within a month','In the next few months','No fixed date'] },
     { id:'mustDo',   type:'textarea', label:"When someone visits, what's the one thing you'd like them to do?", ph:'e.g. get in touch, book, buy, sign up, just understand what we do…' },
@@ -959,14 +959,29 @@ document.head.appendChild(style);
     } else {
       h += '<input type="' + (q.type === 'email' ? 'email' : 'text') + '" id="qi-' + q.id + '" placeholder="' + esc(q.ph || '') + '">';
     }
+    if (q.optOut) h += '<div class="budget-chips" style="margin-top:10px"><button type="button" class="budget-chip" data-optout="' + q.id + '">' + esc(q.optOut) + '</button></div>';
     return h + '</div>';
   }
 
   function wire(q, root){
     var input = root.querySelector('#qi-' + q.id);
+    var optChip = root.querySelector('[data-optout="' + q.id + '"]');
     if (input) {
-      input.value = answers[q.id] || '';
-      input.addEventListener('input', function(){ answers[q.id] = input.value; save(); refresh(); });
+      input.value = answers[q.id] === q.optOut ? '' : (answers[q.id] || '');
+      input.addEventListener('input', function(){
+        answers[q.id] = input.value;
+        if (optChip) optChip.classList.remove('selected');
+        save(); refresh();
+      });
+    }
+    if (optChip) {
+      if (answers[q.id] === q.optOut) optChip.classList.add('selected');
+      optChip.addEventListener('click', function(){
+        var on = optChip.classList.toggle('selected');
+        answers[q.id] = on ? q.optOut : '';
+        if (input) input.value = '';
+        save(); refresh();
+      });
     }
     var chips = root.querySelector('[data-q="' + q.id + '"]');
     if (chips) {
