@@ -81,20 +81,8 @@ body {
   color: var(--text);
   font-family: var(--f);
   overflow-x: hidden;
-  cursor: none;
 }
 a { text-decoration: none; }
-
-/* ── Custom cursor ── */
-#cur {
-  position: fixed; width:10px; height:10px;
-  border-radius:50%; pointer-events:none; z-index:9999;
-  background: var(--tan);
-  transform: translate(-50%,-50%);
-  transition: width .25s, height .25s, background .25s, opacity .25s;
-  mix-blend-mode: screen;
-}
-#cur.big { width:48px; height:48px; background: rgba(226,103,19,0.25); }
 
 /* ============================================================
    HERO CANVAS — Mistral-style particle network
@@ -274,7 +262,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   font-size:12px; font-weight:700;
   letter-spacing:.06em; text-transform:uppercase;
   padding:10px 22px; border-radius:3px;
-  border:none; cursor:none;
+  border:none; cursor:pointer;
   transition: opacity .2s, transform .15s, box-shadow .2s;
 }
 .nav-btn:hover {
@@ -346,7 +334,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   background:var(--sunrise); color:var(--white);
   font-family:var(--f); font-size:14px; font-weight:700;
   letter-spacing:.04em; padding:16px 32px; border-radius:3px;
-  border:none; cursor:none; white-space:nowrap;
+  border:none; cursor:pointer; white-space:nowrap;
   transition: transform .15s, box-shadow .25s, opacity .2s;
 }
 .btn-sun:hover {
@@ -362,7 +350,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   font-family:var(--f); font-size:13px; font-weight:700;
   letter-spacing:.08em; text-transform:uppercase;
   padding:14px 0; border-bottom:1px solid rgba(255,255,255,.18);
-  cursor:none; white-space:nowrap;
+  cursor:pointer; white-space:nowrap;
   transition:color .2s, border-color .2s;
 }
 .btn-line:hover { color:var(--white); border-color:var(--tan); }
@@ -933,7 +921,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 .nav-hamburger {
   display:none; flex-direction:column; justify-content:center;
   gap:5px; width:32px; height:32px;
-  background:none; border:none; cursor:none; z-index:201; padding:4px;
+  background:none; border:none; cursor:pointer; z-index:201; padding:4px;
 }
 .nav-hamburger span {
   display:block; width:100%; height:2px;
@@ -997,8 +985,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   .sec-head { flex-direction:column; gap:20px; align-items:flex-start; }
   .footer-in { grid-template-columns:1fr; gap:36px; }
   .f-bot { flex-direction:column; gap:10px; }
-  body { cursor:auto; }
-  #cur { display:none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1033,9 +1019,6 @@ html[data-theme="light"] {
 
 /* Body transition for smooth toggle */
 html[data-theme="light"] body { transition:background-color .3s, color .3s; }
-
-/* Cursor */
-html[data-theme="light"] #cur { mix-blend-mode:multiply; }
 
 /* Mesh blobs — softer for light */
 html[data-theme="light"] .blob { filter:blur(100px); }
@@ -1118,7 +1101,7 @@ html[data-theme="light"] .mobile-nav .mob-cta { color:#ffffff; }
 
 /* Theme toggle */
 .theme-toggle {
-  background:none; border:none; cursor:none;
+  background:none; border:none; cursor:pointer;
   padding:6px; display:flex; align-items:center; justify-content:center;
   color:var(--white); transition:color .2s;
 }
@@ -1159,9 +1142,6 @@ html[data-theme="light"] .icon-moon { display:none; }
   <div class="blob blob-4"></div>
 </div>
 <div id="grain"></div>
-
-<!-- ===== CUSTOM CURSOR ===== -->
-<div id="cur"></div>
 
 <!-- ===== NAV ===== -->
 <nav id="nav">
@@ -1511,21 +1491,6 @@ html[data-theme="light"] .icon-moon { display:none; }
      JS
      ============================================================ -->
 <script>
-/* ── Custom cursor ── */
-const cur = document.getElementById('cur');
-let mx = 0, my = 0, cx = 0, cy = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-function moveCur() {
-  cx += (mx - cx) * 1; cy += (my - cy) * 1;
-  cur.style.left = cx + 'px'; cur.style.top = cy + 'px';
-  requestAnimationFrame(moveCur);
-}
-moveCur();
-document.querySelectorAll('a, button, .card, .svc, .tm-card, .idea-card').forEach(el => {
-  el.addEventListener('mouseenter', () => cur.classList.add('big'));
-  el.addEventListener('mouseleave', () => cur.classList.remove('big'));
-});
-
 /* ── Nav scroll ── */
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {

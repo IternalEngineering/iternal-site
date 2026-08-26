@@ -74,18 +74,8 @@
 /* ── Focus ring ── */
 :focus-visible { outline:2px solid var(--tan); outline-offset:3px; }
 html { scroll-behavior:smooth; }
-body { background:var(--dark); color:var(--t2); font-family:var(--f); overflow-x:hidden; cursor:none; }
+body { background:var(--dark); color:var(--t2); font-family:var(--f); overflow-x:hidden; }
 a { text-decoration:none; }
-
-/* ── Cursor ── */
-#cur {
-  position:fixed; width:10px; height:10px; border-radius:50%;
-  pointer-events:none; z-index:9999; background:var(--tan);
-  transform:translate(-50%,-50%);
-  transition:width .25s, height .25s, background .25s;
-  mix-blend-mode:screen;
-}
-#cur.big { width:48px; height:48px; background:rgba(226,103,19,0.25); }
 
 /* ── Mesh blobs ── */
 #mesh { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
@@ -134,7 +124,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .nav-links a.active { color:var(--tan); }
 .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background:var(--tan); transition:width .25s; }
 .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
-.nav-btn { background:var(--sunrise); color:var(--white); font-family:var(--f); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:10px 22px; border-radius:3px; border:none; cursor:none; transition:opacity .2s, transform .15s, box-shadow .2s; }
+.nav-btn { background:var(--sunrise); color:var(--white); font-family:var(--f); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:10px 22px; border-radius:3px; border:none; transition:opacity .2s, transform .15s, box-shadow .2s; }
 .nav-btn:hover { opacity:.88; transform:translateY(-1px); box-shadow:0 8px 28px rgba(226,103,19,.3); }
 /* ── Scroll reveal ── */
 .rv { opacity:0; transform:translateY(22px); transition:opacity .65s ease, transform .65s ease; }
@@ -146,7 +136,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 
 
 /* ── Buttons ── */
-.btn-sun { display:inline-flex; align-items:center; gap:12px; background:var(--sunrise); color:var(--white); font-family:var(--f); font-size:14px; font-weight:700; letter-spacing:.04em; padding:16px 32px; border-radius:3px; border:none; cursor:none; transition:transform .15s, box-shadow .25s; }
+.btn-sun { display:inline-flex; align-items:center; gap:12px; background:var(--sunrise); color:var(--white); font-family:var(--f); font-size:14px; font-weight:700; letter-spacing:.04em; padding:16px 32px; border-radius:3px; border:none; transition:transform .15s, box-shadow .25s; }
 .btn-sun:hover { transform:translateY(-2px); box-shadow:0 14px 44px rgba(226,103,19,.38); }
 
 /* ============================================================
@@ -219,7 +209,7 @@ a.contact-detail:hover .detail-value { color:var(--tan); }
 .reason {
   display:flex; align-items:flex-start; gap:16px;
   padding:24px; border:1px solid var(--border);
-  cursor:none; transition:border-color .2s;
+  transition:border-color .2s;
 }
 .reason:hover { border-color:var(--border2); }
 .reason-n {
@@ -266,7 +256,6 @@ textarea {
   color:var(--white); padding:14px 18px;
   transition:border-color .2s, background .2s, box-shadow .2s;
   appearance:none; -webkit-appearance:none;
-  cursor:none;
 }
 input::placeholder, textarea::placeholder { color:var(--t4); }
 input:focus, select:focus, textarea:focus {
@@ -278,7 +267,7 @@ input:focus, select:focus, textarea:focus {
 select {
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.4)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat:no-repeat; background-position:right 18px center;
-  padding-right:44px; cursor:none;
+  padding-right:44px;
 }
 select option { background:var(--surf); color:var(--white); }
 textarea { resize:vertical; min-height:130px; line-height:1.65; }
@@ -291,7 +280,7 @@ textarea { resize:vertical; min-height:130px; line-height:1.65; }
   padding:9px 18px;
   background:rgba(255,255,255,.04); border:1px solid var(--border2);
   font-family:var(--f); font-size:13px; font-weight:700;
-  color:var(--t3); border-radius:2px; cursor:none;
+  color:var(--t3); border-radius:2px;
   transition:all .15s;
 }
 .budget-chip:hover { border-color:rgba(226,103,19,.4); color:var(--white); }
@@ -304,7 +293,7 @@ textarea { resize:vertical; min-height:130px; line-height:1.65; }
   background:var(--sunrise); color:var(--white);
   font-family:var(--f); font-size:15px; font-weight:900;
   letter-spacing:.04em; border:none; border-radius:3px;
-  cursor:none; display:flex; align-items:center; justify-content:center; gap:12px;
+  display:flex; align-items:center; justify-content:center; gap:12px;
   transition:transform .15s, box-shadow .25s, opacity .2s;
 }
 .submit-btn:hover { transform:translateY(-2px); box-shadow:0 14px 44px rgba(226,103,19,.4); }
@@ -358,7 +347,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 .nav-hamburger {
   display:none; flex-direction:column; justify-content:center;
   gap:5px; width:32px; height:32px;
-  background:none; border:none; cursor:none; z-index:201; padding:4px;
+  background:none; border:none; z-index:201; padding:4px;
 }
 .nav-hamburger span {
   display:block; width:100%; height:2px;
@@ -411,8 +400,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   .reason-grid { grid-template-columns:1fr; }
   .footer-in { grid-template-columns:1fr; gap:36px; }
   .f-bot { flex-direction:column; gap:10px; }
-  body { cursor:auto; }
-  #cur { display:none; }
 }
 
 
@@ -448,7 +435,6 @@ html[data-theme="light"] {
 html[data-theme="light"] body { transition:background-color .3s, color .3s; }
 
 /* Cursor */
-html[data-theme="light"] #cur { mix-blend-mode:multiply; }
 
 /* Mesh blobs — softer for light */
 html[data-theme="light"] .blob { filter:blur(100px); }
@@ -540,7 +526,7 @@ html[data-theme="light"] .success-icon { background:rgba(11,175,170,0.08); borde
 
 /* Theme toggle */
 .theme-toggle {
-  background:none; border:none; cursor:none;
+  background:none; border:none;
   padding:6px; display:flex; align-items:center; justify-content:center;
   color:var(--white); transition:color .2s;
 }
@@ -563,7 +549,6 @@ html[data-theme="light"] .icon-moon { display:none; }
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
 
-<div id="cur"></div>
 
 <!-- ===== NAV ===== -->
 <nav id="nav">
@@ -786,15 +771,6 @@ window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 40);
 });
 
-/* ── Cursor ── */
-const cur = document.getElementById('cur');
-let mx=0,my=0,cx=0,cy=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY});
-(function move(){cx+=(mx-cx)*1;cy+=(my-cy)*1;cur.style.left=cx+'px';cur.style.top=cy+'px';requestAnimationFrame(move)})();
-document.querySelectorAll('a,button,input,select,textarea,.reason,.budget-chip').forEach(el=>{
-  el.addEventListener('mouseenter',()=>cur.classList.add('big'));
-  el.addEventListener('mouseleave',()=>cur.classList.remove('big'));
-});
 
 /* ── Mobile nav toggle ── */
 const hamburger = document.querySelector('.nav-hamburger');
