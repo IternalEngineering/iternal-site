@@ -932,6 +932,15 @@ document.head.appendChild(style);
   try { answers = JSON.parse(localStorage.getItem(STORE)) || {}; } catch(e) {}
   var partialSent = false;
 
+  // Arriving from Stripe (the Payment Link redirects to questions.html?paid=1):
+  // greet them as a paying client, not a browser.
+  if (/[?&]paid\b/.test(location.search)) {
+    var heroH = document.querySelector('.page-hero-h');
+    var heroSub = document.querySelector('.page-hero-sub');
+    if (heroH) heroH.innerHTML = 'One<br><span class="dim">last</span><br>thing.';
+    if (heroSub) heroSub.textContent = 'Payment received — thank you. Finally, we just need you to answer a few questions, plus some optional ones that help us prepare properly for your call. The first five unlock the booking.';
+  }
+
   function save(){ try { localStorage.setItem(STORE, JSON.stringify(answers)); } catch(e) {} }
   function answered(q){ var v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!(v && String(v).trim()); }
   function coreDone(){ return QUESTIONS.filter(function(q){ return q.core; }).every(answered); }
