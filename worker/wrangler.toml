@@ -1,0 +1,23 @@
+name = "iternal-funnel"
+main = "worker.js"
+compatibility_date = "2026-08-01"
+
+# Create with: wrangler kv namespace create CLIENTS  — then paste the id here.
+[[kv_namespaces]]
+binding = "CLIENTS"
+id = "REPLACE_AT_DEPLOY"
+
+[vars]
+SITE_URL = "https://iternal.life"
+FROM_EMAIL = "Iternal <hello@iternal.life>"
+TEAM_EMAIL = "paul@iternal.life"
+# The Lead Tracker's "Anyone" /exec URL once Robbie creates that deployment:
+LEAD_API_URL = ""
+# The Calendly event URL once it exists:
+CALENDLY_URL = ""
+
+# Secrets — set each with: wrangler secret put <NAME>
+#   STRIPE_WEBHOOK_SECRET  from Stripe Dashboard -> Developers -> Webhooks (after adding this worker's URL)
+#   MAGIC_SECRET           any long random string (openssl rand -hex 32)
+#   RESEND_API_KEY         from resend.com after domain verification
+#   LEAD_API_SECRET        from Lead Tracker Admin -> Website leads -> Generate secret

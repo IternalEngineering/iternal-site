@@ -872,6 +872,7 @@ document.head.appendChild(style);
 /* ── Call-prep question wizard ── */
 (function(){
   var BOOKING_URL = 'contact.html'; // DECIDED: Calendly. Paste the calendly.com event URL here when Robbie supplies it.
+  var WORKER_URL = ''; // once the worker is deployed, paste its URL here and answers stop going via FormSubmit
   var SEND_TO = 'https://formsubmit.co/ajax/paul@iternal.life';
   var STORE = 'iternal_call_prep';
 
@@ -907,6 +908,17 @@ document.head.appendChild(style);
   var answers = {};
   try { answers = JSON.parse(sessionStorage.getItem(STORE)) || {}; } catch(e) {}
   var partialSent = false;
+
+  // Magic-link token (?t=...) from the worker's post-payment email: prefill
+  // the client's email so they never re-type it. The worker re-verifies the
+  // token server-side; this decode is only convenience.
+  var TOKEN = new URLSearchParams(location.search).get('t') || '';
+  if (TOKEN && !answers.email) {
+    try {
+      var tEmail = atob(TOKEN.split('.')[0].replace(/-/g, '+').replace(/_/g, '/'));
+      if (tEmail.indexOf('@') > -1) answers.email = tEmail.toLowerCase();
+    } catch (e) {}
+  }
 
   // Arriving from Stripe (the Payment Link redirects to questions.html?paid=1):
   // greet them as a paying client, not a browser.
@@ -1016,6 +1028,13 @@ document.head.appendChild(style);
   }
 
   function send(kind){
+    if (WORKER_URL) {
+      return fetch(WORKER_URL + '/answers', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token: TOKEN || undefined, email: answers.email, kind: kind, answers: answers })
+      });
+    }
     var fd = new FormData();
     fd.append('_captcha', 'false');
     fd.append('_subject', 'Call prep answers (' + kind + ') — ' + (answers.email || 'no email'));
