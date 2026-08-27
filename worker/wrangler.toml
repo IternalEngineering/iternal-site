@@ -1,11 +1,12 @@
 name = "iternal-funnel"
 main = "worker.js"
 compatibility_date = "2026-08-01"
+account_id = "65d5b12232edf6944b3c596a887f27d3" # Iternal
 
 # Create with: wrangler kv namespace create CLIENTS  — then paste the id here.
 [[kv_namespaces]]
 binding = "CLIENTS"
-id = "REPLACE_AT_DEPLOY"
+id = "bf744fdf07b945719b644e314b69b780"
 
 [vars]
 SITE_URL = "https://iternal.life"
