@@ -1,7 +1,8 @@
-name = "iternal-funnel"
+name = "client-site-funnel"
 main = "worker.js"
 compatibility_date = "2026-08-01"
 account_id = "65d5b12232edf6944b3c596a887f27d3" # Iternal
+routes = [{ pattern = "api.iternal.life", custom_domain = true }]
 
 # Create with: wrangler kv namespace create CLIENTS  — then paste the id here.
 [[kv_namespaces]]
