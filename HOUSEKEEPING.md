@@ -14,6 +14,16 @@ Reword, add, or remove a question → make the matching one-line change in the
 worker map and redeploy. If they drift, nothing breaks: briefs fall back to
 the raw field id (`mainJob: …`) and no answer is ever dropped.
 
+## Adding a site to the gallery
+
+Three files move together:
+
+1. `websites.html` — the gallery entry (label, description, screenshot img).
+2. `tools/screenshots.js` — the `SHOTS` list, so the weekly screenshot
+   refresh covers it.
+3. `questions.html` — the "Which of our sites do you like the look of?"
+   options, which mirror the gallery.
+
 ## Worker (worker/)
 
 - Deploy: `node test-worker.js` (must print "All worker checks passed."),
