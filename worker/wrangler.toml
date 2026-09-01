@@ -13,10 +13,8 @@ id = "bf744fdf07b945719b644e314b69b780"
 SITE_URL = "https://iternal.co.uk"
 FROM_EMAIL = "Website Pipeline <funnel@iternal.co.uk>"
 TEAM_EMAIL = "paul@iternal.life"
-# The Lead Tracker's "Anyone" /exec URL once Robbie creates that deployment:
+# The Lead Tracker's public "Anyone" /exec URL:
 LEAD_API_URL = "https://script.google.com/macros/s/AKfycbzwkFrrOZ_VqMP0CJnAjtCsUTU6BtOzbLyJ7SClkmaVJq6W3r4FSoxohBPLqZZbrTKI/exec"
-# The booking page (Google Calendar appointment schedule):
-BOOKING_URL = "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2ieZFMZ6jC2And2oFl5Fe2ZGy88xKt6gGj9O99dNBU8kxPsIq_cYFL2oAfp9YBBaUgxvRrlBCf"
 
 # Team briefs go out via Cloudflare Email Routing (enabled on iternal.co.uk);
 # the destination must be verified in Email Routing first.
