@@ -598,12 +598,12 @@ html[data-theme="light"] .icon-moon { display:none; }
           your call.
         </h1>
         <p class="page-hero-sub rv d2">
-          A few questions about your organisation and what the site has to do. Answer the first few and you can book your call — everything after that is optional, but each answer makes the call (and your concepts) sharper.
+          A few questions about your organisation and what the site has to do. The first five book your call. The rest are optional — each one sharpens what we build.
         </p>
       </div>
 
       <div class="response-note rv d4">
-            <p><strong>Skip anything you're not sure about.</strong> "I don't know yet" is a perfectly good answer for the call — only the first five questions are needed to book it.</p>
+            <p><strong>Skip anything you're not sure about.</strong> "Don't know yet" is an answer we can work with — that's half of what the call is for.</p>
       </div>
     </div>
 
@@ -621,7 +621,7 @@ html[data-theme="light"] .icon-moon { display:none; }
 
           <div id="unlockPanel" hidden aria-live="polite" style="margin-top:26px; padding:18px 20px; border:1px solid var(--tan); border-radius:6px">
             <div style="font-weight:700; color:var(--tan); margin-bottom:6px">Your call is unlocked</div>
-            <p style="font-size:14px; color:var(--t2); margin:0 0 12px; line-height:1.6">That's enough for us to prepare properly. Book your call now, or answer a few more below — every extra answer sharpens the concepts.</p>
+            <p style="font-size:14px; color:var(--t2); margin:0 0 12px; line-height:1.6">That's enough for us to prepare. Book now, or keep going below — the more you tell us, the closer the first concepts land.</p>
             <a id="bookBtn" href="contact.html" class="submit-btn" style="margin-top:2px; text-decoration:none">Book your call →</a>
           </div>
 
@@ -640,7 +640,7 @@ html[data-theme="light"] .icon-moon { display:none; }
             <span id="sendNote" style="font-size:13px; color:var(--t3)"></span>
           </div>
 
-          <p class="form-privacy" style="margin-top:22px">Your answers reach us when you book the call or send them. No newsletters, no noise.</p>
+          <p class="form-privacy" style="margin-top:22px">Your answers reach us when you book or press send, and go nowhere else.</p>
         </div>
 
         <!-- Success state -->
@@ -649,7 +649,7 @@ html[data-theme="light"] .icon-moon { display:none; }
             <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
           <h3 class="success-h">Answers sent.</h3>
-          <p class="success-p">Thank you — that's exactly what we need to make the call count. If you haven't already, the last step before we start is booking it. After the call, we get to work: two or three working versions of your site for you to choose between, real pages you can click through.</p>
+          <p class="success-p">Thank you — that's what the call needed. If you haven't booked it yet, that's the one step left. After it, we get to work: two or three working versions of your site, real pages you can click through.</p>
           <a id="bookBtnSuccess" href="contact.html" class="submit-btn" style="margin-top:22px; text-decoration:none">Book your call →</a>
         </div>
 
@@ -919,7 +919,7 @@ document.head.appendChild(style);
     var heroH = document.querySelector('.page-hero-h');
     var heroSub = document.querySelector('.page-hero-sub');
     if (heroH) heroH.innerHTML = 'One<br><span class="dim">last</span><br>thing.';
-    if (heroSub) heroSub.textContent = 'Payment received — thank you. Finally, we just need you to answer a few questions, plus some optional ones that help us prepare properly for your call. The first five unlock the booking.';
+    if (heroSub) heroSub.textContent = 'Payment received — thank you. One thing left before we start: the questions below. The first five book your call; the rest sharpen your concepts.';
   }
 
   function save(){ try { sessionStorage.setItem(STORE, JSON.stringify(answers)); } catch(e) {} }
