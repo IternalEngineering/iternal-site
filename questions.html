@@ -909,16 +909,9 @@ document.head.appendChild(style);
   try { answers = JSON.parse(sessionStorage.getItem(STORE)) || {}; } catch(e) {}
   var partialSent = false;
 
-  // Magic-link token (?t=...) from the worker's post-payment email: prefill
-  // the client's email so they never re-type it. The worker re-verifies the
-  // token server-side; this decode is only convenience.
-  var TOKEN = new URLSearchParams(location.search).get('t') || '';
-  if (TOKEN && !answers.email) {
-    try {
-      var tEmail = atob(TOKEN.split('.')[0].replace(/-/g, '+').replace(/_/g, '/'));
-      if (tEmail.indexOf('@') > -1) answers.email = tEmail.toLowerCase();
-    } catch (e) {}
-  }
+  // Stripe's payment redirect carries ?session={CHECKOUT_SESSION_ID}; the
+  // worker maps it to the paying client so answers attach to their record.
+  var SESSION = new URLSearchParams(location.search).get('session') || '';
 
   // Arriving from Stripe (the Payment Link redirects to questions.html?paid=1):
   // greet them as a paying client, not a browser.
@@ -1032,7 +1025,7 @@ document.head.appendChild(style);
       return fetch(WORKER_URL + '/answers', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ token: TOKEN || undefined, email: answers.email, kind: kind, answers: answers })
+        body: JSON.stringify({ session: SESSION || undefined, email: answers.email, kind: kind, answers: answers })
       });
     }
     var fd = new FormData();
