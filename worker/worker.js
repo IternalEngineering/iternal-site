@@ -4,20 +4,24 @@
  * Routes:
  *   POST /stripe-webhook  Stripe calls this when the £375 payment completes.
  *                         Verifies the signature, writes the client record to
- *                         KV, then (best-effort) emails the client their magic
- *                         link, briefs the team, and posts the lead into the
+ *                         KV (plus a session→email mapping for the redirect),
+ *                         briefs the team, and posts the lead into the
  *                         Lead Tracker.
- *   POST /answers         The questions page posts drafts/finals here.
- *                         With a valid token the answers attach to the paying
- *                         client's record; without one they're stored as a
- *                         plain lead so nothing is ever lost.
+ *   POST /answers         The questions page posts drafts/finals here. With a
+ *                         valid Stripe session id (carried by the payment
+ *                         redirect) the answers attach to the paying client's
+ *                         record; without one they're stored as a plain lead
+ *                         so nothing is ever lost.
  *   GET  /health          Liveness check.
  *
- * Explicitly NOT here: card details (Stripe's), booking (Calendly's), and any
- * READ of the Lead Tracker (write-only by policy).
+ * Clients get NO email from us by design: Stripe sends the receipt, Google
+ * Calendar sends the booking invite. Team briefs go via Cloudflare's native
+ * email (send_email binding) to a verified destination.
  *
- * Secrets (wrangler secret put): STRIPE_WEBHOOK_SECRET, MAGIC_SECRET,
- * RESEND_API_KEY, LEAD_API_SECRET. Vars in wrangler.toml.
+ * Explicitly NOT here: card details (Stripe's), booking (Google Calendar's),
+ * and any READ of the Lead Tracker (write-only by policy).
+ *
+ * Secrets (wrangler secret put): STRIPE_WEBHOOK_SECRET, LEAD_API_SECRET.
  */
 
 const enc = new TextEncoder();
@@ -45,22 +49,6 @@ async function hmacHex(secret, message) {
   return [...new Uint8Array(sig)].map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-const b64url = s => btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-const b64urlDecode = s => atob(s.replace(/-/g, '+').replace(/_/g, '/'));
-
-async function makeToken(email, env) {
-  return b64url(email) + '.' + (await hmacHex(env.MAGIC_SECRET, email)).slice(0, 32);
-}
-
-async function emailFromToken(token, env) {
-  try {
-    const [payload, mac] = String(token).split('.');
-    const email = b64urlDecode(payload).toLowerCase();
-    const expected = (await hmacHex(env.MAGIC_SECRET, email)).slice(0, 32);
-    return mac === expected ? email : null;
-  } catch (e) { return null; }
-}
-
 /* Stripe signature: header "t=...,v1=..."; v1 = HMAC-SHA256(secret, `${t}.${body}`). */
 async function verifyStripeSignature(rawBody, header, secret) {
   if (!header || !secret) return false;
@@ -75,13 +63,18 @@ async function verifyStripeSignature(rawBody, header, secret) {
   return (parts.v1 || []).some(v => v === expected);
 }
 
-async function sendEmail(env, to, subject, text) {
-  if (!env.RESEND_API_KEY) return;
-  await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ from: env.FROM_EMAIL, to: [to], subject, text }),
-  });
+async function sendTeamEmail(env, subject, text) {
+  if (!env.TEAM_MAIL) return;
+  const from = env.FROM_EMAIL;
+  const to = env.TEAM_EMAIL;
+  const raw = 'From: ' + from + '\r\n' + 'To: ' + to + '\r\n' +
+    'Subject: ' + subject + '\r\n' + 'Date: ' + new Date().toUTCString() + '\r\n' +
+    'Content-Type: text/plain; charset=utf-8' + '\r\n\r\n' + text;
+  let msg = { from, to, raw };
+  // In the Workers runtime this import exists; in the Node self-check it
+  // throws and the stub binding receives the plain object instead.
+  try { const { EmailMessage } = await import('cloudflare:email'); msg = new EmailMessage(from, to, raw); } catch (e) {}
+  await env.TEAM_MAIL.send(msg);
 }
 
 async function postToLeadTracker(env, lead) {
@@ -123,20 +116,16 @@ async function handleStripeWebhook(request, env, ctx) {
     answers: existing.answers || {},
   };
   await env.CLIENTS.put(key, JSON.stringify(record));
-
-  const token = await makeToken(email, env);
-  const qLink = `${env.SITE_URL}/questions.html?paid=1&t=${token}`;
-  const calendly = env.BOOKING_URL ? `\n\nWhen you're ready, book your call here: ${env.BOOKING_URL}` : '';
+  // The payment redirect carries ?session={CHECKOUT_SESSION_ID}; this mapping
+  // lets /answers attach those answers to the paying client's record.
+  if (record.stripeSession) await env.CLIENTS.put(`session:${record.stripeSession}`, email);
 
   ctx.waitUntil(Promise.allSettled([
-    sendEmail(env, email,
-      'Payment received — one last thing',
-      `Thank you${name ? ' ' + name.split(' ')[0] : ''} — your payment is in and we're on.\n\n` +
-      `One last thing before your call: answer a few questions so we can prepare properly.\n\n${qLink}\n\n` +
-      `The first five unlock the call booking; everything else is optional.${calendly}\n\n— Iternal`),
-    sendEmail(env, env.TEAM_EMAIL,
+    sendTeamEmail(env,
       `Funnel: ${email} paid`,
-      `${name || email} paid ${(session.amount_total || 0) / 100} ${(session.currency || 'gbp').toUpperCase()}.\nStripe session: ${session.id}\nMagic link sent.`),
+      `${name || email} paid ${(session.amount_total || 0) / 100} ${(session.currency || 'gbp').toUpperCase()}.
+Stripe session: ${session.id}
+They've been redirected to the questions.`),
     postToLeadTracker(env, {
       org: name || email, email,
       source: 'website funnel', message: 'Paid £375 via Stripe — awaiting questions.',
@@ -156,8 +145,9 @@ async function handleAnswers(request, env, ctx) {
   } catch (e) { return json(400, { error: 'bad json' }, cors); }
 
   const kind = body.kind === 'complete' ? 'complete' : 'partial';
-  const tokenEmail = body.token ? await emailFromToken(body.token, env) : null;
-  const email = tokenEmail || s(body.email, 120).toLowerCase();
+  const sessionId = s(body.session, 100);
+  const sessionEmail = sessionId ? await env.CLIENTS.get(`session:${sessionId}`) : null;
+  const email = ((sessionEmail || s(body.email, 120)) + '').toLowerCase();
   if (!email || email.indexOf('@') === -1) return json(400, { error: 'email required' }, cors);
 
   const answers = {};
@@ -170,8 +160,8 @@ async function handleAnswers(request, env, ctx) {
 
   // ponytail: KV read-modify-write without a lock — fine at funnel volume,
   // move to Durable Objects if two devices ever race on one record.
-  const key = tokenEmail ? `client:${email}` : `lead:${email}`;
-  const existing = (await env.CLIENTS.get(key, 'json')) || { email, status: tokenEmail ? 'paid' : 'lead' };
+  const key = sessionEmail ? `client:${email}` : `lead:${email}`;
+  const existing = (await env.CLIENTS.get(key, 'json')) || { email, status: sessionEmail ? 'paid' : 'lead' };
   existing.answers = { ...(existing.answers || {}), ...answers };
   existing.answersUpdatedAt = new Date().toISOString();
   if (kind === 'complete') existing.answersComplete = true;
@@ -179,20 +169,12 @@ async function handleAnswers(request, env, ctx) {
 
   const summary = Object.entries(existing.answers)
     .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`).join('\n');
-  const calendly = env.BOOKING_URL ? `\n\nBook your call: ${env.BOOKING_URL}` : '';
 
-  const jobs = [
-    sendEmail(env, env.TEAM_EMAIL,
-      `Funnel: call prep answers (${kind}) — ${email}`,
-      `${tokenEmail ? 'Paying client' : 'Unpaid lead'}.\n\n${summary}`),
-  ];
-  if (kind === 'complete') {
-    jobs.push(sendEmail(env, email,
-      'Got your answers — next: your call',
-      `Thank you — that's exactly what we need to make the call count.\n\n` +
-      `After the call, we get to work: two or three working versions of your site for you to choose between.${calendly}\n\n— Iternal`));
-  }
-  ctx.waitUntil(Promise.allSettled(jobs));
+  ctx.waitUntil(sendTeamEmail(env,
+    `Funnel: call prep answers (${kind}) — ${email}`,
+    `${sessionEmail ? 'Paying client' : 'Unpaid lead'}.
+
+${summary}`));
 
   return json(200, { ok: true }, cors);
 }

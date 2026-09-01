@@ -11,15 +11,17 @@ id = "bf744fdf07b945719b644e314b69b780"
 
 [vars]
 SITE_URL = "https://iternal.co.uk"
-FROM_EMAIL = "Iternal <hello@iternal.life>"
+FROM_EMAIL = "Iternal Funnel <funnel@iternal.co.uk>"
 TEAM_EMAIL = "paul@iternal.life"
 # The Lead Tracker's "Anyone" /exec URL once Robbie creates that deployment:
 LEAD_API_URL = "https://script.google.com/macros/s/AKfycbzwkFrrOZ_VqMP0CJnAjtCsUTU6BtOzbLyJ7SClkmaVJq6W3r4FSoxohBPLqZZbrTKI/exec"
 # The booking page (Google Calendar appointment schedule):
 BOOKING_URL = "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2ieZFMZ6jC2And2oFl5Fe2ZGy88xKt6gGj9O99dNBU8kxPsIq_cYFL2oAfp9YBBaUgxvRrlBCf"
 
+# Team briefs go out via Cloudflare Email Routing (enabled on iternal.co.uk);
+# the destination must be verified in Email Routing first.
+send_email = [{ name = "TEAM_MAIL", destination_address = "paul@iternal.life" }]
+
 # Secrets — set each with: wrangler secret put <NAME>
-#   STRIPE_WEBHOOK_SECRET  from Stripe Dashboard -> Developers -> Webhooks (after adding this worker's URL)
-#   MAGIC_SECRET           any long random string (openssl rand -hex 32)
-#   RESEND_API_KEY         from resend.com after domain verification
-#   LEAD_API_SECRET        from Lead Tracker Admin -> Website leads -> Generate secret
+#   STRIPE_WEBHOOK_SECRET  from Stripe Dashboard (sandbox secret during testing; swap to live at launch)
+#   LEAD_API_SECRET        from Lead Tracker Admin -> Website leads
