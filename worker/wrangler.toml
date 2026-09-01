@@ -14,7 +14,7 @@ SITE_URL = "https://iternal.co.uk"
 FROM_EMAIL = "Iternal <hello@iternal.life>"
 TEAM_EMAIL = "paul@iternal.life"
 # The Lead Tracker's "Anyone" /exec URL once Robbie creates that deployment:
-LEAD_API_URL = ""
+LEAD_API_URL = "https://script.google.com/macros/s/AKfycbzwkFrrOZ_VqMP0CJnAjtCsUTU6BtOzbLyJ7SClkmaVJq6W3r4FSoxohBPLqZZbrTKI/exec"
 # The Calendly event URL once it exists:
 CALENDLY_URL = ""
 
