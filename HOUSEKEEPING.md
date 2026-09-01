@@ -17,8 +17,10 @@ the raw field id (`mainJob: …`) and no answer is ever dropped.
 ## Adding a site to the gallery
 
 The gallery is curated — a new site going live does NOT automatically earn a
-place. Adding one is a deliberate call, made by a person, per site. Once that
-call is made, three files move together:
+place. Adding one is a deliberate call, made by a person, per site, and only
+with the featured client's consent. Additions happen quietly: the page makes
+no promise that new sites are coming. Once the call is made, three files move
+together:
 
 1. `websites.html` — the gallery entry (label, description, screenshot img).
 2. `tools/screenshots.js` — the `SHOTS` list, so the weekly screenshot
