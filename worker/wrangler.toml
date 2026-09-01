@@ -15,8 +15,8 @@ FROM_EMAIL = "Iternal <hello@iternal.life>"
 TEAM_EMAIL = "paul@iternal.life"
 # The Lead Tracker's "Anyone" /exec URL once Robbie creates that deployment:
 LEAD_API_URL = "https://script.google.com/macros/s/AKfycbzwkFrrOZ_VqMP0CJnAjtCsUTU6BtOzbLyJ7SClkmaVJq6W3r4FSoxohBPLqZZbrTKI/exec"
-# The Calendly event URL once it exists:
-CALENDLY_URL = ""
+# The booking page (Google Calendar appointment schedule):
+BOOKING_URL = "https://calendar.google.com/calendar/u/0/appointments/schedules/AcZssZ2ieZFMZ6jC2And2oFl5Fe2ZGy88xKt6gGj9O99dNBU8kxPsIq_cYFL2oAfp9YBBaUgxvRrlBCf"
 
 # Secrets — set each with: wrangler secret put <NAME>
 #   STRIPE_WEBHOOK_SECRET  from Stripe Dashboard -> Developers -> Webhooks (after adding this worker's URL)

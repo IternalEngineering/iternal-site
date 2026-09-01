@@ -14,7 +14,7 @@ const env = {
   FROM_EMAIL: 'Iternal <hello@iternal.life>',
   TEAM_EMAIL: 'paul@iternal.life',
   LEAD_API_URL: 'https://script.example/exec',
-  CALENDLY_URL: 'https://calendly.com/iternal/test',
+  BOOKING_URL: 'https://calendar.app.google/test',
   STRIPE_WEBHOOK_SECRET: 'whsec_test',
   MAGIC_SECRET: 'magic_test_secret',
   RESEND_API_KEY: 're_test',
@@ -83,7 +83,7 @@ assert.deepStrictEqual(updated.answers.pages, ['Home', 'Contact']);
 assert.strictEqual(updated.answersComplete, true);
 assert.strictEqual(updated.status, 'paid');
 assert.strictEqual(outbound.length, 2); // team brief + client confirmation
-assert.ok(outbound.some(o => o.body.to && o.body.to[0] === 'dana@riverspottery.co.uk' && o.body.text.includes('calendly.com')));
+assert.ok(outbound.some(o => o.body.to && o.body.to[0] === 'dana@riverspottery.co.uk' && o.body.text.includes('calendar.app.google')));
 
 // tampered token falls back to nothing (no email field either) -> 400
 r = await call('/answers', { method: 'POST', body: JSON.stringify({ token: token.slice(0, -4) + 'xxxx', kind: 'partial', answers: {} }) });

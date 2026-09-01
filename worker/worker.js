@@ -126,7 +126,7 @@ async function handleStripeWebhook(request, env, ctx) {
 
   const token = await makeToken(email, env);
   const qLink = `${env.SITE_URL}/questions.html?paid=1&t=${token}`;
-  const calendly = env.CALENDLY_URL ? `\n\nWhen you're ready, book your call here: ${env.CALENDLY_URL}` : '';
+  const calendly = env.BOOKING_URL ? `\n\nWhen you're ready, book your call here: ${env.BOOKING_URL}` : '';
 
   ctx.waitUntil(Promise.allSettled([
     sendEmail(env, email,
@@ -179,7 +179,7 @@ async function handleAnswers(request, env, ctx) {
 
   const summary = Object.entries(existing.answers)
     .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`).join('\n');
-  const calendly = env.CALENDLY_URL ? `\n\nBook your call: ${env.CALENDLY_URL}` : '';
+  const calendly = env.BOOKING_URL ? `\n\nBook your call: ${env.BOOKING_URL}` : '';
 
   const jobs = [
     sendEmail(env, env.TEAM_EMAIL,
