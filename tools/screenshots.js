@@ -24,6 +24,7 @@ const SHOTS = [
   { file: 'screenshot-tech4good.png', url: 'https://tech4goodsouthwest.org', width: 1440, height: 900 },
   { file: 'screenshot-genius.png', url: 'https://www.generatinggenius.org.uk', width: 1440, height: 900 },
   { file: 'screenshot-marvinrees.png', url: 'https://marvinrees.com', width: 1440, height: 900 },
+  { file: 'screenshot-pawlett.png', url: 'https://pawlettpavilion.com', width: 1440, height: 900 },
 ];
 
 // Remove fixed/sticky cookie-consent overlays without accepting anything.
