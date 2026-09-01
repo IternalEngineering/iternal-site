@@ -122,7 +122,7 @@ async function handleStripeWebhook(request, env, ctx) {
 
   ctx.waitUntil(Promise.allSettled([
     sendTeamEmail(env,
-      `Funnel: ${email} paid`,
+      `Website Pipeline: ${email} paid`,
       `${name || email} paid ${(session.amount_total || 0) / 100} ${(session.currency || 'gbp').toUpperCase()}.
 Stripe session: ${session.id}
 They've been redirected to the questions.`),
@@ -171,7 +171,7 @@ async function handleAnswers(request, env, ctx) {
     .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`).join('\n');
 
   ctx.waitUntil(sendTeamEmail(env,
-    `Funnel: call prep answers (${kind}) — ${email}`,
+    `Website Pipeline: call prep answers (${kind}) — ${email}`,
     `${sessionEmail ? 'Paying client' : 'Unpaid lead'}.
 
 ${summary}`));

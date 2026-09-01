@@ -13,7 +13,7 @@ const env = {
   },
   TEAM_MAIL: { async send(msg) { teamMail.push(msg); } },
   SITE_URL: 'https://iternal.co.uk',
-  FROM_EMAIL: 'Iternal Funnel <funnel@iternal.co.uk>',
+  FROM_EMAIL: 'Website Pipeline <funnel@iternal.co.uk>',
   TEAM_EMAIL: 'paul@iternal.life',
   LEAD_API_URL: 'https://script.example/exec',
   STRIPE_WEBHOOK_SECRET: 'whsec_test',
@@ -67,7 +67,7 @@ assert.strictEqual(outbound.length, 1); // tracker only — no client email by d
 assert.ok(outbound[0].url.includes('action=createLead') && outbound[0].url.includes('key=lead_test'));
 assert.strictEqual(outbound[0].body.email, 'dana@riverspottery.co.uk');
 assert.strictEqual(teamMail.length, 1);
-assert.ok(teamMail[0].raw.includes('Subject: Funnel: dana@riverspottery.co.uk paid'));
+assert.ok(teamMail[0].raw.includes('Subject: Website Pipeline: dana@riverspottery.co.uk paid'));
 
 // answers carrying the Stripe session id -> attach to the paying client's record
 outbound = []; teamMail.length = 0;
