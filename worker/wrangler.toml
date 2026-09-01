@@ -4,6 +4,12 @@ compatibility_date = "2026-08-01"
 account_id = "65d5b12232edf6944b3c596a887f27d3" # Iternal
 routes = [{ pattern = "api.iternal.co.uk", custom_domain = true }]
 
+# Team briefs go out via Cloudflare Email Routing (enabled on iternal.co.uk);
+# the destination must be verified in Email Routing first.
+# NB: must sit up here, above every [section] header — anywhere lower, TOML
+# swallows it into the preceding table and the binding silently never exists.
+send_email = [{ name = "TEAM_MAIL", destination_address = "paul@iternal.life" }]
+
 # Create with: wrangler kv namespace create CLIENTS  — then paste the id here.
 [[kv_namespaces]]
 binding = "CLIENTS"
@@ -15,10 +21,6 @@ FROM_EMAIL = "Website Pipeline <funnel@iternal.co.uk>"
 TEAM_EMAIL = "paul@iternal.life"
 # The Lead Tracker's public "Anyone" /exec URL:
 LEAD_API_URL = "https://script.google.com/macros/s/AKfycbzwkFrrOZ_VqMP0CJnAjtCsUTU6BtOzbLyJ7SClkmaVJq6W3r4FSoxohBPLqZZbrTKI/exec"
-
-# Team briefs go out via Cloudflare Email Routing (enabled on iternal.co.uk);
-# the destination must be verified in Email Routing first.
-send_email = [{ name = "TEAM_MAIL", destination_address = "paul@iternal.life" }]
 
 # Secrets — set each with: wrangler secret put <NAME>
 #   STRIPE_WEBHOOK_SECRET  from Stripe Dashboard (sandbox secret during testing; swap to live at launch)

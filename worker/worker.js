@@ -70,11 +70,19 @@ async function sendTeamEmail(env, subject, text) {
   const raw = 'From: ' + from + '\r\n' + 'To: ' + to + '\r\n' +
     'Subject: ' + subject + '\r\n' + 'Date: ' + new Date().toUTCString() + '\r\n' +
     'Content-Type: text/plain; charset=utf-8' + '\r\n\r\n' + text;
+  // The envelope wants bare addresses; the display name lives in the MIME From.
+  const bare = a => { const m = /<([^>]+)>/.exec(a); return m ? m[1] : a; };
   let msg = { from, to, raw };
   // In the Workers runtime this import exists; in the Node self-check it
   // throws and the stub binding receives the plain object instead.
-  try { const { EmailMessage } = await import('cloudflare:email'); msg = new EmailMessage(from, to, raw); } catch (e) {}
-  await env.TEAM_MAIL.send(msg);
+  try { const { EmailMessage } = await import('cloudflare:email'); msg = new EmailMessage(bare(from), bare(to), raw); } catch (e) {}
+  try {
+    await env.TEAM_MAIL.send(msg);
+    console.log('team brief sent:', subject);
+  } catch (e) {
+    console.error('team brief FAILED:', e && e.message ? e.message : e);
+    throw e;
+  }
 }
 
 async function postToLeadTracker(env, lead) {
