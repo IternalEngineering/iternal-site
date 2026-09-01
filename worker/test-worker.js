@@ -82,6 +82,10 @@ assert.strictEqual(updated.status, 'paid');
 assert.strictEqual(outbound.length, 0); // no client email, no extra fetches
 assert.strictEqual(teamMail.length, 1);
 assert.ok(teamMail[0].raw.includes('Paying client'));
+// answers rendered as full question wording, question order, arrays joined
+assert.ok(teamMail[0].raw.includes('Who do you most want the site to reach?\n  gift buyers'));
+assert.ok(teamMail[0].raw.includes('Which pages do you think you need?\n  Home, Contact'));
+assert.ok(teamMail[0].raw.indexOf('site to reach') < teamMail[0].raw.indexOf('pages do you think'));
 
 // unknown session and no email -> refused
 r = await call('/answers', { method: 'POST', body: JSON.stringify({ session: 'cs_forged', kind: 'partial', answers: {} }) });

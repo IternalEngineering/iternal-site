@@ -89,6 +89,37 @@ async function postToLeadTracker(env, lead) {
 
 const s = (v, max) => String(v === null || v === undefined ? '' : v).trim().slice(0, max);
 
+/* Field ids as sent by questions.html, in the order they appear on the page.
+   Keeps team briefs readable as real Q&A; unknown ids fall back to the raw key. */
+const QUESTIONS = [
+  ['email', 'Your work email'],
+  ['mainJob', "What's the site's main job?"],
+  ['hasSite', 'Do you have a website today?'],
+  ['audience', 'Who do you most want the site to reach?'],
+  ['timeline', 'When would you like to launch?'],
+  ['mustDo', "When someone visits, what's the one thing you'd like them to do?"],
+  ['pages', 'Which pages do you think you need?'],
+  ['branding', 'Do you have branding — a logo, colours?'],
+  ['visualStyle', 'Which pulls you more? (visual direction)'],
+  ['feel', 'What should someone they respect think of the finished site?'],
+  ['admired', 'Which of our sites do you like the look of?'],
+  ['peers', 'Competitors or peers — doing well / getting wrong'],
+  ['dislikes', 'Any sites that make you cringe?'],
+  ['content', 'Where will the words come from?'],
+  ['assets', 'What do you already have that we can use?'],
+  ['wrong', 'If you have a site now — what does it get wrong?'],
+  ['anything', 'Anything else we should know before the call?'],
+];
+
+function answersBrief(answers) {
+  const labels = new Map(QUESTIONS);
+  const order = [...labels.keys(), ...Object.keys(answers).filter(k => !labels.has(k))];
+  return order.filter(k => k in answers).map(k => {
+    const v = answers[k];
+    return (labels.get(k) || k) + '\n  ' + (Array.isArray(v) ? v.join(', ') : v);
+  }).join('\n\n');
+}
+
 async function handleStripeWebhook(request, env, ctx) {
   const rawBody = await request.text();
   const ok = await verifyStripeSignature(rawBody, request.headers.get('stripe-signature'), env.STRIPE_WEBHOOK_SECRET);
@@ -167,8 +198,7 @@ async function handleAnswers(request, env, ctx) {
   if (kind === 'complete') existing.answersComplete = true;
   await env.CLIENTS.put(key, JSON.stringify(existing));
 
-  const summary = Object.entries(existing.answers)
-    .map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`).join('\n');
+  const summary = answersBrief(existing.answers);
 
   ctx.waitUntil(sendTeamEmail(env,
     `Website Pipeline: call prep answers (${kind}) — ${email}`,
