@@ -138,7 +138,7 @@ async function handleStripeWebhook(request, env, ctx) {
       `Funnel: ${email} paid`,
       `${name || email} paid ${(session.amount_total || 0) / 100} ${(session.currency || 'gbp').toUpperCase()}.\nStripe session: ${session.id}\nMagic link sent.`),
     postToLeadTracker(env, {
-      org: name || email, contact: name, email,
+      org: name || email, email,
       source: 'website funnel', message: 'Paid £375 via Stripe — awaiting questions.',
     }),
   ]));
