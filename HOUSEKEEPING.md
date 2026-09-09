@@ -48,12 +48,25 @@ together:
 - `STRIPE_WEBHOOK_SECRET` holds the **live** webhook's signing secret
   (swapped 2026-09-09). For sandbox testing, put the sandbox secret back
   temporarily — the worker verifies against exactly one at a time.
-- IMMEDIATELY AFTER the merge to main: set the Terms of service URL in
-  Stripe (Settings → Business → Public details) to
-  `https://iternal.co.uk/start.html#terms` — it only resolves once the
-  merge publishes the page — then edit the Payment Link and tick
-  "Require customers to accept your terms of service". The start page
-  promises this checkbox; until it's ticked, checkout shows no terms.
+## Go-live sequence
+
+Merging to main does NOT publish anything: the live site is the
+`iternal-site` worker, deployed manually with wrangler by Paul (no Git
+auto-deploy — verified 9 Sep 2026). The funnel goes live in this order:
+
+1. Merge `feature/client-funnel` → main (clean fast-forward as of 9 Sep;
+   main had not moved).
+2. Paul deploys the `iternal-site` worker from main — THIS is the moment
+   the pages, gallery, and live payment button become public.
+3. Straight after that deploy: set the Terms of service URL in Stripe
+   (Settings → Business → Public details) to
+   `https://iternal.co.uk/start.html#terms` — it only resolves once
+   deployed — then edit the Payment Link and tick "Require customers to
+   accept your terms of service". The start page promises this checkbox;
+   until it's ticked, checkout shows no terms.
+4. Reload the checkout and confirm the agreement checkbox shows, then
+   walk start → payment button → checkout once as a smoke test (no
+   payment needed).
 
 ## Team briefs (email)
 
