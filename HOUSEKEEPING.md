@@ -45,8 +45,9 @@ together:
 - The Payment Link must redirect to exactly
   `https://iternal.co.uk/questions.html?paid=1&session={CHECKOUT_SESSION_ID}`
   (Stripe substitutes the template) with require-ToS ticked and receipt on.
-- `STRIPE_WEBHOOK_SECRET` currently holds the **sandbox** signing secret.
-  At go-live, swap it for the live webhook's secret.
+- `STRIPE_WEBHOOK_SECRET` holds the **live** webhook's signing secret
+  (swapped 2026-09-09). For sandbox testing, put the sandbox secret back
+  temporarily — the worker verifies against exactly one at a time.
 
 ## Team briefs (email)
 
