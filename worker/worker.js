@@ -1,17 +1,24 @@
 /**
  * Iternal funnel worker — the funnel's only backend.
  *
+ * Flow (pay-at-booking): the client agrees the terms on start.html, answers
+ * the questions, then books their call on the Google Calendar appointment
+ * page — which takes the £375 (Google's Stripe integration) and only
+ * confirms the booking when payment succeeds.
+ *
  * Routes:
- *   POST /stripe-webhook  Stripe calls this when the £375 payment completes.
- *                         Verifies the signature, writes the client record to
- *                         KV (plus a session→email mapping for the redirect),
- *                         briefs the team, and posts the lead into the
- *                         Lead Tracker.
- *   POST /answers         The questions page posts drafts/finals here. With a
- *                         valid Stripe session id (carried by the payment
- *                         redirect) the answers attach to the paying client's
- *                         record; without one they're stored as a plain lead
- *                         so nothing is ever lost.
+ *   POST /stripe-webhook  Stripe calls this when money moves. The pay-at-
+ *                         booking flow arrives as payment_intent.succeeded
+ *                         (from Google Calendar's Stripe integration): the
+ *                         payer's lead record is upgraded to a paid client,
+ *                         the team gets a brief, and the Lead Tracker gets
+ *                         a Landed entry. checkout.session.completed is
+ *                         kept for the legacy Payment Link until it is
+ *                         deactivated.
+ *   POST /answers         The questions page posts drafts/finals here, keyed
+ *                         by the email they give in the first question.
+ *                         Answers land on their lead record (or client
+ *                         record once they've paid) so nothing is lost.
  *   GET  /health          Liveness check.
  *
  * Clients get NO email from us by design: Stripe sends the receipt, Google
@@ -135,6 +142,7 @@ async function handleStripeWebhook(request, env, ctx) {
 
   let event;
   try { event = JSON.parse(rawBody); } catch (e) { return json(400, { error: 'bad payload' }); }
+  if (event.type === 'payment_intent.succeeded') return handlePaymentIntent(event, env, ctx);
   if (event.type !== 'checkout.session.completed') return json(200, { received: true, ignored: event.type });
 
   const session = (event.data && event.data.object) || {};
@@ -174,6 +182,54 @@ They've been redirected to the questions.`),
   return json(200, { received: true });
 }
 
+/**
+ * A payment landed via Google Calendar's pay-at-booking (or any direct
+ * PaymentIntent). Match the payer by email, upgrade their lead record to a
+ * paid client, brief the team, post the Landed entry to the tracker. If no
+ * email is on the event, brief the team anyway — a payment must never pass
+ * silently.
+ */
+async function handlePaymentIntent(event, env, ctx) {
+  const pi = (event.data && event.data.object) || {};
+  const email = s(pi.receipt_email || (pi.charges && pi.charges.data && pi.charges.data[0] &&
+    pi.charges.data[0].billing_details && pi.charges.data[0].billing_details.email) || '', 120).toLowerCase();
+  const amount = pi.amount_received || pi.amount || 0;
+
+  if (!email) {
+    ctx.waitUntil(sendTeamEmail(env,
+      'Website Pipeline: payment received — UNMATCHED',
+      `A payment of ${amount / 100} ${(pi.currency || 'gbp').toUpperCase()} arrived (${pi.id}) with no payer email on the event. Match it by hand in Stripe.`));
+    return json(200, { received: true, unmatched: true });
+  }
+
+  const lead = await env.CLIENTS.get(`lead:${email}`, 'json');
+  const existing = (await env.CLIENTS.get(`client:${email}`, 'json')) || lead || {};
+  const record = {
+    ...existing,
+    email,
+    status: 'paid',
+    paidAt: new Date().toISOString(),
+    amount,
+    paymentIntent: s(pi.id, 100),
+    answers: existing.answers || {},
+  };
+  await env.CLIENTS.put(`client:${email}`, JSON.stringify(record));
+  if (lead) await env.CLIENTS.delete(`lead:${email}`);
+
+  ctx.waitUntil(Promise.allSettled([
+    sendTeamEmail(env,
+      `Website Pipeline: ${email} booked & paid`,
+      `${email} paid ${amount / 100} ${(pi.currency || 'gbp').toUpperCase()} at booking — the call is confirmed.
+Payment: ${pi.id}${record.answersComplete ? '\nTheir call-prep answers are already in.' : '\nTheir answers so far are on the record; more may follow.'}`),
+    postToLeadTracker(env, {
+      org: email, email,
+      source: 'website funnel', message: 'Booked the call and paid £375 — call confirmed.',
+    }),
+  ]));
+
+  return json(200, { received: true });
+}
+
 async function handleAnswers(request, env, ctx) {
   const cors = corsHeaders(env);
   let body;
@@ -199,8 +255,11 @@ async function handleAnswers(request, env, ctx) {
 
   // ponytail: KV read-modify-write without a lock — fine at funnel volume,
   // move to Durable Objects if two devices ever race on one record.
-  const key = sessionEmail ? `client:${email}` : `lead:${email}`;
-  const existing = (await env.CLIENTS.get(key, 'json')) || { email, status: sessionEmail ? 'paid' : 'lead' };
+  // Answers land on the client record if they've already paid (pay-at-booking
+  // can complete before the final answers arrive), else on their lead record.
+  const paidClient = await env.CLIENTS.get(`client:${email}`, 'json');
+  const key = (sessionEmail || paidClient) ? `client:${email}` : `lead:${email}`;
+  const existing = paidClient || (await env.CLIENTS.get(key, 'json')) || { email, status: sessionEmail ? 'paid' : 'lead' };
   existing.answers = { ...(existing.answers || {}), ...answers };
   existing.answersUpdatedAt = new Date().toISOString();
   if (kind === 'complete') existing.answersComplete = true;
@@ -210,7 +269,7 @@ async function handleAnswers(request, env, ctx) {
 
   ctx.waitUntil(sendTeamEmail(env,
     `Website Pipeline: call prep answers (${kind}) — ${email}`,
-    `${sessionEmail ? 'Paying client' : 'Unpaid lead'}.
+    `${existing.status === 'paid' ? 'Booked & paid client' : 'Not yet booked — answers ahead of the call booking'}.
 
 ${summary}`));
 

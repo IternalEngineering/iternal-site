@@ -10,6 +10,7 @@ const env = {
   CLIENTS: {
     async get(k, type) { const v = store.get(k); return v === undefined ? null : (type === 'json' ? JSON.parse(v) : v); },
     async put(k, v) { store.set(k, v); },
+    async delete(k) { store.delete(k); },
   },
   TEAM_MAIL: { async send(msg) { teamMail.push(msg); } },
   SITE_URL: 'https://iternal.co.uk',
@@ -81,7 +82,7 @@ assert.strictEqual(updated.answersComplete, true);
 assert.strictEqual(updated.status, 'paid');
 assert.strictEqual(outbound.length, 0); // no client email, no extra fetches
 assert.strictEqual(teamMail.length, 1);
-assert.ok(teamMail[0].raw.includes('Paying client'));
+assert.ok(teamMail[0].raw.includes('Booked & paid client'));
 // answers rendered as full question wording, question order, arrays joined
 assert.ok(teamMail[0].raw.includes('Who do you most want the site to reach?\n  gift buyers'));
 assert.ok(teamMail[0].raw.includes('Which pages do you think you need?\n  Home, Contact'));
@@ -98,7 +99,56 @@ assert.strictEqual(r.status, 200);
 await drain();
 assert.strictEqual(JSON.parse(store.get('lead:sam@brightpaws.co.uk')).status, 'lead');
 assert.strictEqual(teamMail.length, 1);
-assert.ok(teamMail[0].to === env.TEAM_EMAIL && teamMail[0].raw.includes('Unpaid lead'));
+assert.ok(teamMail[0].to === env.TEAM_EMAIL && teamMail[0].raw.includes('Not yet booked'));
+
+// pay-at-booking: payment_intent.succeeded upgrades the lead to a paid client
+outbound = []; teamMail.length = 0;
+{
+  const piPayload = JSON.stringify({
+    type: 'payment_intent.succeeded',
+    data: { object: { id: 'pi_777', amount_received: 37500, currency: 'gbp', receipt_email: 'Sam@BrightPaws.co.uk' } },
+  });
+  const t2 = Math.floor(Date.now() / 1000);
+  const sig2 = `t=${t2},v1=${await hmacHex(env.STRIPE_WEBHOOK_SECRET, `${t2}.${piPayload}`)}`;
+  const rPi = await call('/stripe-webhook', { method: 'POST', headers: { 'stripe-signature': sig2 }, body: piPayload });
+  assert.strictEqual(rPi.status, 200);
+  await drain();
+  const upgraded = JSON.parse(store.get('client:sam@brightpaws.co.uk'));
+  assert.strictEqual(upgraded.status, 'paid');
+  assert.strictEqual(upgraded.paymentIntent, 'pi_777');
+  assert.strictEqual(upgraded.answers.mainJob, 'Take bookings'); // lead answers carried over
+  assert.ok(!store.get('lead:sam@brightpaws.co.uk')); // lead record retired
+  assert.strictEqual(outbound.length, 1); // tracker Landed entry
+  assert.ok(outbound[0].url.includes('action=createLead'));
+  assert.strictEqual(teamMail.length, 1);
+  assert.ok(teamMail[0].raw.includes('booked & paid'));
+}
+
+// answers arriving AFTER payment land on the client record (no session id)
+teamMail.length = 0;
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'sam@brightpaws.co.uk', kind: 'complete', answers: { timeline: 'As soon as possible' } }) });
+assert.strictEqual(r.status, 200);
+await drain();
+{
+  const after = JSON.parse(store.get('client:sam@brightpaws.co.uk'));
+  assert.strictEqual(after.status, 'paid');
+  assert.strictEqual(after.answers.timeline, 'As soon as possible');
+  assert.strictEqual(after.answersComplete, true);
+  assert.ok(teamMail[0].raw.includes('Booked & paid client'));
+}
+
+// unmatched payment (no email) still briefs the team, never silent
+teamMail.length = 0;
+{
+  const piPayload = JSON.stringify({ type: 'payment_intent.succeeded', data: { object: { id: 'pi_888', amount: 37500, currency: 'gbp' } } });
+  const t3 = Math.floor(Date.now() / 1000);
+  const sig3 = `t=${t3},v1=${await hmacHex(env.STRIPE_WEBHOOK_SECRET, `${t3}.${piPayload}`)}`;
+  const rU = await call('/stripe-webhook', { method: 'POST', headers: { 'stripe-signature': sig3 }, body: piPayload });
+  assert.strictEqual(rU.status, 200);
+  await drain();
+  assert.strictEqual(teamMail.length, 1);
+  assert.ok(teamMail[0].raw.includes('UNMATCHED'));
+}
 
 // oversized body refused
 r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'a@b.c', answers: { x: 'y'.repeat(40000) } }) });

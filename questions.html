@@ -593,12 +593,12 @@ html[data-theme="light"] .icon-moon { display:none; }
     <div class="hero-left">
       <div>
         <h1 class="page-hero-h rv d1">
-          Help us<br>
-          <span class="dim">prepare</span><br>
+          Before<br>
+          <span class="dim">you book</span><br>
           your call.
         </h1>
         <p class="page-hero-sub rv d2">
-          A few questions about your organisation and what the site has to do. The first five book your call. The rest are optional — each one sharpens what we build.
+          A few questions about your organisation and what the site has to do. The first five unlock your call booking — the £375 is taken when you book. The rest are optional; each one sharpens what we build.
         </p>
       </div>
 
@@ -621,7 +621,7 @@ html[data-theme="light"] .icon-moon { display:none; }
 
           <div id="unlockPanel" hidden aria-live="polite" style="margin-top:26px; padding:18px 20px; border:1px solid var(--tan); border-radius:6px">
             <div style="font-weight:700; color:var(--tan); margin-bottom:6px">Your call is unlocked</div>
-            <p style="font-size:14px; color:var(--t2); margin:0 0 12px; line-height:1.6">That's enough for us to prepare. Book now, or keep going below — the more you tell us, the closer the first concepts land.</p>
+            <p style="font-size:14px; color:var(--t2); margin:0 0 12px; line-height:1.6">That's enough for us to prepare. Book now, or keep going below — the more you tell us, the closer the first concepts land. Booking takes the £375 by card on the booking page; your call is only confirmed once the payment goes through.</p>
             <a id="bookBtn" href="contact.html" class="submit-btn" style="margin-top:2px; text-decoration:none">Book your call →</a>
           </div>
 
@@ -649,7 +649,7 @@ html[data-theme="light"] .icon-moon { display:none; }
             <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
           <h3 class="success-h">Answers sent.</h3>
-          <p class="success-p">Thank you — that's what the call needed. If you haven't booked it yet, that's the one step left. After it, we get to work: two or three working versions of your site, real pages you can click through.</p>
+          <p class="success-p">Thank you — that's what the call needed. If you haven't booked it yet, that's the one step left: booking takes the £375 by card, and the call is confirmed once the payment goes through. After it, we get to work: two or three working versions of your site, real pages you can click through.</p>
           <a id="bookBtnSuccess" href="contact.html" class="submit-btn" style="margin-top:22px; text-decoration:none">Book your call →</a>
         </div>
 
@@ -909,18 +909,11 @@ document.head.appendChild(style);
   try { answers = JSON.parse(sessionStorage.getItem(STORE)) || {}; } catch(e) {}
   var partialSent = false;
 
-  // Stripe's payment redirect carries ?session={CHECKOUT_SESSION_ID}; the
-  // worker maps it to the paying client so answers attach to their record.
-  var SESSION = new URLSearchParams(location.search).get('session') || '';
-
-  // Arriving from Stripe (the Payment Link redirects to questions.html?paid=1):
-  // greet them as a paying client, not a browser.
-  if (/[?&]paid\b/.test(location.search)) {
-    var heroH = document.querySelector('.page-hero-h');
-    var heroSub = document.querySelector('.page-hero-sub');
-    if (heroH) heroH.innerHTML = 'One<br><span class="dim">last</span><br>thing.';
-    if (heroSub) heroSub.textContent = 'Payment received — thank you. One thing left before we start: the questions below. The first five book your call; the rest sharpen your concepts.';
-  }
+  // Pay-at-booking flow: identity is simply the email they give in the first
+  // question; the £375 is taken on the Google booking page after these.
+  // The terms-agreed stamp travels from start.html via sessionStorage.
+  var TERMS_AGREED = '';
+  try { TERMS_AGREED = sessionStorage.getItem('iternal_terms_agreed') || ''; } catch (e) {}
 
   function save(){ try { sessionStorage.setItem(STORE, JSON.stringify(answers)); } catch(e) {} }
   function answered(q){ var v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!(v && String(v).trim()); }
@@ -1025,7 +1018,7 @@ document.head.appendChild(style);
       return fetch(WORKER_URL + '/answers', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ session: SESSION || undefined, email: answers.email, kind: kind, answers: answers })
+        body: JSON.stringify({ email: answers.email, kind: kind, answers: TERMS_AGREED ? Object.assign({}, answers, { termsAgreed: TERMS_AGREED }) : answers })
       });
     }
     var fd = new FormData();

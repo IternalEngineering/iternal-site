@@ -39,12 +39,21 @@ together:
   answers). Sweep any test records after manual testing:
   `npx wrangler kv key delete "lead:<email>" --namespace-id bf744fdf07b945719b644e314b69b780 --remote`
 
-## Stripe
+## Stripe (pay-at-booking, 10 Sep rework)
 
-- The webhook endpoint subscribes to `checkout.session.completed` only.
-- The Payment Link must redirect to exactly
-  `https://iternal.co.uk/questions.html?paid=1&session={CHECKOUT_SESSION_ID}`
-  (Stripe substitutes the template) with require-ToS ticked and receipt on.
+- Payment happens ON THE GOOGLE CALENDAR BOOKING PAGE (Calendar's Stripe
+  integration, "require payment when booking", £375): the client picks a
+  slot, pays by card there, and the booking is only confirmed when the
+  payment succeeds. Terms are agreed via the required checkbox on
+  start.html (the agreed-at timestamp travels into their answers as
+  `termsAgreed`).
+- The webhook endpoint must subscribe to BOTH `checkout.session.completed`
+  (legacy link, until deactivated) and `payment_intent.succeeded` (the
+  pay-at-booking events) — the second needs ADDING in the Stripe dashboard.
+- The worker matches a payment to its client by the payer email on the
+  event; an email-less payment briefs the team as UNMATCHED, never silent.
+- The old £375 Payment Link (buy.stripe.com/eVqfZi…) should be DEACTIVATED
+  in Stripe once pay-at-booking is configured.
 - `STRIPE_WEBHOOK_SECRET` holds the **live** webhook's signing secret
   (swapped 2026-09-09). For sandbox testing, put the sandbox secret back
   temporarily — the worker verifies against exactly one at a time.

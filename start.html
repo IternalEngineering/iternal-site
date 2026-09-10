@@ -603,9 +603,9 @@ html[data-theme="light"] .icon-moon { display:none; }
         </p>
         <div class="rv d3" style="display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin-top:26px; font-size:14px; color:var(--t2)">
           <span><span style="color:var(--tan); font-weight:700">1</span>&nbsp; Sign up</span>
-          <span><span style="color:var(--tan); font-weight:700">2</span>&nbsp; Terms &amp; payment</span>
+          <span><span style="color:var(--tan); font-weight:700">2</span>&nbsp; Agree the terms</span>
           <span><span style="color:var(--tan); font-weight:700">3</span>&nbsp; Your questions</span>
-          <span><span style="color:var(--tan); font-weight:700">4</span>&nbsp; Book your call</span>
+          <span><span style="color:var(--tan); font-weight:700">4</span>&nbsp; Book your call — £375 taken then</span>
         </div>
       </div>
 
@@ -698,12 +698,12 @@ html[data-theme="light"] .icon-moon { display:none; }
           <p style="margin:0">The full cost is <strong style="color:var(--white)">£750</strong>, paid in two equal halves. It covers everything on this page, from first questions to launch. If we ever offer extras, they’ll be priced separately — nothing is added without you choosing it.</p>
         </div>
         <div>
-          <div style="font-weight:700; color:var(--white); margin-bottom:6px">£375 to start</div>
-          <p style="margin:0"><strong style="color:var(--white)">£375</strong> when you sign, through Stripe’s secure checkout — that starts the work. The second £375 is invoiced when your site goes live.</p>
+          <div style="font-weight:700; color:var(--white); margin-bottom:6px">£375 when you book your call</div>
+          <p style="margin:0">Nothing is paid today. You pay <strong style="color:var(--white)">£375</strong> by card when you book your project call — the booking only goes through if the payment does. The second £375 is invoiced when your site goes live.</p>
         </div>
         <div>
-          <div style="font-weight:700; color:var(--white); margin-bottom:6px">What signing starts</div>
-          <p style="margin:0">You answer a short set of questions about your organisation and what the site has to do, we talk it through on a call, and then we design and build <strong style="color:var(--white)">two or three working concepts</strong> — real pages you can click through. You pick the one that fits, and refine it with us until it’s yours.</p>
+          <div style="font-weight:700; color:var(--white); margin-bottom:6px">What the call starts</div>
+          <p style="margin:0">You answer a short set of questions about your organisation and what the site has to do, we talk it through on the call, and then we design and build <strong style="color:var(--white)">two or three working concepts</strong> — real pages you can click through. You pick the one that fits, and refine it with us until it’s yours.</p>
         </div>
         <div>
           <div style="font-weight:700; color:var(--white); margin-bottom:6px">If no concept fits</div>
@@ -712,15 +712,15 @@ html[data-theme="light"] .icon-moon { display:none; }
       </div>
 
       <div class="form-submit" style="margin-top:34px">
-        <a href="https://buy.stripe.com/eVqfZi4p78W38JNcx2bwk00" class="submit-btn" id="payBtn" style="text-decoration:none">
-          Continue to Secure Payment
+        <label style="display:flex; align-items:flex-start; gap:10px; margin-bottom:16px; font-size:14px; color:var(--t2); cursor:pointer">
+          <input type="checkbox" id="agreeTick" style="width:18px; height:18px; margin-top:2px; accent-color:var(--tan); cursor:pointer">
+          <span>I’ve read the engagement terms above and I agree to them.</span>
+        </label>
+        <a href="questions.html" class="submit-btn" id="agreeBtn" aria-disabled="true" style="text-decoration:none; opacity:.55; pointer-events:none">
+          Continue to Your Questions
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
-        <a href="questions.html" class="submit-btn" style="margin-top:14px; text-decoration:none; background:none; border:1px solid var(--tan); color:var(--tan)">
-          Answer Your Project Questions
-          <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <p class="form-privacy">You’ll tick your agreement to these terms on Stripe’s secure payment page; your card details go to Stripe, never to us. Straight after paying, you land on your project questions.</p>
+        <p class="form-privacy">Next: your project questions, then booking your call — the £375 is taken by card on the booking page, handled by Stripe, never by us. No successful payment, no booking.</p>
       </div>
     </div>
   </div>
@@ -823,20 +823,28 @@ if (PREVIEW) {
   submitBtn.disabled = true;
   submitBtn.style.opacity = '.55';
   submitBtn.style.pointerEvents = 'none';
-  const pay = document.getElementById('payBtn');
-  if (pay) {
-    pay.removeAttribute('href');
-    pay.style.opacity = '.55';
-    pay.style.pointerEvents = 'none';
-    pay.setAttribute('aria-disabled', 'true');
-  }
+  const tick = document.getElementById('agreeTick');
+  if (tick) tick.disabled = true;
   document.querySelectorAll('.form-privacy').forEach((p) => {
-    p.textContent = 'Preview — sign-ups and payment aren’t open just yet.';
+    p.textContent = 'Preview — sign-ups aren’t open just yet.';
   });
   const banner = document.createElement('div');
   banner.textContent = 'In testing — sign-ups and payment links won’t work yet.';
   banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:200;background:#e0a614;color:#060f26;font-weight:700;font-size:13px;text-align:center;padding:8px 14px;letter-spacing:.02em';
   document.body.appendChild(banner);
+}
+
+/* ── Terms agreement gates the continue button ── */
+const agreeTick = document.getElementById('agreeTick');
+const agreeBtn = document.getElementById('agreeBtn');
+if (agreeTick && agreeBtn) {
+  agreeTick.addEventListener('change', () => {
+    const on = agreeTick.checked;
+    agreeBtn.style.opacity = on ? '1' : '.55';
+    agreeBtn.style.pointerEvents = on ? 'auto' : 'none';
+    agreeBtn.setAttribute('aria-disabled', String(!on));
+    if (on) try { sessionStorage.setItem('iternal_terms_agreed', new Date().toISOString()); } catch (e) {}
+  });
 }
 
 form.addEventListener('submit', (e)=>{
