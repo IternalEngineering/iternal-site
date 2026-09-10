@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Privacy — Iternal AI</title>
-<meta name="description" content="How Iternal handles your information: what we collect, where it goes, and your rights. No tracking cookies, no noise.">
+<title>Websites We've Made — Iternal AI</title>
+<meta name="description" content="A gallery of websites designed and built by Iternal — and how to get one of your own. £750 all in: £375 when you sign, £375 when your site goes live.">
 <meta name="robots" content="index, follow">
-<meta property="og:title" content="Privacy — Iternal AI">
-<meta property="og:description" content="How Iternal handles your information: what we collect, where it goes, and your rights. No tracking cookies, no noise.">
+<meta property="og:title" content="Websites We've Made — Iternal AI">
+<meta property="og:description" content="A gallery of websites designed and built by Iternal — and how to get one of your own.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://iternal.co.uk/privacy.html">
+<meta property="og:url" content="https://iternal.life/websites.html">
 <meta property="og:image" content="https://iternal.life/og-image.png">
 <meta property="og:site_name" content="Iternal AI">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Privacy — Iternal AI">
-<meta name="twitter:description" content="How Iternal handles your information: what we collect, where it goes, and your rights. No tracking cookies, no noise.">
+<meta name="twitter:title" content="Websites We've Made — Iternal AI">
+<meta name="twitter:description" content="A gallery of websites designed and built by Iternal — and how to get one of your own.">
 <meta name="twitter:image" content="https://iternal.life/og-image.png">
-<link rel="canonical" href="https://iternal.co.uk/privacy.html">
+<link rel="canonical" href="https://iternal.life/websites.html">
 <link rel="icon" href="assets/icon-navy.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -557,204 +557,3 @@ html[data-theme="light"] .icon-moon { display:none; }
   .theme-toggle { color:var(--white); position:absolute; right:56px; top:50%; transform:translateY(-50%); }
 }
 </style>
-</head>
-<body>
-<a href="#main" class="skip-link">Skip to content</a>
-
-<!-- ===== MESH + GRAIN ===== -->
-<div id="mesh">
-  <div class="blob blob-1"></div>
-  <div class="blob blob-2"></div>
-  <div class="blob blob-3"></div>
-  <div class="blob blob-4"></div>
-</div>
-<div id="grain"></div>
-
-<!-- ===== CUSTOM CURSOR ===== -->
-
-<!-- ===== NAV ===== -->
-<nav id="nav">
-  <a href="index.html" class="nav-logo" aria-label="Iternal — home">
-    <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
-    <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
-  </a>
-  <ul class="nav-links">
-    <li><a href="index.html#work">Work</a></li>
-    <li><a href="services.html">What We Do</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="insights.html">Insights</a></li>
-    <li><a href="contact.html">Contact</a></li>
-  </ul>
-  <a href="contact.html" class="nav-btn">Book a Call</a>
-  <button class="theme-toggle" aria-label="Toggle light/dark mode">
-    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-    <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-  </button>
-  <button class="nav-hamburger" aria-label="Menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-</nav>
-<div class="mobile-nav" id="mobileNav">
-  <a href="index.html">Home</a>
-  <a href="index.html#work">Work</a>
-  <a href="services.html">What We Do</a>
-  <a href="about.html">About</a>
-  <a href="insights.html">Insights</a>
-  <a href="contact.html">Contact</a>
-  <a href="contact.html" class="mob-cta">Book a Call</a>
-</div>
-
-<main id="main">
-
-<!-- ===== HERO ===== -->
-<section class="cs-hero">
-  <div class="w">
-    <div class="cs-sector rv d1">Last updated · September 2026</div>
-    <h1 class="cs-h1 rv d2">Privacy,<br><em>in plain English</em></h1>
-    <p class="cs-intro rv d3">What we collect, where it goes, and what you can ask of us. No tracking cookies, no data sold, no noise — and short enough to actually read.</p>
-  </div>
-</section>
-
-<!-- ===== POLICY ===== -->
-<section class="cs-details">
-  <div class="w">
-    <div class="cs-body rv d1" style="max-width:760px">
-
-      <h2>Who we are</h2>
-      <p>Iternal Ltd, Bristol, UK — the company behind iternal.co.uk and iternal.life. Anything in this policy, or anything about your data, comes to <a href="mailto:hello@iternal.life" style="color:var(--tan); text-decoration:underline; text-underline-offset:3px">hello@iternal.life</a> and a person will answer.</p>
-
-      <h2>What we collect, and why</h2>
-      <p><strong>If you sign up for a website build:</strong> your name, email, organisation and current website — because that’s the start of working together. Your answers to the project questions — because they shape what we design for you. While you’re answering, drafts live only in your own browser and are wiped when you press send; nothing reaches us until you book the call or send them.</p>
-      <p><strong>If you pay:</strong> payment runs entirely through Stripe’s secure checkout. Your card details go to Stripe, never to us — we receive your name, email and confirmation that payment succeeded.</p>
-      <p><strong>If you book a call:</strong> Google Calendar handles the booking and sends you the invite.</p>
-      <p><strong>If you email us or use the contact form:</strong> we keep the correspondence for as long as we’re talking, and for a reasonable period after.</p>
-      <p>The legal bases for all of this are performing a contract with you (or the steps you ask us to take before one) and our legitimate interest in running an orderly business.</p>
-
-      <h2>Where it goes</h2>
-      <p>Your information lives in a small, named set of services we use to run the business: <strong>Stripe</strong> (payments), <strong>Google</strong> (email, calendar and our internal records), <strong>Cloudflare</strong> (the infrastructure this site and its forms run on), <strong>Slack</strong> (internal notifications to the team) and <strong>FormSubmit</strong> (relays the sign-up form to our inbox). Some of these providers process data outside the UK; each does so under recognised UK data-transfer safeguards. We never sell your information, and we never share it beyond that list.</p>
-
-      <h2>How long we keep it</h2>
-      <p>Project records for as long as we’re working together and a reasonable period afterwards, in case you come back. Payment and invoicing records for six years, because tax law says so. When there’s no reason left to keep something, it goes.</p>
-
-      <h2>Your rights</h2>
-      <p>You can ask us what we hold about you, ask us to correct it, or ask us to delete it — email <a href="mailto:hello@iternal.life" style="color:var(--tan); text-decoration:underline; text-underline-offset:3px">hello@iternal.life</a> and we’ll act on it. If you think we’ve handled your data badly and we haven’t put it right, you can complain to the <a href="https://ico.org.uk" target="_blank" rel="noopener" style="color:var(--tan); text-decoration:underline; text-underline-offset:3px">Information Commissioner’s Office</a> — though we’d rather you told us first.</p>
-
-      <h2>Cookies</h2>
-      <p>This site sets no tracking or analytics cookies. The only thing stored in your browser is the draft of your own project answers while you type them — strictly necessary, on your device, wiped on send. That’s why there’s no cookie banner.</p>
-
-      <h2>Changes</h2>
-      <p>If this policy changes, the date at the top changes with it. We won’t quietly move the goalposts.</p>
-
-    </div>
-  </div>
-</section>
-
-</main>
-
-<!-- ===== FOOTER ===== -->
-<footer>
-  <div class="footer-in">
-    <div>
-      <div class="f-logo">
-        <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
-        <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
-      </div>
-      <p class="f-desc">Specialist agentic AI consultancy and product studio. Building the systems that run tomorrow's organisations. Today.</p>
-    </div>
-    <div>
-      <span class="f-col-lbl">Navigation</span>
-      <ul class="f-links">
-        <li><a href="index.html#work">Work</a></li>
-        <li><a href="services.html">What We Do</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="insights.html">Insights</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </div>
-    <div>
-      <span class="f-col-lbl">Get In Touch</span>
-      <ul class="f-links">
-        <li><a href="mailto:hello@iternal.life">hello@iternal.life</a></li>
-        <li><a href="https://iternal.app" target="_blank" rel="noopener noreferrer">iternal.app</a></li>
-        <li><a href="https://linkedin.com/company/iternal" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-        <li><a href="contact.html">Book a Call</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Bristol, UK</span>
-    <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
-  </div>
-</footer>
-
-<script>
-
-/* ── Nav scroll ── */
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 40);
-});
-
-/* ── Mobile nav toggle ── */
-const hamburger = document.querySelector('.nav-hamburger');
-const mobileNav = document.getElementById('mobileNav');
-hamburger.addEventListener('click', () => {
-  const isOpen = hamburger.classList.toggle('open');
-  mobileNav.classList.toggle('open');
-  hamburger.setAttribute('aria-expanded', isOpen);
-  document.body.style.overflow = isOpen ? 'hidden' : '';
-});
-document.addEventListener('keydown', function(e){
-  if(e.key === 'Escape' && mobileNav.classList.contains('open')){
-    mobileNav.classList.remove('open');
-    hamburger.setAttribute('aria-expanded','false');
-  }
-});
-
-/* ── Theme toggle ── */
-(function(){
-  const toggle = document.querySelector('.theme-toggle');
-  if(toggle){
-    toggle.addEventListener('click', function(){
-      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem('theme', next);
-    });
-  }
-  matchMedia('(prefers-color-scheme:light)').addEventListener('change', function(e){
-    if(!localStorage.getItem('theme')){
-      document.documentElement.setAttribute('data-theme', e.matches ? 'light' : 'dark');
-    }
-  });
-})();
-
-/* ── Scroll reveal ── */
-const rvEls = document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale');
-const rvObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('on'); rvObs.unobserve(e.target); }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-rvEls.forEach(el => rvObs.observe(el));
-
-/* ── Hero parallax ── */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const mesh = document.getElementById('mesh');
-  if(!mesh) return;
-  let ticking = false;
-  window.addEventListener('scroll', function(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(function(){
-      const sy = window.scrollY;
-      if(sy <= window.innerHeight){
-        mesh.style.transform = 'translateY(' + (sy * -0.08) + 'px)';
-      }
-      ticking = false;
-    });
-  }, {passive: true});
-})();
-</script>
-</body>
-</html>

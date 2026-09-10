@@ -1,0 +1,107 @@
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-in">
+    <div>
+      <div class="f-logo">
+        <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
+        <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
+      </div>
+      <p class="f-desc">Specialist agentic AI consultancy and product studio. Building the systems that run tomorrow's organisations. Today.</p>
+    </div>
+    <div>
+      <span class="f-col-lbl">Navigation</span>
+      <ul class="f-links">
+        <li><a href="index.html#work">Work</a></li>
+        <li><a href="services.html">What We Do</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="insights.html">Insights</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <span class="f-col-lbl">Get In Touch</span>
+      <ul class="f-links">
+        <li><a href="mailto:hello@iternal.life">hello@iternal.life</a></li>
+        <li><a href="https://iternal.app" target="_blank" rel="noopener noreferrer">iternal.app</a></li>
+        <li><a href="https://linkedin.com/company/iternal" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+        <li><a href="contact.html">Book a Call</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="f-bot" style="padding:28px var(--px) 0">
+    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Bristol, UK</span>
+    <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
+  </div>
+</footer>
+
+<script>
+
+/* ── Nav scroll ── */
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+/* ── Mobile nav toggle ── */
+const hamburger = document.querySelector('.nav-hamburger');
+const mobileNav = document.getElementById('mobileNav');
+hamburger.addEventListener('click', () => {
+  const isOpen = hamburger.classList.toggle('open');
+  mobileNav.classList.toggle('open');
+  hamburger.setAttribute('aria-expanded', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && mobileNav.classList.contains('open')){
+    mobileNav.classList.remove('open');
+    hamburger.setAttribute('aria-expanded','false');
+  }
+});
+
+/* ── Theme toggle ── */
+(function(){
+  const toggle = document.querySelector('.theme-toggle');
+  if(toggle){
+    toggle.addEventListener('click', function(){
+      const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    });
+  }
+  matchMedia('(prefers-color-scheme:light)').addEventListener('change', function(e){
+    if(!localStorage.getItem('theme')){
+      document.documentElement.setAttribute('data-theme', e.matches ? 'light' : 'dark');
+    }
+  });
+})();
+
+/* ── Scroll reveal ── */
+const rvEls = document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale');
+const rvObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('on'); rvObs.unobserve(e.target); }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+rvEls.forEach(el => rvObs.observe(el));
+
+/* ── Hero parallax ── */
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const mesh = document.getElementById('mesh');
+  if(!mesh) return;
+  let ticking = false;
+  window.addEventListener('scroll', function(){
+    if(ticking) return;
+    ticking = true;
+    requestAnimationFrame(function(){
+      const sy = window.scrollY;
+      if(sy <= window.innerHeight){
+        mesh.style.transform = 'translateY(' + (sy * -0.08) + 'px)';
+      }
+      ticking = false;
+    });
+  }, {passive: true});
+})();
+</script>
+</body>
+</html>
