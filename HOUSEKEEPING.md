@@ -68,10 +68,11 @@ people with the URLs can reach them.
 4. Team smoke test on the dark URLs: /websites.html → /start.html →
    payment button → checkout shows the terms checkbox (no payment
    needed); /questions.html?paid=1 greeting.
-5. LIGHTING UP (when the team says go): `git revert` the dark-launch
-   commit (message "Dark launch: delink the funnel...") to restore the
-   nav links, flip websites.html + start.html robots back to
-   "index, follow" (the revert does this too), merge, Paul redeploys.
+5. LIGHTING UP (when the team says go): `git revert 32b1649` to restore
+   the nav links and flip websites.html + start.html robots back to
+   "index, follow". If the revert conflicts on the _privacy_skeleton
+   scratch files (deleted in a later commit), keep them deleted
+   (`git rm`). Then merge and Paul redeploys.
 
 ## Team briefs (email)
 
