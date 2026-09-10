@@ -815,8 +815,29 @@ if (siteField) siteField.addEventListener('blur', () => {
 const form = document.getElementById('contactForm');
 const submitBtn = document.getElementById('submitBtn');
 
+// Dark-launch preview gate: the page is live for review, but sign-up and
+// payment stay off until launch. The team appends ?team to use the real
+// forms. Remove this whole block at light-up (with the nav-link revert).
+const PREVIEW = !/[?&]team\b/.test(location.search);
+if (PREVIEW) {
+  submitBtn.disabled = true;
+  submitBtn.style.opacity = '.55';
+  submitBtn.style.pointerEvents = 'none';
+  const pay = document.getElementById('payBtn');
+  if (pay) {
+    pay.removeAttribute('href');
+    pay.style.opacity = '.55';
+    pay.style.pointerEvents = 'none';
+    pay.setAttribute('aria-disabled', 'true');
+  }
+  document.querySelectorAll('.form-privacy').forEach((p) => {
+    p.textContent = 'Preview — sign-ups and payment aren’t open just yet.';
+  });
+}
+
 form.addEventListener('submit', (e)=>{
   e.preventDefault();
+  if (PREVIEW) return;
 
   // Animate button
   submitBtn.style.opacity='.6';
