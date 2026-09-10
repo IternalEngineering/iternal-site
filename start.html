@@ -833,6 +833,10 @@ if (PREVIEW) {
   document.querySelectorAll('.form-privacy').forEach((p) => {
     p.textContent = 'Preview — sign-ups and payment aren’t open just yet.';
   });
+  const banner = document.createElement('div');
+  banner.textContent = 'In testing — sign-ups and payment links won’t work yet.';
+  banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:200;background:#e0a614;color:#060f26;font-weight:700;font-size:13px;text-align:center;padding:8px 14px;letter-spacing:.02em';
+  document.body.appendChild(banner);
 }
 
 form.addEventListener('submit', (e)=>{
