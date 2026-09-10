@@ -137,6 +137,23 @@ await drain();
   assert.ok(teamMail[0].raw.includes('Booked & paid client'));
 }
 
+// sign-up: seeds the lead record and carries it to the tracker
+outbound = []; teamMail.length = 0;
+r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'Nadia', lastName: 'Rossi', email: 'Nadia@HarbourlightCafe.co.uk', organisation: 'Harbourlight Cafe', website: 'harbourlightcafe.co.uk' }) });
+assert.strictEqual(r.status, 200);
+await drain();
+{
+  const lead = JSON.parse(store.get('lead:nadia@harbourlightcafe.co.uk'));
+  assert.strictEqual(lead.org, 'Harbourlight Cafe');
+  assert.strictEqual(lead.name, 'Nadia Rossi');
+  assert.strictEqual(outbound.length, 1); // one tracker post, nothing else
+  assert.ok(outbound[0].url.includes('action=createLead'));
+  assert.strictEqual(outbound[0].body.email, 'nadia@harbourlightcafe.co.uk');
+  assert.ok(outbound[0].body.message.includes('Signed up'));
+}
+r = await call('/signup', { method: 'POST', body: JSON.stringify({ organisation: 'No Email Ltd' }) });
+assert.strictEqual(r.status, 400); // email required
+
 // unmatched payment (no email) still briefs the team, never silent
 teamMail.length = 0;
 {

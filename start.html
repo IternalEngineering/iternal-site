@@ -869,6 +869,21 @@ form.addEventListener('submit', (e)=>{
   .then(res=>{
     if(res.ok){
       document.getElementById('formWrap').classList.add('submitted');
+      // Carry the sign-up into the Lead Tracker pipeline (fire-and-forget —
+      // a hiccup here must never affect the client's flow).
+      try {
+        fetch('https://api.iternal.co.uk/signup', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            firstName: document.getElementById('fname').value.trim(),
+            lastName: document.getElementById('lname').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            organisation: document.getElementById('org').value.trim(),
+            website: document.getElementById('website').value.trim(),
+          })
+        });
+      } catch(err) {}
     } else {
       throw new Error('Form submission failed');
     }

@@ -15,6 +15,10 @@
  *                         a Landed entry. checkout.session.completed is
  *                         kept for the legacy Payment Link until it is
  *                         deactivated.
+ *   POST /signup          The start.html form posts here after sign-up:
+ *                         seeds their lead record in KV and carries the
+ *                         sign-up into the Lead Tracker pipeline
+ *                         (fire-and-forget, never blocking).
  *   POST /answers         The questions page posts drafts/finals here, keyed
  *                         by the email they give in the first question.
  *                         Answers land on their lead record (or client
@@ -230,6 +234,38 @@ Payment: ${pi.id}${record.answersComplete ? '\nTheir call-prep answers are alrea
   return json(200, { received: true });
 }
 
+/** Sign-up from start.html: seed the lead record, carry it to the tracker. */
+async function handleSignup(request, env, ctx) {
+  const cors = corsHeaders(env);
+  let body;
+  try {
+    const raw = await request.text();
+    if (raw.length > 8192) return json(400, { error: 'too large' }, cors);
+    body = JSON.parse(raw);
+  } catch (e) { return json(400, { error: 'bad json' }, cors); }
+
+  const email = s(body.email, 120).toLowerCase();
+  if (!email || email.indexOf('@') === -1) return json(400, { error: 'email required' }, cors);
+  const name = (s(body.firstName, 60) + ' ' + s(body.lastName, 60)).trim();
+  const org = s(body.organisation, 120) || name || email;
+  const website = s(body.website, 200);
+
+  const key = `lead:${email}`;
+  const existing = (await env.CLIENTS.get(key, 'json')) || { email, status: 'lead' };
+  existing.name = name || existing.name || '';
+  existing.org = org || existing.org || '';
+  existing.website = website || existing.website || '';
+  existing.signedUpAt = existing.signedUpAt || new Date().toISOString();
+  await env.CLIENTS.put(key, JSON.stringify(existing));
+
+  ctx.waitUntil(postToLeadTracker(env, {
+    org, contact: name || email, email, website,
+    source: 'website funnel', message: 'Signed up on the website — heading into the project questions.',
+  }));
+
+  return json(200, { ok: true }, cors);
+}
+
 async function handleAnswers(request, env, ctx) {
   const cors = corsHeaders(env);
   let body;
@@ -282,6 +318,7 @@ export default {
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders(env) });
     if (url.pathname === '/health') return json(200, { ok: true });
     if (url.pathname === '/stripe-webhook' && request.method === 'POST') return handleStripeWebhook(request, env, ctx);
+    if (url.pathname === '/signup' && request.method === 'POST') return handleSignup(request, env, ctx);
     if (url.pathname === '/answers' && request.method === 'POST') return handleAnswers(request, env, ctx);
     return json(404, { error: 'not found' });
   },
