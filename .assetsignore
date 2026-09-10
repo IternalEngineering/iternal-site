@@ -1,0 +1,14 @@
+# Files in the repo that must NOT be served as part of the website.
+# Wrangler reads this when deploying the site as Workers static assets.
+worker/
+tools/
+node_modules/
+.github/
+.claude/
+HOUSEKEEPING.md
+README.md
+package.json
+package-lock.json
+wrangler.toml
+.assetsignore
+.gitignore

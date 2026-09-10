@@ -1,0 +1,12 @@
+# The LIVE SITE deployment: iternal.co.uk served as Workers static assets.
+# Mirrors the configuration observed on the deployed `iternal-site` worker
+# (no script, no bindings, assets served directly; custom-domain attachment
+# persists across deploys). Deploy from the REPO ROOT: npx wrangler deploy
+# .assetsignore controls what is excluded from the upload.
+# (The funnel worker is separate — worker/wrangler.toml, deployed from worker/.)
+name = "iternal-site"
+compatibility_date = "2026-08-20"
+account_id = "65d5b12232edf6944b3c596a887f27d3" # Iternal
+
+[assets]
+directory = "."
