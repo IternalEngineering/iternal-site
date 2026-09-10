@@ -68,11 +68,15 @@ people with the URLs can reach them.
 4. Team smoke test on the dark URLs: /websites.html → /start.html →
    payment button → checkout shows the terms checkbox (no payment
    needed); /questions.html?paid=1 greeting.
-5. LIGHTING UP (when the team says go): `git revert 32b1649` to restore
-   the nav links and flip websites.html + start.html robots back to
-   "index, follow". If the revert conflicts on the _privacy_skeleton
-   scratch files (deleted in a later commit), keep them deleted
-   (`git rm`). Then merge and Paul redeploys.
+5. LIGHTING UP (when the team says go), three parts then redeploy:
+   a. `git revert 32b1649` — restores the nav links and flips
+      websites.html + start.html robots back to "index, follow" (if it
+      conflicts on the _privacy_skeleton scratch files, keep them
+      deleted with `git rm`).
+   b. `git revert 7620e05 6914250` — removes the preview gate + testing
+      banner from start.html (sign-up/payment disabled without ?team
+      while dark).
+   c. Redeploy the site (npx wrangler deploy from the repo root).
 
 ## Team briefs (email)
 
