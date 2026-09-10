@@ -12,3 +12,4 @@ package-lock.json
 wrangler.toml
 .assetsignore
 .gitignore
+.git/
