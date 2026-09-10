@@ -5,6 +5,7 @@ tools/
 node_modules/
 .github/
 .claude/
+CLAUDE.md
 HOUSEKEEPING.md
 README.md
 package.json
