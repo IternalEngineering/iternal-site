@@ -62,26 +62,28 @@ no successful payment, no booking. Our site never touches card details.
 | **Slack** | nothing directly — pings come from the Lead Tracker | — | |
 | **GitHub Action** (`.github/workflows/screenshots.yml`) | weekly gallery screenshot refresh commits | — | Gallery additions touch THREE files — see HOUSEKEEPING.md |
 
-## Current to-do (10 Sep 2026)
+## Current to-do (15 Sep 2026)
 
-1. Robbie: deploy the site (`npx wrangler deploy` from repo root — an
-   agent CANNOT run this, the permission layer reserves prod deploys for
-   the user; prepare everything and hand over the command).
+1. ~~Deploy the site~~ DONE — the reflowed dark funnel is live.
 2. Robbie: Google Calendar → appointment schedule → Payments → connect
-   Stripe, £375. TIER-DEPENDENT — if the Payments section is absent,
-   the fallback is the charge-then-book design in
-   `../build-flow-end-to-end.html`'s history.
-3. Robbie: Stripe webhook → add `payment_intent.succeeded` event.
-4. Robbie: deactivate the old Payment Link.
+   Stripe, £375. **THE remaining make-or-break** — TIER-DEPENDENT; if
+   the Payments section is absent, we pivot to the charge-then-book
+   fallback design.
+3. ~~Stripe webhook payment_intent.succeeded event~~ DONE 15 Sep.
+4. ~~Deactivate the old Payment Link~~ DONE 15 Sep (verified: "The link
+   is no longer active").
 5. Team: `?team` walkthrough on the dark URLs (a real test booking +
-   refund proves the whole chain).
+   refund proves the whole chain). Not yet done — KV had zero records
+   at the 15 Sep audit.
 6. Legal: privacy.html review + linking; terms small-print annex; ICO
    data-protection-fee registration check (`../legal-review-pack.md`).
 7. Light-up when the team says go (HOUSEKEEPING.md §Go-live).
 8. Stale artefacts to refresh after the dust settles: the StateCraft
    diagram (`../statecraft/diagrams/client-funnel.scd`) still shows the
    old payment-link flow; `../build-a-site-journey.html` screenshots
-   predate the reflow.
+   predate the reflow. Also: merge lead-tracker branch
+   `revamp/website-builds` → its main (bookkeeping; deployment already
+   runs it).
 
 ## Rules and gotchas for agents
 
