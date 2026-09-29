@@ -131,7 +131,6 @@ const QUESTIONS = [
   ['admired', 'Which of our sites do you like the look of?'],
   ['loved', 'Which websites do you love?'],
   ['peers', 'Competitors or peers — doing well / getting wrong'],
-  ['dislikes', 'Any sites that make you cringe?'],
   ['branding', 'Do you have branding — a logo, colours?'],
   ['visualStyle', 'Which look pulls you more?'],
   ['pages', 'Which pages do you think you need?'],
