@@ -94,8 +94,9 @@ no successful payment, no booking. Our site never touches card details.
   filtered by `.assetsignore` — keep this file, HOUSEKEEPING.md, worker/,
   tools/ and .git out of uploads).
 - Question wording is COUPLED to `worker/worker.js`'s QUESTIONS map;
-  gallery entries are coupled across three files — HOUSEKEEPING.md has
-  both checklists.
+  gallery entries are coupled across four places (incl. the worker's
+  GALLERY_SITES slug map behind the per-site "start here" buttons) —
+  HOUSEKEEPING.md has both checklists.
 - Windows/bash gotcha: writing `\n`/`\r`/`\u` escapes through a bash
   heredoc into python/node collapses them — use the Write/Edit tools for
   such code.

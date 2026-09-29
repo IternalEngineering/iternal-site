@@ -108,6 +108,16 @@ async function postToLeadTracker(env, lead) {
 
 const s = (v, max) => String(v === null || v === undefined ? '' : v).trim().slice(0, max);
 
+/* Gallery slugs as sent by websites.html's per-site "start here" buttons
+   (?from=slug). Coupled to the gallery — see HOUSEKEEPING.md. */
+const GALLERY_SITES = {
+  tech4good: 'Tech4Good South West',
+  agf: 'African Gifted Foundation',
+  genius: 'Generating Genius',
+  marvinrees: 'marvinrees.com',
+  pawlett: 'Pawlett Pavilion',
+};
+
 /* Field ids as sent by questions.html, in the order they appear on the page.
    Keeps team briefs readable as real Q&A; unknown ids fall back to the raw key. */
 const QUESTIONS = [
@@ -249,18 +259,24 @@ async function handleSignup(request, env, ctx) {
   const name = (s(body.firstName, 60) + ' ' + s(body.lastName, 60)).trim();
   const org = s(body.organisation, 120) || name || email;
   const website = s(body.website, 200);
+  // The gallery example they clicked through from (websites.html ?from=slug).
+  // Whitelist: slugs match websites.html's g-cta links; unknown values drop.
+  const inspiration = GALLERY_SITES[s(body.inspiration, 40)] || '';
 
   const key = `lead:${email}`;
   const existing = (await env.CLIENTS.get(key, 'json')) || { email, status: 'lead' };
   existing.name = name || existing.name || '';
   existing.org = org || existing.org || '';
   existing.website = website || existing.website || '';
+  existing.inspiration = inspiration || existing.inspiration || '';
   existing.signedUpAt = existing.signedUpAt || new Date().toISOString();
   await env.CLIENTS.put(key, JSON.stringify(existing));
 
   ctx.waitUntil(postToLeadTracker(env, {
     org, contact: name || email, email, website,
-    source: 'website funnel', message: 'Signed up on the website — heading into the project questions.',
+    source: 'website funnel',
+    message: 'Signed up on the website — heading into the project questions.'
+      + (inspiration ? ' Came in from the ' + inspiration + ' example in the gallery — a steer for the concepts.' : ''),
   }));
 
   return json(200, { ok: true }, cors);

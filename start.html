@@ -881,6 +881,9 @@ form.addEventListener('submit', (e)=>{
             email: document.getElementById('email').value.trim(),
             organisation: document.getElementById('org').value.trim(),
             website: document.getElementById('website').value.trim(),
+            // Which gallery example they clicked through from (?from=…) —
+            // a steer for the concepts, whitelisted worker-side.
+            inspiration: (location.search.match(/[?&]from=([\w-]{1,40})/)||[])[1] || '',
           })
         });
       } catch(err) {}

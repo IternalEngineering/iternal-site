@@ -19,13 +19,25 @@ the raw field id (`mainJob: …`) and no answer is ever dropped.
 The gallery is curated — a new site going live does NOT automatically earn a
 place. Adding one is a deliberate call, made by a person, per site, and only
 with the featured client's consent. Additions happen quietly: the page makes
-no promise that new sites are coming. Once the call is made, three files move
+no promise that new sites are coming. Once the call is made, four places move
 together:
 
-1. `websites.html` — the gallery entry (label, description, screenshot img).
-2. `tools/screenshots.js` — the `SHOTS` list, so the weekly screenshot
+1. `websites.html` — the gallery entry (label, description, screenshot img,
+   and the "Start yours" button whose `start.html?from=<slug>` link tags the
+   sign-up with the example that hooked them). The screenshot is wrapped in
+   an `<a class="g-view">` to the live site with `data-embed`, which opens
+   the click in the lightbox instead of a new tab. That needs the site's
+   headers to allow framing: our own builds set `frame-ancestors 'self'`
+   plus the four iternal.co.uk / iternal.life origins in their `_headers`
+   file (AGF and pawlett-pavilion got this Sept 2026 — copy that pattern,
+   and never ship a plain `X-Frame-Options` on a gallery site). A site that
+   blocks framing gets no `data-embed` and falls back to a new tab.
+2. `worker/worker.js` — the `GALLERY_SITES` slug→name map (the whitelist
+   that turns `?from=` into the tracker note "Came in from the … example");
+   redeploy the worker after changing it.
+3. `tools/screenshots.js` — the `SHOTS` list, so the weekly screenshot
    refresh covers it.
-3. `questions.html` — the "Which of our sites do you like the look of?"
+4. `questions.html` — the "Which of our sites do you like the look of?"
    options, which mirror the gallery.
 
 ## Worker (worker/)

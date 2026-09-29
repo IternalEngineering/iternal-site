@@ -306,6 +306,87 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 
 /* ============================================================
+   GALLERY GRID
+   ============================================================ */
+/* No scroll-reveal in here: every site and its way into the pipeline is
+   visible the moment the section is, however far someone scrolls. */
+.g-grid { display:grid; grid-template-columns:1fr 1fr; gap:56px 36px; }
+.g-card { margin:0; display:flex; flex-direction:column; }
+.g-head { margin-bottom:10px; flex:1; }
+.g-desc { font-size:14px; color:var(--t3); margin-top:4px; line-height:1.6; }
+.g-shot { position:relative; display:block; }
+.g-shot img {
+  width:100%; display:block;
+  aspect-ratio:16/10; object-fit:cover; object-position:top;
+  border:1px solid var(--border); border-radius:4px;
+}
+.g-cta {
+  position:absolute; right:12px; bottom:12px;
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--sunrise); color:#ffffff;
+  font-size:12px; font-weight:700;
+  letter-spacing:.05em; text-transform:uppercase;
+  padding:9px 16px; border-radius:3px;
+  box-shadow:0 6px 22px rgba(6,15,38,.45);
+  transition:transform .15s, box-shadow .2s;
+}
+.g-cta:hover {
+  transform:translateY(-1px);
+  box-shadow:0 10px 30px rgba(226,103,19,.4);
+}
+.g-view { display:block; }
+.g-view:hover img { border-color:var(--border2); }
+@media (max-width:900px) {
+  .g-grid { grid-template-columns:1fr; gap:44px; }
+}
+
+/* ── Site lightbox: the live site in a frame, our page underneath ── */
+#siteView {
+  width:min(1200px, 94vw); height:88vh;
+  padding:0; overflow:hidden;
+  border:1px solid var(--border2); border-radius:6px;
+  background:var(--deep); color:var(--text);
+}
+#siteView::backdrop { background:rgba(6,15,38,.78); backdrop-filter:blur(6px); }
+.sv-bar {
+  display:flex; align-items:center; gap:16px;
+  height:52px; padding:0 8px 0 16px;
+  border-bottom:1px solid var(--border);
+}
+.sv-domain {
+  flex:1; min-width:0;
+  font-size:12px; font-weight:700; letter-spacing:.08em;
+  text-transform:uppercase; color:var(--t3);
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.sv-cta {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--sunrise); color:#ffffff;
+  font-size:12px; font-weight:700;
+  letter-spacing:.05em; text-transform:uppercase;
+  padding:9px 16px; border-radius:3px;
+  transition:opacity .2s;
+}
+.sv-cta:hover { opacity:.88; }
+.sv-close {
+  background:none; border:none; cursor:pointer;
+  color:var(--t3); font-size:20px; line-height:1;
+  padding:8px 12px; transition:color .2s;
+}
+.sv-close:hover { color:var(--t1); }
+#svFrame {
+  width:100%; height:calc(100% - 52px);
+  border:0; display:block; background:#ffffff;
+}
+@media (max-width:900px) {
+  #siteView {
+    width:100vw; height:100dvh;
+    max-width:100vw; max-height:100dvh;
+    border:none; border-radius:0;
+  }
+}
+
+/* ============================================================
    CASE STUDY — DETAILS GRID
    ============================================================ */
 .cs-details { padding:0 0 100px; }
@@ -631,40 +712,67 @@ html[data-theme="light"] .icon-moon { display:none; }
 <!-- ===== GALLERY ===== -->
 <section class="cs-img-section">
   <div class="w">
-    <div class="rv" style="margin-bottom:12px">
-      <div class="cs-meta-label">tech4goodsouthwest.org</div>
-      <div style="font-size:15px; color:var(--t3); margin-top:4px">Tech4Good South West — the online home for a community of charities and purpose-led tech across the region. Built and maintained by us; the team edits it through our agentic studio.</div>
-    </div>
-    <div class="rv-scale" style="margin-bottom:64px">
-      <img src="assets/screenshot-tech4good.png" alt="Tech4Good South West website" style="width:100%; display:block; border:1px solid var(--border); border-radius:4px;">
-    </div>
-    <div class="rv" style="margin-bottom:12px">
-      <div class="cs-meta-label">African Gifted Foundation</div>
-      <div style="font-size:15px; color:var(--t3); margin-top:4px">A full website refresh for the charity behind the African Science Academy in Ghana — hand-built, fast, and easy for a small team to keep current.</div>
-    </div>
-    <div class="rv-scale" style="margin-bottom:64px">
-      <img src="assets/screenshot-agf.png" alt="African Gifted Foundation website — Creating Africa's next generation of women STEM leaders" style="width:100%; display:block; border:1px solid var(--border); border-radius:4px;">
-    </div>
-    <div class="rv" style="margin-bottom:12px">
-      <div class="cs-meta-label">generatinggenius.org.uk</div>
-      <div style="font-size:15px; color:var(--t3); margin-top:4px">Generating Genius — a full rebuild for the UK charity taking high-potential students from low socio-economic backgrounds into STEM careers.</div>
-    </div>
-    <div class="rv-scale" style="margin-bottom:64px">
-      <img src="assets/screenshot-genius.png" alt="Generating Genius website — Developing the next generation of STEM leaders" style="width:100%; display:block; border:1px solid var(--border); border-radius:4px;">
-    </div>
-    <div class="rv" style="margin-bottom:12px">
-      <div class="cs-meta-label">marvinrees.com</div>
-      <div style="font-size:15px; color:var(--t3); margin-top:4px">Marvin Rees — the personal site of Bristol's former Mayor, taking his speaking and city-leadership work to a global audience. Proudly made in Bristol, like its subject.</div>
-    </div>
-    <div class="rv-scale" style="margin-bottom:64px">
-      <img src="assets/screenshot-marvinrees.png" alt="Marvin Rees website — I help cities, businesses and leaders find their purpose in a complex world" style="width:100%; display:block; border:1px solid var(--border); border-radius:4px;">
-    </div>
-    <div class="rv" style="margin-bottom:12px">
-      <div class="cs-meta-label">pawlettpavilion.com</div>
-      <div style="font-size:15px; color:var(--t3); margin-top:4px">Pawlett Pavilion — the village sports and social club in Somerset: what's on, pitch hire and membership. The noticeboard, without the drive over.</div>
-    </div>
-    <div class="rv-scale">
-      <img src="assets/screenshot-pawlett.png" alt="Pawlett Pavilion website — For a match. For a party. For a pint." style="width:100%; display:block; border:1px solid var(--border); border-radius:4px;">
+    <div class="g-grid">
+      <figure class="g-card">
+        <figcaption class="g-head">
+          <div class="cs-meta-label">tech4goodsouthwest.org</div>
+          <div class="g-desc">The online home for the South West's charities and purpose-led tech. The team edits it themselves through our agentic studio.</div>
+        </figcaption>
+        <div class="g-shot">
+          <a class="g-view" data-embed href="https://tech4goodsouthwest.org" target="_blank" rel="noopener" aria-label="Have a look around tech4goodsouthwest.org">
+            <img src="assets/screenshot-tech4good.png" alt="Tech4Good South West website">
+          </a>
+          <a class="g-cta" href="start.html?from=tech4good">Start yours →</a>
+        </div>
+      </figure>
+      <figure class="g-card">
+        <figcaption class="g-head">
+          <div class="cs-meta-label">African Gifted Foundation</div>
+          <div class="g-desc">The charity behind the African Science Academy in Ghana: its story, its students, and how to support them.</div>
+        </figcaption>
+        <div class="g-shot">
+          <a class="g-view" data-embed href="https://africangifted.org" target="_blank" rel="noopener" aria-label="Have a look around africangifted.org">
+            <img src="assets/screenshot-agf.png" alt="African Gifted Foundation website — Creating Africa's next generation of women STEM leaders">
+          </a>
+          <a class="g-cta" href="start.html?from=agf">Start yours →</a>
+        </div>
+      </figure>
+      <figure class="g-card">
+        <figcaption class="g-head">
+          <div class="cs-meta-label">generatinggenius.org.uk</div>
+          <div class="g-desc">The UK charity taking high-potential students from low socio-economic backgrounds into STEM careers.</div>
+        </figcaption>
+        <div class="g-shot">
+          <a class="g-view" data-embed href="https://www.generatinggenius.org.uk" target="_blank" rel="noopener" aria-label="Have a look around generatinggenius.org.uk">
+            <img src="assets/screenshot-genius.png" alt="Generating Genius website — Developing the next generation of STEM leaders">
+          </a>
+          <a class="g-cta" href="start.html?from=genius">Start yours →</a>
+        </div>
+      </figure>
+      <figure class="g-card">
+        <figcaption class="g-head">
+          <div class="cs-meta-label">marvinrees.com</div>
+          <div class="g-desc">The personal site of Bristol's former Mayor, taking his work to a global audience. Made in Bristol, like its subject.</div>
+        </figcaption>
+        <div class="g-shot">
+          <a class="g-view" data-embed href="https://marvinrees.com" target="_blank" rel="noopener" aria-label="Have a look around marvinrees.com">
+            <img src="assets/screenshot-marvinrees.png" alt="Marvin Rees website — I help cities, businesses and leaders find their purpose in a complex world">
+          </a>
+          <a class="g-cta" href="start.html?from=marvinrees">Start yours →</a>
+        </div>
+      </figure>
+      <figure class="g-card">
+        <figcaption class="g-head">
+          <div class="cs-meta-label">pawlettpavilion.com</div>
+          <div class="g-desc">Somerset village sports and social club: what's on, pitch hire and membership. The noticeboard, without the drive over.</div>
+        </figcaption>
+        <div class="g-shot">
+          <a class="g-view" data-embed href="https://pawlettpavilion.com" target="_blank" rel="noopener" aria-label="Have a look around pawlettpavilion.com">
+            <img src="assets/screenshot-pawlett.png" alt="Pawlett Pavilion website — For a match. For a party. For a pint.">
+          </a>
+          <a class="g-cta" href="start.html?from=pawlett">Start yours →</a>
+        </div>
+      </figure>
     </div>
   </div>
 </section>
@@ -698,6 +806,16 @@ html[data-theme="light"] .icon-moon { display:none; }
 </section>
 
 </main>
+
+<!-- ===== SITE LIGHTBOX ===== -->
+<dialog id="siteView" aria-label="Have a look around the site">
+  <div class="sv-bar">
+    <span class="sv-domain" id="svDomain"></span>
+    <a class="sv-cta" id="svCta" href="start.html">Start yours →</a>
+    <button class="sv-close" id="svClose" aria-label="Close">&#10005;</button>
+  </div>
+  <iframe id="svFrame" title="Live site" referrerpolicy="no-referrer"></iframe>
+</dialog>
 
 <!-- ===== FOOTER ===== -->
 <footer>
@@ -784,6 +902,37 @@ const rvObs = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 rvEls.forEach(el => rvObs.observe(el));
+
+/* ── Site lightbox ── */
+(function(){
+  const dlg = document.getElementById('siteView');
+  const frame = document.getElementById('svFrame');
+  const domain = document.getElementById('svDomain');
+  const cta = document.getElementById('svCta');
+  const canModal = dlg && typeof dlg.showModal === 'function';
+
+  // The screenshot itself is the way in. Embeddable sites (data-embed)
+  // upgrade the plain new-tab link to the lightbox; the ones that send
+  // frame-blocking headers keep their default new tab.
+  document.querySelectorAll('a.g-view[data-embed]').forEach(a => {
+    if (!canModal) return;
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      domain.textContent = a.href.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, '');
+      cta.href = a.closest('.g-shot').querySelector('.g-cta').getAttribute('href');
+      frame.src = a.href;
+      dlg.showModal();
+    });
+  });
+
+  if (canModal) {
+    document.getElementById('svClose').addEventListener('click', () => dlg.close());
+    // A click on the backdrop lands on the dialog element itself
+    dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+    // Stop the framed site running (video, audio) once closed
+    dlg.addEventListener('close', () => { frame.src = 'about:blank'; });
+  }
+})();
 
 /* ── Hero parallax ── */
 (function(){

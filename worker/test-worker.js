@@ -139,17 +139,29 @@ await drain();
 
 // sign-up: seeds the lead record and carries it to the tracker
 outbound = []; teamMail.length = 0;
-r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'Nadia', lastName: 'Rossi', email: 'Nadia@HarbourlightCafe.co.uk', organisation: 'Harbourlight Cafe', website: 'harbourlightcafe.co.uk' }) });
+r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'Nadia', lastName: 'Rossi', email: 'Nadia@HarbourlightCafe.co.uk', organisation: 'Harbourlight Cafe', website: 'harbourlightcafe.co.uk', inspiration: 'pawlett' }) });
 assert.strictEqual(r.status, 200);
 await drain();
 {
   const lead = JSON.parse(store.get('lead:nadia@harbourlightcafe.co.uk'));
   assert.strictEqual(lead.org, 'Harbourlight Cafe');
   assert.strictEqual(lead.name, 'Nadia Rossi');
+  assert.strictEqual(lead.inspiration, 'Pawlett Pavilion'); // gallery slug resolved
   assert.strictEqual(outbound.length, 1); // one tracker post, nothing else
   assert.ok(outbound[0].url.includes('action=createLead'));
   assert.strictEqual(outbound[0].body.email, 'nadia@harbourlightcafe.co.uk');
   assert.ok(outbound[0].body.message.includes('Signed up'));
+  assert.ok(outbound[0].body.message.includes('Pawlett Pavilion example'));
+}
+// an unknown gallery slug is dropped, never echoed through
+outbound = [];
+r = await call('/signup', { method: 'POST', body: JSON.stringify({ email: 'slug@test.co.uk', inspiration: '<script>alert(1)</script>' }) });
+assert.strictEqual(r.status, 200);
+await drain();
+{
+  const lead = JSON.parse(store.get('lead:slug@test.co.uk'));
+  assert.strictEqual(lead.inspiration, '');
+  assert.ok(!outbound[0].body.message.includes('script'));
 }
 r = await call('/signup', { method: 'POST', body: JSON.stringify({ organisation: 'No Email Ltd' }) });
 assert.strictEqual(r.status, 400); // email required
