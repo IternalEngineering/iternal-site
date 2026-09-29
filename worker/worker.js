@@ -133,6 +133,7 @@ const QUESTIONS = [
   ['visualStyle', 'Which look pulls you more?'],
   ['feel', 'When someone they respect sees the finished site, what should they think?'],
   ['admired', 'Which of our sites do you like the look of?'],
+  ['loved', 'Which websites do you love?'],
   ['peers', 'Competitors or peers — doing well / getting wrong'],
   ['dislikes', 'Any sites that make you cringe?'],
   ['content', 'Where will the words come from?'],
