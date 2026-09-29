@@ -115,6 +115,7 @@ const GALLERY_SITES = {
   agf: 'African Gifted Foundation',
   genius: 'Generating Genius',
   marvinrees: 'marvinrees.com',
+  bplaced: 'bPlaced',
   pawlett: 'Pawlett Pavilion',
 };
 
