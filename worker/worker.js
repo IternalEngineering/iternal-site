@@ -130,6 +130,7 @@ const QUESTIONS = [
   ['mustDo', "When someone visits, what's the one thing you'd like them to do?"],
   ['admired', 'Which of our sites do you like the look of?'],
   ['loved', 'Websites you love'],
+  ['avoid', 'Websites or design choices to avoid'],
   ['branding', 'Do you have branding — a logo, colours?'],
   ['visualStyle', 'Which look pulls you more?'],
   ['pages', 'Which pages do you think you need?'],
