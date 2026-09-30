@@ -117,6 +117,8 @@ const GALLERY_SITES = {
   marvinrees: 'marvinrees.com',
   bplaced: 'bPlaced',
   pawlett: 'Pawlett Pavilion',
+  jays: "Jay's Transport",
+  cnz: 'CivicNetZero',
 };
 
 /* Field ids as sent by questions.html, in the order they appear on the page.
