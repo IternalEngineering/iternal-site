@@ -42,6 +42,8 @@ function fakeGitHub(url, opts) {
   return new Response('{}', { status: cur ? 200 : 201 });
 }
 const ghFile = slug => JSON.parse(gh.files.get(`clients/${slug}.json`).json);
+const answered = f => f.answers.filter(a => a.answer !== null);
+const answerOf = (f, id) => f.answers.find(a => a.id === id);
 
 let outbound = [];
 globalThis.fetch = async (url, opts = {}) => {
@@ -267,9 +269,14 @@ await drain();
   assert.strictEqual(f.demoRequested, true);
   assert.strictEqual(f.stageHistory.length, 2);
   assert.strictEqual(f.termsAgreedAt, '2026-09-30T09:00:00.000Z');
-  assert.deepStrictEqual(f.answers.map(a => a.id), ['mainJob', 'timeline']); // page order, terms not an answer
-  assert.strictEqual(f.answers[0].question, "What's the site's main job?");
-  assert.strictEqual(f.answers[0].answer, 'Sell products or services');
+  assert.deepStrictEqual(answered(f).map(a => a.id), ['mainJob', 'timeline']); // page order, terms not an answer
+  assert.strictEqual(answerOf(f, 'mainJob').question, "What's the site's main job?");
+  assert.strictEqual(answerOf(f, 'mainJob').answer, 'Sell products or services');
+  // every question is on the record, answered or not, so the dashboard can
+  // fill in what they skipped without its own copy of the question list
+  assert.strictEqual(f.answers.length, 17);
+  assert.deepStrictEqual(f.answers.slice(0, 2).map(a => a.id), ['email', 'mainJob']);
+  assert.strictEqual(answerOf(f, 'pages').answer, null);
   assert.strictEqual(f.notes, 'Prefers a Tuesday call'); // dashboard field survived
   assert.strictEqual(f.payment.via, 'dashboard'); // a hand-marked payment is never downgraded
 }
@@ -292,7 +299,36 @@ await drain();
   assert.strictEqual(f.demoRequested, false);
   assert.strictEqual(f.demo.path, `demos/${slug}`);
   assert.strictEqual(f.answersComplete, true);
-  assert.strictEqual(f.answers.length, 3);
+  assert.strictEqual(answered(f).length, 3);
+}
+
+// the team corrects one answer and fills in one the client skipped (the
+// dashboard's pencil); a later sync from the funnel must leave both alone
+{
+  const f = ghFile(slug);
+  Object.assign(answerOf(f, 'mainJob'), { answer: 'Take bookings or enquiries', client: 'Sell products or services', editedAt: '2026-09-30' });
+  Object.assign(answerOf(f, 'pages'), { answer: ['Home', 'Shop'], client: null, editedAt: '2026-09-30' });
+  gh.files.set(`clients/${slug}.json`, { json: JSON.stringify(f), sha: 'sha-pencil' });
+}
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', kind: 'partial', answers: { audience: 'Interior designers' } }) });
+assert.strictEqual(r.status, 200);
+await drain();
+{
+  const f = ghFile(slug);
+  assert.strictEqual(answerOf(f, 'mainJob').answer, 'Take bookings or enquiries'); // team edit stands
+  assert.strictEqual(answerOf(f, 'mainJob').client, 'Sell products or services');
+  assert.deepStrictEqual(answerOf(f, 'pages').answer, ['Home', 'Shop']); // so does the filled-in one
+  assert.strictEqual(answerOf(f, 'audience').answer, 'Interior designers'); // and the new answer arrived
+}
+// ...until the client changes that answer themselves: theirs is the newer word
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', kind: 'partial', answers: { mainJob: 'Publish news or content' } }) });
+assert.strictEqual(r.status, 200);
+await drain();
+{
+  const f = ghFile(slug);
+  assert.strictEqual(answerOf(f, 'mainJob').answer, 'Publish news or content');
+  assert.ok(!('client' in answerOf(f, 'mainJob'))); // the edit marker is gone with the edit
+  assert.deepStrictEqual(answerOf(f, 'pages').answer, ['Home', 'Shop']); // untouched by that
 }
 
 // a payment lands on the same file, with the amount actually paid
@@ -306,7 +342,7 @@ await drain();
   assert.strictEqual(f.payment.status, 'paid');
   assert.strictEqual(f.payment.amount, 22500);
   assert.strictEqual(f.payment.via, 'stripe'); // a real Stripe payment is the stronger record
-  assert.strictEqual(f.answers.length, 3); // answers survived the lead -> client move
+  assert.ok(answered(f).length >= 3); // answers survived the lead -> client move
 }
 
 // a GitHub outage must never fail the client's request

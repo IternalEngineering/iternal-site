@@ -9,7 +9,10 @@ The question wording lives twice:
 
 - `questions.html` — the `QUESTIONS` array the client sees.
 - `worker/worker.js` — the `QUESTIONS` id→wording map. It renders the team
-  briefs AND labels the answers written to the pipeline repo, in page order.
+  briefs AND is the pipeline repo's question list: every question is written
+  to each client record in page order (`answer: null` when skipped), which
+  is what lets the dashboard fill in a skipped answer. An answer the team
+  has edited there is left alone until the client changes it themselves.
 
 Reword, add, remove or reorder a question → make the matching change in the
 worker map and redeploy. If they drift, nothing breaks: an unknown id falls

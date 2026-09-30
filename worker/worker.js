@@ -184,8 +184,13 @@ function projectToPipeline(kv, file, slug) {
   };
   const raw = kv.answers || {};
   const labels = new Map(QUESTIONS);
-  const ids = [...labels.keys(), ...Object.keys(raw).filter(k => !labels.has(k))]
-    .filter(k => k in raw && k !== 'termsAgreed');
+  const prev = new Map((rec.answers || []).map(a => [a.id, a]));
+  // Every question, in page order, answered or not (answer: null) — so the
+  // dashboard can fill in what a client skipped without its own copy of the
+  // question list. Then anything outside the map, from either side.
+  const ids = [...new Set([...labels.keys(), ...Object.keys(raw), ...prev.keys()])]
+    .filter(k => k !== 'termsAgreed');
+  const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
 
   rec.email = kv.email;
   rec.contact = kv.name || '';
@@ -194,7 +199,15 @@ function projectToPipeline(kv, file, slug) {
   rec.inspiration = kv.inspiration || '';
   rec.signedUpAt = kv.signedUpAt || rec.signedUpAt || null;
   rec.termsAgreedAt = raw.termsAgreed || rec.termsAgreedAt || null;
-  rec.answers = ids.map(id => ({ id, question: labels.get(id) || id, answer: raw[id] }));
+  rec.answers = ids.map(id => {
+    const fromClient = id in raw ? raw[id] : null;
+    const was = prev.get(id);
+    // A team edit carries `client`: what the client had said when the team
+    // changed it. The edit stands until the client changes that answer
+    // themselves, and then theirs is the newer word.
+    if (was && 'client' in was && same(was.client, fromClient)) return { ...was, question: labels.get(id) || was.question || id };
+    return { id, question: labels.get(id) || id, answer: fromClient };
+  });
   rec.answersComplete = !!kv.answersComplete;
   rec.answersUpdatedAt = kv.answersUpdatedAt || null;
   // Payment is handled separately and may never touch Stripe, so the team can
@@ -204,7 +217,7 @@ function projectToPipeline(kv, file, slug) {
 
   // The first answers queue the pre-call demo build, once. After that the
   // stage and the flag are the dashboard's and the agent's to move.
-  if (ids.some(id => id !== 'email') && rec.stage === 'signed-up') {
+  if (Object.keys(raw).some(id => id !== 'email' && id !== 'termsAgreed') && rec.stage === 'signed-up') {
     rec.stage = 'answers-in';
     rec.stageHistory.push({ stage: 'answers-in', date: today, note: 'answers arrived — demo build queued' });
     rec.demoRequested = true;
