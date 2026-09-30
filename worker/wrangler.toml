@@ -5,10 +5,11 @@ account_id = "65d5b12232edf6944b3c596a887f27d3" # Iternal
 routes = [{ pattern = "api.iternal.co.uk", custom_domain = true }]
 
 # Team briefs go out via Cloudflare Email Routing (enabled on iternal.co.uk);
-# the destination must be verified in Email Routing first.
+# EVERY address listed here must be a verified destination in Email Routing
+# before deploying, and must match TEAM_EMAIL below.
 # NB: must sit up here, above every [section] header — anywhere lower, TOML
 # swallows it into the preceding table and the binding silently never exists.
-send_email = [{ name = "TEAM_MAIL", destination_address = "paul@iternal.life" }]
+send_email = [{ name = "TEAM_MAIL", allowed_destination_addresses = ["websites@iternal.life", "john@iternal.life"] }]
 
 # Create with: wrangler kv namespace create CLIENTS  — then paste the id here.
 [[kv_namespaces]]
@@ -18,10 +19,16 @@ id = "bf744fdf07b945719b644e314b69b780"
 [vars]
 SITE_URL = "https://iternal.co.uk"
 FROM_EMAIL = "Website Pipeline <funnel@iternal.co.uk>"
-TEAM_EMAIL = "paul@iternal.life"
+# Comma-separated; each gets its own copy of every team brief.
+TEAM_EMAIL = "websites@iternal.life, john@iternal.life"
 # The Lead Tracker's public "Anyone" /exec URL:
 LEAD_API_URL = "https://script.google.com/macros/s/AKfycbzwkFrrOZ_VqMP0CJnAjtCsUTU6BtOzbLyJ7SClkmaVJq6W3r4FSoxohBPLqZZbrTKI/exec"
+# The information & demo build dashboard's repo: the worker commits one
+# clients/<slug>.json per client here. Skipped silently until PIPELINE_TOKEN
+# is set, so the worker can deploy before the repo exists.
+PIPELINE_REPO = "IternalEngineering/website-build-pipeline"
 
 # Secrets — set each with: wrangler secret put <NAME>
 #   STRIPE_WEBHOOK_SECRET  from Stripe Dashboard (sandbox secret during testing; swap to live at launch)
 #   LEAD_API_SECRET        from Lead Tracker Admin -> Website leads
+#   PIPELINE_TOKEN         fine-grained GitHub token: Contents read+write on PIPELINE_REPO only

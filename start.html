@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Build a Site With Us — Iternal AI</title>
-<meta name="description" content="We design and build your website with you. Sign up, review the engagement terms, and we'll design two or three site concepts for you to choose between. £750 all in — £375 to start.">
+<meta name="description" content="We design and build your website with you. Sign up, review the engagement terms, and we'll design two or three site concepts for you to choose between. £750 all in.">
 <meta name="robots" content="noindex, follow">
 <meta property="og:title" content="Build a Site With Us — Iternal AI">
 <meta property="og:description" content="We design and build your website with you. Sign up, review the engagement terms, and we'll design two or three site concepts for you to choose between.">
@@ -605,7 +605,7 @@ html[data-theme="light"] .icon-moon { display:none; }
           <span><span style="color:var(--tan); font-weight:700">1</span>&nbsp; Sign up</span>
           <span><span style="color:var(--tan); font-weight:700">2</span>&nbsp; Agree the terms</span>
           <span><span style="color:var(--tan); font-weight:700">3</span>&nbsp; Your questions</span>
-          <span><span style="color:var(--tan); font-weight:700">4</span>&nbsp; Book your call — £375 taken then</span>
+          <span><span style="color:var(--tan); font-weight:700">4</span>&nbsp; Book your call</span>
         </div>
       </div>
 
@@ -618,11 +618,9 @@ html[data-theme="light"] .icon-moon { display:none; }
     <div class="rv-right d1" id="form">
       <div class="form-wrap" id="formWrap">
 
-        <form class="form-inner" id="contactForm" method="POST" action="https://formsubmit.co/ajax/paul@iternal.life">
-          <!-- FormSubmit config: no captcha page, honeypot spam filter -->
-          <input type="hidden" name="_captcha" value="false">
-          <input type="hidden" name="_subject" value="New project sign-up from iternal.life">
-          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+        <form class="form-inner" id="contactForm" method="POST" action="https://api.iternal.co.uk/signup">
+          <!-- Honeypot: people never see it, bots fill it, the worker drops those -->
+          <input type="text" id="honey" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="form-head">
             <h2>Sign up</h2>
             <p>Four fields. The detailed questions come later, once you've seen the terms.</p>
@@ -698,8 +696,8 @@ html[data-theme="light"] .icon-moon { display:none; }
           <p style="margin:0">The full cost is <strong style="color:var(--white)">£750</strong>, paid in two equal halves. It covers everything on this page, from first questions to launch. If we ever offer extras, they’ll be priced separately — nothing is added without you choosing it.</p>
         </div>
         <div>
-          <div style="font-weight:700; color:var(--white); margin-bottom:6px">£375 when you book your call</div>
-          <p style="margin:0">Nothing is paid today. You pay <strong style="color:var(--white)">£375</strong> by card when you book your project call — the booking only goes through if the payment does. The second £375 is invoiced when your site goes live.</p>
+          <div style="font-weight:700; color:var(--white); margin-bottom:6px">£750 all in, in two payments</div>
+          <p style="margin:0">Nothing is paid today, and booking your call takes no payment. A <strong style="color:var(--white)">deposit</strong> gets the work started — we send that request separately. The balance is invoiced when your site goes live.</p>
         </div>
         <div>
           <div style="font-weight:700; color:var(--white); margin-bottom:6px">What the call starts</div>
@@ -707,7 +705,7 @@ html[data-theme="light"] .icon-moon { display:none; }
         </div>
         <div>
           <div style="font-weight:700; color:var(--white); margin-bottom:6px">If no concept fits</div>
-          <p style="margin:0">Then we haven’t finished, and that’s ours to fix. We go back over it with you and rework the concepts until there’s a version you’re glad to build on. A concept is the start of a conversation, not a one-shot bet on your £375.</p>
+          <p style="margin:0">Then we haven’t finished, and that’s ours to fix. We go back over it with you and rework the concepts until there’s a version you’re glad to build on. A concept is the start of a conversation, not a one-shot bet on your deposit.</p>
         </div>
       </div>
 
@@ -720,7 +718,7 @@ html[data-theme="light"] .icon-moon { display:none; }
           Continue to Your Questions
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
-        <p class="form-privacy">Next: your project questions, then booking your call — the £375 is taken by card on the booking page, handled by Stripe, never by us. No successful payment, no booking.</p>
+        <p class="form-privacy">Next: your project questions, then booking your call. Booking takes no payment.</p>
       </div>
     </div>
   </div>
@@ -811,13 +809,13 @@ if (siteField) siteField.addEventListener('blur', () => {
   if (v && v.includes('.') && !/^https?:\/\//i.test(v)) siteField.value = 'https://' + v;
 });
 
-/* ── Form submit via FormSubmit ── */
+/* ── Sign-up submit ── */
 const form = document.getElementById('contactForm');
 const submitBtn = document.getElementById('submitBtn');
 
-// Dark-launch preview gate: the page is live for review, but sign-up and
-// payment stay off until launch. The team appends ?team to use the real
-// forms. Remove this whole block at light-up (with the nav-link revert).
+// Dark-launch preview gate: the page is live for review, but sign-up stays
+// off until launch. The team appends ?team to use the real form. Remove
+// this whole block at light-up (with the nav-link revert).
 const PREVIEW = !/[?&]team\b/.test(location.search);
 if (PREVIEW) {
   submitBtn.disabled = true;
@@ -829,7 +827,7 @@ if (PREVIEW) {
     p.textContent = 'Preview — sign-ups aren’t open just yet.';
   });
   const banner = document.createElement('div');
-  banner.textContent = 'In testing — sign-ups and payment links won’t work yet.';
+  banner.textContent = 'In testing — sign-ups aren’t open yet.';
   banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:200;background:#e0a614;color:#060f26;font-weight:700;font-size:13px;text-align:center;padding:8px 14px;letter-spacing:.02em';
   document.body.appendChild(banner);
 }
@@ -861,44 +859,36 @@ form.addEventListener('submit', (e)=>{
     Sending…
   `;
 
+  // The sign-up goes straight to our own worker, which stores it and carries
+  // it to the dashboard, the tracker and the team. It only counts as sent
+  // once the worker has it.
   fetch(form.action, {
     method: 'POST',
-    body: new FormData(form),
-    headers: { 'Accept': 'application/json' }
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({
+      firstName: document.getElementById('fname').value.trim(),
+      lastName: document.getElementById('lname').value.trim(),
+      email: document.getElementById('email').value.trim(),
+      organisation: document.getElementById('org').value.trim(),
+      website: document.getElementById('website').value.trim(),
+      // Which gallery example they clicked through from (?from=…) —
+      // a steer for the concepts, whitelisted worker-side.
+      inspiration: (location.search.match(/[?&]from=([\w-]{1,40})/)||[])[1] || '',
+      _honey: document.getElementById('honey').value,
+    })
   })
   .then(res=>{
-    if(res.ok){
-      document.getElementById('formWrap').classList.add('submitted');
-      // Carry the sign-up into the Lead Tracker pipeline (fire-and-forget —
-      // a hiccup here must never affect the client's flow).
-      try {
-        fetch('https://api.iternal.co.uk/signup', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({
-            firstName: document.getElementById('fname').value.trim(),
-            lastName: document.getElementById('lname').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            organisation: document.getElementById('org').value.trim(),
-            website: document.getElementById('website').value.trim(),
-            // Which gallery example they clicked through from (?from=…) —
-            // a steer for the concepts, whitelisted worker-side.
-            inspiration: (location.search.match(/[?&]from=([\w-]{1,40})/)||[])[1] || '',
-          })
-        });
-      } catch(err) {}
-    } else {
-      throw new Error('Form submission failed');
-    }
+    if (!res.ok) throw new Error('Sign-up failed');
+    document.getElementById('formWrap').classList.add('submitted');
   })
   .catch(()=>{
     submitBtn.style.opacity='1';
     submitBtn.style.pointerEvents='auto';
     submitBtn.innerHTML = `
-      Send Message
+      Sign Up
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     `;
-    alert('Something went wrong. Please try again or email us directly at paul@iternal.life');
+    alert('Something went wrong. Please try again or email us directly at websites@iternal.life');
   });
 });
 

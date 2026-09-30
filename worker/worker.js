@@ -1,38 +1,39 @@
 /**
  * Iternal funnel worker — the funnel's only backend.
  *
- * Flow (pay-at-booking): the client agrees the terms on start.html, answers
- * the questions, then books their call on the Google Calendar appointment
- * page — which takes the £375 (Google's Stripe integration) and only
- * confirms the booking when payment succeeds.
+ * Flow: the client signs up and agrees the terms on start.html, answers the
+ * questions, then books their call on the Google Calendar appointment page.
+ * Booking takes NO payment; the deposit is handled separately by the team.
+ *
+ * Everything a client enters goes to TWO destinations, independently:
+ *   1. the website-build pipeline repo (PIPELINE_REPO) — the full record,
+ *      one clients/<slug>.json per client, which the information & demo
+ *      build dashboard shows and agent sessions work from;
+ *   2. the Lead Tracker — a summary post (write-only by policy).
  *
  * Routes:
- *   POST /stripe-webhook  Stripe calls this when money moves. The pay-at-
- *                         booking flow arrives as payment_intent.succeeded
- *                         (from Google Calendar's Stripe integration): the
- *                         payer's lead record is upgraded to a paid client,
- *                         the team gets a brief, and the Lead Tracker gets
- *                         a Landed entry. checkout.session.completed is
- *                         kept for the legacy Payment Link until it is
- *                         deactivated.
  *   POST /signup          The start.html form posts here after sign-up:
- *                         seeds their lead record in KV and carries the
- *                         sign-up into the Lead Tracker pipeline
- *                         (fire-and-forget, never blocking).
+ *                         seeds their lead record in KV, then both
+ *                         destinations (fire-and-forget, never blocking).
  *   POST /answers         The questions page posts drafts/finals here, keyed
- *                         by the email they give in the first question.
- *                         Answers land on their lead record (or client
- *                         record once they've paid) so nothing is lost.
+ *                         by the email they give in the first question. The
+ *                         first answers queue the pre-call demo build
+ *                         (demoRequested) in the pipeline repo.
+ *   POST /stripe-webhook  Stripe calls this when money moves (a payment the
+ *                         team requested separately): the payer's record is
+ *                         marked paid in KV, the pipeline repo and the
+ *                         tracker, and the team is briefed.
  *   GET  /health          Liveness check.
  *
- * Clients get NO email from us by design: Stripe sends the receipt, Google
+ * Clients get NO email from us by design: Stripe sends any receipt, Google
  * Calendar sends the booking invite. Team briefs go via Cloudflare's native
- * email (send_email binding) to a verified destination.
+ * email (send_email binding) to verified destinations.
  *
  * Explicitly NOT here: card details (Stripe's), booking (Google Calendar's),
  * and any READ of the Lead Tracker (write-only by policy).
  *
- * Secrets (wrangler secret put): STRIPE_WEBHOOK_SECRET, LEAD_API_SECRET.
+ * Secrets (wrangler secret put): STRIPE_WEBHOOK_SECRET, LEAD_API_SECRET,
+ * PIPELINE_TOKEN (GitHub token with contents:write on PIPELINE_REPO only).
  */
 
 const enc = new TextEncoder();
@@ -77,22 +78,29 @@ async function verifyStripeSignature(rawBody, header, secret) {
 async function sendTeamEmail(env, subject, text) {
   if (!env.TEAM_MAIL) return;
   const from = env.FROM_EMAIL;
-  const to = env.TEAM_EMAIL;
-  const raw = 'From: ' + from + '\r\n' + 'To: ' + to + '\r\n' +
-    'Subject: ' + subject + '\r\n' + 'Date: ' + new Date().toUTCString() + '\r\n' +
-    'Content-Type: text/plain; charset=utf-8' + '\r\n\r\n' + text;
   // The envelope wants bare addresses; the display name lives in the MIME From.
   const bare = a => { const m = /<([^>]+)>/.exec(a); return m ? m[1] : a; };
-  let msg = { from, to, raw };
   // In the Workers runtime this import exists; in the Node self-check it
   // throws and the stub binding receives the plain object instead.
-  try { const { EmailMessage } = await import('cloudflare:email'); msg = new EmailMessage(bare(from), bare(to), raw); } catch (e) {}
-  try {
-    await env.TEAM_MAIL.send(msg);
+  let EmailMessage = null;
+  try { ({ EmailMessage } = await import('cloudflare:email')); } catch (e) {}
+  // TEAM_EMAIL is a comma-separated list. One message per recipient: an
+  // EmailMessage carries a single envelope recipient, and one bad address
+  // must not sink the others.
+  const recipients = String(env.TEAM_EMAIL || '').split(',').map(a => a.trim()).filter(Boolean);
+  const results = await Promise.allSettled(recipients.map(to => {
+    const raw = 'From: ' + from + '\r\n' + 'To: ' + to + '\r\n' +
+      'Subject: ' + subject + '\r\n' + 'Date: ' + new Date().toUTCString() + '\r\n' +
+      'Content-Type: text/plain; charset=utf-8' + '\r\n\r\n' + text;
+    return env.TEAM_MAIL.send(EmailMessage ? new EmailMessage(bare(from), bare(to), raw) : { from, to, raw });
+  }));
+  const failed = results.filter(r => r.status === 'rejected');
+  if (failed.length) {
+    const why = failed[0].reason;
+    console.error(`team brief FAILED for ${failed.length}/${recipients.length} recipient(s):`, why && why.message ? why.message : why);
+    if (failed.length === recipients.length) throw why;
+  } else {
     console.log('team brief sent:', subject);
-  } catch (e) {
-    console.error('team brief FAILED:', e && e.message ? e.message : e);
-    throw e;
   }
 }
 
@@ -152,6 +160,101 @@ function answersBrief(answers) {
   }).join('\n\n');
 }
 
+/* ── Website-build pipeline repo ──────────────────────────────────────────
+   One clients/<slug>.json per client, committed through the GitHub Contents
+   API. KV stays the worker's own store; this projects it into the repo the
+   dashboard and the demo-build agents read. Field contract: that repo's
+   README. */
+
+const pipelineSlug = email => email.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+
+const b64encode = str => { let bin = ''; for (const b of enc.encode(str)) bin += String.fromCharCode(b); return btoa(bin); };
+const b64decode = b64 => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\s/g, '')), c => c.charCodeAt(0)));
+
+/* The worker owns the fields it sets here and refreshes them from KV on every
+   event. Everything else in the file (stageHistory notes, demo, research,
+   notes, a cleared demoRequested) belongs to the dashboard and the agents and
+   is carried over untouched. */
+function projectToPipeline(kv, file, slug) {
+  const today = new Date().toISOString().slice(0, 10);
+  const rec = file || {
+    slug, stage: 'signed-up',
+    stageHistory: [{ stage: 'signed-up', date: today, note: 'signed up on the website' }],
+    demoRequested: false, demo: null, research: '', notes: '',
+  };
+  const raw = kv.answers || {};
+  const labels = new Map(QUESTIONS);
+  const ids = [...labels.keys(), ...Object.keys(raw).filter(k => !labels.has(k))]
+    .filter(k => k in raw && k !== 'termsAgreed');
+
+  rec.email = kv.email;
+  rec.contact = kv.name || '';
+  rec.org = kv.org || kv.name || kv.email;
+  rec.website = kv.website || '';
+  rec.inspiration = kv.inspiration || '';
+  rec.signedUpAt = kv.signedUpAt || rec.signedUpAt || null;
+  rec.termsAgreedAt = raw.termsAgreed || rec.termsAgreedAt || null;
+  rec.answers = ids.map(id => ({ id, question: labels.get(id) || id, answer: raw[id] }));
+  rec.answersComplete = !!kv.answersComplete;
+  rec.answersUpdatedAt = kv.answersUpdatedAt || null;
+  // Payment is handled separately and may never touch Stripe, so the team can
+  // mark it paid in the dashboard. The worker only ever upgrades it.
+  if (kv.status === 'paid') rec.payment = { status: 'paid', amount: kv.amount || 0, at: kv.paidAt || null, via: 'stripe' };
+  else rec.payment = rec.payment || { status: 'none' };
+
+  // The first answers queue the pre-call demo build, once. After that the
+  // stage and the flag are the dashboard's and the agent's to move.
+  if (ids.some(id => id !== 'email') && rec.stage === 'signed-up') {
+    rec.stage = 'answers-in';
+    rec.stageHistory.push({ stage: 'answers-in', date: today, note: 'answers arrived — demo build queued' });
+    rec.demoRequested = true;
+  }
+  return rec;
+}
+
+async function syncToPipeline(env, email, what) {
+  if (!env.PIPELINE_REPO || !env.PIPELINE_TOKEN) return;
+  const kv = (await env.CLIENTS.get(`client:${email}`, 'json')) || (await env.CLIENTS.get(`lead:${email}`, 'json'));
+  if (!kv) return;
+  const slug = pipelineSlug(email);
+  const api = `https://api.github.com/repos/${env.PIPELINE_REPO}/contents/clients/${slug}.json`;
+  const headers = {
+    authorization: `Bearer ${env.PIPELINE_TOKEN}`,
+    accept: 'application/vnd.github+json',
+    'user-agent': 'iternal-funnel-worker',
+    'content-type': 'application/json',
+  };
+  // ponytail: read-modify-write on the file's sha with one retry, which covers
+  // a sign-up and its first answers overlapping. Put a queue in front if
+  // conflicts ever become routine.
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const got = await fetch(api, { headers });
+    let file = null, sha;
+    if (got.status === 200) {
+      const j = await got.json();
+      sha = j.sha;
+      file = JSON.parse(b64decode(j.content));
+    } else if (got.status !== 404) {
+      console.error('pipeline read FAILED:', got.status, slug);
+      return;
+    }
+    const rec = projectToPipeline(kv, file, slug);
+    const put = await fetch(api, {
+      method: 'PUT', headers,
+      body: JSON.stringify({
+        message: `funnel: ${rec.org} — ${what}`,
+        content: b64encode(JSON.stringify(rec, null, 2) + '\n'),
+        sha,
+      }),
+    });
+    if (put.status === 200 || put.status === 201) { console.log('pipeline synced:', slug, what); return; }
+    if (put.status !== 409) { console.error('pipeline write FAILED:', put.status, slug); return; }
+  }
+  console.error('pipeline write FAILED: still conflicting after retry', slug);
+}
+
+const money = (amount, currency) => `${(amount || 0) / 100} ${(currency || 'gbp').toUpperCase()}`;
+
 async function handleStripeWebhook(request, env, ctx) {
   const rawBody = await request.text();
   const ok = await verifyStripeSignature(rawBody, request.headers.get('stripe-signature'), env.STRIPE_WEBHOOK_SECRET);
@@ -184,27 +287,27 @@ async function handleStripeWebhook(request, env, ctx) {
   // lets /answers attach those answers to the paying client's record.
   if (record.stripeSession) await env.CLIENTS.put(`session:${record.stripeSession}`, email);
 
+  const paid = money(session.amount_total, session.currency);
   ctx.waitUntil(Promise.allSettled([
     sendTeamEmail(env,
       `Website Pipeline: ${email} paid`,
-      `${name || email} paid ${(session.amount_total || 0) / 100} ${(session.currency || 'gbp').toUpperCase()}.
-Stripe session: ${session.id}
-They've been redirected to the questions.`),
+      `${name || email} paid ${paid}.
+Stripe session: ${session.id}`),
     postToLeadTracker(env, {
       org: name || email, email,
-      source: 'website funnel', message: 'Paid £375 via Stripe — awaiting questions.',
+      source: 'website funnel', message: `Payment received (${paid}) via Stripe.`,
     }),
+    syncToPipeline(env, email, 'payment received'),
   ]));
 
   return json(200, { received: true });
 }
 
 /**
- * A payment landed via Google Calendar's pay-at-booking (or any direct
- * PaymentIntent). Match the payer by email, upgrade their lead record to a
- * paid client, brief the team, post the Landed entry to the tracker. If no
- * email is on the event, brief the team anyway — a payment must never pass
- * silently.
+ * A payment the team requested separately landed (any direct PaymentIntent).
+ * Match the payer by email, mark their record paid, brief the team, update
+ * both destinations. If no email is on the event, brief the team anyway — a
+ * payment must never pass silently.
  */
 async function handlePaymentIntent(event, env, ctx) {
   const pi = (event.data && event.data.object) || {};
@@ -212,10 +315,12 @@ async function handlePaymentIntent(event, env, ctx) {
     pi.charges.data[0].billing_details && pi.charges.data[0].billing_details.email) || '', 120).toLowerCase();
   const amount = pi.amount_received || pi.amount || 0;
 
+  const paid = money(amount, pi.currency);
+
   if (!email) {
     ctx.waitUntil(sendTeamEmail(env,
       'Website Pipeline: payment received — UNMATCHED',
-      `A payment of ${amount / 100} ${(pi.currency || 'gbp').toUpperCase()} arrived (${pi.id}) with no payer email on the event. Match it by hand in Stripe.`));
+      `A payment of ${paid} arrived (${pi.id}) with no payer email on the event. Match it by hand in Stripe.`));
     return json(200, { received: true, unmatched: true });
   }
 
@@ -235,19 +340,20 @@ async function handlePaymentIntent(event, env, ctx) {
 
   ctx.waitUntil(Promise.allSettled([
     sendTeamEmail(env,
-      `Website Pipeline: ${email} booked & paid`,
-      `${email} paid ${amount / 100} ${(pi.currency || 'gbp').toUpperCase()} at booking — the call is confirmed.
+      `Website Pipeline: payment received — ${email}`,
+      `${email} paid ${paid}.
 Payment: ${pi.id}${record.answersComplete ? '\nTheir call-prep answers are already in.' : '\nTheir answers so far are on the record; more may follow.'}`),
     postToLeadTracker(env, {
       org: email, email,
-      source: 'website funnel', message: 'Booked the call and paid £375 — call confirmed.',
+      source: 'website funnel', message: `Payment received (${paid}) via Stripe.`,
     }),
+    syncToPipeline(env, email, 'payment received'),
   ]));
 
   return json(200, { received: true });
 }
 
-/** Sign-up from start.html: seed the lead record, carry it to the tracker. */
+/** Sign-up from start.html: seed the lead record, then both destinations. */
 async function handleSignup(request, env, ctx) {
   const cors = corsHeaders(env);
   let body;
@@ -256,6 +362,12 @@ async function handleSignup(request, env, ctx) {
     if (raw.length > 8192) return json(400, { error: 'too large' }, cors);
     body = JSON.parse(raw);
   } catch (e) { return json(400, { error: 'bad json' }, cors); }
+
+  // Honeypot: the form's hidden field. A bot that fills it gets the same OK a
+  // person would, and nothing is stored or sent.
+  // ponytail: honeypot only. Add Turnstile or a rate-limit rule if this
+  // endpoint ever draws real abuse — each accepted call writes to four places.
+  if (s(body._honey, 200)) return json(200, { ok: true }, cors);
 
   const email = s(body.email, 120).toLowerCase();
   if (!email || email.indexOf('@') === -1) return json(400, { error: 'email required' }, cors);
@@ -275,12 +387,26 @@ async function handleSignup(request, env, ctx) {
   existing.signedUpAt = existing.signedUpAt || new Date().toISOString();
   await env.CLIENTS.put(key, JSON.stringify(existing));
 
-  ctx.waitUntil(postToLeadTracker(env, {
-    org, contact: name || email, email, website,
-    source: 'website funnel',
-    message: 'Signed up on the website — heading into the project questions.'
-      + (inspiration ? ' Came in from the ' + inspiration + ' example in the gallery — a steer for the concepts.' : ''),
-  }));
+  // Two destinations plus the team brief, all independent: one failing must
+  // not stop the others.
+  ctx.waitUntil(Promise.allSettled([
+    sendTeamEmail(env,
+      `Website Pipeline: new sign-up — ${org}`,
+      `${name || email} signed up for a website build.
+
+Email: ${email}
+Organisation: ${org}
+Website: ${website || 'none given'}${inspiration ? '\nCame in from the ' + inspiration + ' example in the gallery.' : ''}
+
+Their questions come next; a second brief follows when they answer.`),
+    postToLeadTracker(env, {
+      org, contact: name || email, email, website,
+      source: 'website funnel',
+      message: 'Signed up on the website — heading into the project questions.'
+        + (inspiration ? ' Came in from the ' + inspiration + ' example in the gallery — a steer for the concepts.' : ''),
+    }),
+    syncToPipeline(env, email, 'signed up'),
+  ]));
 
   return json(200, { ok: true }, cors);
 }
@@ -310,8 +436,8 @@ async function handleAnswers(request, env, ctx) {
 
   // ponytail: KV read-modify-write without a lock — fine at funnel volume,
   // move to Durable Objects if two devices ever race on one record.
-  // Answers land on the client record if they've already paid (pay-at-booking
-  // can complete before the final answers arrive), else on their lead record.
+  // Answers land on the client record if they've already paid (a payment can
+  // arrive before the final answers do), else on their lead record.
   const paidClient = await env.CLIENTS.get(`client:${email}`, 'json');
   const key = (sessionEmail || paidClient) ? `client:${email}` : `lead:${email}`;
   const existing = paidClient || (await env.CLIENTS.get(key, 'json')) || { email, status: sessionEmail ? 'paid' : 'lead' };
@@ -322,11 +448,14 @@ async function handleAnswers(request, env, ctx) {
 
   const summary = answersBrief(existing.answers);
 
-  ctx.waitUntil(sendTeamEmail(env,
-    `Website Pipeline: call prep answers (${kind}) — ${email}`,
-    `${existing.status === 'paid' ? 'Booked & paid client' : 'Not yet booked — answers ahead of the call booking'}.
+  ctx.waitUntil(Promise.allSettled([
+    sendTeamEmail(env,
+      `Website Pipeline: call prep answers (${kind}) — ${email}`,
+      `${existing.status === 'paid' ? 'Payment received' : 'No payment recorded yet'}.
 
-${summary}`));
+${summary}`),
+    syncToPipeline(env, email, `answers (${kind})`),
+  ]));
 
   return json(200, { ok: true }, cors);
 }
