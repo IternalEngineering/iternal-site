@@ -128,7 +128,7 @@ const QUESTIONS = [
   ['audience', 'Who do you most want the site to reach?'],
   ['timeline', 'When would you like to launch?'],
   ['mustDo', "When someone visits, what's the one thing you'd like them to do?"],
-  ['admired', 'Which of our sites do you like the look of?'],
+  ['admired', 'Are there any websites you like the look of?'],
   ['loved', 'Websites you love'],
   ['avoid', 'Websites or design choices to avoid'],
   ['branding', 'Do you have branding — a logo, colours?'],
