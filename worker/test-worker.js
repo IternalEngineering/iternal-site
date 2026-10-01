@@ -265,9 +265,10 @@ assert.strictEqual(r.status, 200);
 await drain();
 {
   const f = ghFile(slug);
-  assert.strictEqual(f.stage, 'answers-in');
+  assert.strictEqual(f.stage, 'signed-up'); // answers are part of signing up, not a stage
+  assert.ok(f.answersFirstAt);
   assert.strictEqual(f.demoRequested, true);
-  assert.strictEqual(f.stageHistory.length, 2);
+  assert.strictEqual(f.stageHistory.length, 2); // the queueing is still on the record
   assert.strictEqual(f.termsAgreedAt, '2026-09-30T09:00:00.000Z');
   assert.deepStrictEqual(answered(f).map(a => a.id), ['mainJob', 'timeline']); // page order, terms not an answer
   assert.strictEqual(answerOf(f, 'mainJob').question, "What's the site's main job?");
@@ -280,6 +281,18 @@ await drain();
   assert.strictEqual(f.notes, 'Prefers a Tuesday call'); // dashboard field survived
   assert.strictEqual(f.payment.via, 'dashboard'); // a hand-marked payment is never downgraded
 }
+
+// the team cancels the request before any build; more answers must not
+// re-queue it (the queue fires once, on the first answers)
+{
+  const f = ghFile(slug);
+  f.demoRequested = false;
+  gh.files.set(`clients/${slug}.json`, { json: JSON.stringify(f), sha: 'sha-cancel' });
+}
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', kind: 'partial', answers: { anything: 'No' } }) });
+assert.strictEqual(r.status, 200);
+await drain();
+assert.strictEqual(ghFile(slug).demoRequested, false);
 
 // an agent builds the demo and clears the flag; later answers must not
 // re-queue it or move the stage back
@@ -299,7 +312,7 @@ await drain();
   assert.strictEqual(f.demoRequested, false);
   assert.strictEqual(f.demo.path, `demos/${slug}`);
   assert.strictEqual(f.answersComplete, true);
-  assert.strictEqual(answered(f).length, 3);
+  assert.strictEqual(answered(f).length, 4);
 }
 
 // the team corrects one answer and fills in one the client skipped (the

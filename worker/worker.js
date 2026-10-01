@@ -180,7 +180,7 @@ function projectToPipeline(kv, file, slug) {
   const rec = file || {
     slug, stage: 'signed-up',
     stageHistory: [{ stage: 'signed-up', date: today, note: 'signed up on the website' }],
-    demoRequested: false, demo: null, research: '', notes: '',
+    demoRequested: false, demo: null, research: '', notes: '', answersFirstAt: null,
   };
   const raw = kv.answers || {};
   const labels = new Map(QUESTIONS);
@@ -215,11 +215,13 @@ function projectToPipeline(kv, file, slug) {
   if (kv.status === 'paid') rec.payment = { status: 'paid', amount: kv.amount || 0, at: kv.paidAt || null, via: 'stripe' };
   else rec.payment = rec.payment || { status: 'none' };
 
-  // The first answers queue the pre-call demo build, once. After that the
-  // stage and the flag are the dashboard's and the agent's to move.
-  if (Object.keys(raw).some(id => id !== 'email' && id !== 'termsAgreed') && rec.stage === 'signed-up') {
-    rec.stage = 'answers-in';
-    rec.stageHistory.push({ stage: 'answers-in', date: today, note: 'answers arrived — demo build queued' });
+  // The first answers queue the pre-call demo build, once (the essentials are
+  // mandatory before booking, so this is part of signing up, not a stage of
+  // its own). After that the flag is the dashboard's and the agent's to move.
+  const answered = Object.keys(raw).some(id => id !== 'email' && id !== 'termsAgreed');
+  if (answered && !rec.answersFirstAt) {
+    rec.answersFirstAt = kv.answersUpdatedAt || new Date().toISOString();
+    rec.stageHistory.push({ stage: rec.stage, date: today, note: 'answers arrived — demo build queued' });
     rec.demoRequested = true;
   }
   return rec;
