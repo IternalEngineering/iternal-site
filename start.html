@@ -879,6 +879,15 @@ form.addEventListener('submit', (e)=>{
   })
   .then(res=>{
     if (!res.ok) throw new Error('Sign-up failed');
+    return res.json().catch(()=>({}));
+  })
+  .then(data=>{
+    // The questions page prefills the email from this, and sends the token
+    // with the answers so nobody else can submit answers under their email.
+    try {
+      localStorage.setItem('iternal_signup_email', document.getElementById('email').value.trim().toLowerCase());
+      if (data && data.token) localStorage.setItem('iternal_signup_token', data.token);
+    } catch(e) {}
     document.getElementById('formWrap').classList.add('submitted');
   })
   .catch(()=>{

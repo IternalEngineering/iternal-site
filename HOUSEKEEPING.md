@@ -85,6 +85,16 @@ the token awaits org approval), so the worker can deploy regardless.
   tracker; remove those too.
 - `/signup` is the sign-up form's only destination (FormSubmit is gone from
   that page). Its spam check is the form's hidden honeypot field.
+- `/signup` answers `{ok, token}`; start.html keeps the token and the email
+  in localStorage, questions.html prefills the email from it and sends the
+  token with every answers post. `/answers` refuses (403) answers for a
+  record whose token does not match — knowing an email is not enough to
+  rewrite someone's brief. A client on a different browser gets a message
+  pointing them to websites@iternal.life.
+- Nothing fails silently: a tracker post the Sheet rejects, or a platform
+  sync GitHub rejects (expired token, slug clash, bad file), emails the team
+  a "FAILED" brief naming the client. Worker logs are retained
+  (`[observability]` in wrangler.toml).
 
 ## Payment (handled separately — 30 Sep 2026)
 

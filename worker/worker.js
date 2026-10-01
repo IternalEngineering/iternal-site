@@ -89,6 +89,7 @@ async function sendTeamEmail(env, subject, text) {
   // EmailMessage carries a single envelope recipient, and one bad address
   // must not sink the others.
   const recipients = String(env.TEAM_EMAIL || '').split(',').map(a => a.trim()).filter(Boolean);
+  subject = String(subject).replace(/[\r\n]+/g, ' '); // client text reaches subjects; a line break would forge headers
   const results = await Promise.allSettled(recipients.map(to => {
     const raw = 'From: ' + from + '\r\n' + 'To: ' + to + '\r\n' +
       'Subject: ' + subject + '\r\n' + 'Date: ' + new Date().toUTCString() + '\r\n' +
@@ -108,14 +109,27 @@ async function sendTeamEmail(env, subject, text) {
 async function postToLeadTracker(env, lead) {
   if (!env.LEAD_API_URL || !env.LEAD_API_SECRET) return;
   const url = `${env.LEAD_API_URL}?key=${encodeURIComponent(env.LEAD_API_SECRET)}&action=createLead`;
-  await fetch(url, {
-    method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify(lead),
-  });
+  let why = '';
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(lead),
+    });
+    const body = res.ok ? await res.json().catch(() => ({})) : {};
+    if (!res.ok || body.ok === false) why = `HTTP ${res.status}${body.error ? ' — ' + body.error : ''}`;
+  } catch (e) { why = e && e.message ? e.message : String(e); }
+  if (!why) return;
+  // Never silent: the client saw "ok", so the team must hear it went missing.
+  console.error('tracker post FAILED:', why, lead.email);
+  await sendTeamEmail(env, `Website Pipeline: tracker post FAILED — ${lead.email}`,
+    `The Lead Tracker did not accept this post (${why}). Add them by hand:
+
+${JSON.stringify(lead, null, 2)}`);
 }
 
 const s = (v, max) => String(v === null || v === undefined ? '' : v).trim().slice(0, max);
+const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
 /* Gallery slugs as sent by websites.html's per-site "start here" buttons
    (?from=slug). Coupled to the gallery — see HOUSEKEEPING.md. */
@@ -228,9 +242,25 @@ function projectToPipeline(kv, file, slug) {
 
 async function syncToPipeline(env, email, what) {
   if (!env.PIPELINE_REPO || !env.PIPELINE_TOKEN) return;
+  let why;
+  try { why = await syncToPipelineOnce(env, email, what); }
+  catch (e) { why = e && e.message ? e.message : String(e); }
+  if (!why) return;
+  // Never silent: the client saw "ok", the record is safe in KV, but the
+  // dashboard did not get it — someone has to know.
+  console.error('pipeline sync FAILED:', why, email);
+  await sendTeamEmail(env, `Website Pipeline: dashboard sync FAILED — ${email}`,
+    `The Website Build Platform did not receive this update (${what}): ${why}.
+Their record is intact in KV; the dashboard is missing it until the next event for them or a resync.
+If this keeps happening, check the PIPELINE_TOKEN (expired? revoked?) and the repo.`);
+}
+
+/** One attempt; returns '' on success or a short reason. Throws are caught above. */
+async function syncToPipelineOnce(env, email, what) {
   const kv = (await env.CLIENTS.get(`client:${email}`, 'json')) || (await env.CLIENTS.get(`lead:${email}`, 'json'));
-  if (!kv) return;
+  if (!kv) return '';
   const slug = pipelineSlug(email);
+  if (!slug) return 'empty slug';
   const api = `https://api.github.com/repos/${env.PIPELINE_REPO}/contents/clients/${slug}.json`;
   const headers = {
     authorization: `Bearer ${env.PIPELINE_TOKEN}`,
@@ -247,10 +277,12 @@ async function syncToPipeline(env, email, what) {
     if (got.status === 200) {
       const j = await got.json();
       sha = j.sha;
-      file = JSON.parse(b64decode(j.content));
+      try { file = JSON.parse(b64decode(j.content)); } catch (e) { return `the file in the repo is not valid JSON (${slug}.json)`; }
+      // Two different emails can map to one slug (dots, dashes and plus signs
+      // all become hyphens). Never let one client overwrite another.
+      if (file && file.email && file.email !== kv.email) return `slug ${slug} already belongs to ${file.email}`;
     } else if (got.status !== 404) {
-      console.error('pipeline read FAILED:', got.status, slug);
-      return;
+      return `GitHub read ${got.status}` + (got.status === 401 || got.status === 403 ? ' (token rejected)' : '');
     }
     const rec = projectToPipeline(kv, file, slug);
     const put = await fetch(api, {
@@ -261,10 +293,10 @@ async function syncToPipeline(env, email, what) {
         sha,
       }),
     });
-    if (put.status === 200 || put.status === 201) { console.log('pipeline synced:', slug, what); return; }
-    if (put.status !== 409) { console.error('pipeline write FAILED:', put.status, slug); return; }
+    if (put.status === 200 || put.status === 201) { console.log('pipeline synced:', slug, what); return ''; }
+    if (put.status !== 409) return `GitHub write ${put.status}` + (put.status === 401 || put.status === 403 ? ' (token rejected)' : '');
   }
-  console.error('pipeline write FAILED: still conflicting after retry', slug);
+  return 'still conflicting after a retry';
 }
 
 const money = (amount, currency) => `${(amount || 0) / 100} ${(currency || 'gbp').toUpperCase()}`;
@@ -384,7 +416,7 @@ async function handleSignup(request, env, ctx) {
   if (s(body._honey, 200)) return json(200, { ok: true }, cors);
 
   const email = s(body.email, 120).toLowerCase();
-  if (!email || email.indexOf('@') === -1) return json(400, { error: 'email required' }, cors);
+  if (!EMAIL.test(email)) return json(400, { error: 'email required' }, cors);
   const name = (s(body.firstName, 60) + ' ' + s(body.lastName, 60)).trim();
   const org = s(body.organisation, 120) || name || email;
   const website = s(body.website, 200);
@@ -399,6 +431,9 @@ async function handleSignup(request, env, ctx) {
   existing.website = website || existing.website || '';
   existing.inspiration = inspiration || existing.inspiration || '';
   existing.signedUpAt = existing.signedUpAt || new Date().toISOString();
+  // The browser keeps this and sends it with the answers, so knowing someone's
+  // email is not enough to rewrite their record.
+  existing.token = existing.token || crypto.randomUUID();
   await env.CLIENTS.put(key, JSON.stringify(existing));
 
   // Two destinations plus the team brief, all independent: one failing must
@@ -422,7 +457,7 @@ Their questions come next; a second brief follows when they answer.`),
     syncToPipeline(env, email, 'signed up'),
   ]));
 
-  return json(200, { ok: true }, cors);
+  return json(200, { ok: true, token: existing.token }, cors);
 }
 
 async function handleAnswers(request, env, ctx) {
@@ -438,7 +473,7 @@ async function handleAnswers(request, env, ctx) {
   const sessionId = s(body.session, 100);
   const sessionEmail = sessionId ? await env.CLIENTS.get(`session:${sessionId}`) : null;
   const email = ((sessionEmail || s(body.email, 120)) + '').toLowerCase();
-  if (!email || email.indexOf('@') === -1) return json(400, { error: 'email required' }, cors);
+  if (!EMAIL.test(email)) return json(400, { error: 'email required' }, cors);
 
   const answers = {};
   if (body.answers && typeof body.answers === 'object') {
@@ -455,8 +490,15 @@ async function handleAnswers(request, env, ctx) {
   const paidClient = await env.CLIENTS.get(`client:${email}`, 'json');
   const key = (sessionEmail || paidClient) ? `client:${email}` : `lead:${email}`;
   const existing = paidClient || (await env.CLIENTS.get(key, 'json')) || { email, status: sessionEmail ? 'paid' : 'lead' };
-  existing.answers = { ...(existing.answers || {}), ...answers };
-  existing.answersUpdatedAt = new Date().toISOString();
+  // A record made by a sign-up carries a token; answers must present it.
+  // (A record without one predates this check, or came from a payment alone.)
+  if (existing.token && !sessionEmail && s(body.token, 100) !== existing.token) {
+    return json(403, { error: 'not the browser that signed up' }, cors);
+  }
+  const merged = { ...(existing.answers || {}), ...answers };
+  const changed = JSON.stringify(merged) !== JSON.stringify(existing.answers || {});
+  existing.answers = merged;
+  if (changed || !existing.answersUpdatedAt) existing.answersUpdatedAt = new Date().toISOString();
   if (kind === 'complete') existing.answersComplete = true;
   await env.CLIENTS.put(key, JSON.stringify(existing));
 

@@ -232,6 +232,8 @@ const slug = 'omar-kilnworks-co-uk';
 outbound = [];
 r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'Omar', lastName: 'Haddad', email: 'Omar@Kilnworks.co.uk', organisation: 'Kilnworks', website: 'kilnworks.co.uk', inspiration: 'bplaced' }) });
 assert.strictEqual(r.status, 200);
+const omarToken = (await r.json()).token;
+assert.ok(omarToken && omarToken.length > 20); // the browser keeps this for /answers
 await drain();
 {
   const f = ghFile(slug);
@@ -243,6 +245,7 @@ await drain();
   assert.strictEqual(f.stage, 'signed-up');
   assert.strictEqual(f.demoRequested, false); // nothing to build from yet
   assert.ok(!('payment' in f)); // payment lives in the tracker, never here
+  assert.ok(!('token' in f)); // the browser's token never leaves KV
   assert.strictEqual(outbound.length, 1); // the tracker still got its own post
   assert.ok(outbound[0].url.includes('action=createLead'));
   assert.ok(gh.calls.every(c => c.auth === 'Bearer ghp_test'));
@@ -258,7 +261,7 @@ await drain();
 // first answers: labelled Q&A in page order, terms timestamp lifted out,
 // stage moves on, and the pre-call demo build is queued — through a 409
 gh.conflictOnce = true;
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', kind: 'partial', answers: { timeline: 'Within a month', mainJob: 'Sell products or services', termsAgreed: '2026-09-30T09:00:00.000Z' } }) });
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'partial', answers: { timeline: 'Within a month', mainJob: 'Sell products or services', termsAgreed: '2026-09-30T09:00:00.000Z' } }) });
 assert.strictEqual(r.status, 200);
 await drain();
 {
@@ -286,7 +289,7 @@ await drain();
   f.demoRequested = false;
   gh.files.set(`clients/${slug}.json`, { json: JSON.stringify(f), sha: 'sha-cancel' });
 }
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', kind: 'partial', answers: { anything: 'No' } }) });
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'partial', answers: { anything: 'No' } }) });
 assert.strictEqual(r.status, 200);
 await drain();
 assert.strictEqual(ghFile(slug).demoRequested, false);
@@ -300,7 +303,7 @@ assert.strictEqual(ghFile(slug).demoRequested, false);
   f.demo = { path: `demos/${slug}`, builtAt: '2026-09-30' };
   gh.files.set(`clients/${slug}.json`, { json: JSON.stringify(f), sha: 'sha-agent' });
 }
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', kind: 'complete', answers: { feel: 'Made by people who care' } }) });
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'complete', answers: { feel: 'Made by people who care' } }) });
 assert.strictEqual(r.status, 200);
 await drain();
 {
@@ -320,7 +323,7 @@ await drain();
   Object.assign(answerOf(f, 'pages'), { answer: ['Home', 'Shop'], client: null, editedAt: '2026-09-30' });
   gh.files.set(`clients/${slug}.json`, { json: JSON.stringify(f), sha: 'sha-pencil' });
 }
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', kind: 'partial', answers: { audience: 'Interior designers' } }) });
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'partial', answers: { audience: 'Interior designers' } }) });
 assert.strictEqual(r.status, 200);
 await drain();
 {
@@ -331,7 +334,7 @@ await drain();
   assert.strictEqual(answerOf(f, 'audience').answer, 'Interior designers'); // and the new answer arrived
 }
 // ...until the client changes that answer themselves: theirs is the newer word
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', kind: 'partial', answers: { mainJob: 'Publish news or content' } }) });
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'partial', answers: { mainJob: 'Publish news or content' } }) });
 assert.strictEqual(r.status, 200);
 await drain();
 {
@@ -375,9 +378,99 @@ await drain();
 // team briefs: one copy per address in TEAM_EMAIL
 env.TEAM_EMAIL = 'websites@iternal.life, john@iternal.life';
 teamMail.length = 0;
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', kind: 'partial', answers: { wrong: 'Dated' } }) });
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'partial', answers: { wrong: 'Dated' } }) });
 assert.strictEqual(r.status, 200);
 await drain();
 assert.deepStrictEqual(teamMail.map(m => m.to).sort(), ['john@iternal.life', 'websites@iternal.life']);
+
+// ── Review fixes ────────────────────────────────────────────────────────
+// knowing an email is not enough to rewrite that client's answers
+outbound = []; teamMail.length = 0;
+{
+  const calls = gh.calls.length;
+  const before = JSON.stringify(ghFile(slug));
+  for (const body of [{ email: 'omar@kilnworks.co.uk', kind: 'partial', answers: { audience: 'junk' } },
+                      { email: 'omar@kilnworks.co.uk', token: 'guess', kind: 'partial', answers: { audience: 'junk' } }]) {
+    const rr = await call('/answers', { method: 'POST', body: JSON.stringify(body) });
+    assert.strictEqual(rr.status, 403);
+  }
+  await drain();
+  assert.strictEqual(JSON.parse(store.get('client:omar@kilnworks.co.uk')).answers.audience, 'Interior designers'); // untouched
+  assert.strictEqual(gh.calls.length, calls);
+  assert.strictEqual(teamMail.length, 0);
+  assert.strictEqual(JSON.stringify(ghFile(slug)), before);
+}
+// a record with no token (made before this check) still accepts answers
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'sam@brightpaws.co.uk', kind: 'partial', answers: { pages: ['Home'] } }) });
+assert.strictEqual(r.status, 200);
+
+// resending identical answers does not move answersUpdatedAt
+{
+  const t0 = JSON.parse(store.get('client:omar@kilnworks.co.uk')).answersUpdatedAt;
+  const cur = JSON.parse(store.get('client:omar@kilnworks.co.uk')).answers;
+  await new Promise(res => setTimeout(res, 5));
+  r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'partial', answers: { audience: cur.audience } }) });
+  assert.strictEqual(r.status, 200);
+  await drain();
+  assert.strictEqual(JSON.parse(store.get('client:omar@kilnworks.co.uk')).answersUpdatedAt, t0);
+}
+
+// degenerate emails are refused
+for (const bad of ['@', 'a@b', 'nobody', 'a b@c.com']) {
+  r = await call('/signup', { method: 'POST', body: JSON.stringify({ email: bad }) });
+  assert.strictEqual(r.status, 400, `accepted ${bad}`);
+}
+
+// a sync failure is never silent: the team gets an email naming the client
+teamMail.length = 0;
+{
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url, opts) => String(url).startsWith('https://api.github.com/')
+    ? new Response('{}', { status: 401 }) : realFetch(url, opts);
+  r = await call('/signup', { method: 'POST', body: JSON.stringify({ email: 'alert@test.co.uk', organisation: 'Alert Ltd' }) });
+  assert.strictEqual(r.status, 200);
+  await drain();
+  globalThis.fetch = realFetch;
+  const failMail = teamMail.find(m => m.raw.includes('dashboard sync FAILED'));
+  assert.ok(failMail, 'no failure email');
+  assert.ok(failMail.raw.includes('alert@test.co.uk') && failMail.raw.includes('token rejected'));
+}
+
+// two emails that collapse to one slug never overwrite each other
+teamMail.length = 0;
+{
+  gh.files.set('clients/pat-smith-x-com.json', { json: JSON.stringify({ slug: 'pat-smith-x-com', email: 'pat.smith@x.com', org: 'First' }), sha: 'sha-first' });
+  r = await call('/signup', { method: 'POST', body: JSON.stringify({ email: 'pat-smith@x.com', organisation: 'Second' }) });
+  assert.strictEqual(r.status, 200);
+  await drain();
+  assert.strictEqual(JSON.parse(gh.files.get('clients/pat-smith-x-com.json').json).org, 'First'); // untouched
+  assert.ok(teamMail.some(m => m.raw.includes('dashboard sync FAILED') && m.raw.includes('already belongs to pat.smith@x.com')));
+}
+
+// a tracker that rejects the post is reported, not ignored
+teamMail.length = 0;
+{
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url, opts) => String(url).includes('script.example')
+    ? new Response('{"ok":false,"error":"unauthorised"}', { status: 200 }) : realFetch(url, opts);
+  r = await call('/signup', { method: 'POST', body: JSON.stringify({ email: 'tracker@test.co.uk', organisation: 'Tracker Ltd' }) });
+  assert.strictEqual(r.status, 200);
+  await drain();
+  globalThis.fetch = realFetch;
+  const failMail = teamMail.find(m => m.raw.includes('tracker post FAILED'));
+  assert.ok(failMail && failMail.raw.includes('unauthorised') && failMail.raw.includes('tracker@test.co.uk'));
+}
+
+// client text in a subject cannot forge mail headers
+teamMail.length = 0;
+r = await call('/signup', { method: 'POST', body: JSON.stringify({ email: 'crlf@test.co.uk', organisation: 'Evil\r\nBcc: victim@example.com' }) });
+assert.strictEqual(r.status, 200);
+await drain();
+{
+  const headers = teamMail[0].raw.split('\r\n\r\n')[0]; // the header block, before the body
+  const subj = headers.split('\r\n').find(l => l.startsWith('Subject:'));
+  assert.ok(subj.includes('Evil') && subj.includes('Bcc: victim')); // flattened INTO the subject text…
+  assert.ok(!headers.split('\r\n').some(l => /^bcc:/i.test(l))); // …never a header line of its own
+}
 
 console.log('All worker checks passed.');

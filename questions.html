@@ -907,6 +907,13 @@ document.head.appendChild(style);
   var bookBtn = document.getElementById('bookBtn');
   var answers = {};
   try { answers = JSON.parse(sessionStorage.getItem(STORE)) || {}; } catch(e) {}
+  // Carried over from sign-up: the email they used (so a retyped one can't
+  // split them into two records) and the token the worker expects back.
+  var SIGNUP_TOKEN = '';
+  try {
+    if (!answers.email && localStorage.getItem('iternal_signup_email')) answers.email = localStorage.getItem('iternal_signup_email');
+    SIGNUP_TOKEN = localStorage.getItem('iternal_signup_token') || '';
+  } catch(e) {}
   var partialSent = false;
 
   // Pay-at-booking flow: identity is simply the email they give in the first
@@ -1018,7 +1025,7 @@ document.head.appendChild(style);
       return fetch(WORKER_URL + '/answers', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ email: answers.email, kind: kind, answers: TERMS_AGREED ? Object.assign({}, answers, { termsAgreed: TERMS_AGREED }) : answers })
+        body: JSON.stringify({ email: answers.email, token: SIGNUP_TOKEN, kind: kind, answers: TERMS_AGREED ? Object.assign({}, answers, { termsAgreed: TERMS_AGREED }) : answers })
       });
     }
     var fd = new FormData();
@@ -1037,12 +1044,14 @@ document.head.appendChild(style);
     if (answers.email && answers.email.indexOf('@') === -1) { sendNote.textContent = 'That email doesn’t look right.'; return; }
     sendBtn.style.opacity = '.6'; sendBtn.style.pointerEvents = 'none';
     send('complete').then(function(res){
-      if (!res.ok) throw new Error('send failed');
+      if (!res.ok) throw new Error(res.status === 403 ? 'not yours' : 'send failed');
       try { sessionStorage.removeItem(STORE); } catch(e) {}
       document.getElementById('formWrap').classList.add('submitted');
-    }).catch(function(){
+    }).catch(function(err){
       sendBtn.style.opacity = '1'; sendBtn.style.pointerEvents = 'auto';
-      sendNote.textContent = 'Sending failed — please try again, or email your answers to hello@iternal.life.';
+      sendNote.textContent = err && err.message === 'not yours'
+        ? 'These answers don’t match the sign-up for that email. Please use the browser you signed up in, or email your answers to websites@iternal.life.'
+        : 'Sending failed — please try again, or email your answers to websites@iternal.life.';
     });
   });
 

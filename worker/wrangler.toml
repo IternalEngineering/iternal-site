@@ -32,3 +32,7 @@ PIPELINE_REPO = "IternalEngineering/website-build-platform"
 #   STRIPE_WEBHOOK_SECRET  from Stripe Dashboard (sandbox secret during testing; swap to live at launch)
 #   LEAD_API_SECRET        from Lead Tracker Admin -> Website leads
 #   PIPELINE_TOKEN         fine-grained GitHub token: Contents read+write on PIPELINE_REPO only
+
+# Keep worker logs so a failed sync or send can be found afterwards.
+[observability]
+enabled = true
