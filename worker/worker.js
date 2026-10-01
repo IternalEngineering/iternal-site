@@ -21,8 +21,9 @@
  *                         (demoRequested) in the pipeline repo.
  *   POST /stripe-webhook  Stripe calls this when money moves (a payment the
  *                         team requested separately): the payer's record is
- *                         marked paid in KV, the pipeline repo and the
- *                         tracker, and the team is briefed.
+ *                         marked paid in KV and the tracker, and the team
+ *                         is briefed. Payment never touches the platform
+ *                         record: that lives in the tracker.
  *   GET  /health          Liveness check.
  *
  * Clients get NO email from us by design: Stripe sends any receipt, Google
@@ -210,10 +211,8 @@ function projectToPipeline(kv, file, slug) {
   });
   rec.answersComplete = !!kv.answersComplete;
   rec.answersUpdatedAt = kv.answersUpdatedAt || null;
-  // Payment is handled separately and may never touch Stripe, so the team can
-  // mark it paid in the dashboard. The worker only ever upgrades it.
-  if (kv.status === 'paid') rec.payment = { status: 'paid', amount: kv.amount || 0, at: kv.paidAt || null, via: 'stripe' };
-  else rec.payment = rec.payment || { status: 'none' };
+  // Payment is deliberately NOT on this record: the platform is for demo
+  // building; whether a client has paid lives in the Lead Tracker.
 
   // The first answers queue the pre-call demo build, once (the essentials are
   // mandatory before booking, so this is part of signing up, not a stage of
@@ -287,7 +286,8 @@ async function handleStripeWebhook(request, env, ctx) {
   const name = s(details.name, 120);
 
   const key = `client:${email}`;
-  const existing = (await env.CLIENTS.get(key, 'json')) || {};
+  const lead = await env.CLIENTS.get(`lead:${email}`, 'json');
+  const existing = (await env.CLIENTS.get(key, 'json')) || lead || {};
   const record = {
     ...existing,
     email, name: name || existing.name || '',
@@ -298,6 +298,7 @@ async function handleStripeWebhook(request, env, ctx) {
     answers: existing.answers || {},
   };
   await env.CLIENTS.put(key, JSON.stringify(record));
+  if (lead) await env.CLIENTS.delete(`lead:${email}`); // their sign-up and answers now live on the client record
   // The payment redirect carries ?session={CHECKOUT_SESSION_ID}; this mapping
   // lets /answers attach those answers to the paying client's record.
   if (record.stripeSession) await env.CLIENTS.put(`session:${record.stripeSession}`, email);
@@ -312,7 +313,6 @@ Stripe session: ${session.id}`),
       org: name || email, email,
       source: 'website funnel', message: `Payment received (${paid}) via Stripe.`,
     }),
-    syncToPipeline(env, email, 'payment received'),
   ]));
 
   return json(200, { received: true });
@@ -362,7 +362,6 @@ Payment: ${pi.id}${record.answersComplete ? '\nTheir call-prep answers are alrea
       org: email, email,
       source: 'website funnel', message: `Payment received (${paid}) via Stripe.`,
     }),
-    syncToPipeline(env, email, 'payment received'),
   ]));
 
   return json(200, { received: true });

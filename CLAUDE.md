@@ -25,8 +25,9 @@ homepage from the client's answers.
   appointment schedule.
 - `worker/` — the only backend (`client-site-funnel` at
   https://api.iternal.co.uk): `/signup`, `/answers`, `/stripe-webhook`,
-  `/health`. Every submission goes to TWO destinations: the website-build
-  pipeline repo (full record) and the Lead Tracker (summary). Deploy from
+  `/health`. Every sign-up and answer goes to TWO destinations: the
+  Website Build Platform repo (full record, no payment) and the Lead
+  Tracker (summary; payments go there too, never to the platform). Deploy from
   `worker/`: `node test-worker.js` MUST pass, then `npx wrangler deploy`.
 - `../website-build-platform/` — a separate repo: the information & demo
   build dashboard. The worker commits `clients/<slug>.json` there; the
@@ -58,7 +59,7 @@ homepage from the client's answers.
 | Party | We send | Comes back | Rules |
 |---|---|---|---|
 | **Worker /signup, /answers** (ours) | sign-up fields and answers, from the pages | `{ok}` | The page shows success only once the worker has it |
-| **GitHub** (pipeline repo) | one `clients/<slug>.json` per client: identity, answers, payment | file sha, used for the next write | Personal data in a private repo. Token scoped to that one repo. Named as a processor in the privacy draft |
+| **GitHub** (platform repo) | one `clients/<slug>.json` per client: identity and answers (never payment) | file sha, used for the next write | Personal data in a private repo. Token scoped to that one repo. Named as a processor in the privacy draft |
 | **Lead Tracker** (Apps Script, separate `lead-tracker` repo) | `createLead` POSTs on sign-up and on payment, secret-gated (`LEAD_API_SECRET`) | `{ok, id}` and NOTHING else | **WRITE-ONLY. Never read tracker/Sheet data — it is private.** Dedupes by email: repeat posts become notes on the existing record |
 | **Stripe** | nothing outbound from our code | webhook events to `/stripe-webhook`, HMAC-verified (`STRIPE_WEBHOOK_SECRET`, live) | Only fires if the team requests a deposit through Stripe; matches payer by email; email-less payments brief the team as UNMATCHED |
 | **Google Calendar** | the client (we just link to the appointment schedule URL) | nothing to our systems — the invite goes to the client | The schedule lives in Google's UI, not in code. No payment step |

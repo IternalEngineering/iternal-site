@@ -50,12 +50,13 @@ together:
 
 Everything a client enters is sent to two places, independently, by the
 worker. One failing never stops the other, and neither can fail the client's
-request.
+request. Payments are the exception: they reach KV and the tracker only.
 
-1. **The website-build pipeline repo** (`PIPELINE_REPO` in `wrangler.toml`,
+1. **The Website Build Platform repo** (`PIPELINE_REPO` in `wrangler.toml`,
    locally `Iternal/website-build-platform`). The worker commits one
-   `clients/<slug>.json` per client through the GitHub API: the full record,
-   with labelled answers. The information & demo build dashboard shows it
+   `clients/<slug>.json` per client through the GitHub API on sign-up and
+   on answers: the full record, with labelled answers, and nothing about
+   payment — the platform is for demo building. The dashboard shows it
    and agent sessions work from it. The first answers set
    `demoRequested: true`, which queues the pre-call demo build for the
    `website-demo-build` skill. Field ownership is in that repo's README —
@@ -66,8 +67,8 @@ request.
    Script deployment has a manifest-access gotcha — see the lead-tracker
    repo before touching it.
 
-The pipeline feed is off until the `PIPELINE_TOKEN` secret is set, so the
-worker can be deployed before the repo exists on GitHub.
+The platform feed is off until the `PIPELINE_TOKEN` secret is set (set 1 Oct;
+the token awaits org approval), so the worker can deploy regardless.
 
 ## Worker (worker/)
 

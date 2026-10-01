@@ -242,18 +242,16 @@ await drain();
   assert.strictEqual(f.inspiration, 'bPlaced');
   assert.strictEqual(f.stage, 'signed-up');
   assert.strictEqual(f.demoRequested, false); // nothing to build from yet
-  assert.deepStrictEqual(f.payment, { status: 'none' });
+  assert.ok(!('payment' in f)); // payment lives in the tracker, never here
   assert.strictEqual(outbound.length, 1); // the tracker still got its own post
   assert.ok(outbound[0].url.includes('action=createLead'));
   assert.ok(gh.calls.every(c => c.auth === 'Bearer ghp_test'));
 }
 
-// the dashboard writes its own fields — including a deposit marked paid by
-// hand (payment may never touch Stripe); the worker must carry them over
+// the dashboard writes its own fields; the worker must carry them over
 {
   const f = ghFile(slug);
   f.notes = 'Prefers a Tuesday call';
-  f.payment = { status: 'paid', amount: 10000, at: '2026-09-30', via: 'dashboard' };
   gh.files.set(`clients/${slug}.json`, { json: JSON.stringify(f), sha: 'sha-dashboard' });
 }
 
@@ -279,7 +277,6 @@ await drain();
   assert.deepStrictEqual(f.answers.slice(0, 2).map(a => a.id), ['email', 'mainJob']);
   assert.strictEqual(answerOf(f, 'pages').answer, null);
   assert.strictEqual(f.notes, 'Prefers a Tuesday call'); // dashboard field survived
-  assert.strictEqual(f.payment.via, 'dashboard'); // a hand-marked payment is never downgraded
 }
 
 // the team cancels the request before any build; more answers must not
@@ -344,18 +341,24 @@ await drain();
   assert.deepStrictEqual(answerOf(f, 'pages').answer, ['Home', 'Shop']); // untouched by that
 }
 
-// a payment lands on the same file, with the amount actually paid
+// a Payment Link payment (checkout.session.completed) marks the client paid
+// in KV WITHOUT losing their sign-up answers, and never touches the platform
+// file — payment lives in the tracker
 {
-  const piPayload = JSON.stringify({ type: 'payment_intent.succeeded', data: { object: { id: 'pi_999', amount_received: 22500, currency: 'gbp', receipt_email: 'omar@kilnworks.co.uk' } } });
+  const before = JSON.stringify(ghFile(slug));
+  const calls = gh.calls.length;
+  const csPayload = JSON.stringify({ type: 'checkout.session.completed', data: { object: { id: 'cs_999', amount_total: 22500, currency: 'gbp', customer_details: { email: 'omar@kilnworks.co.uk', name: 'Omar Haddad' } } } });
   const t4 = Math.floor(Date.now() / 1000);
-  const sig4 = `t=${t4},v1=${await hmacHex(env.STRIPE_WEBHOOK_SECRET, `${t4}.${piPayload}`)}`;
-  assert.strictEqual((await call('/stripe-webhook', { method: 'POST', headers: { 'stripe-signature': sig4 }, body: piPayload })).status, 200);
+  const sig4 = `t=${t4},v1=${await hmacHex(env.STRIPE_WEBHOOK_SECRET, `${t4}.${csPayload}`)}`;
+  assert.strictEqual((await call('/stripe-webhook', { method: 'POST', headers: { 'stripe-signature': sig4 }, body: csPayload })).status, 200);
   await drain();
-  const f = ghFile(slug);
-  assert.strictEqual(f.payment.status, 'paid');
-  assert.strictEqual(f.payment.amount, 22500);
-  assert.strictEqual(f.payment.via, 'stripe'); // a real Stripe payment is the stronger record
-  assert.ok(answered(f).length >= 3); // answers survived the lead -> client move
+  const kvClient = JSON.parse(store.get('client:omar@kilnworks.co.uk'));
+  assert.strictEqual(kvClient.status, 'paid');
+  assert.strictEqual(kvClient.answers.timeline, 'Within a month'); // the lead's answers moved with them
+  assert.strictEqual(kvClient.org, 'Kilnworks');
+  assert.ok(!store.get('lead:omar@kilnworks.co.uk')); // lead record retired
+  assert.strictEqual(gh.calls.length, calls); // no platform write for a payment
+  assert.strictEqual(JSON.stringify(ghFile(slug)), before); // file untouched
 }
 
 // a GitHub outage must never fail the client's request
