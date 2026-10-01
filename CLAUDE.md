@@ -40,9 +40,13 @@ one concept homepage from the client's answers (the "initial build" the
   say payment is taken at booking, and say nothing about refunding the £100
   until that is decided. Every place a figure is printed is listed in
   HOUSEKEEPING.md §Payment.
-- Never say or imply that every site comes with the Studio (the self-editing
-  Site Agent). It does not; Robbie removed that claim on 1 Oct 2026. A
-  caption about a named client that really has it is fine.
+- Two tiers, and the pages must keep them hyper-clear (Robbie, 1 Oct 2026):
+  a **website** (£750, as above), or a **website with the agentic studio**
+  built in so the client can edit it themselves, **priced separately** and
+  never part of the £750. Never say or imply the website tier includes the
+  studio. The studio tier has no published price: "say so on your call and
+  we will price it with you". The tiers are set out in websites.html ("Two
+  ways to have it") and the start.html terms ("The other option").
 - Clients get no email from us: Google Calendar sends the invite. Team
   briefs go to websites@iternal.life and john@iternal.life as
   "Website Pipeline <funnel@iternal.co.uk>" via the worker's send_email

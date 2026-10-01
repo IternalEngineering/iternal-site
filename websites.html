@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Websites We've Made — Iternal AI</title>
-<meta name="description" content="A gallery of websites designed and built by Iternal — and how to get one of your own. £750 all in: £100 for your call and an initial build, the rest only if you go ahead.">
+<meta name="description" content="A gallery of websites designed and built by Iternal — and how to get one of your own. A website, £750 all in, or a website with our agentic studio built in so you can edit it yourself, priced separately.">
 <meta name="robots" content="noindex, follow">
 <meta property="og:title" content="Websites We've Made — Iternal AI">
 <meta property="og:description" content="A gallery of websites designed and built by Iternal — and how to get one of your own.">
@@ -26,7 +26,7 @@
   "@context": "https://schema.org",
   "@type": "Service",
   "name": "Website design and build",
-  "description": "Iternal designs and builds complete websites: £750 all in: £100 for the call and an initial build, the remaining £650 only if you decide to go ahead. Two or three working concepts to choose between, refined with you and launched.",
+  "description": "Iternal designs and builds complete websites, in two tiers. A website: £750 all in, with £100 for the call and an initial build and the remaining £650 only if you decide to go ahead. Or a website with Iternal's agentic studio built in, so you can edit it yourself, priced separately. Two or three working concepts to choose between, refined with you and launched.",
   "url": "https://iternal.life/websites.html",
   "provider": { "@type": "Organization", "name": "Iternal", "url": "https://iternal.life" },
   "areaServed": "GB"
@@ -414,6 +414,23 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 .cs-body p:last-child { margin-bottom:0; }
 .cs-body strong { color:var(--white); font-weight:700; }
+
+/* The two tiers: a website, or a website with the studio built in. */
+.tiers { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:0 0 56px; }
+.tier {
+  background:var(--deep); border:1px solid var(--border2); border-radius:14px;
+  padding:28px 26px; display:flex; flex-direction:column; gap:12px;
+}
+.tier-studio { border-color:var(--aqua); }
+.tier-name { font-size:12px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--tan); }
+.tier-studio .tier-name { color:var(--aqua); }
+.tier-price { font-size:30px; font-weight:900; color:var(--t1); letter-spacing:-.02em; line-height:1.1; }
+.cs-body .tier p { font-size:15px; line-height:1.65; margin:0; }
+.cs-body .tier p.tier-terms {
+  margin-top:auto; padding-top:14px; border-top:1px solid var(--border);
+  font-size:14px; color:var(--t3);
+}
+@media (max-width:700px) { .tiers { grid-template-columns:1fr; } }
 
 .cs-highlights {
   margin-top:48px; display:grid; grid-template-columns:repeat(3,1fr); gap:2px;
@@ -818,7 +835,23 @@ html[data-theme="light"] .icon-moon { display:none; }
   <div class="w">
     <div class="cs-body rv d1" style="max-width:760px">
       <h2>How it works</h2>
-      <p><strong>£750 all in: £100 for your call and an initial build, the remaining £650 only if you decide to go ahead.</strong> You answer a few questions, we build a first version from your answers, and we talk it through for half an hour. If you go ahead, we design and build <strong>two or three working versions of your site</strong>. Real pages you can click through, not mockups. You pick the one that fits, we refine it together and launch it.</p>
+      <p>You answer a few questions, we build a first version from your answers, and we talk it through for half an hour. If you go ahead, we design and build <strong>two or three working versions of your site</strong>. Real pages you can click through, not mockups. You pick the one that fits, we refine it together and launch it.</p>
+
+      <h2>Two ways to have it</h2>
+      <div class="tiers">
+        <article class="tier">
+          <div class="tier-name">Website</div>
+          <div class="tier-price">£750 all in</div>
+          <p>Your site, designed, built and launched with you. Everything above, from the first questions to launch day.</p>
+          <p class="tier-terms">£100 for your call and an initial build. The remaining £650 only if you decide to go ahead.</p>
+        </article>
+        <article class="tier tier-studio">
+          <div class="tier-name">Website with our studio</div>
+          <div class="tier-price">Priced separately</div>
+          <p>The same website with our agentic studio built in, so you can keep it up to date yourself. Ask in plain English to change the words, swap a photograph or publish news, and it goes live in a minute or two.</p>
+          <p class="tier-terms">Not included in the £750. If you want it, say so on your call and we will price it with you.</p>
+        </article>
+      </div>
 
       <h2>After something bigger?</h2>
       <p>Some organisations arrive here wanting a website and realise they need a platform — the kind of systems in <a href="index.html#work" style="color:var(--tan); text-decoration:underline; text-underline-offset:3px">our case studies</a>, like the one behind Good News London. That's a different conversation, and it starts with a <a href="contact.html" style="color:var(--tan); text-decoration:underline; text-underline-offset:3px">discovery call</a>.</p>

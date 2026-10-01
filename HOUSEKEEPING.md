@@ -104,16 +104,21 @@ the token awaits org approval), so the worker can deploy regardless.
   the call and an initial build. At the end of the call, or after it, the
   client decides whether to go ahead; if they do, the remainder is invoiced
   then. The pages print the total as £750 and the remainder as £650.
-- **Changing the price or the split.** The figures live in six places and
-  nowhere else. Search both files for `£` to find them all:
+- **Two tiers (Robbie, 1 Oct 2026).** A *website* (the £750 above), or a
+  *website with the agentic studio* built in so the client can edit it
+  themselves, priced separately with no published figure. The pages must
+  keep it unmistakable that the £750 does not include the studio.
+- **Changing a price or the split.** The figures, and the studio tier's
+  wording, live only in these places. Search both files for `£` and
+  `studio` to find them all:
   - `websites.html`: the meta description, the JSON-LD description, and the
-    bold opening sentence of "How it works".
-  - `start.html`: the meta description, and the first two cards of "The
-    engagement at a glance" ("The price" and "£100 to begin, the rest when
-    you decide").
+    two cards under "Two ways to have it".
+  - `start.html`: the meta description, and the cards "The price", "£100 to
+    begin, the rest when you decide" and "The other option: the website
+    with our studio" in "The engagement at a glance".
   If the order of events changes too (when the initial build happens, when
-  the client decides), the third card in `start.html` and the rest of the
-  "How it works" paragraph describe it. Then tell whoever reviews
+  the client decides), the "What the call starts" card in `start.html` and
+  the "How it works" paragraph describe it. Then tell whoever reviews
   `../legal-review-pack.md`: the terms card is the contract summary.
 - **Not yet decided:** whether the £100 is returned if the client does not
   go ahead. The pages say nothing either way until it is.
