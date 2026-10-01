@@ -26,7 +26,7 @@ LEAD_API_URL = "https://script.google.com/macros/s/AKfycbzwkFrrOZ_VqMP0CJnAjtCsU
 # The information & demo build dashboard's repo: the worker commits one
 # clients/<slug>.json per client here. Skipped silently until PIPELINE_TOKEN
 # is set, so the worker can deploy before the repo exists.
-PIPELINE_REPO = "IternalEngineering/website-build-pipeline"
+PIPELINE_REPO = "IternalEngineering/website-build-platform"
 
 # Secrets — set each with: wrangler secret put <NAME>
 #   STRIPE_WEBHOOK_SECRET  from Stripe Dashboard (sandbox secret during testing; swap to live at launch)

@@ -224,7 +224,7 @@ r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'a@b.
 assert.strictEqual(r.status, 400);
 
 // ── Two destinations: the pipeline repo as well as the tracker ──────────
-env.PIPELINE_REPO = 'Org/website-build-pipeline';
+env.PIPELINE_REPO = 'Org/website-build-platform';
 env.PIPELINE_TOKEN = 'ghp_test';
 const slug = 'omar-kilnworks-co-uk';
 

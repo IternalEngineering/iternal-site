@@ -53,7 +53,7 @@ worker. One failing never stops the other, and neither can fail the client's
 request.
 
 1. **The website-build pipeline repo** (`PIPELINE_REPO` in `wrangler.toml`,
-   locally `Iternal/website-build-pipeline`). The worker commits one
+   locally `Iternal/website-build-platform`). The worker commits one
    `clients/<slug>.json` per client through the GitHub API: the full record,
    with labelled answers. The information & demo build dashboard shows it
    and agent sessions work from it. The first answers set

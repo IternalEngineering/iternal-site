@@ -28,7 +28,7 @@ homepage from the client's answers.
   `/health`. Every submission goes to TWO destinations: the website-build
   pipeline repo (full record) and the Lead Tracker (summary). Deploy from
   `worker/`: `node test-worker.js` MUST pass, then `npx wrangler deploy`.
-- `../website-build-pipeline/` — a separate repo: the information & demo
+- `../website-build-platform/` — a separate repo: the information & demo
   build dashboard. The worker commits `clients/<slug>.json` there; the
   `website-demo-build` skill drains its `demoRequested` queue. Its own
   CLAUDE.md and README hold the data contract.
@@ -71,7 +71,7 @@ fallback constant in questions.html.
 
 ## Current to-do (30 Sep 2026)
 
-1. Create the private GitHub repo for `../website-build-pipeline`, push it,
+1. Create the private GitHub repo for `../website-build-platform`, push it,
    and set the worker's `PIPELINE_TOKEN`.
 2. Create websites@iternal.life; verify it and john@iternal.life as Email
    Routing destinations; then deploy the worker.
