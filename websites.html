@@ -282,6 +282,39 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   color:var(--t2); max-width:640px; line-height:1.7;
 }
 
+/* The gallery's own screenshots, panning slowly behind the headline. Decorative only:
+   the rows are built by script from the gallery, so there is no second list to keep. */
+.cs-hero { position:relative; overflow:hidden; }
+.cs-hero > .w { position:relative; z-index:2; }
+.cs-hero-pan {
+  position:absolute; inset:110px 0 0; z-index:0; pointer-events:none;
+  display:flex; flex-direction:column; justify-content:center; gap:18px;
+  transform:rotate(-5deg);
+}
+/* Text side stays almost solid; the sites show on the right and fade under the nav. */
+.cs-hero::after {
+  content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--dark) 96%, transparent) 0%, color-mix(in srgb, var(--dark) 90%, transparent) 54%, color-mix(in srgb, var(--dark) 40%, transparent) 74%, color-mix(in srgb, var(--dark) 15%, transparent)),
+    linear-gradient(180deg, var(--dark) 90px, transparent 200px),
+    linear-gradient(0deg, var(--dark), transparent 26%);
+}
+.cs-pan-row { display:flex; width:max-content; animation:cs-pan 120s linear infinite; }
+.cs-pan-row.rev { animation-direction:reverse; margin-left:-170px; }
+.cs-pan-row img {
+  width:300px; margin-right:18px; aspect-ratio:16/10; object-fit:cover; object-position:top;
+  border-radius:8px; box-shadow:0 18px 40px rgba(6,15,38,.35);
+}
+@keyframes cs-pan { to { transform:translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .cs-pan-row { animation:none; } }
+@media (max-width:768px) {
+  .cs-hero { padding-bottom:40px; }
+  .cs-hero::after { display:none; }
+  .cs-hero-pan { position:relative; inset:auto; padding:0; margin-top:36px; transform:none; }
+  .cs-pan-row.rev { display:none; }
+  .cs-pan-row img { width:200px; margin-right:12px; }
+}
+
 /* ============================================================
    CASE STUDY — IMAGE PLACEHOLDER
    ============================================================ */
@@ -707,6 +740,7 @@ html[data-theme="light"] .icon-moon { display:none; }
     <h1 class="cs-h1 rv d2">Websites<br><em>we've made</em></h1>
     <p class="cs-intro rv d3">Not every project needs a platform. Sometimes you need a really good website — designed, built and live in weeks. Here's what ours look like.</p>
   </div>
+  <div class="cs-hero-pan" aria-hidden="true"></div>
 </section>
 
 <!-- ===== GALLERY ===== -->
@@ -893,6 +927,25 @@ html[data-theme="light"] .icon-moon { display:none; }
 </footer>
 
 <script>
+
+/* ── Hero background: two rows of the gallery's screenshots, each written twice so the
+      -50% loop lands seamlessly; the second row starts halfway round and runs the other way ── */
+(() => {
+  const pan = document.querySelector('.cs-hero-pan');
+  const shots = [...document.querySelectorAll('.g-shot img')].map((i) => i.getAttribute('src'));
+  if (!pan || !shots.length) return;
+  const half = Math.ceil(shots.length / 2);
+  [shots, [...shots.slice(half), ...shots.slice(0, half)]].forEach((list, n) => {
+    const row = document.createElement('div');
+    row.className = n ? 'cs-pan-row rev' : 'cs-pan-row';
+    for (const src of [...list, ...list]) {
+      const img = new Image();
+      img.src = src; img.alt = ''; img.decoding = 'async';
+      row.append(img);
+    }
+    pan.append(row);
+  });
+})();
 
 /* ── Nav scroll ── */
 const nav = document.getElementById('nav');
