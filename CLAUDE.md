@@ -40,13 +40,14 @@ one concept homepage from the client's answers (the "initial build" the
   say payment is taken at booking, and say nothing about refunding the £100
   until that is decided. Every place a figure is printed is listed in
   HOUSEKEEPING.md §Payment.
-- Two tiers, and the pages must keep them hyper-clear (Robbie, 1 Oct 2026):
-  a **website** (£750, as above), or a **website with the agentic studio**
-  built in so the client can edit it themselves, **priced separately** and
-  never part of the £750. Never say or imply the website tier includes the
-  studio. The studio tier has no published price: "say so on your call and
-  we will price it with you". The tiers are set out in websites.html ("Two
-  ways to have it") and the start.html terms ("The other option").
+- The studio is an extra, offered gently (Robbie, 1 Oct 2026): "we also
+  offer our agentic studio, built in", priced separately from the £750,
+  with no published figure ("mention it on your call"). Never call it a
+  tier or set it up as a comparison, and never say or imply the £750
+  includes it. It appears as "Our studio, built in" in websites.html and in
+  the start.html terms.
+- Do not promise a number of concepts ("two or three") anywhere on these
+  pages. We show them; we do not announce them.
 - Clients get no email from us: Google Calendar sends the invite. Team
   briefs go to websites@iternal.life and john@iternal.life as
   "Website Pipeline <funnel@iternal.co.uk>" via the worker's send_email

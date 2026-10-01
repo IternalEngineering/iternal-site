@@ -104,18 +104,17 @@ the token awaits org approval), so the worker can deploy regardless.
   the call and an initial build. At the end of the call, or after it, the
   client decides whether to go ahead; if they do, the remainder is invoiced
   then. The pages print the total as £750 and the remainder as £650.
-- **Two tiers (Robbie, 1 Oct 2026).** A *website* (the £750 above), or a
-  *website with the agentic studio* built in so the client can edit it
-  themselves, priced separately with no published figure. The pages must
-  keep it unmistakable that the £750 does not include the studio.
-- **Changing a price or the split.** The figures, and the studio tier's
+- **The studio as an extra (Robbie, 1 Oct 2026).** The agentic studio can be
+  built into a site, priced separately from the £750 with no published
+  figure. It is mentioned plainly, never set up as a tier.
+- **Changing a price or the split.** The figures, and the studio's
   wording, live only in these places. Search both files for `£` and
   `studio` to find them all:
-  - `websites.html`: the meta description, the JSON-LD description, and the
-    two cards under "Two ways to have it".
+  - `websites.html`: the meta description, the JSON-LD description, the
+    bold opening sentence of "How it works", and "Our studio, built in".
   - `start.html`: the meta description, and the cards "The price", "£100 to
-    begin, the rest when you decide" and "The other option: the website
-    with our studio" in "The engagement at a glance".
+    begin, the rest when you decide" and "Our studio, built in" in "The
+    engagement at a glance".
   If the order of events changes too (when the initial build happens, when
   the client decides), the "What the call starts" card in `start.html` and
   the "How it works" paragraph describe it. Then tell whoever reviews
