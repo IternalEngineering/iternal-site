@@ -7,10 +7,11 @@ changing anything.
 
 ## The pipeline, as built (30 Sep 2026)
 
-Sign up → agree the terms → questions → book the call → call → 2–3 concepts
-→ build → live. **Booking takes no payment**; the deposit is requested
-separately by the team. Before the call, an agent session builds one concept
-homepage from the client's answers.
+Sign up → agree the terms → questions → book the call → call → decide →
+2–3 concepts → build → live. **Booking takes no payment**; payments are
+requested separately by the team. Before the call, an agent session builds
+one concept homepage from the client's answers (the "initial build" the
+£100 covers).
 
 - `websites.html` — the gallery, sole funnel entrance (curated; consent
   required per HOUSEKEEPING.md). Eight sites; each opens in a lightbox and
@@ -33,10 +34,12 @@ homepage from the client's answers.
   build dashboard. The worker commits `clients/<slug>.json` there; the
   `website-demo-build` skill drains its `demoRequested` queue. Its own
   CLAUDE.md and README hold the data contract.
-- Pricing language: £750 all in, a deposit to get started, the balance at
-  launch. The deposit FIGURE is undecided (£100 or 30% under discussion) —
-  do not print one until Robbie gives it. Never say payment is taken at
-  booking.
+- Pricing language (Robbie, 1 Oct 2026; he expects it to change): £750 all
+  in. £100 covers the call and an initial build; the remaining £650 only if
+  the client decides to go ahead, at the end of the call or after it. Never
+  say payment is taken at booking, and say nothing about refunding the £100
+  until that is decided. Every place a figure is printed is listed in
+  HOUSEKEEPING.md §Payment.
 - Clients get no email from us: Google Calendar sends the invite. Team
   briefs go to websites@iternal.life and john@iternal.life as
   "Website Pipeline <funnel@iternal.co.uk>" via the worker's send_email
@@ -79,8 +82,9 @@ fallback constant in questions.html.
 3. Deploy the site (held: only on Robbie's word, named in that moment).
 4. `?team` walkthrough: one real sign-up should yield a client file, a
    tracker row and both briefs.
-5. Decide the deposit figure and how it is requested; put the figure in
-   the pages.
+5. Decide how the £100 and the remainder are requested, and whether the
+   £100 is returned if the client does not go ahead. (Figures are in the
+   pages since 1 Oct.)
 6. Show the team the current front end — they have not seen the gallery,
    lightbox or question changes. They want the prospect experience to take
    its cue from the sleekness of existing sites; redesign after they have

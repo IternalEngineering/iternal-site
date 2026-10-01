@@ -96,17 +96,28 @@ the token awaits org approval), so the worker can deploy regardless.
   a "FAILED" brief naming the client. Worker logs are retained
   (`[observability]` in wrangler.toml).
 
-## Payment (handled separately — 30 Sep 2026)
+## Payment (handled separately — 30 Sep 2026; figures set 1 Oct)
 
 - **Booking a call takes no payment.** The Google Calendar pay-at-booking
-  design is dropped. The team requests the deposit separately, around the
-  time of the call.
-- **The deposit amount is not settled** (£100 or 30% were being considered
-  on 30 Sep, instead of the earlier £375). The pages therefore say "£750 all
-  in: a deposit to get started, the balance when your site goes live" with
-  no figure. When it is decided, the figure goes into `websites.html` (meta
-  description, JSON-LD, "How it works") and the terms card in `start.html`.
-- The Stripe webhook stays wired and is harmless if unused. If the deposit
+  design is dropped. The team requests each payment separately.
+- **The structure (Robbie, 1 Oct 2026, and expected to change):** £100 covers
+  the call and an initial build. At the end of the call, or after it, the
+  client decides whether to go ahead; if they do, the remainder is invoiced
+  then. The pages print the total as £750 and the remainder as £650.
+- **Changing the price or the split.** The figures live in six places and
+  nowhere else. Search both files for `£` to find them all:
+  - `websites.html`: the meta description, the JSON-LD description, and the
+    bold opening sentence of "How it works".
+  - `start.html`: the meta description, and the first two cards of "The
+    engagement at a glance" ("The price" and "£100 to begin, the rest when
+    you decide").
+  If the order of events changes too (when the initial build happens, when
+  the client decides), the third card in `start.html` and the rest of the
+  "How it works" paragraph describe it. Then tell whoever reviews
+  `../legal-review-pack.md`: the terms card is the contract summary.
+- **Not yet decided:** whether the £100 is returned if the client does not
+  go ahead. The pages say nothing either way until it is.
+- The Stripe webhook stays wired and is harmless if unused. If a payment
   is requested through the Iternal Stripe account, `payment_intent.succeeded`
   marks the client paid in KV, the pipeline repo and the tracker, with the
   amount actually paid. If it arrives any other way, mark it in the
@@ -155,7 +166,8 @@ Before lighting up:
 - websites@iternal.life exists and both brief addresses are verified.
 - A `?team` walkthrough has produced a client file, a tracker row and both
   briefs from one real sign-up.
-- The deposit wording is settled and the legal pack reviewed.
+- The payment wording is reviewed with the legal pack, including what
+  happens to the £100 if the client does not go ahead.
 - Jay's Transport has moved to the new site (the gallery shows the old one
   until then).
 
