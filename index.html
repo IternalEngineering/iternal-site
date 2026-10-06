@@ -407,21 +407,23 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 /* ============================================================
    DIFFERENCE
    ============================================================ */
+/* Sized to fit one laptop screen below the nav: the orbital takes a fixed column, the
+   copy the rest, and the three points run as a row under both. */
 #diff {
-  padding:80px 0;
+  padding:min(72px, 7vh) 0;
   border-bottom:1px solid var(--border);
 }
 
 .diff-grid {
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:100px; align-items:center;
+  display:grid; grid-template-columns:380px 1fr;
+  gap:min(44px, 5vh) 72px; align-items:center;
 }
 
 /* Orbital SVG animation (Composio style) */
 .diff-visual {
   position:relative; display:flex;
   align-items:center; justify-content:center;
-  height:460px;
+  height:380px;
 }
 
 .orbital-wrap {
@@ -490,21 +492,24 @@ html[data-theme="light"] .orb-logo { filter:none; }
 .orb-label.bot   { bottom:0; left:50%; transform:translateX(-50%); }
 .orb-label.left  { left:0; top:50%; transform:translateY(-50%); }
 
+.diff-copy-side { position:relative; }
 .diff-copy-side .ey { margin-bottom:28px; }
 
+/* Sits behind the headline rather than above it, so it adds no height. */
 .diff-ghost {
-  font-size:180px; font-weight:900;
+  position:absolute; top:-0.55em; left:-0.04em; z-index:0;
+  font-size:170px; font-weight:900;
   line-height:.85; letter-spacing:-.05em;
   background:var(--sunrise);
   -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  background-clip:text; opacity:.15; user-select:none;
-  margin-bottom:-40px;
+  background-clip:text; opacity:.15; user-select:none; pointer-events:none;
 }
 
 .diff-h2 {
-  font-size:clamp(32px, 4vw, 50px);
+  position:relative;
+  font-size:clamp(30px, 3.3vw, 46px);
   font-weight:900; color:var(--white);
-  line-height:1.06; margin-bottom:24px;
+  line-height:1.06; margin-bottom:22px;
 }
 .diff-h2 .warm {
   background:var(--sunrise);
@@ -513,18 +518,17 @@ html[data-theme="light"] .orb-logo { filter:none; }
 }
 
 .diff-p {
-  font-size:17px; line-height:1.8;
-  color:var(--t3); margin-bottom:44px;
+  font-size:17px; line-height:1.75;
+  color:var(--t3); max-width:36em;
 }
 
-/* Points */
-.pts { display:flex; flex-direction:column; }
+/* Points: one row of three under both columns */
+.pts { grid-column:1 / -1; display:grid; grid-template-columns:repeat(3, 1fr); gap:0 40px; }
 .pt {
-  display:grid; grid-template-columns:40px 1fr;
-  gap:18px; padding:22px 0;
-  border-bottom:1px solid var(--border);
+  display:grid; grid-template-columns:32px 1fr;
+  gap:14px; padding:22px 0 0;
+  border-top:1px solid var(--border);
 }
-.pt:first-child { border-top:1px solid var(--border); }
 .pt-n {
   font-size:12px; font-weight:700;
   color:var(--tan); letter-spacing:.12em; padding-top:3px;
@@ -945,8 +949,11 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 @media (max-width:1024px) {
   :root { --px:32px; }
   .hero-actions { flex-wrap:wrap; }
-  .diff-grid { grid-template-columns:1fr; gap:60px; }
+  .diff-grid { grid-template-columns:1fr; gap:36px; }
   .diff-visual { display:none; }
+  .pts { grid-template-columns:1fr; }
+  .pt { padding:14px 0; }
+  .diff-ghost { font-size:130px; }
   .work-feat { grid-template-columns:1fr; }
   .work-3 { grid-template-columns:1fr 1fr; }
   .svcs-grid { grid-template-columns:1fr; }
@@ -1249,11 +1256,12 @@ html[data-theme="light"] .icon-moon { display:none; }
         <p class="diff-p">
           Iternal runs a unique AI-augmented delivery model called Forge. A small core team, amplified by an internal suite of agentic tools, delivers at a capacity most agencies many times our size would struggle to match.
         </p>
-        <div class="pts">
+      </div>
+
+      <div class="pts rv d3">
           <div class="pt"><span class="pt-n">01</span><div><div class="pt-h">Agentic, not just generative</div><p class="pt-p">Systems that plan, orchestrate, and deliver outcomes inside real-world infrastructure.</p></div></div>
           <div class="pt"><span class="pt-n">02</span><div><div class="pt-h">Live systems, not pilots</div><p class="pt-p">Good News London is live with the GLA on london.gov.uk. CivicNetZero runs across three continents.</p></div></div>
           <div class="pt"><span class="pt-n">03</span><div><div class="pt-h">Senior team on every project</div><p class="pt-p">The people who scoped it build it. No account management layer, no junior bench.</p></div></div>
-        </div>
       </div>
     </div>
   </div>
