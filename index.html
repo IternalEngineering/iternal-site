@@ -273,13 +273,16 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 /* ============================================================
    HERO
    ============================================================ */
+/* The hero stops short of the fold by the client strip's height, so the client list is
+   on screen on arrival. --cl-h is that strip's height; change both together. */
 #hero {
-  min-height:100vh;
+  --cl-h:150px;
+  min-height:calc(100vh - var(--cl-h));
+  min-height:calc(100svh - var(--cl-h));
   display:flex; flex-direction:column; justify-content:flex-end;
-  padding:0 var(--px) 100px;
+  padding:0 var(--px) min(56px, 5vh);
   overflow:hidden;
   position: relative;
-  overflow: hidden;
 }
 
 .hero-in {
@@ -294,10 +297,10 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 
 /* ── Word-by-word title reveal (Composio style) ── */
 .hero-h1 {
-  font-size:clamp(56px, 8.5vw, 112px);
+  font-size:clamp(48px, min(8.5vw, 10.5vh), 112px);
   font-weight:900; line-height:.94;
   letter-spacing:-.04em;
-  margin-bottom:52px;
+  margin-bottom:min(52px, 4vh);
 }
 
 .word {
@@ -316,7 +319,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 
 .hero-body {
-  display:flex; flex-direction:column; gap:36px;
+  display:flex; flex-direction:column; gap:28px;
   max-width:600px;
   opacity:0; animation:up .9s ease .9s forwards;
 }
@@ -356,35 +359,20 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .btn-line:hover { color:var(--white); border-color:var(--tan); }
 
 
-/* Scroll cue */
-.scue {
-  position:absolute; bottom:40px; left:50%;
-  transform:translateX(-50%);
-  display:flex; flex-direction:column; align-items:center; gap:8px;
-  opacity:0; animation:fadeIn 1s ease 1.6s forwards;
-}
-.scue-l {
-  width:1px; height:40px;
-  background:linear-gradient(to bottom, var(--tan), transparent);
-  animation:scuePulse 2.2s ease-in-out infinite;
-}
-@keyframes scuePulse { 0%,100%{opacity:.35;transform:scaleY(1)} 50%{opacity:1;transform:scaleY(1.2)} }
-
 @keyframes up { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
-@keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
 /* ============================================================
    CLIENTS
    ============================================================ */
 #clients {
-  padding:72px 0;
+  padding:36px 0;
   border-top:1px solid var(--border);
   border-bottom:1px solid var(--border);
   overflow:hidden;
 }
 
 .cl-label {
-  text-align:center; margin-bottom:40px;
+  text-align:center; margin-bottom:22px;
   font-size:12px; font-weight:700;
   letter-spacing:.18em; text-transform:uppercase;
   color:var(--t4);
@@ -976,6 +964,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   :root { --px:20px; }
   .hero-actions { flex-direction:column; align-items:stretch; gap:16px; }
   .hero-actions a { justify-content:center; }
+  .hero-p { font-size:17px; line-height:1.65; }
   nav { padding:0 20px; }
   .nav-links { display:none; }
   .nav-btn { display:none; }
@@ -1204,7 +1193,6 @@ html[data-theme="light"] .icon-moon { display:none; }
       </div>
     </div>
   </div>
-  <div class="scue"><div class="scue-l"></div></div>
 </section>
 
 <!-- ===== CLIENTS ===== -->
