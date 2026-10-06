@@ -645,14 +645,26 @@ html[data-theme="light"] .orb-logo { filter:none; }
   position:absolute; inset:0; border-radius:4px;
 }
 
+/* The sector tag sits in the image's bottom-left corner on a soft shade, clear of the
+   screenshot's own navigation bar. It lets clicks through to the card's link. */
+.card-img::after {
+  content:''; position:absolute; left:0; right:0; bottom:0; height:40%;
+  background:linear-gradient(to top, rgba(6,15,38,.5), transparent);
+  pointer-events:none;
+}
 .card-badge {
-  position:absolute; top:18px; right:18px;
-  background:rgba(6,15,38,.88);
-  border:1px solid var(--border2);
-  backdrop-filter:blur(8px);
-  font-size:11px; font-weight:700;
+  position:absolute; left:16px; bottom:16px; z-index:2; pointer-events:none;
+  display:inline-flex; align-items:center; gap:8px;
+  padding:6px 12px 6px 10px; border-radius:999px;
+  background:rgba(6,15,38,.72);
+  border:1px solid rgba(255,255,255,.16);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  font-size:10.5px; font-weight:700; line-height:1;
   letter-spacing:.12em; text-transform:uppercase;
-  color:var(--t4); padding:6px 14px;
+  color:rgba(255,255,255,.92);
+}
+.card-badge::before {
+  content:''; width:6px; height:6px; border-radius:50%; background:var(--aqua);
 }
 
 .card-body { padding:28px 30px; }
@@ -1065,7 +1077,8 @@ html[data-theme="light"] .ph { background:linear-gradient(145deg, rgba(10,33,86,
 html[data-theme="light"] .ph-hatch { background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(10,33,86,0.03) 20px,rgba(10,33,86,0.03) 21px); }
 
 /* Card badge */
-html[data-theme="light"] .card-badge { background:rgba(255,255,255,0.88); }
+html[data-theme="light"] .card-badge { background:rgba(255,255,255,.9); border-color:rgba(10,33,86,.12); color:var(--navy); }
+html[data-theme="light"] .card-img::after { background:linear-gradient(to top, rgba(10,33,86,.22), transparent); }
 
 /* Service cards */
 html[data-theme="light"] .svc { background:rgba(255,255,255,0.5); }
