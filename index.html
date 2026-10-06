@@ -584,6 +584,12 @@ html[data-theme="light"] .orb-logo { filter:none; }
 .work-3 {
   display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
 }
+/* On wide screens the cards reach past the text column, so the headline stays on the
+   site's left edge while the work gets more room. Image heights are fixed, so the
+   cards widen without growing taller. */
+@media (min-width:1240px) {
+  .work-feat, .work-3 { margin-left:-56px; margin-right:-56px; }
+}
 
 .card-img {
   width:100%; overflow:hidden; position:relative;
