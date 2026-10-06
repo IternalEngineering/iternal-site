@@ -150,7 +150,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
    PAGE HERO
    ============================================================ */
 .page-hero {
-  padding:160px var(--px) 100px;
+  padding:124px var(--px) min(64px, 7vh);
   border-bottom:1px solid var(--border);
   position:relative; overflow:hidden;
 }
@@ -165,12 +165,12 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   width:100%; height:100%;
   z-index:0; pointer-events:none; display:block;
 }
-.page-hero-in { max-width:var(--max); margin:0 auto; position:relative; z-index:2; }
+.page-hero-in { max-width:calc(var(--max) - 2 * var(--px)); margin:0 auto; position:relative; z-index:2; }
 .page-hero .ey { margin-bottom:28px; }
 .page-hero-h {
-  font-size:clamp(44px, 6vw, 80px); font-weight:900;
+  font-size:clamp(40px, min(5.4vw, 9vh), 72px); font-weight:900;
   line-height:.96; letter-spacing:-.04em;
-  color:var(--white); margin-bottom:28px;
+  color:var(--white); margin-bottom:24px;
 }
 .page-hero-h .grad {
   background:var(--sunrise); -webkit-background-clip:text;
@@ -178,14 +178,14 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 .page-hero-sub {
   font-size:19px; line-height:1.75; color:var(--t3);
-  max-width:600px; margin-bottom:52px;
+  max-width:600px; margin-bottom:36px;
 }
 .page-hero-sub strong { color:var(--white); font-weight:700; }
 .model-badges { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:52px; }
 .badge {
   display:inline-flex; align-items:center; gap:8px;
   background:rgba(255,255,255,0.05); border:1px solid var(--border2);
-  padding:8px 18px; border-radius:2px;
+  padding:8px 18px; border-radius:999px;
   font-size:13px; font-weight:700; color:var(--t2);
   letter-spacing:.04em;
 }
@@ -198,8 +198,8 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 /* ============================================================
    SECTION SHARED
    ============================================================ */
-section { padding:100px 0; border-bottom:1px solid var(--border); }
-.sec-intro { margin-bottom:60px; }
+section { padding:min(88px, 10vh) 0; border-bottom:1px solid var(--border); }
+.sec-intro { margin-bottom:44px; }
 .sec-intro .ey { margin-bottom:20px; }
 .sec-h { font-size:clamp(28px,3.8vw,44px); font-weight:900; color:var(--white); line-height:1.05; margin-bottom:16px; }
 .sec-sub { font-size:17px; color:var(--t3); line-height:1.75; max-width:600px; }
@@ -215,7 +215,7 @@ section { padding:100px 0; border-bottom:1px solid var(--border); }
 .engage-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-top:48px; }
 
 .tier {
-  background:rgba(8,16,50,.8); padding:48px 36px;
+  background:rgba(8,16,50,.8); padding:38px 32px;
   position:relative; overflow:hidden; transition:background .3s;
   display:flex; flex-direction:column;
 }
@@ -254,16 +254,17 @@ section { padding:100px 0; border-bottom:1px solid var(--border); }
   background:rgba(226,103,19,.12); border:1px solid rgba(226,103,19,.25);
   color:var(--tan); font-size:11px; font-weight:700;
   letter-spacing:.1em; text-transform:uppercase;
-  padding:4px 12px; border-radius:2px; margin-bottom:20px;
+  padding:5px 12px 5px 10px; border-radius:999px; margin-bottom:18px; align-self:flex-start;
 }
+.tier-popular::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--tan); }
 
 .tier-name { font-size:24px; font-weight:900; color:var(--white); margin-bottom:14px; }
-.tier-desc { font-size:15px; color:var(--t3); line-height:1.7; margin-bottom:28px; }
+.tier-desc { font-size:15px; color:var(--t3); line-height:1.7; margin-bottom:22px; }
 .tier-ideal {
   font-size:12px; font-weight:700; color:var(--t4);
   letter-spacing:.08em; text-transform:uppercase; margin-bottom:16px;
 }
-.tier-list { list-style:none; display:flex; flex-direction:column; gap:11px; margin-bottom:36px; flex:1; }
+.tier-list { list-style:none; display:flex; flex-direction:column; gap:10px; margin-bottom:28px; flex:1; }
 .tier-list li {
   font-size:14px; color:var(--t2); display:flex; align-items:flex-start; gap:10px; line-height:1.5;
 }
@@ -326,8 +327,8 @@ section { padding:100px 0; border-bottom:1px solid var(--border); }
 .experts-bar-logos { display:flex; gap:24px; align-items:center; flex-wrap:wrap; }
 .expert-chip {
   background:rgba(255,255,255,.05); border:1px solid var(--border2);
-  padding:10px 20px; border-radius:2px;
-  font-size:14px; font-weight:900; color:var(--t2); white-space:nowrap;
+  padding:8px 16px; border-radius:999px;
+  font-size:13px; font-weight:700; color:var(--t2); white-space:nowrap;
 }
 
 /* ============================================================
@@ -508,13 +509,9 @@ section { padding:100px 0; border-bottom:1px solid var(--border); }
    ============================================================ */
 #faq {}
 
-.faq-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:60px; }
+.faq-grid { display:grid; grid-template-columns:1fr 1fr; gap:0 64px; margin-top:40px; }
 
-.faq-item {
-  padding:32px 36px; background:rgba(12,18,50,.6); border:1px solid var(--border);
-  transition:border-color .3s;
-}
-.faq-item:hover { border-color:var(--border2); }
+.faq-item { padding:28px 0; border-top:1px solid var(--border); }
 .faq-q { font-size:16px; font-weight:700; color:var(--white); margin-bottom:12px; line-height:1.4; }
 .faq-a { font-size:15px; color:var(--t3); line-height:1.75; }
 .faq-a strong { color:var(--white); font-weight:700; }
@@ -522,7 +519,7 @@ section { padding:100px 0; border-bottom:1px solid var(--border); }
 /* ============================================================
    CTA
    ============================================================ */
-#cta { border-bottom:none; padding:140px 0; position:relative; overflow:hidden; }
+#cta { border-bottom:none; padding:min(112px, 13vh) 0; position:relative; overflow:hidden; }
 #cta::before {
   content:''; position:absolute; top:50%; left:50%;
   transform:translate(-50%,-50%);
@@ -599,13 +596,13 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
    SECTORS
    ============================================================ */
 #sectors {
-  padding:100px 0;
+  padding:min(88px, 10vh) 0;
   border-bottom:1px solid var(--border);
 }
 .sec-grid {
   display:grid; grid-template-columns:repeat(4,1fr);
   gap:1px; background:var(--border);
-  border:1px solid var(--border); margin-top:60px;
+  border:1px solid var(--border); margin-top:40px;
 }
 .sec-c {
   background:rgba(12,18,50,.6); padding:36px 28px;
@@ -616,7 +613,11 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 .sec-c:nth-child(2)::before { content:''; position:absolute; top:0;left:0;right:0;height:2px;background:var(--aqua); }
 .sec-c:nth-child(3)::before { content:''; position:absolute; top:0;left:0;right:0;height:2px;background:var(--gold); }
 .sec-c:nth-child(4)::before { content:''; position:absolute; top:0;left:0;right:0;height:2px;background:var(--blue); }
-.sec-ico  { font-size:28px; margin-bottom:18px; display:block; }
+.sec-ico  { width:28px; height:28px; margin-bottom:18px; display:block; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round; }
+.sec-c:nth-child(1) .sec-ico { color:var(--tan); }
+.sec-c:nth-child(2) .sec-ico { color:var(--aqua); }
+.sec-c:nth-child(3) .sec-ico { color:var(--gold); }
+.sec-c:nth-child(4) .sec-ico { color:var(--blue); }
 .sec-name { font-size:17px; color:var(--white); margin-bottom:10px; font-weight:700; }
 .sec-desc { font-size:14px; color:var(--t3); line-height:1.7; }
 
@@ -742,8 +743,6 @@ html[data-theme="light"] .case-featured-ph-hatch { background:repeating-linear-g
 html[data-theme="light"] .case-result { background:rgba(11,175,170,.05); }
 
 /* ── FAQ section ── */
-html[data-theme="light"] .faq-item { background:rgba(255,255,255,0.6); }
-html[data-theme="light"] .faq-item:hover { background:rgba(255,255,255,0.8); }
 
 /* ── CTA section glow ── */
 html[data-theme="light"] #cta::before { background:radial-gradient(ellipse, rgba(226,103,19,.06) 0%, rgba(224,166,20,.03) 40%, transparent 70%); }
@@ -868,7 +867,7 @@ html[data-theme="light"] .icon-moon { display:none; }
       <!-- Tier 2: Agentic Builds — FEATURED -->
       <div class="tier featured">
         <div class="tier-accent"></div>
-        <div class="tier-popular">★ Most Requested</div>
+        <div class="tier-popular">Most requested</div>
         <span class="tier-tag" style="color:var(--tan)">Core Offer</span>
         <h3 class="tier-name">Agentic AI Builds</h3>
         <p class="tier-desc">End-to-end design and delivery of production agentic AI systems. Systems that plan, reason and execute across your real infrastructure, not just generate text.</p>
@@ -1009,10 +1008,10 @@ html[data-theme="light"] .icon-moon { display:none; }
       </div>
     </div>
     <div class="sec-grid rv d1">
-      <div class="sec-c"><span class="sec-ico">🏛️</span><div class="sec-name">Civic Innovation</div><p class="sec-desc">Smart city platforms, public service AI, citizen-facing tools, local government automation, net-zero infrastructure.</p></div>
-      <div class="sec-c"><span class="sec-ico">🏥</span><div class="sec-name">Health &amp; MedTech</div><p class="sec-desc">Patient pathway intelligence, clinical workflow automation, NHS-compliant AI infrastructure, health data systems.</p></div>
-      <div class="sec-c"><span class="sec-ico">💷</span><div class="sec-name">Financial Services</div><p class="sec-desc">Risk intelligence, agentic advisory systems, compliance automation, AI-augmented client services.</p></div>
-      <div class="sec-c"><span class="sec-ico">🌱</span><div class="sec-name">Sustainability</div><p class="sec-desc">Carbon intelligence platforms, ESG data systems, conservation AI, climate action tooling for governments and NGOs.</p></div>
+      <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"/><path d="M5 18V10M9.5 18V10M14.5 18V10M19 18V10"/><path d="M12 3 3 8h18z"/></svg><div class="sec-name">Civic Innovation</div><p class="sec-desc">Smart city platforms, public service AI, citizen-facing tools, local government automation, net-zero infrastructure.</p></div>
+      <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/><path d="M3.5 12H9l1-1.8 2 4.6 2-7 1.6 4.2H21"/></svg><div class="sec-name">Health &amp; MedTech</div><p class="sec-desc">Patient pathway intelligence, clinical workflow automation, NHS-compliant AI infrastructure, health data systems.</p></div>
+      <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M14.8 8.6A2.6 2.6 0 0 0 10 9.8V16"/><path d="M8.5 12.5h5"/><path d="M8.5 16h7"/></svg><div class="sec-name">Financial Services</div><p class="sec-desc">Risk intelligence, agentic advisory systems, compliance automation, AI-augmented client services.</p></div>
+      <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.9-5.4 5.1-6 2.4-.5 4.9-2 5.9-3"/></svg><div class="sec-name">Sustainability</div><p class="sec-desc">Carbon intelligence platforms, ESG data systems, conservation AI, climate action tooling for governments and NGOs.</p></div>
     </div>
   </div>
 </section>
