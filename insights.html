@@ -232,6 +232,10 @@ footer { padding:80px var(--px) 40px; border-top:1px solid var(--border); }
 .footer-in { display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:60px; max-width:var(--max); margin:0 auto; }
 .f-logo { display:flex; align-items:center; gap:10px; font-size:19px; font-weight:900; color:var(--white); margin-bottom:16px; }
 .f-logo svg { width:26px; height:26px; }
+.f-logo img { height:24px; width:auto; }
+.f-logo .logo-light { display:none; }
+html[data-theme="light"] .f-logo .logo-dark { display:none; }
+html[data-theme="light"] .f-logo .logo-light { display:inline; }
 .f-desc { font-size:14px; color:var(--t3); line-height:1.7; max-width:320px; }
 .f-col-lbl { font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--t4); margin-bottom:18px; display:block; }
 .f-links { list-style:none; display:flex; flex-direction:column; gap:12px; }
