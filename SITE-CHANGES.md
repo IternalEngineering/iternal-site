@@ -15,7 +15,15 @@ Last deploy: **7 Oct 2026** (version 3634c3c9). Local copy: `http://localhost:87
 - **Orange buttons are readable.** "Book a call", "See Our Work", "Send Message" and the
   rest had white text on the orange-to-gold gradient (3.4:1 down to 2.2:1); the text is
   now near-black navy in both themes (5.6:1 to 8.7:1). The mobile menu's button no longer
-  turns orange-on-orange when tapped. (round-three fixes)
+  turns orange-on-orange when tapped, and it and the keyboard-only "Skip to content" link
+  are navy in light mode too. (round-three fixes, consistency pass)
+- **Every inner page's headline starts at the same place and size.** About, Contact and the
+  sign-up pages started 64px left of the content below and used 80–112px headlines; they
+  now line up with What We Do, Insights and the case studies at 72px. The homepage keeps its
+  larger headline. (consistency pass)
+- **The last pages are on the same spacing.** Contact, Privacy, the Insights footer and the
+  websites gallery now use the same gaps as the rest of the site (about 127px between
+  sections, about 150px before the footer). (consistency pass)
 - **Links shared on LinkedIn, Slack or email show a preview.** Every page pointed at a share
   image that did not exist; there is now a 1200×630 card (the homepage headline on navy)
   at iternal.co.uk/og-image.png. (round-three fixes)
@@ -33,6 +41,14 @@ Last deploy: **7 Oct 2026** (version 3634c3c9). Local copy: `http://localhost:87
 - **The big faint numbers are gone.** The process steps and the operating principles had
   52–68px numerals at about 1.2:1 that read as smudges; they are now small orange labels
   ("01", "02"…). (round-three fixes)
+- **About's hero matches What We Do's.** "Small team. Outsized impact." filled the whole
+  screen with a "Scroll to explore" cue; it is now the same height, size and alignment as
+  the What We Do hero, so "Built on a simple premise" shows on arrival. (consistency pass)
+
+### Sign-up and questions (still hidden from the public)
+- **Headlines no longer sit flush against the paragraph** (28px, as on Contact), and the
+  faint middle words ("your", "you book") are readable in light mode (2.1:1 before).
+  (consistency pass)
 
 ### Contact
 - **"about your" in the headline is readable in light mode** (2.1:1 before). (round-three

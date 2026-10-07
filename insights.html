@@ -69,7 +69,7 @@
 
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
 /* ── Skip link ── */
-.skip-link { position:absolute; top:-100%; left:16px; background:var(--tan); color:var(--dark); padding:10px 18px; border-radius:3px; font-weight:700; font-size:14px; z-index:999; text-decoration:none; }
+.skip-link { position:absolute; top:-100%; left:16px; background:var(--tan); color:#060f26; padding:10px 18px; border-radius:3px; font-weight:700; font-size:14px; z-index:999; text-decoration:none; }
 .skip-link:focus { top:12px; }
 /* ── Focus ring ── */
 :focus-visible { outline:2px solid var(--tan); outline-offset:3px; }
@@ -228,7 +228,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 /* ============================================================
    FOOTER
    ============================================================ */
-footer { padding:80px var(--px) 40px; border-top:1px solid var(--border); }
+footer { border-top:1px solid var(--border); padding:60px var(--px); background:rgba(6,15,38,.6); }
 .footer-in { display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:60px; max-width:var(--max); margin:0 auto; }
 .f-logo { display:flex; align-items:center; gap:10px; font-size:19px; font-weight:900; color:var(--white); margin-bottom:16px; }
 .f-logo svg { width:26px; height:26px; }
@@ -319,7 +319,6 @@ html[data-theme="light"] .mobile-nav { background:rgba(244,241,236,0.97); }
 /* Nav btn — keep white text on sunrise gradient */
 html[data-theme="light"] .nav-btn { color:#060f26; }
 html[data-theme="light"] .btn-sun { color:#060f26; }
-html[data-theme="light"] .mobile-nav .mob-cta { color:#ffffff; }
 
 /* Insight article cards */
 html[data-theme="light"] .idea-card { background:rgba(255,255,255,0.6); }

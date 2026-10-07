@@ -69,7 +69,7 @@
 
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
 /* ── Skip link ── */
-.skip-link { position:absolute; top:-100%; left:16px; background:var(--tan); color:var(--dark); padding:10px 18px; border-radius:3px; font-weight:700; font-size:14px; z-index:999; text-decoration:none; }
+.skip-link { position:absolute; top:-100%; left:16px; background:var(--tan); color:#060f26; padding:10px 18px; border-radius:3px; font-weight:700; font-size:14px; z-index:999; text-decoration:none; }
 .skip-link:focus { top:12px; }
 /* ── Focus ring ── */
 :focus-visible { outline:2px solid var(--tan); outline-offset:3px; }
@@ -143,7 +143,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
    PAGE HERO (two-column: text left, form right)
    ============================================================ */
 .page-hero {
-  padding:160px var(--px) 48px;
+  padding:124px var(--px) min(88px, 10vh);
   overflow:visible;
   position:relative;
 }
@@ -153,16 +153,16 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   z-index:0; pointer-events:none; display:block;
 }
 .page-hero-in {
-  max-width:var(--max); margin:0 auto;
+  max-width:calc(var(--max) - 2 * var(--px)); margin:0 auto;
   position:relative; z-index:2;
   display:grid; grid-template-columns:1fr; gap:52px; align-items:start;
 }
 .hero-left { display:flex; flex-direction:column; gap:32px; padding-top:16px; max-width:860px; }
 #formWrap { max-width:860px; }
 .page-hero-h {
-  font-size:clamp(44px,6vw,80px); font-weight:900;
-  line-height:.93; letter-spacing:-.04em;
-  color:var(--white); margin-bottom:0;
+  font-size:clamp(40px, min(5.4vw, 9vh), 72px); font-weight:900;
+  line-height:.96; letter-spacing:-.04em;
+  color:var(--white); margin-bottom:28px;
 }
 .page-hero-h .dim { color:var(--t5); }
 .page-hero-sub { font-size:17px; color:var(--t3); line-height:1.75; max-width:420px; }
@@ -451,7 +451,7 @@ html[data-theme="light"] nav { border-bottom-color:rgba(10,33,86,0); }
 html[data-theme="light"] nav.scrolled { background:rgba(244,241,236,0.97); border-color:var(--border); }
 
 /* Hero dim words */
-html[data-theme="light"] .page-hero-h .dim { color:rgba(10,33,86,0.35); }
+html[data-theme="light"] .page-hero-h .dim { color:rgba(10,33,86,0.55); }
 
 /* Btn-line border */
 html[data-theme="light"] .btn-line { border-bottom-color:rgba(10,33,86,0.18); }
@@ -465,7 +465,6 @@ html[data-theme="light"] .mobile-nav { background:rgba(244,241,236,0.97); }
 /* Nav btn — keep white text on sunrise gradient */
 html[data-theme="light"] .nav-btn { color:#060f26; }
 html[data-theme="light"] .btn-sun { color:#060f26; }
-html[data-theme="light"] .mobile-nav .mob-cta { color:#ffffff; }
 
 /* ── Contact page form overrides ── */
 
