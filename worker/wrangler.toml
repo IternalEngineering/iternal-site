@@ -35,8 +35,3 @@ PIPELINE_REPO = "IternalEngineering/website-build-platform"
 # Keep worker logs so a failed sync or send can be found afterwards.
 [observability]
 enabled = true
-
-# Every 15 minutes: carry out the dashboard's "Hand over and remove" requests
-# (processRemovals in worker.js).
-[triggers]
-crons = ["*/15 * * * *"]

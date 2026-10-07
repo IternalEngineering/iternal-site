@@ -20,8 +20,6 @@
  *                         first answers queue the pre-call demo build
  *                         (demoRequested) in the pipeline repo.
  *   GET  /health          Liveness check.
- *   Every 15 minutes      Carries out the dashboard's "Hand over and remove"
- *                         requests (processRemovals).
  *
  * Clients get NO email from us by design: Google Calendar sends the booking
  * invite. Team briefs go via Cloudflare's native
@@ -252,6 +250,8 @@ async function syncToPipelineOnce(env, email, what) {
       // Two different emails can map to one slug (dots, dashes and plus signs
       // all become hyphens). Never let one client overwrite another.
       if (file && file.email && file.email !== kv.email) return `slug ${slug} already belongs to ${file.email}`;
+    } else if (got.status === 404 && what !== 'signed up' && await leftThePlatform(env, kv.email)) {
+      return ''; // archived: never recreate from a late answer
     } else if (got.status !== 404) {
       return `GitHub read ${got.status}` + (got.status === 401 || got.status === 403 ? ' (token rejected)' : '');
     }
@@ -360,8 +360,8 @@ async function handleAnswers(request, env, ctx) {
   // move to Durable Objects if two devices ever race on one record.
   const key = `lead:${email}`;
   const stored = await env.CLIENTS.get(key, 'json');
-  // A client who has left the platform may still have the questions page
-  // open; a late answer must not bring their record back.
+  // An archived client may still have the questions page open; a late answer
+  // must not bring their record back.
   if (!stored && await leftThePlatform(env, email)) return json(200, { ok: true }, cors);
   const existing = stored || { email, status: 'lead' };
   // A record made by a sign-up carries a token; answers must present it.
@@ -387,17 +387,14 @@ async function handleAnswers(request, env, ctx) {
   return json(200, { ok: true }, cors);
 }
 
-/* ── Leaving the platform ─────────────────────────────────────────────────
-   The dashboard's "Hand over and remove" sets removeRequested on a client's
-   file once their call is held (the build carries on elsewhere) or they
-   declined. On the schedule, this deletes their record, demo and build
-   folder in one commit, appends a line to history/clients.jsonl (record
-   keeping the dashboard never loads), forgets the KV copy and notes the date
-   in the tracker. A failed run is logged and retried on the next one; the
-   dashboard says so if a request is still waiting after 30 minutes. */
+/* ── Archived clients ────────────────────────────────────────────────────
+   The dashboard archives a client once their call is held or they declined:
+   it deletes their files from the platform repo, appends a line to
+   history/clients.jsonl and deletes this worker's KV record. This worker's
+   only part is not bringing them back: a late answer from their open
+   questions page must not recreate the record. */
 
 const HISTORY = 'history/clients.jsonl';
-const BRANCH = 'main';
 const ghHeaders = env => ({
   authorization: `Bearer ${env.PIPELINE_TOKEN}`,
   accept: 'application/vnd.github+json',
@@ -405,66 +402,7 @@ const ghHeaders = env => ({
   'content-type': 'application/json',
 });
 
-async function graphql(env, query, variables) {
-  const res = await fetch('https://api.github.com/graphql', { method: 'POST', headers: ghHeaders(env), body: JSON.stringify({ query, variables }) });
-  if (!res.ok) throw new Error(`GitHub GraphQL ${res.status}`);
-  const j = await res.json();
-  if (j.errors) throw new Error(j.errors[0].message);
-  return j.data;
-}
-
-async function processRemovals(env) {
-  if (!env.PIPELINE_REPO || !env.PIPELINE_TOKEN) return;
-  const [owner, name] = env.PIPELINE_REPO.split('/');
-  const { repository: repo } = await graphql(env, `query($owner: String!, $name: String!) { repository(owner: $owner, name: $name) {
-    ref(qualifiedName: "refs/heads/${BRANCH}") { target { oid } }
-    clients: object(expression: "${BRANCH}:clients") { ... on Tree { entries { name object { ... on Blob { text } } } } }
-    history: object(expression: "${BRANCH}:${HISTORY}") { ... on Blob { text } }
-  } }`, { owner, name });
-
-  const leaving = [];
-  for (const f of (repo.clients && repo.clients.entries) || []) {
-    let rec;
-    try { rec = JSON.parse(f.object.text); } catch (e) { continue; }
-    if (rec && rec.removeRequested && /^[a-z0-9-]+$/.test(rec.slug || '')) leaving.push(rec);
-  }
-  if (!leaving.length) return;
-
-  const head = repo.ref.target.oid;
-  const treeRes = await fetch(`https://api.github.com/repos/${env.PIPELINE_REPO}/git/trees/${head}?recursive=1`, { headers: ghHeaders(env) });
-  if (!treeRes.ok) throw new Error(`GitHub tree read ${treeRes.status}`);
-  const paths = (await treeRes.json()).tree.filter(t => t.type === 'blob').map(t => t.path);
-  const gone = paths.filter(p => leaving.some(r => p === `clients/${r.slug}.json` || p.startsWith(`demos/${r.slug}/`) || p.startsWith(`builds/${r.slug}/`)));
-
-  const now = new Date().toISOString();
-  const lines = leaving.map(r => JSON.stringify({
-    removedAt: now, slug: r.slug, org: r.org || '', contact: r.contact || '', email: r.email || '', website: r.website || '',
-    signedUpAt: r.signedUpAt || null, stage: r.stage, stageHistory: r.stageHistory || [], demoBuiltAt: (r.demo && r.demo.builtAt) || null,
-    requestedAt: r.removeRequested.at || null, requestedBy: r.removeRequested.by || '', note: r.removeRequested.note || '',
-  }));
-  const before = (repo.history && repo.history.text) || '';
-  const history = before + (before && !before.endsWith('\n') ? '\n' : '') + lines.join('\n') + '\n';
-
-  // One commit for everything; expectedHeadOid makes it fail, not clobber,
-  // if anything else committed since the read. The next run tries again.
-  await graphql(env, 'mutation($input: CreateCommitOnBranchInput!) { createCommitOnBranch(input: $input) { commit { oid } } }', { input: {
-    branch: { repositoryNameWithOwner: env.PIPELINE_REPO, branchName: BRANCH },
-    expectedHeadOid: head,
-    message: { headline: `Left the platform: ${leaving.map(r => r.org || r.slug).join(', ')}`, body: `Removed on request from the dashboard; a line each is kept in ${HISTORY}.` },
-    fileChanges: { additions: [{ path: HISTORY, contents: b64encode(history) }], deletions: gone.map(path => ({ path })) },
-  } });
-
-  for (const r of leaving) {
-    console.log('left the platform:', r.slug);
-    if (r.email) await env.CLIENTS.delete(`lead:${r.email}`);
-    await postToLeadTracker(env, {
-      org: r.org || '', contact: r.contact || r.email, email: r.email, website: r.website || '', source: 'website funnel',
-      message: `Left the Website Build Platform on ${now.slice(0, 10)} (${r.stage === 'declined' ? 'declined' : 'handed over'})${r.removeRequested.note ? ': ' + r.removeRequested.note : ''}.`,
-    });
-  }
-}
-
-/** Whether this email belongs to a client who has left the platform. */
+/** Whether this email belongs to a client the dashboard has archived. */
 async function leftThePlatform(env, email) {
   if (!env.PIPELINE_REPO || !env.PIPELINE_TOKEN) return false;
   try {
@@ -475,9 +413,6 @@ async function leftThePlatform(env, email) {
 }
 
 export default {
-  async scheduled(event, env, ctx) {
-    ctx.waitUntil(processRemovals(env).catch(e => console.error('removals FAILED (retried next run):', e.message)));
-  },
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders(env) });

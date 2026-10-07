@@ -23,28 +23,10 @@ const env = {
 
 // Fake GitHub contents API: path -> { json, sha }. `conflictOnce` makes the
 // next PUT answer 409, the way a concurrent commit would.
-const gh = { files: new Map(), calls: [], conflictOnce: false, n: 0, head: 'head0' };
+const gh = { files: new Map(), calls: [], conflictOnce: false, n: 0 };
 const b64 = s => Buffer.from(s, 'utf-8').toString('base64');
 function fakeGitHub(url, opts) {
   gh.calls.push({ method: opts.method || 'GET', auth: opts.headers && opts.headers.authorization });
-  // GraphQL: the removal run's read, and its one-commit write
-  if (url === 'https://api.github.com/graphql') {
-    const { query, variables } = JSON.parse(opts.body);
-    if (query.includes('createCommitOnBranch')) {
-      const input = variables.input;
-      if (input.expectedHeadOid !== gh.head) return new Response(JSON.stringify({ errors: [{ message: 'Expected branch to point to another commit' }] }), { status: 200 });
-      for (const d of input.fileChanges.deletions) gh.files.delete(d.path);
-      for (const a of input.fileChanges.additions) gh.files.set(a.path, { json: Buffer.from(a.contents, 'base64').toString('utf-8'), sha: 'sha' + (++gh.n) });
-      gh.head = 'head' + gh.n;
-      return new Response(JSON.stringify({ data: { createCommitOnBranch: { commit: { oid: gh.head } } } }), { status: 200 });
-    }
-    const clients = [...gh.files].filter(([p]) => /^clients\/[^/]+$/.test(p)).map(([p, f]) => ({ name: p.slice(8), object: { text: f.json } }));
-    const hist = gh.files.get('history/clients.jsonl');
-    return new Response(JSON.stringify({ data: { repository: { ref: { target: { oid: gh.head } }, clients: { entries: clients }, history: hist ? { text: hist.json } : null } } }), { status: 200 });
-  }
-  if (url.includes('/git/trees/')) {
-    return new Response(JSON.stringify({ tree: [...gh.files.keys()].map(path => ({ path, type: 'blob' })), truncated: false }), { status: 200 });
-  }
   const path = url.split('/contents/')[1];
   if ((opts.method || 'GET') === 'GET') {
     const f = gh.files.get(path);
@@ -396,68 +378,36 @@ await drain();
 assert.strictEqual(teamMail.length, 0);
 assert.strictEqual(answerOf(ghFile(slug), 'wrong').answer, 'Too slow on phones');
 
-// ── Leaving the platform ("Hand over and remove") ───────────────────────
-// a scheduled run with nothing requested changes nothing
-{
-  const files = gh.files.size;
-  await worker.scheduled({}, env, ctx); await drain();
-  assert.strictEqual(gh.files.size, files);
-  assert.ok(!gh.files.has('history/clients.jsonl'));
-}
-// the team asks for Omar's removal after the call; his concept and build
-// folder are in the repo beside another client's demo
-{
-  const f = ghFile(slug);
-  f.stage = 'call-held';
-  f.removeRequested = { at: '2026-10-07T10:00:00.000Z', by: 'robbie@iternal.life', note: 'Build continues in its own repo' };
-  gh.files.set(`clients/${slug}.json`, { json: JSON.stringify(f), sha: 'sha-remove' });
-  gh.files.set(`demos/${slug}/index.html`, { json: '<html></html>', sha: 'd1' });
-  gh.files.set(`builds/${slug}/src/App.jsx`, { json: 'x', sha: 'b1' });
-  gh.files.set('demos/someone-else/index.html', { json: '<html></html>', sha: 'd2' });
-  outbound = [];
-  await worker.scheduled({}, env, ctx); await drain();
-  assert.ok(!gh.files.has(`clients/${slug}.json`));
-  assert.ok(!gh.files.has(`demos/${slug}/index.html`));
-  assert.ok(!gh.files.has(`builds/${slug}/src/App.jsx`));
-  assert.ok(gh.files.has('demos/someone-else/index.html')); // only his
-  const lines = gh.files.get('history/clients.jsonl').json.trim().split('\n').map(l => JSON.parse(l));
-  assert.strictEqual(lines.length, 1);
-  assert.strictEqual(lines[0].email, 'omar@kilnworks.co.uk');
-  assert.strictEqual(lines[0].org, 'Kilnworks');
-  assert.strictEqual(lines[0].stage, 'call-held');
-  assert.strictEqual(lines[0].note, 'Build continues in its own repo');
-  assert.ok(!('answers' in lines[0]) && !('research' in lines[0])); // record keeping, not the record
-  assert.ok(!store.get('lead:omar@kilnworks.co.uk')); // the worker's own copy is gone
-  assert.ok(outbound.some(o => o.url.includes('action=createLead') && o.body.message.includes('Left the Website Build Platform') && o.body.message.includes('handed over')));
-}
+// ── Archived clients ─────────────────────────────────────────────────────
+// The dashboard archives a client: deletes their files, appends a history line
+// and deletes this worker's KV record. Simulate it for Omar.
+const archive = (email, fileSlug, { keepKv = false } = {}) => {
+  for (const p of [...gh.files.keys()]) if (p === `clients/${fileSlug}.json` || p.startsWith(`demos/${fileSlug}/`)) gh.files.delete(p);
+  const prev = gh.files.has('history/clients.jsonl') ? gh.files.get('history/clients.jsonl').json : '';
+  gh.files.set('history/clients.jsonl', { json: prev + JSON.stringify({ archivedAt: '2026-10-07T12:00:00.000Z', email, slug: fileSlug }) + '\n', sha: 'h' + (++gh.n) });
+  if (!keepKv) store.delete(`lead:${email}`);
+};
+archive('omar@kilnworks.co.uk', slug);
 // a late answer from the browser that signed up does not bring him back
 r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'update', answers: { feel: 'Late thought' } }) });
 assert.strictEqual(r.status, 200);
 await drain();
 assert.ok(!gh.files.has(`clients/${slug}.json`));
 assert.ok(!store.get('lead:omar@kilnworks.co.uk'));
-// a commit landing between the read and the write: nothing changes, the next run does it
-{
-  const f2 = { slug: 'sam-brightpaws-co-uk', email: 'sam@brightpaws.co.uk', org: 'Bright Paws', stage: 'declined', removeRequested: { at: '2026-10-07T11:00:00.000Z', by: 'robbie@iternal.life', note: '' } };
-  gh.files.set('clients/sam-brightpaws-co-uk.json', { json: JSON.stringify(f2), sha: 's1' });
-  const realFetch = globalThis.fetch;
-  globalThis.fetch = async (url, opts) => { // someone commits just before the write
-    if (String(url) === 'https://api.github.com/graphql' && opts.body.includes('createCommitOnBranch')) gh.head = 'moved';
-    return realFetch(url, opts);
-  };
-  await worker.scheduled({}, env, ctx); await drain();
-  globalThis.fetch = realFetch;
-  assert.ok(gh.files.has('clients/sam-brightpaws-co-uk.json'));
-  await worker.scheduled({}, env, ctx); await drain();
-  assert.ok(!gh.files.has('clients/sam-brightpaws-co-uk.json'));
-  assert.strictEqual(gh.files.get('history/clients.jsonl').json.trim().split('\n').length, 2); // appended, not replaced
-}
+// if the archive could not delete the KV record, a late answer still never
+// recreates the platform file
+assert.ok(gh.files.has('clients/sam-brightpaws-co-uk.json'));
+archive('sam@brightpaws.co.uk', 'sam-brightpaws-co-uk', { keepKv: true });
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'sam@brightpaws.co.uk', kind: 'partial', answers: { feel: 'Late' } }) });
+assert.strictEqual(r.status, 200);
+await drain();
+assert.ok(!gh.files.has('clients/sam-brightpaws-co-uk.json'));
 // a returning client who signs up again starts a fresh record; the history stays
 r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'Omar', lastName: 'Haddad', email: 'omar@kilnworks.co.uk', organisation: 'Kilnworks' }) });
 assert.strictEqual(r.status, 200);
 await drain();
 assert.strictEqual(ghFile(slug).stage, 'signed-up');
 assert.strictEqual(answered(ghFile(slug)).length, 0);
-assert.ok(!('removeRequested' in ghFile(slug)));
+assert.strictEqual(gh.files.get('history/clients.jsonl').json.trim().split('\n').length, 2);
 
 console.log('All worker checks passed.');

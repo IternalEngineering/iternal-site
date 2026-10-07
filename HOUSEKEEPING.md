@@ -98,12 +98,13 @@ the token awaits org approval), so the worker can deploy regardless.
   "Send Answers" (`complete`), and, once they have booked, whenever they
   switch away from or close the page with answers newer than the last send
   (`update`: platform only, no team email). The tracker never gets answers.
-- Every 15 minutes (`[triggers]` in wrangler.toml) the worker carries out
-  the dashboard's "Hand over and remove" requests: it deletes the client's
-  record, demo and build folder from the platform repo in one commit,
-  appends a line to the repo's `history/clients.jsonl`, deletes the client's
-  KV record and notes the date in the tracker. Details: the platform
-  README, "Leaving the platform".
+- Archiving is the dashboard's job, not the worker's: the hosted dashboard
+  deletes the client's files from the platform repo, appends a line to its
+  `history/clients.jsonl` and deletes their KV record here (it shares this
+  KV namespace). The worker's only part: a late answer from an archived
+  client never recreates their record (it checks that history file). A
+  fresh sign-up starts a new one. Details: the platform README, "Archiving
+  a client".
 - Nothing fails silently: a tracker post the Sheet rejects, or a platform
   sync GitHub rejects (expired token, slug clash, bad file), emails the team
   a "FAILED" brief naming the client. Worker logs are retained
