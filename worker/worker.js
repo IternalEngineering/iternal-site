@@ -470,6 +470,10 @@ async function handleAnswers(request, env, ctx) {
   } catch (e) { return json(400, { error: 'bad json' }, cors); }
 
   const kind = body.kind === 'complete' ? 'complete' : 'partial';
+  // 'update': answers the questions page saves by itself as a client who has
+  // booked leaves the page. They go to the dashboard only; the team already
+  // has the brief.
+  const quiet = body.kind === 'update';
   const sessionId = s(body.session, 100);
   const sessionEmail = sessionId ? await env.CLIENTS.get(`session:${sessionId}`) : null;
   const email = ((sessionEmail || s(body.email, 120)) + '').toLowerCase();
@@ -505,12 +509,12 @@ async function handleAnswers(request, env, ctx) {
   const summary = answersBrief(existing.answers);
 
   ctx.waitUntil(Promise.allSettled([
-    sendTeamEmail(env,
+    quiet ? null : sendTeamEmail(env,
       `Website Pipeline: call prep answers (${kind}) — ${email}`,
       `${existing.status === 'paid' ? 'Payment received' : 'No payment recorded yet'}.
 
 ${summary}`),
-    syncToPipeline(env, email, `answers (${kind})`),
+    syncToPipeline(env, email, quiet ? 'answers (saved on leaving)' : `answers (${kind})`),
   ]));
 
   return json(200, { ok: true }, cors);

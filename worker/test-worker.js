@@ -473,4 +473,13 @@ await drain();
   assert.ok(!headers.split('\r\n').some(l => /^bcc:/i.test(l))); // …never a header line of its own
 }
 
+// answers the page saves by itself as a booked client leaves ('update') reach
+// the dashboard without another team email
+teamMail.length = 0;
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'update', answers: { wrong: 'Too slow on phones' } }) });
+assert.strictEqual(r.status, 200);
+await drain();
+assert.strictEqual(teamMail.length, 0);
+assert.strictEqual(answerOf(ghFile(slug), 'wrong').answer, 'Too slow on phones');
+
 console.log('All worker checks passed.');

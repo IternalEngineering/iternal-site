@@ -1021,11 +1021,17 @@ document.head.appendChild(style);
     sendNote.textContent = '';
   }
 
+  var lastSent = '';
   function send(kind){
+    lastSent = JSON.stringify(answers);
     if (WORKER_URL) {
+      var leaving = kind === 'update';
       return fetch(WORKER_URL + '/answers', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        // Leaving: a plain-text body needs no CORS preflight, so the browser
+        // can still deliver it as the tab closes (the worker parses either).
+        headers: leaving ? {} : { 'content-type': 'application/json' },
+        keepalive: leaving,
         body: JSON.stringify({ email: answers.email, token: SIGNUP_TOKEN, kind: kind, answers: TERMS_AGREED ? Object.assign({}, answers, { termsAgreed: TERMS_AGREED }) : answers })
       });
     }
@@ -1086,6 +1092,15 @@ document.head.appendChild(style);
       });
     }
   });
+
+  // Once they've booked, the page invites more answers but has no reason for
+  // them to press Send: save whatever is new when they switch away or close.
+  function saveOnLeave(){
+    if (!WORKER_URL || !partialSent || JSON.stringify(answers) === lastSent) return;
+    try { send('update'); } catch(e) {}
+  }
+  document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') saveOnLeave(); });
+  window.addEventListener('pagehide', saveOnLeave);
 
   refresh();
 })();

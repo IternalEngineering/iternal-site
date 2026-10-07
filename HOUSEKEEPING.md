@@ -95,6 +95,10 @@ the token awaits org approval), so the worker can deploy regardless.
   record whose token does not match — knowing an email is not enough to
   rewrite someone's brief. A client on a different browser gets a message
   pointing them to websites@iternal.life.
+- Answers reach the platform at three moments: "Book your call" (`partial`),
+  "Send Answers" (`complete`), and, once they have booked, whenever they
+  switch away from or close the page with answers newer than the last send
+  (`update`: platform only, no team email). The tracker never gets answers.
 - Nothing fails silently: a tracker post the Sheet rejects, or a platform
   sync GitHub rejects (expired token, slug clash, bad file), emails the team
   a "FAILED" brief naming the client. Worker logs are retained
