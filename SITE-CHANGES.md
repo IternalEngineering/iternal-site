@@ -16,9 +16,17 @@ Last deploy: **1 Oct 2026** (version 28d2f96d). Local copy: `http://localhost:87
   three pages are blank below the menu: leftover merge markers from 10 September stop each
   page's script from running, so nothing fades in. (7c41b43)
 - **Insights footer logo is the right size.** It rendered about 1,200px wide and pushed the
-  footer links off-screen. (e926d81)
+  footer links off-screen. Its footer columns and "Built with Forge" line now match the other
+  pages too. (e926d81, round-two fixes)
 
 ### Whole site
+- **Light theme is readable.** Body text and labels were too faint for anyone whose computer
+  is set to light mode (3.6:1 and 2.4:1 contrast); they are now about 6:1 and 5:1.
+  (round-two fixes)
+- **No sideways wobble on phones.** Content that slides in from the side made pages 10px
+  wider than a phone screen; pages now stay put. (round-two fixes)
+- **Closing headings break evenly**, so no single word ends up alone on a line (About's
+  "Ready to operate at / a / different scale?"). (round-two fixes)
 - **Even, tighter spacing between sections.** The blank space between one section and the
   next was 180–280px depending on the page; it is now about 127px everywhere (about 150px
   around the closing call to action). Pages are 190–710px shorter on a laptop. Applies to the
@@ -30,13 +38,21 @@ Last deploy: **1 Oct 2026** (version 28d2f96d). Local copy: `http://localhost:87
   visible without scrolling on every common screen size, phones included. The headline
   scales a little with screen height; the scroll arrow is gone. (ac9f478)
 - **The delivery-model section fits one screen.** "Most agencies charge for headcount" was
-  1,080px tall at every size; the copy column is wider, the faint "10×" sits behind the
-  headline, and the three points run as a row underneath. Same words. (e59a678)
-- **Project cards about 11% wider, same height**, on screens 1240px and wider. The
-  headline above them stays on the page's left edge. (dd3f878)
-- **Project tags restyled.** The sector labels ("Local Government", "Health"…) were square
-  navy blocks sitting on each screenshot's own menu bar; they are now small rounded tags in
-  the image's bottom-left corner over a soft shade. (8702fb6)
+  1,080px tall at every size; the copy column is wider and the three points run as a row
+  underneath. The faint "10×" behind the headline is gone: it read as a smudge and was never
+  explained. Same words otherwise. (e59a678, round-two fixes)
+- **Project section about 11% wider, same card heights**, on screens 1240px and wider. The
+  headline, cards and closing line widen together, so they line up with each other. The
+  Good News London screenshot shifts up slightly so its own headline is not cut in half.
+  (dd3f878, round-two fixes)
+- **Project tags restyled and moved off the screenshots.** The sector labels ("Local
+  Government", "Health"…) were square navy blocks sitting on each screenshot's own menu bar;
+  they are now small rounded tags in the card, level with "Case study", so they never cover
+  the screenshot. (8702fb6, round-two fixes)
+- **Client names are readable.** The "Trusted by" names were the faintest text on the page;
+  they are now as clear as body text. (round-two fixes)
+- **Articles say "Coming soon"** instead of "Read Article" links that led nowhere, here and on
+  Insights. (round-two fixes)
 
 ### What We Do
 - **Hero aligned and shorter.** It started 64px left of everything below it; it now lines
@@ -48,11 +64,16 @@ Last deploy: **1 Oct 2026** (version 28d2f96d). Local copy: `http://localhost:87
   column's accent colour. (1b3f9bb)
 - **FAQ divided by thin lines** instead of six boxes. (1b3f9bb)
 
+### Contact
+- **The intro no longer sits flush against "next build."**: 28px between the headline and
+  the paragraph. (round-two fixes)
+
 ### Websites gallery (still hidden from the public)
 - **The sample sites pan slowly behind the header.** Two tilted rows of the gallery's own
-  screenshots drift in opposite directions on the right; a single strip on phones; still
-  for anyone who has reduced motion switched on. Built from the gallery, so a new site
-  appears there automatically. (f6e1a5f)
+  screenshots drift in opposite directions on the right, kept clear of the headline and
+  intro; a single strip on phones; still for anyone who has reduced motion switched on.
+  Built from the gallery, so a new site appears there automatically. (f6e1a5f, round-two
+  fixes)
 
 ---
 

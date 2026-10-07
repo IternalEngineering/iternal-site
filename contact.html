@@ -161,7 +161,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .page-hero-h {
   font-size:clamp(44px,6vw,80px); font-weight:900;
   line-height:.93; letter-spacing:-.04em;
-  color:var(--white); margin-bottom:0;
+  color:var(--white); margin-bottom:28px;
 }
 .page-hero-h .dim { color:var(--t5); }
 .page-hero-sub { font-size:17px; color:var(--t3); line-height:1.75; max-width:420px; }
@@ -417,8 +417,8 @@ html[data-theme="light"] {
   --surf2:  rgba(10,33,86,0.06);
   --t1:     #0a2156;
   --t2:     rgba(10,33,86,0.78);
-  --t3:     rgba(10,33,86,0.55);
-  --t4:     rgba(10,33,86,0.40);
+  --t3:     rgba(10,33,86,0.72);
+  --t4:     rgba(10,33,86,0.66);
   --t5:     rgba(10,33,86,0.28);
   --text:   rgba(10,33,86,0.78);
   --muted:  rgba(10,33,86,0.40);
@@ -540,6 +540,7 @@ html[data-theme="light"] .icon-moon { display:none; }
 @media (max-width:900px) {
   .theme-toggle { color:var(--white); position:absolute; right:56px; top:50%; transform:translateY(-50%); }
 }
+html { overflow-x:clip; }
 </style>
 </head>
 <body>

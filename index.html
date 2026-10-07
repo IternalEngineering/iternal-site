@@ -394,14 +394,14 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 .cl-name {
   font-size:16px; font-weight:900;
-  color:rgba(255,255,255,.35); display:block;
+  color:var(--t2); display:block;
   margin-bottom:4px; transition:color .3s;
 }
-.cl-track:hover .cl-name { color:rgba(255,255,255,.65); }
+.cl-track:hover .cl-name { color:var(--t1); }
 .cl-sec {
   font-size:11px; font-weight:700;
   letter-spacing:.12em; text-transform:uppercase;
-  color:rgba(255,255,255,.35);
+  color:var(--t4);
 }
 
 /* ============================================================
@@ -495,16 +495,6 @@ html[data-theme="light"] .orb-logo { filter:none; }
 .diff-copy-side { position:relative; }
 .diff-copy-side .ey { margin-bottom:28px; }
 
-/* Sits behind the headline rather than above it, so it adds no height. */
-.diff-ghost {
-  position:absolute; top:-0.55em; left:-0.04em; z-index:0;
-  font-size:170px; font-weight:900;
-  line-height:.85; letter-spacing:-.05em;
-  background:var(--sunrise);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  background-clip:text; opacity:.15; user-select:none; pointer-events:none;
-}
-
 .diff-h2 {
   position:relative;
   font-size:clamp(30px, 3.3vw, 46px);
@@ -584,11 +574,12 @@ html[data-theme="light"] .orb-logo { filter:none; }
 .work-3 {
   display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
 }
-/* On wide screens the cards reach past the text column, so the headline stays on the
-   site's left edge while the work gets more room. Image heights are fixed, so the
-   cards widen without growing taller. */
+/* On wide screens the work section is wider than the text sections, headline and cards
+   together. Image heights are fixed, so the cards widen without growing taller; the
+   featured screenshot shifts up slightly so its own headline is not cut in half. */
 @media (min-width:1240px) {
-  .work-feat, .work-3 { margin-left:-56px; margin-right:-56px; }
+  #work .w { max-width:calc(var(--max) + 112px); }
+  .card-img.xl .card-screenshot { object-position:50% -20px; }
 }
 
 .card-img {
@@ -645,23 +636,18 @@ html[data-theme="light"] .orb-logo { filter:none; }
   position:absolute; inset:0; border-radius:4px;
 }
 
-/* The sector tag sits in the image's bottom-left corner on a soft shade, clear of the
-   screenshot's own navigation bar. It lets clicks through to the card's link. */
-.card-img::after {
-  content:''; position:absolute; left:0; right:0; bottom:0; height:40%;
-  background:linear-gradient(to top, rgba(6,15,38,.5), transparent);
-  pointer-events:none;
-}
+/* The sector tag sits in the card, level with "Case study", so it never covers the
+   screenshot whatever the weekly refresh puts there. */
+.card-body { position:relative; }
 .card-badge {
-  position:absolute; left:16px; bottom:16px; z-index:2; pointer-events:none;
+  position:absolute; right:30px; bottom:39px;
   display:inline-flex; align-items:center; gap:8px;
   padding:6px 12px 6px 10px; border-radius:999px;
-  background:rgba(6,15,38,.72);
-  border:1px solid rgba(255,255,255,.16);
-  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--border2);
   font-size:10.5px; font-weight:700; line-height:1;
   letter-spacing:.12em; text-transform:uppercase;
-  color:rgba(255,255,255,.92);
+  color:var(--t3);
 }
 .card-badge::before {
   content:''; width:6px; height:6px; border-radius:50%; background:var(--aqua);
@@ -856,6 +842,7 @@ html[data-theme="light"] .orb-logo { filter:none; }
 .cta-in .ey::after { content:''; width:18px; height:1px; background:var(--aqua); display:block; }
 
 .cta-h {
+  text-wrap:balance;
   font-size:clamp(36px, 5.5vw, 66px);
   font-weight:900; color:var(--white);
   line-height:1.06; margin-bottom:22px;
@@ -971,7 +958,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   .diff-visual { display:none; }
   .pts { grid-template-columns:1fr; }
   .pt { padding:14px 0; }
-  .diff-ghost { font-size:130px; }
   .work-feat { grid-template-columns:1fr; }
   .work-3 { grid-template-columns:1fr 1fr; }
   .svcs-grid { grid-template-columns:1fr; }
@@ -1018,8 +1004,8 @@ html[data-theme="light"] {
   --surf2:  rgba(10,33,86,0.06);
   --t1:     #0a2156;
   --t2:     rgba(10,33,86,0.78);
-  --t3:     rgba(10,33,86,0.55);
-  --t4:     rgba(10,33,86,0.40);
+  --t3:     rgba(10,33,86,0.72);
+  --t4:     rgba(10,33,86,0.66);
   --t5:     rgba(10,33,86,0.28);
   --text:   rgba(10,33,86,0.78);
   --muted:  rgba(10,33,86,0.40);
@@ -1058,9 +1044,6 @@ html[data-theme="light"] .w-dim { color:rgba(10,33,86,0.35); }
 html[data-theme="light"] .btn-line { border-bottom-color:rgba(10,33,86,0.18); }
 
 /* Clients ticker */
-html[data-theme="light"] .cl-name { color:rgba(10,33,86,0.35); }
-html[data-theme="light"] .cl-track:hover .cl-name { color:rgba(10,33,86,0.65); }
-html[data-theme="light"] .cl-sec { color:rgba(10,33,86,0.35); }
 
 /* Orbital labels */
 html[data-theme="light"] .orb-label { background:rgba(255,255,255,0.85); }
@@ -1077,8 +1060,7 @@ html[data-theme="light"] .ph { background:linear-gradient(145deg, rgba(10,33,86,
 html[data-theme="light"] .ph-hatch { background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(10,33,86,0.03) 20px,rgba(10,33,86,0.03) 21px); }
 
 /* Card badge */
-html[data-theme="light"] .card-badge { background:rgba(255,255,255,.9); border-color:rgba(10,33,86,.12); color:var(--navy); }
-html[data-theme="light"] .card-img::after { background:linear-gradient(to top, rgba(10,33,86,.22), transparent); }
+html[data-theme="light"] .card-badge { background:rgba(10,33,86,.04); }
 
 /* Service cards */
 html[data-theme="light"] .svc { background:rgba(255,255,255,0.5); }
@@ -1128,6 +1110,7 @@ html[data-theme="light"] .icon-moon { display:none; }
 @media (max-width:900px) {
   .theme-toggle { color:var(--white); position:absolute; right:56px; top:50%; transform:translateY(-50%); }
 }
+html { overflow-x:clip; }
 </style>
 <script type="application/ld+json">
 {
@@ -1267,7 +1250,6 @@ html[data-theme="light"] .icon-moon { display:none; }
 
       <!-- Copy -->
       <div class="diff-copy-side rv-right d2">
-        <div class="diff-ghost">10×</div>
         <h2 class="diff-h2">
           Most agencies charge for headcount.<br>
           <span class="warm">We're built differently.</span>
@@ -1303,57 +1285,55 @@ html[data-theme="light"] .icon-moon { display:none; }
             <source srcset="assets/screenshot-goodnews-mobile.png" media="(max-width:700px)">
             <img src="assets/screenshot-goodnews.png" alt="Good News London homepage, live at goodnews.london.gov.uk" class="card-screenshot">
           </picture>
-          <span class="card-badge">Local Government</span>
           <a href="case-good-news-london.html" aria-label="Good News London — view project details" style="position:absolute; inset:0; z-index:1;"></a>
         </div>
         <div class="card-body">
           <div class="card-sec"><span class="cdot"></span><span class="csec">Civic AI Platform</span></div>
           <h3 class="card-h">Good News London</h3>
           <p class="card-p">Pan-London AI platform built with the Greater London Authority. Now live, surfacing positive stories from all 33 boroughs.</p>
-          <a href="case-good-news-london.html" class="btn-line">Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a href="case-good-news-london.html" class="btn-line">Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><span class="card-badge">Local Government</span>
         </div>
       </div>
       <div class="card">
         <div class="card-img md">
           <img src="assets/screenshot-civicnetzero.png" alt="CivicNetZero platform" class="card-screenshot">
-          <span class="card-badge">Civic Innovation</span>
           <a href="case-civicnetzero.html" aria-label="CivicNetZero — view project details" style="position:absolute; inset:0; z-index:1;"></a>
         </div>
         <div class="card-body">
           <div class="card-sec"><span class="cdot"></span><span class="csec">Agentic Infrastructure</span></div>
           <h3 class="card-h">CivicNetZero</h3>
           <p class="card-p">First-of-its-kind platform identifying city climate projects and connecting them with delivery partners and finance. Live across multiple city networks.</p>
-          <a href="case-civicnetzero.html" class="btn-line">Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a href="case-civicnetzero.html" class="btn-line">Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><span class="card-badge">Civic Innovation</span>
         </div>
       </div>
     </div>
 
     <div class="work-3 rv d2" style="margin-top:20px">
       <div class="card">
-        <div class="card-img sm"><img src="assets/screenshot-bplaced.png" alt="bPlaced platform" class="card-screenshot"><span class="card-badge">Welfare</span><a href="case-bplaced.html" aria-label="bPlaced — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
+        <div class="card-img sm"><img src="assets/screenshot-bplaced.png" alt="bPlaced platform" class="card-screenshot"><a href="case-bplaced.html" aria-label="bPlaced — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
         <div class="card-body">
           <div class="card-sec"><span class="cdot"></span><span class="csec">AI Matching</span></div>
           <h3 class="card-h">bPlaced: Smarter Care</h3>
           <p class="card-p">Connecting local authorities with care providers for better, faster placements for young people.</p>
-          <a href="case-bplaced.html" class="btn-line">Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a href="case-bplaced.html" class="btn-line">Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><span class="card-badge">Welfare</span>
         </div>
       </div>
       <div class="card">
-        <div class="card-img sm"><img src="assets/screenshot-nhs.png" alt="Bristol Children's Hospital - Digital Diary" class="card-screenshot"><span class="card-badge">Health</span><a href="case-nhs.html" aria-label="Bristol Children's Hospital — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
+        <div class="card-img sm"><img src="assets/screenshot-nhs.png" alt="Bristol Children's Hospital - Digital Diary" class="card-screenshot"><a href="case-nhs.html" aria-label="Bristol Children's Hospital — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
         <div class="card-body">
           <div class="card-sec"><span class="cdot"></span><span class="csec">MedTech AI</span></div>
           <h3 class="card-h">Bristol Children's Hospital</h3>
           <p class="card-p">Supporting parents of sick children. Co-designed with clinicians, full NHS security compliance.</p>
-          <a href="case-nhs.html" class="btn-line">Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a href="case-nhs.html" class="btn-line">Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><span class="card-badge">Health</span>
         </div>
       </div>
       <div class="card">
-        <div class="card-img sm"><img src="assets/screenshot-tech4good.png" alt="Tech4Good South West homepage, live at tech4goodsouthwest.org" class="card-screenshot"><span class="card-badge">Social Impact</span><a href="case-tech4good.html" aria-label="Tech4Good South West — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
+        <div class="card-img sm"><img src="assets/screenshot-tech4good.png" alt="Tech4Good South West homepage, live at tech4goodsouthwest.org" class="card-screenshot"><a href="case-tech4good.html" aria-label="Tech4Good South West — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
         <div class="card-body">
           <div class="card-sec"><span class="cdot"></span><span class="csec">AI for Social Change</span></div>
           <h3 class="card-h">Tech4Good South West</h3>
           <p class="card-p">AI advisory for industry-leading Living Labs programmes with Age UK and others.</p>
-          <a href="case-tech4good.html" class="btn-line">Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a href="case-tech4good.html" class="btn-line">Case Study <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><span class="card-badge">Social Impact</span>
         </div>
       </div>
     </div>
@@ -1429,16 +1409,14 @@ html[data-theme="light"] .icon-moon { display:none; }
     </div>
     <div class="ideas-grid">
       <div class="idea-card rv-left d1">
-        <div class="idea-meta"><span class="idea-tag">Agentic AI</span><span class="idea-date">February 2026</span></div>
+        <div class="idea-meta"><span class="idea-tag">Agentic AI</span><span class="idea-date">Coming soon</span></div>
         <h3 class="idea-h">Why "agentic" is not just a marketing word, and how to tell when it is</h3>
         <p class="idea-p">The word "agentic" is everywhere. Most of what's called agentic AI is still just generative AI with a longer prompt. Here's how to tell the difference, and why it matters for anyone commissioning AI work.</p>
-        <a href="insights.html" class="idea-lnk">Read Article <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
       <div class="idea-card rv-right d2">
-        <div class="idea-meta"><span class="idea-tag">Delivery Model</span><span class="idea-date">January 2026</span></div>
+        <div class="idea-meta"><span class="idea-tag">Delivery Model</span><span class="idea-date">Coming soon</span></div>
         <h3 class="idea-h">The 10x team: how AI augmentation is changing what a small agency can deliver</h3>
         <p class="idea-p">We've built an internal delivery model called Forge that lets a small team operate at the capacity of an agency many times its size. This is how it works, and what it means for the economics of building with AI.</p>
-        <a href="insights.html" class="idea-lnk">Read Article <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
     </div>
   </div>

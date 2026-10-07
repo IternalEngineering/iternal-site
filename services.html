@@ -533,7 +533,7 @@ section { padding:min(64px, 7vh) 0; border-bottom:1px solid var(--border); }
 .cta-in .ey { justify-content:center; margin-bottom:28px; }
 .cta-in .ey::before { display:none; }
 .cta-in .ey::after { content:''; width:18px; height:1px; background:var(--aqua); display:block; }
-.cta-h { font-size:clamp(36px,5.5vw,62px); font-weight:900; color:var(--white); line-height:1.06; margin-bottom:22px; }
+.cta-h { text-wrap:balance; font-size:clamp(36px,5.5vw,62px); font-weight:900; color:var(--white); line-height:1.06; margin-bottom:22px; }
 .cta-h .warm { background:var(--sunrise); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 .cta-p { font-size:18px; color:var(--t3); line-height:1.78; margin-bottom:52px; }
 .cta-row { display:flex; gap:20px; justify-content:center; flex-wrap:wrap; }
@@ -665,8 +665,8 @@ html[data-theme="light"] {
   --surf2:  rgba(10,33,86,0.06);
   --t1:     #0a2156;
   --t2:     rgba(10,33,86,0.78);
-  --t3:     rgba(10,33,86,0.55);
-  --t4:     rgba(10,33,86,0.40);
+  --t3:     rgba(10,33,86,0.72);
+  --t4:     rgba(10,33,86,0.66);
   --t5:     rgba(10,33,86,0.28);
   --text:   rgba(10,33,86,0.78);
   --muted:  rgba(10,33,86,0.40);
@@ -769,6 +769,7 @@ html[data-theme="light"] .icon-moon { display:none; }
 @media (max-width:900px) {
   .theme-toggle { color:var(--white); position:absolute; right:56px; top:50%; transform:translateY(-50%); }
 }
+html { overflow-x:clip; }
 </style>
 </head>
 <body>

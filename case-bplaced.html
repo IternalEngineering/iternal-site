@@ -360,7 +360,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 .closing-h {
   font-size:clamp(36px, 5vw, 64px);
-  font-weight:900; line-height:.97; letter-spacing:-.03em;
+  font-weight:900; line-height:.97; letter-spacing:-.03em; text-wrap:balance;
   max-width:760px; margin:0 auto 34px; color:var(--t1);
 }
 .closing-h em {
@@ -525,8 +525,8 @@ html[data-theme="light"] {
   --surf2:  rgba(10,33,86,0.06);
   --t1:     #0a2156;
   --t2:     rgba(10,33,86,0.78);
-  --t3:     rgba(10,33,86,0.55);
-  --t4:     rgba(10,33,86,0.40);
+  --t3:     rgba(10,33,86,0.72);
+  --t4:     rgba(10,33,86,0.66);
   --t5:     rgba(10,33,86,0.28);
   --text:   rgba(10,33,86,0.78);
   --muted:  rgba(10,33,86,0.40);
@@ -568,6 +568,7 @@ html[data-theme="light"] .icon-moon { display:none; }
 @media (max-width:900px) {
   .theme-toggle { color:var(--white); position:absolute; right:56px; top:50%; transform:translateY(-50%); }
 }
+html { overflow-x:clip; }
 </style>
 </head>
 <body>
