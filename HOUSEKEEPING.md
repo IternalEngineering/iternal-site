@@ -61,7 +61,7 @@ Answers go to the platform only, never the tracker.
    `clients/<slug>.json` per client through the GitHub API on sign-up and
    on answers: the full record, with labelled answers, and nothing about
    payment — the platform is for demo building. The dashboard shows it
-   and agent sessions work from it. The first answers set
+   and agent sessions work from it. Booking (or sending every answer) sets
    `demoRequested: true`, which queues the pre-call demo build for the
    `website-demo-build` skill. Field ownership is in that repo's README —
    the worker refreshes its own fields and carries everything else over.
@@ -94,10 +94,16 @@ the token awaits org approval), so the worker can deploy regardless.
   record whose token does not match — knowing an email is not enough to
   rewrite someone's brief. A client on a different browser gets a message
   pointing them to websites@iternal.life.
-- Answers reach the platform at three moments: "Book your call" (`partial`),
-  "Send Answers" (`complete`), and, once they have booked, whenever they
-  switch away from or close the page with answers newer than the last send
-  (`update`: platform only, no team email). The tracker never gets answers.
+- Answers reach the platform as the prospect goes: whenever they switch
+  away from or close the questions page with answers newer than the last
+  send (`update`), on "Book your call" (`partial`, which records `bookedAt`)
+  and on "Send Answers" (`complete`). start.html also sends the terms
+  agreement as an `update` when they continue to the questions. `update`
+  posts go to the platform only (no team email), never create a record
+  without a sign-up, and never queue the demo build: only booking or sending
+  does. Each record carries `progress` (furthest step, last active) so the
+  dashboard can flag prospects who have gone quiet. The tracker never gets
+  answers.
 - Archiving is the dashboard's job, not the worker's: the hosted dashboard
   deletes the client's record from the platform repo (their demo and build
   stay: an approved demo becomes the work-in-progress site), appends a line to its

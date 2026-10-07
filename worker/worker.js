@@ -160,6 +160,23 @@ const pipelineSlug = email => email.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$
 const b64encode = str => { let bin = ''; for (const b of enc.encode(str)) bin += String.fromCharCode(b); return btoa(bin); };
 const b64decode = b64 => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\s/g, '')), c => c.charCodeAt(0)));
 
+/* How far a prospect got, and when they were last active, so the team can see
+   who stopped where and chase them up. Booking means clicking "Book your call";
+   whether they finished booking in Google Calendar is not visible to us. */
+const CORE = ['mainJob', 'hasSite', 'audience', 'timeline']; // the essentials besides email
+function progressOf(kv) {
+  const a = kv.answers || {};
+  const given = id => { const v = a[id]; return Array.isArray(v) ? v.length > 0 : v !== undefined && v !== null && String(v).trim() !== ''; };
+  const step = kv.answersComplete ? 'sent'
+    : kv.bookedAt ? 'booked'
+    : CORE.every(given) ? 'essentials-done'
+    : Object.keys(a).some(id => id !== 'email' && id !== 'termsAgreed' && given(id)) ? 'answering'
+    : a.termsAgreed ? 'terms-agreed'
+    : 'signed-up';
+  const lastActiveAt = [kv.signedUpAt, kv.answersUpdatedAt, kv.bookedAt].filter(Boolean).sort().pop() || null;
+  return { step, lastActiveAt };
+}
+
 /* The worker owns the fields it sets here and refreshes them from KV on every
    event. Everything else in the file (stageHistory notes, demo, research,
    notes, a cleared demoRequested) belongs to the dashboard and the agents and
@@ -169,7 +186,7 @@ function projectToPipeline(kv, file, slug) {
   const rec = file || {
     slug, stage: 'signed-up',
     stageHistory: [{ stage: 'signed-up', date: today, note: 'signed up on the website' }],
-    demoRequested: false, demo: null, research: '', notes: '', answersFirstAt: null,
+    demoRequested: false, demo: null, research: '', notes: '', demoQueuedAt: null,
   };
   const raw = kv.answers || {};
   const labels = new Map(QUESTIONS);
@@ -199,16 +216,17 @@ function projectToPipeline(kv, file, slug) {
   });
   rec.answersComplete = !!kv.answersComplete;
   rec.answersUpdatedAt = kv.answersUpdatedAt || null;
+  rec.progress = progressOf(kv);
   // Payment is deliberately NOT on this record: the platform is for demo
   // building; whether a client has paid lives in the Lead Tracker.
 
-  // The first answers queue the pre-call demo build, once (the essentials are
-  // mandatory before booking, so this is part of signing up, not a stage of
-  // its own). After that the flag is the dashboard's and the agent's to move.
-  const answered = Object.keys(raw).some(id => id !== 'email' && id !== 'termsAgreed');
-  if (answered && !rec.answersFirstAt) {
-    rec.answersFirstAt = kv.answersUpdatedAt || new Date().toISOString();
-    rec.stageHistory.push({ stage: rec.stage, date: today, note: 'answers arrived — demo build queued' });
+  // Booking (or sending every answer) queues the pre-call demo build, once.
+  // Answers saved as a prospect leaves the page do not: someone who stops
+  // half-way is followed up, not built for. After that the flag is the
+  // dashboard's and the agent's to move.
+  if ((kv.bookedAt || kv.answersComplete) && !rec.demoQueuedAt) {
+    rec.demoQueuedAt = new Date().toISOString();
+    rec.stageHistory.push({ stage: rec.stage, date: today, note: kv.bookedAt ? 'clicked Book your call — demo build queued' : 'sent their answers — demo build queued' });
     rec.demoRequested = true;
   }
   return rec;
@@ -341,9 +359,9 @@ async function handleAnswers(request, env, ctx) {
   } catch (e) { return json(400, { error: 'bad json' }, cors); }
 
   const kind = body.kind === 'complete' ? 'complete' : 'partial';
-  // 'update': answers the questions page saves by itself as a client who has
-  // booked leaves the page. They go to the dashboard only; the team already
-  // has the brief.
+  // 'update': answers the pages save by themselves as a prospect leaves (and
+  // the start page's terms agreement). They go to the dashboard only, so the
+  // team can see who stopped where; no team email.
   const quiet = body.kind === 'update';
   const email = s(body.email, 120).toLowerCase();
   if (!EMAIL.test(email)) return json(400, { error: 'email required' }, cors);
@@ -363,6 +381,9 @@ async function handleAnswers(request, env, ctx) {
   // An archived client may still have the questions page open; a late answer
   // must not bring their record back.
   if (!stored && await leftThePlatform(env, email)) return json(200, { ok: true }, cors);
+  // A page saving by itself never creates a record: only a sign-up, a booking
+  // or a send does.
+  if (!stored && quiet) return json(200, { ok: true }, cors);
   const existing = stored || { email, status: 'lead' };
   // A record made by a sign-up carries a token; answers must present it.
   if (existing.token && s(body.token, 100) !== existing.token) {
@@ -373,6 +394,8 @@ async function handleAnswers(request, env, ctx) {
   existing.answers = merged;
   if (changed || !existing.answersUpdatedAt) existing.answersUpdatedAt = new Date().toISOString();
   if (kind === 'complete') existing.answersComplete = true;
+  // 'partial' is sent once, by the "Book your call" click.
+  if (body.kind === 'partial' && !existing.bookedAt) existing.bookedAt = new Date().toISOString();
   await env.CLIENTS.put(key, JSON.stringify(existing));
 
   const summary = answersBrief(existing.answers);

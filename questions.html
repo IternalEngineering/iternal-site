@@ -599,7 +599,7 @@ html { overflow-x:clip; }
           your call.
         </h1>
         <p class="page-hero-sub rv d2">
-          A few questions about your organisation and what the site has to do. The first five unlock your call booking. The rest are optional; each one sharpens what we build.
+          A few questions about your organisation and what the site has to do. The first five unlock your call booking. The rest are optional; each one sharpens what we build. Your answers are saved as you go.
         </p>
       </div>
 
@@ -1093,10 +1093,12 @@ document.head.appendChild(style);
     }
   });
 
-  // Once they've booked, the page invites more answers but has no reason for
-  // them to press Send: save whatever is new when they switch away or close.
+  // Save whatever is new when they switch away or close: before booking so the
+  // team can follow up someone who stops, after booking because the page
+  // invites more answers but gives no reason to press Send. Only booking or
+  // sending queues the demo build (the worker's rule).
   function saveOnLeave(){
-    if (!WORKER_URL || !partialSent || JSON.stringify(answers) === lastSent) return;
+    if (!WORKER_URL || !answers.email || JSON.stringify(answers) === lastSent) return;
     try { send('update'); } catch(e) {}
   }
   document.addEventListener('visibilitychange', function(){ if (document.visibilityState === 'hidden') saveOnLeave(); });

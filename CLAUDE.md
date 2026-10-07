@@ -21,7 +21,9 @@ one concept homepage from the client's answers (the "initial build" the
   Your Questions". The agreed-at timestamp travels via sessionStorage into
   the answers as `termsAgreed`.
 - `questions.html` — "Before you book your call": 5 essentials unlock the
-  booking, 12 optional. Drafts in sessionStorage only, wiped on send.
+  booking, 12 optional. Answers are saved to the worker as they go (when
+  the page is hidden or closed), so the team can follow up anyone who stops;
+  the page says so.
   Identity = the email they type. Booking button → a plain Google Calendar
   appointment schedule.
 - `worker/` — the only backend (`client-site-funnel` at

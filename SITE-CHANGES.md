@@ -11,7 +11,11 @@ Last deploy: **7 Oct 2026, third deploy** (version 8fb2c0c7). Local copy: `http:
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-Nothing waiting.
+### Questions page (still hidden from the public)
+- **"Your answers are saved as you go."** The intro now says so: answers are saved to the
+  team's dashboard whenever the visitor leaves the page, from the first answer, so someone
+  who stops part-way can be followed up. (Behind the scenes: the sign-up page also records
+  when they agree the terms.) (prospect progress)
 
 ---
 

@@ -174,6 +174,34 @@ await drain();
   gh.files.set(`clients/${slug}.json`, { json: JSON.stringify(f), sha: 'sha-dashboard' });
 }
 
+// progress before booking: signed up, then the terms, then a first answer
+// saved as they leave. The team can see where they are; nothing is queued
+// and nobody is emailed.
+assert.deepStrictEqual(ghFile(slug).progress.step, 'signed-up');
+teamMail.length = 0;
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'update', answers: { termsAgreed: '2026-09-30T08:55:00.000Z' } }) });
+assert.strictEqual(r.status, 200);
+await drain();
+assert.strictEqual(ghFile(slug).progress.step, 'terms-agreed');
+assert.strictEqual(ghFile(slug).termsAgreedAt, '2026-09-30T08:55:00.000Z');
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'update', answers: { mainJob: 'Sell products or services' } }) });
+assert.strictEqual(r.status, 200);
+await drain();
+{
+  const f = ghFile(slug);
+  assert.strictEqual(f.progress.step, 'answering');
+  assert.ok(f.progress.lastActiveAt);
+  assert.strictEqual(answerOf(f, 'mainJob').answer, 'Sell products or services'); // there to chase with
+  assert.strictEqual(f.demoRequested, false); // stopping half-way is followed up, not built for
+  assert.ok(!f.demoQueuedAt);
+  assert.strictEqual(teamMail.length, 0);
+}
+// a page saving by itself, with no sign-up behind it, creates nothing
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'passer@by.co.uk', kind: 'update', answers: { mainJob: 'x' } }) });
+assert.strictEqual(r.status, 200);
+await drain();
+assert.ok(!store.get('lead:passer@by.co.uk') && !gh.files.has('clients/passer-by-co-uk.json'));
+
 // first answers: labelled Q&A in page order, terms timestamp lifted out,
 // stage moves on, and the pre-call demo build is queued — through a 409
 gh.conflictOnce = true;
@@ -183,7 +211,8 @@ await drain();
 {
   const f = ghFile(slug);
   assert.strictEqual(f.stage, 'signed-up'); // answers are part of signing up, not a stage
-  assert.ok(f.answersFirstAt);
+  assert.ok(f.demoQueuedAt);
+  assert.strictEqual(f.progress.step, 'booked'); // clicking Book your call queues the demo
   assert.strictEqual(f.demoRequested, true);
   assert.strictEqual(f.stageHistory.length, 2); // the queueing is still on the record
   assert.strictEqual(f.termsAgreedAt, '2026-09-30T09:00:00.000Z');

@@ -848,6 +848,20 @@ if (agreeTick && agreeBtn) {
     agreeBtn.setAttribute('aria-disabled', String(!on));
     if (on) try { sessionStorage.setItem('iternal_terms_agreed', new Date().toISOString()); } catch (e) {}
   });
+  // Tell the dashboard they agreed and moved on, so someone who stops before
+  // the questions can still be followed up. Plain text and keepalive: it must
+  // survive the page changing (the worker parses either).
+  agreeBtn.addEventListener('click', () => {
+    let email = '', token = '', agreed = '';
+    try { email = localStorage.getItem('iternal_signup_email') || ''; token = localStorage.getItem('iternal_signup_token') || ''; agreed = sessionStorage.getItem('iternal_terms_agreed') || ''; } catch (e) {}
+    if (!email || !token || !agreed) return;
+    try {
+      fetch(new URL('/answers', document.getElementById('contactForm').action), {
+        method: 'POST', keepalive: true,
+        body: JSON.stringify({ email, token, kind: 'update', answers: { termsAgreed: agreed } }),
+      });
+    } catch (e) {}
+  });
 }
 
 form.addEventListener('submit', (e)=>{
