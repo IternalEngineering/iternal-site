@@ -52,9 +52,9 @@ together:
 
 ## Two destinations (30 Sep 2026)
 
-Everything a client enters is sent to two places, independently, by the
-worker. One failing never stops the other, and neither can fail the client's
-request. Payments are the exception: they reach KV and the tracker only.
+Every sign-up is sent to two places, independently, by the worker. One
+failing never stops the other, and neither can fail the client's request.
+Answers go to the platform only, never the tracker.
 
 1. **The Website Build Platform repo** (`PIPELINE_REPO` in `wrangler.toml`,
    locally `Iternal/website-build-platform`). The worker commits one
@@ -78,12 +78,11 @@ the token awaits org approval), so the worker can deploy regardless.
 
 - Deploy: `node test-worker.js` (must print "All worker checks passed."),
   then `npx wrangler deploy`. Serves https://api.iternal.co.uk.
-- Secrets (set with `npx wrangler secret put <NAME>`): `STRIPE_WEBHOOK_SECRET`,
-  `LEAD_API_SECRET`, `PIPELINE_TOKEN` (fine-grained GitHub token, Contents
-  read+write on the pipeline repo only).
-- KV namespace CLIENTS holds `client:<email>` (paid), `lead:<email>` (unpaid),
-  `session:<stripe-session-id>` → email (legacy). Sweep any test records
-  after manual testing:
+- Secrets (set with `npx wrangler secret put <NAME>`): `LEAD_API_SECRET`,
+  `PIPELINE_TOKEN` (fine-grained GitHub token, Contents read+write on the
+  pipeline repo only).
+- KV namespace CLIENTS holds one `lead:<email>` record per client (empty as
+  of 7 Oct 2026). Sweep any test records after manual testing:
   `npx wrangler kv key delete "lead:<email>" --namespace-id bf744fdf07b945719b644e314b69b780 --remote`
   A test sign-up also leaves a file in the pipeline repo and a row in the
   tracker; remove those too.
@@ -129,15 +128,10 @@ the token awaits org approval), so the worker can deploy regardless.
   `../legal-review-pack.md`: the terms card is the contract summary.
 - **Not yet decided:** whether the £100 is returned if the client does not
   go ahead. The pages say nothing either way until it is.
-- The Stripe webhook stays wired and is harmless if unused. If a payment
-  is requested through the Iternal Stripe account, `payment_intent.succeeded`
-  marks the client paid in KV, the pipeline repo and the tracker, with the
-  amount actually paid. If it arrives any other way, mark it in the
-  dashboard — the worker never downgrades a payment recorded there.
-- An email-less Stripe payment briefs the team as UNMATCHED, never silent.
-- `STRIPE_WEBHOOK_SECRET` holds the **live** webhook's signing secret
-  (swapped 2026-09-09).
-- The old £375 Payment Link was deactivated 15 Sep.
+- **No payment code anywhere (Robbie, 7 Oct 2026).** The Stripe webhook
+  and its payment records were removed from the worker; whether and when a
+  client has paid is kept by hand in the Lead Tracker. The old £375 Payment
+  Link was deactivated 15 Sep.
 
 ## Team briefs (email)
 

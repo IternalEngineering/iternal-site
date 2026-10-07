@@ -1,6 +1,6 @@
 // Self-check for worker.js — run: node worker/test-worker.js  (Node 18+)
 // Exercises every route with stubbed KV + email binding, captured outbound
-// calls, a fake GitHub contents API, and a real HMAC-signed Stripe payload.
+// calls and a fake GitHub contents API.
 // Fails loudly on any break.
 import assert from 'node:assert';
 import worker from './worker.js';
@@ -18,7 +18,6 @@ const env = {
   FROM_EMAIL: 'Website Pipeline <funnel@iternal.co.uk>',
   TEAM_EMAIL: 'paul@iternal.life',
   LEAD_API_URL: 'https://script.example/exec',
-  STRIPE_WEBHOOK_SECRET: 'whsec_test',
   LEAD_API_SECRET: 'lead_test',
 };
 
@@ -57,12 +56,6 @@ const ctx = { waitUntil(p) { pending.push(p); } };
 const call = (path, init) => worker.fetch(new Request('https://w.example' + path, init), env, ctx);
 const drain = () => Promise.allSettled(pending.splice(0));
 
-async function hmacHex(secret, message) {
-  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
-  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(message));
-  return [...new Uint8Array(sig)].map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
 // health + 404 + CORS preflight
 assert.strictEqual((await call('/health')).status, 200);
 assert.strictEqual((await call('/nope')).status, 404);
@@ -70,100 +63,36 @@ const pre = await call('/answers', { method: 'OPTIONS' });
 assert.strictEqual(pre.status, 204);
 assert.strictEqual(pre.headers.get('access-control-allow-origin'), env.SITE_URL);
 
-// webhook: bad signature refused, nothing stored
-let r = await call('/stripe-webhook', { method: 'POST', headers: { 'stripe-signature': 't=1,v1=bad' }, body: '{}' });
-assert.strictEqual(r.status, 400);
+// the old Stripe route is gone
+let r = await call('/stripe-webhook', { method: 'POST', body: '{}' });
+assert.strictEqual(r.status, 404);
 assert.strictEqual(store.size, 0);
 
-// webhook: correctly signed checkout.session.completed
-const payload = JSON.stringify({
-  type: 'checkout.session.completed',
-  data: { object: { id: 'cs_123', amount_total: 37500, currency: 'gbp', customer_details: { email: 'Dana@RiversPottery.co.uk', name: 'Dana Rivers' } } },
-});
-const t = Math.floor(Date.now() / 1000);
-const sig = `t=${t},v1=${await hmacHex(env.STRIPE_WEBHOOK_SECRET, `${t}.${payload}`)}`;
-r = await call('/stripe-webhook', { method: 'POST', headers: { 'stripe-signature': sig }, body: payload });
+// answers with an email: stored on the lead record and briefed to the team;
+// the tracker never receives answers
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'Sam@BrightPaws.co.uk', kind: 'complete', answers: { mainJob: 'Take bookings', audience: 'gift buyers', pages: ['Home', 'Contact'] } }) });
 assert.strictEqual(r.status, 200);
 await drain();
-const client = JSON.parse(store.get('client:dana@riverspottery.co.uk'));
-assert.strictEqual(client.status, 'paid');
-assert.strictEqual(client.amount, 37500);
-assert.strictEqual(store.get('session:cs_123'), 'dana@riverspottery.co.uk'); // redirect mapping
-assert.strictEqual(outbound.length, 1); // tracker only — no client email by design
-assert.ok(outbound[0].url.includes('action=createLead') && outbound[0].url.includes('key=lead_test'));
-assert.strictEqual(outbound[0].body.email, 'dana@riverspottery.co.uk');
-assert.ok(outbound[0].body.message.includes('375 GBP')); // the real amount, never a hardcoded one
-assert.strictEqual(teamMail.length, 1);
-assert.ok(teamMail[0].raw.includes('Subject: Website Pipeline: dana@riverspottery.co.uk paid'));
+{
+  const lead = JSON.parse(store.get('lead:sam@brightpaws.co.uk'));
+  assert.strictEqual(lead.status, 'lead');
+  assert.strictEqual(lead.answers.audience, 'gift buyers');
+  assert.deepStrictEqual(lead.answers.pages, ['Home', 'Contact']);
+  assert.strictEqual(lead.answersComplete, true);
+}
+assert.strictEqual(outbound.length, 0); // no tracker post, no client email
 assert.strictEqual(gh.calls.length, 0); // pipeline feed is off until PIPELINE_TOKEN is set
-
-// answers carrying the Stripe session id -> attach to the paying client's record
-outbound = []; teamMail.length = 0;
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ session: 'cs_123', kind: 'complete', answers: { audience: 'gift buyers', pages: ['Home', 'Contact'] } }) });
-assert.strictEqual(r.status, 200);
-await drain();
-const updated = JSON.parse(store.get('client:dana@riverspottery.co.uk'));
-assert.strictEqual(updated.answers.audience, 'gift buyers');
-assert.deepStrictEqual(updated.answers.pages, ['Home', 'Contact']);
-assert.strictEqual(updated.answersComplete, true);
-assert.strictEqual(updated.status, 'paid');
-assert.strictEqual(outbound.length, 0); // no client email, no extra fetches
 assert.strictEqual(teamMail.length, 1);
-assert.ok(teamMail[0].raw.includes('Payment received'));
+assert.strictEqual(teamMail[0].to, env.TEAM_EMAIL);
 // answers rendered as full question wording, question order, arrays joined
 assert.ok(teamMail[0].raw.includes('Who do you most want the site to reach?\n  gift buyers'));
 assert.ok(teamMail[0].raw.includes('Which pages do you think you need?\n  Home, Contact'));
 assert.ok(teamMail[0].raw.indexOf('site to reach') < teamMail[0].raw.indexOf('pages do you think'));
+assert.ok(!/payment/i.test(teamMail[0].raw));
 
-// unknown session and no email -> refused
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ session: 'cs_forged', kind: 'partial', answers: {} }) });
+// no email: refused
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ kind: 'partial', answers: {} }) });
 assert.strictEqual(r.status, 400);
-
-// no session but an email -> stored as an unpaid lead, team briefed
-teamMail.length = 0;
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'sam@brightpaws.co.uk', kind: 'partial', answers: { mainJob: 'Take bookings' } }) });
-assert.strictEqual(r.status, 200);
-await drain();
-assert.strictEqual(JSON.parse(store.get('lead:sam@brightpaws.co.uk')).status, 'lead');
-assert.strictEqual(teamMail.length, 1);
-assert.ok(teamMail[0].to === env.TEAM_EMAIL && teamMail[0].raw.includes('No payment recorded yet'));
-
-// a separately-requested payment: payment_intent.succeeded marks the lead paid
-outbound = []; teamMail.length = 0;
-{
-  const piPayload = JSON.stringify({
-    type: 'payment_intent.succeeded',
-    data: { object: { id: 'pi_777', amount_received: 10000, currency: 'gbp', receipt_email: 'Sam@BrightPaws.co.uk' } },
-  });
-  const t2 = Math.floor(Date.now() / 1000);
-  const sig2 = `t=${t2},v1=${await hmacHex(env.STRIPE_WEBHOOK_SECRET, `${t2}.${piPayload}`)}`;
-  const rPi = await call('/stripe-webhook', { method: 'POST', headers: { 'stripe-signature': sig2 }, body: piPayload });
-  assert.strictEqual(rPi.status, 200);
-  await drain();
-  const upgraded = JSON.parse(store.get('client:sam@brightpaws.co.uk'));
-  assert.strictEqual(upgraded.status, 'paid');
-  assert.strictEqual(upgraded.paymentIntent, 'pi_777');
-  assert.strictEqual(upgraded.answers.mainJob, 'Take bookings'); // lead answers carried over
-  assert.ok(!store.get('lead:sam@brightpaws.co.uk')); // lead record retired
-  assert.strictEqual(outbound.length, 1); // tracker entry
-  assert.ok(outbound[0].url.includes('action=createLead'));
-  assert.ok(outbound[0].body.message.includes('100 GBP')); // whatever amount was actually paid
-  assert.strictEqual(teamMail.length, 1);
-  assert.ok(teamMail[0].raw.includes('payment received — sam@brightpaws.co.uk'));
-}
-
-// answers arriving AFTER payment land on the client record (no session id)
-teamMail.length = 0;
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'sam@brightpaws.co.uk', kind: 'complete', answers: { timeline: 'As soon as possible' } }) });
-assert.strictEqual(r.status, 200);
-await drain();
-{
-  const after = JSON.parse(store.get('client:sam@brightpaws.co.uk'));
-  assert.strictEqual(after.status, 'paid');
-  assert.strictEqual(after.answers.timeline, 'As soon as possible');
-  assert.strictEqual(after.answersComplete, true);
-  assert.ok(teamMail[0].raw.includes('Payment received'));
-}
 
 // sign-up: seeds the lead record and carries it to the tracker
 outbound = []; teamMail.length = 0;
@@ -205,19 +134,6 @@ await drain();
 }
 r = await call('/signup', { method: 'POST', body: JSON.stringify({ organisation: 'No Email Ltd' }) });
 assert.strictEqual(r.status, 400); // email required
-
-// unmatched payment (no email) still briefs the team, never silent
-teamMail.length = 0;
-{
-  const piPayload = JSON.stringify({ type: 'payment_intent.succeeded', data: { object: { id: 'pi_888', amount: 37500, currency: 'gbp' } } });
-  const t3 = Math.floor(Date.now() / 1000);
-  const sig3 = `t=${t3},v1=${await hmacHex(env.STRIPE_WEBHOOK_SECRET, `${t3}.${piPayload}`)}`;
-  const rU = await call('/stripe-webhook', { method: 'POST', headers: { 'stripe-signature': sig3 }, body: piPayload });
-  assert.strictEqual(rU.status, 200);
-  await drain();
-  assert.strictEqual(teamMail.length, 1);
-  assert.ok(teamMail[0].raw.includes('UNMATCHED'));
-}
 
 // oversized body refused
 r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'a@b.c', answers: { x: 'y'.repeat(40000) } }) });
@@ -344,26 +260,6 @@ await drain();
   assert.deepStrictEqual(answerOf(f, 'pages').answer, ['Home', 'Shop']); // untouched by that
 }
 
-// a Payment Link payment (checkout.session.completed) marks the client paid
-// in KV WITHOUT losing their sign-up answers, and never touches the platform
-// file — payment lives in the tracker
-{
-  const before = JSON.stringify(ghFile(slug));
-  const calls = gh.calls.length;
-  const csPayload = JSON.stringify({ type: 'checkout.session.completed', data: { object: { id: 'cs_999', amount_total: 22500, currency: 'gbp', customer_details: { email: 'omar@kilnworks.co.uk', name: 'Omar Haddad' } } } });
-  const t4 = Math.floor(Date.now() / 1000);
-  const sig4 = `t=${t4},v1=${await hmacHex(env.STRIPE_WEBHOOK_SECRET, `${t4}.${csPayload}`)}`;
-  assert.strictEqual((await call('/stripe-webhook', { method: 'POST', headers: { 'stripe-signature': sig4 }, body: csPayload })).status, 200);
-  await drain();
-  const kvClient = JSON.parse(store.get('client:omar@kilnworks.co.uk'));
-  assert.strictEqual(kvClient.status, 'paid');
-  assert.strictEqual(kvClient.answers.timeline, 'Within a month'); // the lead's answers moved with them
-  assert.strictEqual(kvClient.org, 'Kilnworks');
-  assert.ok(!store.get('lead:omar@kilnworks.co.uk')); // lead record retired
-  assert.strictEqual(gh.calls.length, calls); // no platform write for a payment
-  assert.strictEqual(JSON.stringify(ghFile(slug)), before); // file untouched
-}
-
 // a GitHub outage must never fail the client's request
 {
   const realFetch = globalThis.fetch;
@@ -395,7 +291,7 @@ outbound = []; teamMail.length = 0;
     assert.strictEqual(rr.status, 403);
   }
   await drain();
-  assert.strictEqual(JSON.parse(store.get('client:omar@kilnworks.co.uk')).answers.audience, 'Interior designers'); // untouched
+  assert.strictEqual(JSON.parse(store.get('lead:omar@kilnworks.co.uk')).answers.audience, 'Interior designers'); // untouched
   assert.strictEqual(gh.calls.length, calls);
   assert.strictEqual(teamMail.length, 0);
   assert.strictEqual(JSON.stringify(ghFile(slug)), before);
@@ -406,13 +302,13 @@ assert.strictEqual(r.status, 200);
 
 // resending identical answers does not move answersUpdatedAt
 {
-  const t0 = JSON.parse(store.get('client:omar@kilnworks.co.uk')).answersUpdatedAt;
-  const cur = JSON.parse(store.get('client:omar@kilnworks.co.uk')).answers;
+  const t0 = JSON.parse(store.get('lead:omar@kilnworks.co.uk')).answersUpdatedAt;
+  const cur = JSON.parse(store.get('lead:omar@kilnworks.co.uk')).answers;
   await new Promise(res => setTimeout(res, 5));
   r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'partial', answers: { audience: cur.audience } }) });
   assert.strictEqual(r.status, 200);
   await drain();
-  assert.strictEqual(JSON.parse(store.get('client:omar@kilnworks.co.uk')).answersUpdatedAt, t0);
+  assert.strictEqual(JSON.parse(store.get('lead:omar@kilnworks.co.uk')).answersUpdatedAt, t0);
 }
 
 // degenerate emails are refused

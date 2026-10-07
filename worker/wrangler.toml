@@ -29,7 +29,6 @@ LEAD_API_URL = "https://script.google.com/macros/s/AKfycbzwkFrrOZ_VqMP0CJnAjtCsU
 PIPELINE_REPO = "IternalEngineering/website-build-platform"
 
 # Secrets — set each with: wrangler secret put <NAME>
-#   STRIPE_WEBHOOK_SECRET  from Stripe Dashboard (sandbox secret during testing; swap to live at launch)
 #   LEAD_API_SECRET        from Lead Tracker Admin -> Website leads
 #   PIPELINE_TOKEN         fine-grained GitHub token: Contents read+write on PIPELINE_REPO only
 

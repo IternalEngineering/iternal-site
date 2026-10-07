@@ -25,10 +25,10 @@ one concept homepage from the client's answers (the "initial build" the
   Identity = the email they type. Booking button → a plain Google Calendar
   appointment schedule.
 - `worker/` — the only backend (`client-site-funnel` at
-  https://api.iternal.co.uk): `/signup`, `/answers`, `/stripe-webhook`,
-  `/health`. Every sign-up and answer goes to TWO destinations: the
-  Website Build Platform repo (full record, no payment) and the Lead
-  Tracker (summary; payments go there too, never to the platform). Deploy from
+  https://api.iternal.co.uk): `/signup`, `/answers`, `/health`. Every
+  sign-up goes to TWO destinations: the Website Build Platform repo (full
+  record, answers included) and the Lead Tracker (a summary; never answers).
+  Nothing in it takes or records payment (Stripe removed 7 Oct 2026). Deploy from
   `worker/`: `node test-worker.js` MUST pass, then `npx wrangler deploy`.
 - `../website-build-platform/` — a separate repo: the information & demo
   build dashboard. The worker commits `clients/<slug>.json` there; the
@@ -68,7 +68,6 @@ one concept homepage from the client's answers (the "initial build" the
   light-up.
 - **The pipeline feed** is off until `PIPELINE_TOKEN` is set on the worker.
 - `privacy.html` exists but is deliberately unlinked pending legal review.
-- The Stripe webhook is wired but nothing in the funnel takes payment.
 
 ## Third parties — what we feed them, what comes back
 
@@ -76,8 +75,7 @@ one concept homepage from the client's answers (the "initial build" the
 |---|---|---|---|
 | **Worker /signup, /answers** (ours) | sign-up fields and answers, from the pages | `{ok}` | The page shows success only once the worker has it |
 | **GitHub** (platform repo) | one `clients/<slug>.json` per client: identity and answers (never payment) | file sha, used for the next write | Personal data in a private repo. Token scoped to that one repo. Named as a processor in the privacy draft |
-| **Lead Tracker** (Apps Script, separate `lead-tracker` repo) | `createLead` POSTs on sign-up and on payment, secret-gated (`LEAD_API_SECRET`) | `{ok, id}` and NOTHING else | **WRITE-ONLY. Never read tracker/Sheet data — it is private.** Dedupes by email: repeat posts become notes on the existing record |
-| **Stripe** | nothing outbound from our code | webhook events to `/stripe-webhook`, HMAC-verified (`STRIPE_WEBHOOK_SECRET`, live) | Only fires if the team requests a deposit through Stripe; matches payer by email; email-less payments brief the team as UNMATCHED |
+| **Lead Tracker** (Apps Script, separate `lead-tracker` repo) | `createLead` POSTs on sign-up, secret-gated (`LEAD_API_SECRET`) | `{ok, id}` and NOTHING else | **WRITE-ONLY. Never read tracker/Sheet data — it is private.** Dedupes by email: repeat posts become notes on the existing record. Never sent answers |
 | **Google Calendar** | the client (we just link to the appointment schedule URL) | nothing to our systems — the invite goes to the client | The schedule lives in Google's UI, not in code. No payment step |
 | **Cloudflare Email Routing** | team briefs | — | Every recipient must be a verified destination |
 | **Slack** | nothing directly — pings come from the Lead Tracker | — | |
@@ -133,5 +131,5 @@ fallback constant in questions.html.
   (IternalEngineering/LeadManagement); its public deployment redeploy has
   a manifest-access dance documented in that repo's memory. Its data is
   private: diagnose via code, never by reading records.
-- The Stripe brand name is "Iternal Ltd" (legal entity history: formerly
-  Deathio Ltd — don't resurrect the old name anywhere).
+- The company is "Iternal Ltd" (legal entity history: formerly Deathio Ltd —
+  don't resurrect the old name anywhere).

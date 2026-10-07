@@ -19,22 +19,18 @@
  *                         by the email they give in the first question. The
  *                         first answers queue the pre-call demo build
  *                         (demoRequested) in the pipeline repo.
- *   POST /stripe-webhook  Stripe calls this when money moves (a payment the
- *                         team requested separately): the payer's record is
- *                         marked paid in KV and the tracker, and the team
- *                         is briefed. Payment never touches the platform
- *                         record: that lives in the tracker.
  *   GET  /health          Liveness check.
  *
- * Clients get NO email from us by design: Stripe sends any receipt, Google
- * Calendar sends the booking invite. Team briefs go via Cloudflare's native
+ * Clients get NO email from us by design: Google Calendar sends the booking
+ * invite. Team briefs go via Cloudflare's native
  * email (send_email binding) to verified destinations.
  *
- * Explicitly NOT here: card details (Stripe's), booking (Google Calendar's),
- * and any READ of the Lead Tracker (write-only by policy).
+ * Explicitly NOT here: payment (the team handles it, outside this worker),
+ * booking (Google Calendar's), and any READ of the Lead Tracker (write-only
+ * by policy).
  *
- * Secrets (wrangler secret put): STRIPE_WEBHOOK_SECRET, LEAD_API_SECRET,
- * PIPELINE_TOKEN (GitHub token with contents:write on PIPELINE_REPO only).
+ * Secrets (wrangler secret put): LEAD_API_SECRET, PIPELINE_TOKEN (GitHub
+ * token with contents:write on PIPELINE_REPO only).
  */
 
 const enc = new TextEncoder();
@@ -52,28 +48,6 @@ function corsHeaders(env) {
     'access-control-allow-methods': 'POST, OPTIONS',
     'access-control-allow-headers': 'content-type',
   };
-}
-
-async function hmacHex(secret, message) {
-  const key = await crypto.subtle.importKey(
-    'raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']
-  );
-  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(message));
-  return [...new Uint8Array(sig)].map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-/* Stripe signature: header "t=...,v1=..."; v1 = HMAC-SHA256(secret, `${t}.${body}`). */
-async function verifyStripeSignature(rawBody, header, secret) {
-  if (!header || !secret) return false;
-  const parts = Object.create(null);
-  for (const kv of header.split(',')) {
-    const [k, v] = kv.split('=');
-    (parts[k] = parts[k] || []).push(v);
-  }
-  const t = parts.t && parts.t[0];
-  if (!t || Math.abs(Date.now() / 1000 - Number(t)) > 300) return false;
-  const expected = await hmacHex(secret, `${t}.${rawBody}`);
-  return (parts.v1 || []).some(v => v === expected);
 }
 
 async function sendTeamEmail(env, subject, text) {
@@ -257,7 +231,7 @@ If this keeps happening, check the PIPELINE_TOKEN (expired? revoked?) and the re
 
 /** One attempt; returns '' on success or a short reason. Throws are caught above. */
 async function syncToPipelineOnce(env, email, what) {
-  const kv = (await env.CLIENTS.get(`client:${email}`, 'json')) || (await env.CLIENTS.get(`lead:${email}`, 'json'));
+  const kv = await env.CLIENTS.get(`lead:${email}`, 'json');
   if (!kv) return '';
   const slug = pipelineSlug(email);
   if (!slug) return 'empty slug';
@@ -297,106 +271,6 @@ async function syncToPipelineOnce(env, email, what) {
     if (put.status !== 409) return `GitHub write ${put.status}` + (put.status === 401 || put.status === 403 ? ' (token rejected)' : '');
   }
   return 'still conflicting after a retry';
-}
-
-const money = (amount, currency) => `${(amount || 0) / 100} ${(currency || 'gbp').toUpperCase()}`;
-
-async function handleStripeWebhook(request, env, ctx) {
-  const rawBody = await request.text();
-  const ok = await verifyStripeSignature(rawBody, request.headers.get('stripe-signature'), env.STRIPE_WEBHOOK_SECRET);
-  if (!ok) return json(400, { error: 'bad signature' });
-
-  let event;
-  try { event = JSON.parse(rawBody); } catch (e) { return json(400, { error: 'bad payload' }); }
-  if (event.type === 'payment_intent.succeeded') return handlePaymentIntent(event, env, ctx);
-  if (event.type !== 'checkout.session.completed') return json(200, { received: true, ignored: event.type });
-
-  const session = (event.data && event.data.object) || {};
-  const details = session.customer_details || {};
-  const email = s(details.email, 120).toLowerCase();
-  if (!email) return json(200, { received: true, ignored: 'no email' });
-  const name = s(details.name, 120);
-
-  const key = `client:${email}`;
-  const lead = await env.CLIENTS.get(`lead:${email}`, 'json');
-  const existing = (await env.CLIENTS.get(key, 'json')) || lead || {};
-  const record = {
-    ...existing,
-    email, name: name || existing.name || '',
-    status: 'paid',
-    paidAt: new Date().toISOString(),
-    amount: session.amount_total,
-    stripeSession: s(session.id, 100),
-    answers: existing.answers || {},
-  };
-  await env.CLIENTS.put(key, JSON.stringify(record));
-  if (lead) await env.CLIENTS.delete(`lead:${email}`); // their sign-up and answers now live on the client record
-  // The payment redirect carries ?session={CHECKOUT_SESSION_ID}; this mapping
-  // lets /answers attach those answers to the paying client's record.
-  if (record.stripeSession) await env.CLIENTS.put(`session:${record.stripeSession}`, email);
-
-  const paid = money(session.amount_total, session.currency);
-  ctx.waitUntil(Promise.allSettled([
-    sendTeamEmail(env,
-      `Website Pipeline: ${email} paid`,
-      `${name || email} paid ${paid}.
-Stripe session: ${session.id}`),
-    postToLeadTracker(env, {
-      org: name || email, email,
-      source: 'website funnel', message: `Payment received (${paid}) via Stripe.`,
-    }),
-  ]));
-
-  return json(200, { received: true });
-}
-
-/**
- * A payment the team requested separately landed (any direct PaymentIntent).
- * Match the payer by email, mark their record paid, brief the team, update
- * both destinations. If no email is on the event, brief the team anyway — a
- * payment must never pass silently.
- */
-async function handlePaymentIntent(event, env, ctx) {
-  const pi = (event.data && event.data.object) || {};
-  const email = s(pi.receipt_email || (pi.charges && pi.charges.data && pi.charges.data[0] &&
-    pi.charges.data[0].billing_details && pi.charges.data[0].billing_details.email) || '', 120).toLowerCase();
-  const amount = pi.amount_received || pi.amount || 0;
-
-  const paid = money(amount, pi.currency);
-
-  if (!email) {
-    ctx.waitUntil(sendTeamEmail(env,
-      'Website Pipeline: payment received — UNMATCHED',
-      `A payment of ${paid} arrived (${pi.id}) with no payer email on the event. Match it by hand in Stripe.`));
-    return json(200, { received: true, unmatched: true });
-  }
-
-  const lead = await env.CLIENTS.get(`lead:${email}`, 'json');
-  const existing = (await env.CLIENTS.get(`client:${email}`, 'json')) || lead || {};
-  const record = {
-    ...existing,
-    email,
-    status: 'paid',
-    paidAt: new Date().toISOString(),
-    amount,
-    paymentIntent: s(pi.id, 100),
-    answers: existing.answers || {},
-  };
-  await env.CLIENTS.put(`client:${email}`, JSON.stringify(record));
-  if (lead) await env.CLIENTS.delete(`lead:${email}`);
-
-  ctx.waitUntil(Promise.allSettled([
-    sendTeamEmail(env,
-      `Website Pipeline: payment received — ${email}`,
-      `${email} paid ${paid}.
-Payment: ${pi.id}${record.answersComplete ? '\nTheir call-prep answers are already in.' : '\nTheir answers so far are on the record; more may follow.'}`),
-    postToLeadTracker(env, {
-      org: email, email,
-      source: 'website funnel', message: `Payment received (${paid}) via Stripe.`,
-    }),
-  ]));
-
-  return json(200, { received: true });
 }
 
 /** Sign-up from start.html: seed the lead record, then both destinations. */
@@ -474,9 +348,7 @@ async function handleAnswers(request, env, ctx) {
   // booked leaves the page. They go to the dashboard only; the team already
   // has the brief.
   const quiet = body.kind === 'update';
-  const sessionId = s(body.session, 100);
-  const sessionEmail = sessionId ? await env.CLIENTS.get(`session:${sessionId}`) : null;
-  const email = ((sessionEmail || s(body.email, 120)) + '').toLowerCase();
+  const email = s(body.email, 120).toLowerCase();
   if (!EMAIL.test(email)) return json(400, { error: 'email required' }, cors);
 
   const answers = {};
@@ -489,14 +361,10 @@ async function handleAnswers(request, env, ctx) {
 
   // ponytail: KV read-modify-write without a lock — fine at funnel volume,
   // move to Durable Objects if two devices ever race on one record.
-  // Answers land on the client record if they've already paid (a payment can
-  // arrive before the final answers do), else on their lead record.
-  const paidClient = await env.CLIENTS.get(`client:${email}`, 'json');
-  const key = (sessionEmail || paidClient) ? `client:${email}` : `lead:${email}`;
-  const existing = paidClient || (await env.CLIENTS.get(key, 'json')) || { email, status: sessionEmail ? 'paid' : 'lead' };
+  const key = `lead:${email}`;
+  const existing = (await env.CLIENTS.get(key, 'json')) || { email, status: 'lead' };
   // A record made by a sign-up carries a token; answers must present it.
-  // (A record without one predates this check, or came from a payment alone.)
-  if (existing.token && !sessionEmail && s(body.token, 100) !== existing.token) {
+  if (existing.token && s(body.token, 100) !== existing.token) {
     return json(403, { error: 'not the browser that signed up' }, cors);
   }
   const merged = { ...(existing.answers || {}), ...answers };
@@ -511,9 +379,7 @@ async function handleAnswers(request, env, ctx) {
   ctx.waitUntil(Promise.allSettled([
     quiet ? null : sendTeamEmail(env,
       `Website Pipeline: call prep answers (${kind}) — ${email}`,
-      `${existing.status === 'paid' ? 'Payment received' : 'No payment recorded yet'}.
-
-${summary}`),
+      summary),
     syncToPipeline(env, email, quiet ? 'answers (saved on leaving)' : `answers (${kind})`),
   ]));
 
@@ -525,7 +391,6 @@ export default {
     const url = new URL(request.url);
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders(env) });
     if (url.pathname === '/health') return json(200, { ok: true });
-    if (url.pathname === '/stripe-webhook' && request.method === 'POST') return handleStripeWebhook(request, env, ctx);
     if (url.pathname === '/signup' && request.method === 'POST') return handleSignup(request, env, ctx);
     if (url.pathname === '/answers' && request.method === 'POST') return handleAnswers(request, env, ctx);
     return json(404, { error: 'not found' });
