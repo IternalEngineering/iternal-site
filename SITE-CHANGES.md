@@ -11,7 +11,38 @@ Last deploy: **7 Oct 2026** (version 3634c3c9). Local copy: `http://localhost:87
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-Nothing waiting.
+### Whole site
+- **Orange buttons are readable.** "Book a call", "See Our Work", "Send Message" and the
+  rest had white text on the orange-to-gold gradient (3.4:1 down to 2.2:1); the text is
+  now near-black navy in both themes (5.6:1 to 8.7:1). The mobile menu's button no longer
+  turns orange-on-orange when tapped. (round-three fixes)
+- **Links shared on LinkedIn, Slack or email show a preview.** Every page pointed at a share
+  image that did not exist; there is now a 1200×630 card (the homepage headline on navy)
+  at iternal.co.uk/og-image.png. (round-three fixes)
+- **Pages load much faster.** The site screenshots are WebP instead of PNG: the homepage's
+  drop from 3.3MB to 0.34MB and the websites gallery's from 6.4MB to 0.66MB, with no
+  visible loss. (round-three fixes)
+
+### Homepage
+- **"Case study" sits level across each row of project cards**, at the bottom of every
+  card. (round-three fixes)
+- **"that actually" in the headline is readable in light mode** (2.1:1 before).
+  (round-three fixes)
+
+### What We Do and About
+- **The big faint numbers are gone.** The process steps and the operating principles had
+  52–68px numerals at about 1.2:1 that read as smudges; they are now small orange labels
+  ("01", "02"…). (round-three fixes)
+
+### Contact
+- **"about your" in the headline is readable in light mode** (2.1:1 before). (round-three
+  fixes)
+
+### Websites gallery (still hidden from the public)
+- **No bot-check screenshots.** The weekly refresh had captured CivicNetZero's Cloudflare
+  "security verification" page and a YouTube "not a bot" prompt over Jay's Transport; both
+  are fresh, correct captures again, and the weekly job now skips any capture showing a bot
+  check and keeps last week's instead. (round-three fixes)
 
 ---
 

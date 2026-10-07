@@ -20,7 +20,7 @@ jobs:
       - run: node tools/screenshots.js
       - name: Commit refreshed screenshots
         run: |
-          git add assets/screenshot-*.png
+          git add assets/screenshot-*.webp
           if git diff --staged --quiet; then
             echo "No visual changes this week."
           else

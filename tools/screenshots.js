@@ -17,18 +17,23 @@ const CHROME = process.env.CHROME ||
     ? 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
     : '/usr/bin/google-chrome');
 
-// One entry per screenshot. Add new live sites here.
+// One entry per screenshot. Add new live sites here. WebP keeps each one under ~200KB.
 const SHOTS = [
-  { file: 'screenshot-goodnews.png', url: 'https://goodnews.london.gov.uk', width: 1440, height: 900 },
-  { file: 'screenshot-goodnews-mobile.png', url: 'https://goodnews.london.gov.uk', width: 390, height: 844, mobile: true },
-  { file: 'screenshot-tech4good.png', url: 'https://tech4goodsouthwest.org', width: 1440, height: 900 },
-  { file: 'screenshot-genius.png', url: 'https://www.generatinggenius.org.uk', width: 1440, height: 900 },
-  { file: 'screenshot-marvinrees.png', url: 'https://marvinrees.com', width: 1440, height: 900 },
-  { file: 'screenshot-pawlett.png', url: 'https://pawlettpavilion.com', width: 1440, height: 900 },
-  { file: 'screenshot-bplaced.png', url: 'https://bplaced.co.uk', width: 1440, height: 900 },
-  { file: 'screenshot-jays.png', url: 'https://jaystransport.co.uk', width: 1440, height: 900 },
-  { file: 'screenshot-cnz.png', url: 'https://civicnetzero.com', width: 1440, height: 900 },
+  { file: 'screenshot-goodnews.webp', url: 'https://goodnews.london.gov.uk', width: 1440, height: 900 },
+  { file: 'screenshot-goodnews-mobile.webp', url: 'https://goodnews.london.gov.uk', width: 390, height: 844, mobile: true },
+  { file: 'screenshot-tech4good.webp', url: 'https://tech4goodsouthwest.org', width: 1440, height: 900 },
+  { file: 'screenshot-genius.webp', url: 'https://www.generatinggenius.org.uk', width: 1440, height: 900 },
+  { file: 'screenshot-marvinrees.webp', url: 'https://marvinrees.com', width: 1440, height: 900 },
+  { file: 'screenshot-pawlett.webp', url: 'https://pawlettpavilion.com', width: 1440, height: 900 },
+  { file: 'screenshot-bplaced.webp', url: 'https://bplaced.co.uk', width: 1440, height: 900 },
+  { file: 'screenshot-jays.webp', url: 'https://jaystransport.co.uk', width: 1440, height: 900 },
+  { file: 'screenshot-cnz.webp', url: 'https://civicnetzero.com', width: 1440, height: 900 },
 ];
+
+// Bot checks and sign-in walls a headless browser runs into. A capture showing one of
+// these is skipped, so the page keeps last week's good screenshot (the 5 Oct 2026 run
+// published CivicNetZero's Cloudflare check and a YouTube "not a bot" prompt over Jay's).
+const BLOCKED = /performing security verification|verify you are human|checking your browser|just a moment\.\.\.|attention required|confirm you.re not a bot|sign in to confirm/i;
 
 // Remove fixed/sticky cookie-consent overlays without accepting anything.
 // ponytail: text heuristic, add a per-shot `hide` selector if a site outgrows it.
@@ -39,6 +44,16 @@ function stripCookieBanners() {
     if (style.position !== 'fixed' && style.position !== 'sticky') continue;
     if (/\bcookie(s)?\b/i.test(el.innerText || '')) el.remove();
   }
+}
+
+// Text of the page and every frame in it (the YouTube prompt sits inside an embed).
+async function blockedBy(page) {
+  for (const frame of page.frames()) {
+    const text = await frame.evaluate(() => (document.body && document.body.innerText) || '').catch(() => '');
+    const m = text.match(BLOCKED);
+    if (m) return m[0];
+  }
+  return '';
 }
 
 (async () => {
@@ -57,10 +72,17 @@ function stripCookieBanners() {
         await page.goto(s.url, { waitUntil: 'networkidle2', timeout: 60000 });
         await new Promise(r => setTimeout(r, 2000)); // late banners/animations
         await page.evaluate(stripCookieBanners);
-        await page.screenshot({ path: out });
+        const blocked = await blockedBy(page);
+        if (blocked) {
+          await page.close();
+          console.warn('skip ' + s.file + '  ' + s.url + '  — showed "' + blocked + '"; keeping the last good screenshot');
+          continue;
+        }
+        const img = await page.screenshot({ type: 'webp', quality: 82 });
         await page.close();
-        const kb = Math.round(fs.statSync(out).size / 1024);
-        if (kb < 10) throw new Error('suspiciously small (' + kb + 'KB) — blank page?');
+        const kb = Math.round(img.length / 1024);
+        if (kb < 5) throw new Error('suspiciously small (' + kb + 'KB) — blank page?');
+        fs.writeFileSync(out, img); // only written once it has passed both checks
         console.log('ok  ' + s.file + '  (' + kb + 'KB)  ' + s.url);
       } catch (e) {
         failures++;

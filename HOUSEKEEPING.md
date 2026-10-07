@@ -42,7 +42,11 @@ together:
    tracker note "Came in from the … example"); redeploy the worker after
    changing it.
 3. `tools/screenshots.js` — the `SHOTS` list, so the weekly screenshot
-   refresh covers it.
+   refresh covers it. Screenshots are WebP (`assets/screenshot-<slug>.webp`,
+   since 7 Oct 2026); a capture that shows a bot check or sign-in wall
+   (Cloudflare, the YouTube "not a bot" prompt) is skipped and last week's
+   screenshot stays, so a "skip" line in the job log is expected for sites
+   that block headless browsers.
 4. `questions.html` — the "Are there any websites you like the look of?"
    options, which mirror the gallery.
 

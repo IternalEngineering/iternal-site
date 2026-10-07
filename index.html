@@ -10,12 +10,12 @@
 <meta property="og:description" content="Specialist AI consultancy building agentic systems for the NHS, GLA and enterprise clients across three continents. Bristol-based, globally delivered.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://iternal.life/">
-<meta property="og:image" content="https://iternal.life/og-image.png">
+<meta property="og:image" content="https://iternal.co.uk/og-image.png">
 <meta property="og:site_name" content="Iternal AI">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Iternal — We Build AI That Works">
 <meta name="twitter:description" content="Specialist AI consultancy building agentic systems for the NHS, GLA and enterprise clients across three continents. Bristol-based, globally delivered.">
-<meta name="twitter:image" content="https://iternal.life/og-image.png">
+<meta name="twitter:image" content="https://iternal.co.uk/og-image.png">
 <link rel="canonical" href="https://iternal.life/">
 <link rel="icon" href="assets/icon-navy.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -258,7 +258,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 
 .nav-btn {
   background: var(--sunrise);
-  color:var(--white); font-family:var(--f);
+  color:#060f26; font-family:var(--f);
   font-size:12px; font-weight:700;
   letter-spacing:.06em; text-transform:uppercase;
   padding:10px 22px; border-radius:3px;
@@ -334,7 +334,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 
 .btn-sun {
   display:inline-flex; align-items:center; gap:12px;
-  background:var(--sunrise); color:var(--white);
+  background:var(--sunrise); color:#060f26;
   font-family:var(--f); font-size:14px; font-weight:700;
   letter-spacing:.04em; padding:16px 32px; border-radius:3px;
   border:none; cursor:pointer; white-space:nowrap;
@@ -638,7 +638,9 @@ html[data-theme="light"] .orb-logo { filter:none; }
 
 /* The sector tag sits in the card, level with "Case study", so it never covers the
    screenshot whatever the weekly refresh puts there. */
-.card-body { position:relative; }
+.card { display:flex; flex-direction:column; }
+.card-body { position:relative; flex:1; display:flex; flex-direction:column; }
+.card-body > .btn-line { margin-top:auto; align-self:flex-start; }
 .card-badge {
   position:absolute; right:30px; bottom:39px;
   display:inline-flex; align-items:center; gap:8px;
@@ -943,7 +945,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 }
 .mobile-nav a:hover, .mobile-nav a.active { color:var(--tan); }
 .mobile-nav .mob-cta {
-  margin-top:16px; background:var(--sunrise); color:var(--white);
+  margin-top:16px; background:var(--sunrise); color:#060f26;
   font-size:14px; font-weight:700; letter-spacing:.04em;
   padding:14px 28px; border-radius:3px;
 }
@@ -1038,7 +1040,7 @@ html[data-theme="light"] nav.scrolled { background:rgba(244,241,236,0.97); borde
 html[data-theme="light"] #hero::after { background:linear-gradient(to bottom, transparent, #f4f1ec); }
 
 /* Hero dim words */
-html[data-theme="light"] .w-dim { color:rgba(10,33,86,0.35); }
+html[data-theme="light"] .w-dim { color:rgba(10,33,86,0.55); }
 
 /* Btn-line border */
 html[data-theme="light"] .btn-line { border-bottom-color:rgba(10,33,86,0.18); }
@@ -1092,8 +1094,8 @@ html[data-theme="light"] footer { background:rgba(244,241,236,0.6); }
 html[data-theme="light"] .mobile-nav { background:rgba(244,241,236,0.97); }
 
 /* Nav btn — keep white text on sunrise gradient */
-html[data-theme="light"] .nav-btn { color:#ffffff; }
-html[data-theme="light"] .btn-sun { color:#ffffff; }
+html[data-theme="light"] .nav-btn { color:#060f26; }
+html[data-theme="light"] .btn-sun { color:#060f26; }
 html[data-theme="light"] .mobile-nav .mob-cta { color:#ffffff; }
 
 /* Theme toggle */
@@ -1110,6 +1112,7 @@ html[data-theme="light"] .icon-moon { display:none; }
 @media (max-width:900px) {
   .theme-toggle { color:var(--white); position:absolute; right:56px; top:50%; transform:translateY(-50%); }
 }
+.mobile-nav .mob-cta, .mobile-nav .mob-cta:hover { color:#060f26; }
 html { overflow-x:clip; }
 </style>
 <script type="application/ld+json">
@@ -1282,8 +1285,8 @@ html { overflow-x:clip; }
       <div class="card">
         <div class="card-img xl">
           <picture>
-            <source srcset="assets/screenshot-goodnews-mobile.png" media="(max-width:700px)">
-            <img src="assets/screenshot-goodnews.png" alt="Good News London homepage, live at goodnews.london.gov.uk" class="card-screenshot">
+            <source srcset="assets/screenshot-goodnews-mobile.webp" media="(max-width:700px)">
+            <img src="assets/screenshot-goodnews.webp" alt="Good News London homepage, live at goodnews.london.gov.uk" class="card-screenshot">
           </picture>
           <a href="case-good-news-london.html" aria-label="Good News London — view project details" style="position:absolute; inset:0; z-index:1;"></a>
         </div>
@@ -1296,7 +1299,7 @@ html { overflow-x:clip; }
       </div>
       <div class="card">
         <div class="card-img md">
-          <img src="assets/screenshot-civicnetzero.png" alt="CivicNetZero platform" class="card-screenshot">
+          <img src="assets/screenshot-civicnetzero.webp" alt="CivicNetZero platform" class="card-screenshot">
           <a href="case-civicnetzero.html" aria-label="CivicNetZero — view project details" style="position:absolute; inset:0; z-index:1;"></a>
         </div>
         <div class="card-body">
@@ -1310,7 +1313,7 @@ html { overflow-x:clip; }
 
     <div class="work-3 rv d2" style="margin-top:20px">
       <div class="card">
-        <div class="card-img sm"><img src="assets/screenshot-bplaced.png" alt="bPlaced platform" class="card-screenshot"><a href="case-bplaced.html" aria-label="bPlaced — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
+        <div class="card-img sm"><img src="assets/screenshot-bplaced.webp" alt="bPlaced platform" class="card-screenshot"><a href="case-bplaced.html" aria-label="bPlaced — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
         <div class="card-body">
           <div class="card-sec"><span class="cdot"></span><span class="csec">AI Matching</span></div>
           <h3 class="card-h">bPlaced: Smarter Care</h3>
@@ -1319,7 +1322,7 @@ html { overflow-x:clip; }
         </div>
       </div>
       <div class="card">
-        <div class="card-img sm"><img src="assets/screenshot-nhs.png" alt="Bristol Children's Hospital - Digital Diary" class="card-screenshot"><a href="case-nhs.html" aria-label="Bristol Children's Hospital — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
+        <div class="card-img sm"><img src="assets/screenshot-nhs.webp" alt="Bristol Children's Hospital - Digital Diary" class="card-screenshot"><a href="case-nhs.html" aria-label="Bristol Children's Hospital — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
         <div class="card-body">
           <div class="card-sec"><span class="cdot"></span><span class="csec">MedTech AI</span></div>
           <h3 class="card-h">Bristol Children's Hospital</h3>
@@ -1328,7 +1331,7 @@ html { overflow-x:clip; }
         </div>
       </div>
       <div class="card">
-        <div class="card-img sm"><img src="assets/screenshot-tech4good.png" alt="Tech4Good South West homepage, live at tech4goodsouthwest.org" class="card-screenshot"><a href="case-tech4good.html" aria-label="Tech4Good South West — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
+        <div class="card-img sm"><img src="assets/screenshot-tech4good.webp" alt="Tech4Good South West homepage, live at tech4goodsouthwest.org" class="card-screenshot"><a href="case-tech4good.html" aria-label="Tech4Good South West — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
         <div class="card-body">
           <div class="card-sec"><span class="cdot"></span><span class="csec">AI for Social Change</span></div>
           <h3 class="card-h">Tech4Good South West</h3>
