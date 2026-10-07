@@ -18,6 +18,10 @@ Last deploy: **7 Oct 2026, second deploy** (version 4e40a7ae). Local copy: `http
   as deciding who qualifies. They now invite people to say what they're working on, with a
   straight answer on how Iternal would approach it. What We Do's closing heading is now
   "Tell us what you're working on." (capacity wording)
+- **"We aim to" respond within one working day, instead of a promise.** Contact (its intro
+  box, the "Message sent" confirmation and its search and share descriptions), the
+  homepage and What We Do closing notes, llms.txt, and the hidden sign-up and questions
+  pages. (response-time wording)
 
 ---
 
