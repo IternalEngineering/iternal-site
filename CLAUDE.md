@@ -48,6 +48,11 @@ one concept homepage from the client's answers (the "initial build" the
   the start.html terms.
 - Do not promise a number of concepts ("two or three") anywhere on these
   pages. We show them; we do not announce them.
+- `SITE-CHANGES.md` is the running log of what a visitor would notice, in
+  plain English, page by page. Every visible change adds a line there in the
+  same commit, under "Waiting to deploy"; after a deploy, move those lines to
+  "Live" under the date and update the version line at the top. It is in
+  `.assetsignore`, so it is never published.
 - Clients get no email from us: Google Calendar sends the invite. Team
   briefs go to websites@iternal.life and john@iternal.life as
   "Website Pipeline <funnel@iternal.co.uk>" via the worker's send_email

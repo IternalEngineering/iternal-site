@@ -7,6 +7,7 @@ node_modules/
 .claude/
 CLAUDE.md
 HOUSEKEEPING.md
+SITE-CHANGES.md
 README.md
 package.json
 package-lock.json
