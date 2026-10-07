@@ -23,6 +23,12 @@ Last deploy: **7 Oct 2026, second deploy** (version 4e40a7ae). Local copy: `http
   homepage and What We Do closing notes, llms.txt, and the hidden sign-up and questions
   pages. (response-time wording)
 
+### Questions page (still hidden from the public)
+- **The optional questions say they matter.** Once the essentials are answered, the booking
+  panel said "That's enough for us to prepare" and the optional section said "skip the
+  rest". The panel now says the questions below shape the first version built for the
+  call, and the section opens "These shape the design." (optional questions wording)
+
 ---
 
 ## Live
