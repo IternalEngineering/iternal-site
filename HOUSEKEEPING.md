@@ -99,7 +99,8 @@ the token awaits org approval), so the worker can deploy regardless.
   switch away from or close the page with answers newer than the last send
   (`update`: platform only, no team email). The tracker never gets answers.
 - Archiving is the dashboard's job, not the worker's: the hosted dashboard
-  deletes the client's files from the platform repo, appends a line to its
+  deletes the client's record from the platform repo (their demo and build
+  stay: an approved demo becomes the work-in-progress site), appends a line to its
   `history/clients.jsonl` and deletes their KV record here (it shares this
   KV namespace). The worker's only part: a late answer from an archived
   client never recreates their record (it checks that history file). A
