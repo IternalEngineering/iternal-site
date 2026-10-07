@@ -5,21 +5,29 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **1 Oct 2026** (version 28d2f96d). Local copy: `http://localhost:8734`.
+Last deploy: **7 Oct 2026** (version 3634c3c9). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-### Fixes
-- **About, bPlaced and CivicNetZero show their content again.** On the live site these
-  three pages are blank below the menu: leftover merge markers from 10 September stop each
-  page's script from running, so nothing fades in. (7c41b43)
+Nothing waiting.
+
+---
+
+## Live
+
+### 7 Oct 2026
+
+#### Fixes
+- **About, bPlaced and CivicNetZero show their content again.** Before this deploy these
+  three pages were blank below the menu: leftover merge markers from 10 September stopped each
+  page's script from running, so nothing faded in. (7c41b43)
 - **Insights footer logo is the right size.** It rendered about 1,200px wide and pushed the
   footer links off-screen. Its footer columns and "Built with Forge" line now match the other
   pages too. (e926d81, round-two fixes)
 
-### Whole site
+#### Whole site
 - **Light theme is readable.** Body text and labels were too faint for anyone whose computer
   is set to light mode (3.6:1 and 2.4:1 contrast); they are now about 6:1 and 5:1.
   (round-two fixes)
@@ -33,7 +41,7 @@ Last deploy: **1 Oct 2026** (version 28d2f96d). Local copy: `http://localhost:87
   homepage, What We Do, About, Insights, the five case studies and the websites gallery;
   Contact is unchanged. (abf2123)
 
-### Homepage
+#### Homepage
 - **Shorter hero, so the client list shows on arrival.** "Trusted by organisations…" is
   visible without scrolling on every common screen size, phones included. The headline
   scales a little with screen height; the scroll arrow is gone. (ac9f478)
@@ -54,7 +62,7 @@ Last deploy: **1 Oct 2026** (version 28d2f96d). Local copy: `http://localhost:87
 - **Articles say "Coming soon"** instead of "Read Article" links that led nowhere, here and on
   Insights. (round-two fixes)
 
-### What We Do
+#### What We Do
 - **Hero aligned and shorter.** It started 64px left of everything below it; it now lines
   up, and "Five ways to work with Iternal" shows on arrival. (1b3f9bb)
 - **Less padding** between sections and inside the service cards. (1b3f9bb)
@@ -64,20 +72,16 @@ Last deploy: **1 Oct 2026** (version 28d2f96d). Local copy: `http://localhost:87
   column's accent colour. (1b3f9bb)
 - **FAQ divided by thin lines** instead of six boxes. (1b3f9bb)
 
-### Contact
+#### Contact
 - **The intro no longer sits flush against "next build."**: 28px between the headline and
   the paragraph. (round-two fixes)
 
-### Websites gallery (still hidden from the public)
+#### Websites gallery (still hidden from the public)
 - **The sample sites pan slowly behind the header.** Two tilted rows of the gallery's own
   screenshots drift in opposite directions on the right, kept clear of the headline and
   intro; a single strip on phones; still for anyone who has reduced motion switched on.
   Built from the gallery, so a new site appears there automatically. (f6e1a5f, round-two
   fixes)
-
----
-
-## Live
 
 ### 1 Oct 2026
 - **Websites gallery and sign-up: pricing.** £750 all in: £100 for the call and an initial
