@@ -5,13 +5,21 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **7 Oct 2026, second deploy** (version 4e40a7ae). Local copy: `http://localhost:8734`.
+Last deploy: **7 Oct 2026, third deploy** (version 8fb2c0c7). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-### Whole site
+Nothing waiting.
+
+---
+
+## Live
+
+### 7 Oct 2026, third deploy (version 8fb2c0c7)
+
+#### Whole site
 - **No more "one or two new clients a quarter" or "if there's a fit".** The homepage and What
   We Do closing sections, the Contact intro, the What We Do FAQ and the summary for AI
   assistants (llms.txt) no longer state how many clients Iternal takes on or set Iternal up
@@ -23,15 +31,11 @@ Last deploy: **7 Oct 2026, second deploy** (version 4e40a7ae). Local copy: `http
   homepage and What We Do closing notes, llms.txt, and the hidden sign-up and questions
   pages. (response-time wording)
 
-### Questions page (still hidden from the public)
+#### Questions page (still hidden from the public)
 - **The optional questions say they matter.** Once the essentials are answered, the booking
   panel said "That's enough for us to prepare" and the optional section said "skip the
   rest". The panel now says the questions below shape the first version built for the
   call, and the section opens "These shape the design." (optional questions wording)
-
----
-
-## Live
 
 ### 7 Oct 2026, second deploy (version 4e40a7ae)
 
