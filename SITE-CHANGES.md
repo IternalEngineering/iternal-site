@@ -11,7 +11,13 @@ Last deploy: **7 Oct 2026, second deploy** (version 4e40a7ae). Local copy: `http
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-Nothing waiting.
+### Whole site
+- **No more "one or two new clients a quarter" or "if there's a fit".** The homepage and What
+  We Do closing sections, the Contact intro, the What We Do FAQ and the summary for AI
+  assistants (llms.txt) no longer state how many clients Iternal takes on or set Iternal up
+  as deciding who qualifies. They now invite people to say what they're working on, with a
+  straight answer on how Iternal would approach it. What We Do's closing heading is now
+  "Tell us what you're working on." (capacity wording)
 
 ---
 
