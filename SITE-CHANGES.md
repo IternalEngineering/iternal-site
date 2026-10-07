@@ -5,13 +5,21 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **7 Oct 2026** (version 3634c3c9). Local copy: `http://localhost:8734`.
+Last deploy: **7 Oct 2026, second deploy** (version 4e40a7ae). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-### Whole site
+Nothing waiting.
+
+---
+
+## Live
+
+### 7 Oct 2026, second deploy (version 4e40a7ae)
+
+#### Whole site
 - **Orange buttons are readable.** "Book a call", "See Our Work", "Send Message" and the
   rest had white text on the orange-to-gold gradient (3.4:1 down to 2.2:1); the text is
   now near-black navy in both themes (5.6:1 to 8.7:1). The mobile menu's button no longer
@@ -31,13 +39,13 @@ Last deploy: **7 Oct 2026** (version 3634c3c9). Local copy: `http://localhost:87
   drop from 3.3MB to 0.34MB and the websites gallery's from 6.4MB to 0.66MB, with no
   visible loss. (round-three fixes)
 
-### Homepage
+#### Homepage
 - **"Case study" sits level across each row of project cards**, at the bottom of every
   card. (round-three fixes)
 - **"that actually" in the headline is readable in light mode** (2.1:1 before).
   (round-three fixes)
 
-### What We Do and About
+#### What We Do and About
 - **The big faint numbers are gone.** The process steps and the operating principles had
   52–68px numerals at about 1.2:1 that read as smudges; they are now small orange labels
   ("01", "02"…). (round-three fixes)
@@ -45,24 +53,20 @@ Last deploy: **7 Oct 2026** (version 3634c3c9). Local copy: `http://localhost:87
   screen with a "Scroll to explore" cue; it is now the same height, size and alignment as
   the What We Do hero, so "Built on a simple premise" shows on arrival. (consistency pass)
 
-### Sign-up and questions (still hidden from the public)
+#### Sign-up and questions (still hidden from the public)
 - **Headlines no longer sit flush against the paragraph** (28px, as on Contact), and the
   faint middle words ("your", "you book") are readable in light mode (2.1:1 before).
   (consistency pass)
 
-### Contact
+#### Contact
 - **"about your" in the headline is readable in light mode** (2.1:1 before). (round-three
   fixes)
 
-### Websites gallery (still hidden from the public)
+#### Websites gallery (still hidden from the public)
 - **No bot-check screenshots.** The weekly refresh had captured CivicNetZero's Cloudflare
   "security verification" page and a YouTube "not a bot" prompt over Jay's Transport; both
   are fresh, correct captures again, and the weekly job now skips any capture showing a bot
   check and keeps last week's instead. (round-three fixes)
-
----
-
-## Live
 
 ### 7 Oct 2026
 
