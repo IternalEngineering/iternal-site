@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://iternal.life/</loc><priority>1.0</priority></url>
-  <url><loc>https://iternal.life/about.html</loc><priority>0.8</priority></url>
-  <url><loc>https://iternal.life/services.html</loc><priority>0.9</priority></url>
-  <url><loc>https://iternal.life/contact.html</loc><priority>0.8</priority></url>
-  <url><loc>https://iternal.life/insights.html</loc><priority>0.7</priority></url>
+  <url><loc>https://iternal.co.uk/</loc><priority>1.0</priority></url>
+  <url><loc>https://iternal.co.uk/services</loc><priority>0.9</priority></url>
+  <url><loc>https://iternal.co.uk/about</loc><priority>0.8</priority></url>
+  <url><loc>https://iternal.co.uk/contact</loc><priority>0.8</priority></url>
+  <url><loc>https://iternal.co.uk/insights</loc><priority>0.7</priority></url>
+  <url><loc>https://iternal.co.uk/case-good-news-london</loc><priority>0.7</priority></url>
+  <url><loc>https://iternal.co.uk/case-civicnetzero</loc><priority>0.7</priority></url>
+  <url><loc>https://iternal.co.uk/case-bplaced</loc><priority>0.7</priority></url>
+  <url><loc>https://iternal.co.uk/case-nhs</loc><priority>0.7</priority></url>
+  <url><loc>https://iternal.co.uk/case-tech4good</loc><priority>0.7</priority></url>
 </urlset>
