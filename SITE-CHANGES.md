@@ -11,7 +11,15 @@ Last deploy: **7 Oct 2026, third deploy** (version 8fb2c0c7). Local copy: `http:
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-Nothing waiting.
+#### Whole site
+- **Search engines and link previews are told the site lives at iternal.co.uk.** Every page
+  named iternal.life as its official address (the canonical tag, the address used when a
+  link is shared, and the details search engines read on the homepage, the Websites page
+  and the five case studies), while iternal.life itself redirects to iternal.co.uk. They
+  now all name iternal.co.uk, using the clean addresses the site already serves (`/about`,
+  not `/about.html`). The sitemap and robots.txt point at iternal.co.uk too, and the sitemap
+  now lists the five case studies. Nothing changes on the pages themselves. Email addresses
+  are unchanged. (canonical domain)
 
 ---
 
