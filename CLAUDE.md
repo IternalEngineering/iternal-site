@@ -17,9 +17,10 @@ one concept homepage from the client's answers (the "initial build" the
   required per HOUSEKEEPING.md). Eight sites; each opens in a lightbox and
   carries a "Start yours" button that tags the sign-up with that site.
 - `start.html` — sign-up (4 fields, posted straight to the worker) +
-  engagement terms + required agreement checkbox that unlocks "Continue to
-  Your Questions". The agreed-at timestamp travels via sessionStorage into
-  the answers as `termsAgreed`.
+  "The engagement at a glance" (how it works, cost included; the full terms
+  are a contract signed after the call) + a required "I've read how it
+  works" tick that unlocks "Continue to Your Questions". The tick's time is
+  sent to the worker as `termsAgreed` (the internal name stays).
 - `questions.html` — "Before you book your call": 5 essentials unlock the
   booking, 12 optional. Answers are saved to the worker as they go (when
   the page is hidden or closed), so the team can follow up anyone who stops;

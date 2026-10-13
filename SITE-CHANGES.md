@@ -11,6 +11,14 @@ Last deploy: **7 Oct 2026, third deploy** (version 8fb2c0c7). Local copy: `http:
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
+### Sign-up page and websites gallery (still hidden from the public)
+- **"How it works", not "terms".** The legal terms are now a contract the client signs after
+  their call, so the sign-up page no longer says "This is the whole deal. No small print
+  elsewhere." or asks people to agree to terms. The box keeps its heading ("The engagement
+  at a glance") and now says the full terms come in a contract after the call; the tick
+  reads "I've read how it works"; the steps, buttons and the gallery's closing line say
+  "how it works". (terms wording)
+
 ### Questions page (still hidden from the public)
 - **"Your answers are saved as you go."** The intro now says so: answers are saved to the
   team's dashboard whenever the visitor leaves the page, from the first answer, so someone
