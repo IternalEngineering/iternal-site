@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Build a Site With Us — Iternal AI</title>
-<meta name="description" content="We design and build your website with you. Sign up, see how it works, and we'll design your site with you from your answers. £750 all in.">
+<meta name="description" content="We design and build your website with you. Sign up, review and accept our terms, and we'll design your site with you from your answers. £750 + VAT to build, then £50 a month + VAT to look after it.">
 <meta name="robots" content="noindex, follow">
 <meta property="og:title" content="Build a Site With Us — Iternal AI">
-<meta property="og:description" content="We design and build your website with you. Sign up, see how it works, and we'll design your site with you from your answers.">
+<meta property="og:description" content="We design and build your website with you. Sign up, review and accept our terms, and we'll design your site with you from your answers.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://iternal.life/start.html">
 <meta property="og:image" content="https://iternal.co.uk/og-image.png">
 <meta property="og:site_name" content="Iternal AI">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Build a Site With Us — Iternal AI">
-<meta name="twitter:description" content="We design and build your website with you. Sign up, see how it works, and we'll design your site with you from your answers.">
+<meta name="twitter:description" content="We design and build your website with you. Sign up, review and accept our terms, and we'll design your site with you from your answers.">
 <meta name="twitter:image" content="https://iternal.co.uk/og-image.png">
 <link rel="canonical" href="https://iternal.life/start.html">
 <link rel="icon" href="assets/icon-navy.png" type="image/png">
@@ -304,6 +304,33 @@ textarea { resize:vertical; min-height:130px; line-height:1.65; }
 .form-privacy {
   margin-top:16px; font-size:12px; color:var(--t4);
   text-align:center; line-height:1.6;
+}
+.submit-btn:disabled { opacity:.55; cursor:not-allowed; transform:none; box-shadow:none; }
+.submit-btn:disabled svg { transform:none; }
+
+/* ── Review and accept ── */
+.order { width:100%; border-collapse:collapse; font-size:15px; line-height:1.55; }
+.order th, .order td { border:1px solid var(--border2); padding:11px 16px; text-align:left; vertical-align:top; }
+.order thead th, .order thead td { background:var(--surf2); color:var(--t3); font-weight:500; }
+.order tbody th { font-weight:500; color:var(--t2); white-space:nowrap; width:1%; }
+.order td { color:var(--white); overflow-wrap:break-word; }
+.order a { color:var(--tan); text-decoration:underline; text-underline-offset:3px; }
+label.tick {
+  display:flex; align-items:flex-start; gap:12px; margin-bottom:16px;
+  font-size:14px; font-weight:500; letter-spacing:0; text-transform:none;
+  color:var(--t2); line-height:1.6; cursor:pointer;
+}
+label.tick span { color:inherit; margin-left:0; }
+label.tick input { width:18px; height:18px; margin:2px 0 0; flex-shrink:0; accent-color:var(--tan); cursor:pointer; }
+/* Phones: each item's name above its detail, one bordered block per item. */
+@media (max-width:560px) {
+  .order, .order tbody, .order tr, .order th, .order td { display:block; width:auto; }
+  .order thead { display:none; }
+  .order tr { border:1px solid var(--border2); border-top:none; }
+  .order tr:first-child { border-top:1px solid var(--border2); }
+  .order th, .order td { border:none; }
+  .order tbody th { width:auto; padding:10px 14px 0; font-size:13px; color:var(--t3); white-space:normal; }
+  .order td { padding:2px 14px 10px; overflow-wrap:anywhere; }
 }
 
 /* ── Success state ── */
@@ -600,18 +627,18 @@ html { overflow-x:clip; }
           site.
         </h1>
         <p class="page-hero-sub rv d2">
-          Sign up below and we'll take it from there: you answer some questions about what you need, we talk it through on a call, then we design your site with you and refine it until it's yours.
+          Sign up below and we'll take it from there: you answer some questions about what you need, we talk it through on a call, then we design and build your site with you and launch it.
         </p>
         <div class="rv d3" style="display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin-top:26px; font-size:14px; color:var(--t2)">
           <span><span style="color:var(--tan); font-weight:700">1</span>&nbsp; Sign up</span>
-          <span><span style="color:var(--tan); font-weight:700">2</span>&nbsp; How it works</span>
+          <span><span style="color:var(--tan); font-weight:700">2</span>&nbsp; Review and accept</span>
           <span><span style="color:var(--tan); font-weight:700">3</span>&nbsp; Your questions</span>
           <span><span style="color:var(--tan); font-weight:700">4</span>&nbsp; Book your call</span>
         </div>
       </div>
 
       <div class="response-note rv d4">
-            <p><strong>Signing up commits you to nothing.</strong> <a href="#terms" style="color:var(--tan)">How it works</a>, cost included, is just below. The full terms come in a contract you sign after your call.</p>
+            <p><strong>Signing up commits you to nothing.</strong> Next you review your order and our <a href="terms/website-build-and-care-v1.0.html" target="_blank" rel="noopener" style="color:var(--tan)">Website Build and Care Terms</a>, cost included. Nothing is agreed until you accept them.</p>
       </div>
     </div>
 
@@ -624,7 +651,7 @@ html { overflow-x:clip; }
           <input type="text" id="honey" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="form-head">
             <h2>Sign up</h2>
-            <p>Four fields. The detailed questions come later, once you've seen how it works.</p>
+            <p>Four fields. The detailed questions come later, once you've accepted our terms.</p>
           </div>
 
           <div class="form-row">
@@ -634,7 +661,7 @@ html { overflow-x:clip; }
             </div>
             <div class="form-field">
               <label for="lname">Last name <span>*</span></label>
-              <input type="text" id="lname" name="lastName" placeholder="Smith">
+              <input type="text" id="lname" name="lastName" placeholder="Smith" required aria-required="true">
             </div>
           </div>
 
@@ -644,8 +671,8 @@ html { overflow-x:clip; }
           </div>
 
           <div class="form-field">
-            <label for="org">Organisation</label>
-            <input type="text" id="org" name="organisation" placeholder="Your company or organisation">
+            <label for="org">Organisation <span>*</span></label>
+            <input type="text" id="org" name="organisation" placeholder="Your company or organisation" required aria-required="true">
           </div>
 
           <div class="form-field">
@@ -658,7 +685,7 @@ html { overflow-x:clip; }
               Sign Up
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <p class="form-privacy">We don't share your information with third parties. No newsletters, no noise. Next step: how it works.</p>
+            <p class="form-privacy">We don't share your information with third parties. No newsletters, no noise. Next step: review and accept.</p>
           </div>
         </form>
 
@@ -668,9 +695,9 @@ html { overflow-x:clip; }
             <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
           <h3 class="success-h">You're signed up.</h3>
-          <p class="success-p">We aim to confirm by email within one working day. How it works is next: read it, then carry on when you're ready.</p>
+          <p class="success-p">Next, check your order details and our terms. Once you accept them, your questions follow.</p>
           <a href="#terms" class="submit-btn" style="margin-top:22px; text-decoration:none">
-            See How It Works
+            Review and Accept
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
         </div>
@@ -681,49 +708,45 @@ html { overflow-x:clip; }
   </div>
 </div>
 
-<!-- ===== GOOD REASONS ===== -->
-<!-- ===== THE TERMS ===== -->
-<section id="terms" style="position:relative; z-index:2; max-width:988px; margin:0 auto; padding:min(64px, 7vh) var(--px) min(88px, 10vh)">
+<!-- ===== REVIEW AND ACCEPT =====
+     The wording is supplied with the Website Build and Care Terms; keep it
+     word for word. Shown once the worker has the sign-up, filled from the
+     order it sends back. -->
+<section id="terms" hidden style="position:relative; z-index:2; max-width:988px; margin:0 auto; padding:min(64px, 7vh) var(--px) min(88px, 10vh)">
   <div class="form-wrap">
     <div class="form-inner">
       <div class="form-head">
-        <h2>The engagement at a glance</h2>
-        <p>The full terms come in a contract you sign after your call.</p>
+        <h2>Review and accept</h2>
+        <p>Please check your order details and if correct, tick to say you have read and accept our terms. Once you accept, we will email you a copy of both.</p>
       </div>
 
-      <div style="display:flex; flex-direction:column; gap:26px; font-size:15px; line-height:1.7; color:var(--t2)">
-        <div>
-          <div style="font-weight:700; color:var(--white); margin-bottom:6px">The price</div>
-          <p style="margin:0">The full cost is <strong style="color:var(--white)">£750</strong>. It covers everything on this page, from first questions to launch. Nothing is added without you choosing it.</p>
-        </div>
-        <div>
-          <div style="font-weight:700; color:var(--white); margin-bottom:6px">£100 to begin, the rest when you decide</div>
-          <p style="margin:0">Nothing is paid on this page, and booking your call takes no payment. <strong style="color:var(--white)">£100</strong> covers your call and an initial build of your site, made from your answers so the call starts with something real. We send that request separately. At the end of the call, or after it, you decide whether to go ahead. If you do, the remaining <strong style="color:var(--white)">£650</strong> is invoiced then.</p>
-        </div>
-        <div>
-          <div style="font-weight:700; color:var(--white); margin-bottom:6px">Our studio, built in</div>
-          <p style="margin:0">We also offer our agentic studio, built into your site, so you can keep it up to date yourself: ask in plain English to change the words, swap a photograph or publish news, and it goes live in a minute or two. It is priced separately from the £750; if it sounds useful, mention it on your call.</p>
-        </div>
-        <div>
-          <div style="font-weight:700; color:var(--white); margin-bottom:6px">What the call starts</div>
-          <p style="margin:0">You answer a short set of questions about your organisation and what the site has to do, and we build a first version from your answers to talk through on the call. If you go ahead, we design and build your site with you: real pages you can click through, refined together until it’s yours.</p>
-        </div>
-        <div>
-          <div style="font-weight:700; color:var(--white); margin-bottom:6px">If no concept fits</div>
-          <p style="margin:0">Then we haven’t finished, and that’s ours to fix. We go back over it with you and rework the concepts until there’s a version you’re glad to build on. A concept is the start of a conversation, not a one-shot bet on your money.</p>
-        </div>
-      </div>
+      <table class="order">
+        <thead><tr><th scope="col">Item</th><td></td></tr></thead>
+        <tbody>
+          <tr><th scope="row">Company</th><td data-o="company"></td></tr>
+          <tr><th scope="row">Your name</th><td data-o="name"></td></tr>
+          <tr><th scope="row">Email</th><td data-o="email"></td></tr>
+          <tr><th scope="row">Reference</th><td data-o="reference"></td></tr>
+          <tr><th scope="row">Build fee</th><td>£<span data-o="buildFee"></span> + VAT. 50% now, 50% on completion</td></tr>
+          <tr><th scope="row">Care plan</th><td>£<span data-o="carePlan"></span> per month + VAT, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance</td></tr>
+          <tr><th scope="row">Terms</th><td>Website Build and Care Terms, version <span data-o="termsVersion"></span> (<a data-terms="html" target="_blank" rel="noopener">view</a> or <a data-terms="pdf" download>download</a>)</td></tr>
+        </tbody>
+      </table>
 
-      <div class="form-submit" style="margin-top:34px">
-        <label style="display:flex; align-items:flex-start; gap:10px; margin-bottom:16px; font-size:14px; color:var(--t2); cursor:pointer">
-          <input type="checkbox" id="agreeTick" style="width:18px; height:18px; margin-top:2px; accent-color:var(--tan); cursor:pointer">
-          <span>I’ve read how it works.</span>
+      <div class="form-submit">
+        <label class="tick">
+          <input type="checkbox" id="acceptTerms">
+          <span>I have read and accept the Website Build and Care Terms (version <span data-o="termsVersion"></span>) and the order details above.</span>
         </label>
-        <a href="questions.html" class="submit-btn" id="agreeBtn" aria-disabled="true" style="text-decoration:none; opacity:.55; pointer-events:none">
-          Continue to Your Questions
+        <label class="tick">
+          <input type="checkbox" id="acceptAuthority">
+          <span>I confirm I am authorised to accept these terms on behalf of <span data-o="company"></span>, which is acting in the course of its business.</span>
+        </label>
+        <button type="button" class="submit-btn" id="acceptBtn" disabled>
+          Accept and continue
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <p class="form-privacy">Next: your project questions, then booking your call. Booking takes no payment.</p>
+        </button>
+        <p class="form-privacy">Next: your project questions, then booking your call.</p>
       </div>
     </div>
   </div>
@@ -826,8 +849,6 @@ if (PREVIEW) {
   submitBtn.disabled = true;
   submitBtn.style.opacity = '.55';
   submitBtn.style.pointerEvents = 'none';
-  const tick = document.getElementById('agreeTick');
-  if (tick) tick.disabled = true;
   document.querySelectorAll('.form-privacy').forEach((p) => {
     p.textContent = 'Preview — sign-ups aren’t open just yet.';
   });
@@ -837,31 +858,62 @@ if (PREVIEW) {
   document.body.appendChild(banner);
 }
 
-/* ── Terms agreement gates the continue button ── */
-const agreeTick = document.getElementById('agreeTick');
-const agreeBtn = document.getElementById('agreeBtn');
-if (agreeTick && agreeBtn) {
-  agreeTick.addEventListener('change', () => {
-    const on = agreeTick.checked;
-    agreeBtn.style.opacity = on ? '1' : '.55';
-    agreeBtn.style.pointerEvents = on ? 'auto' : 'none';
-    agreeBtn.setAttribute('aria-disabled', String(!on));
-    if (on) try { sessionStorage.setItem('iternal_terms_agreed', new Date().toISOString()); } catch (e) {}
-  });
-  // Tell the dashboard they agreed and moved on, so someone who stops before
-  // the questions can still be followed up. Plain text and keepalive: it must
-  // survive the page changing (the worker parses either).
-  agreeBtn.addEventListener('click', () => {
-    let email = '', token = '', agreed = '';
-    try { email = localStorage.getItem('iternal_signup_email') || ''; token = localStorage.getItem('iternal_signup_token') || ''; agreed = sessionStorage.getItem('iternal_terms_agreed') || ''; } catch (e) {}
-    if (!email || !token || !agreed) return;
-    try {
-      fetch(new URL('/answers', document.getElementById('contactForm').action), {
-        method: 'POST', keepalive: true,
-        body: JSON.stringify({ email, token, kind: 'update', answers: { termsAgreed: agreed } }),
-      });
-    } catch (e) {}
-  });
+/* ── Review and accept ──
+   The order comes from the worker at sign-up and is kept, so a reload still
+   shows it. Accepting counts only once the worker has recorded it. */
+const review = document.getElementById('terms');
+const acceptTerms = document.getElementById('acceptTerms');
+const acceptAuthority = document.getElementById('acceptAuthority');
+const acceptBtn = document.getElementById('acceptBtn');
+let order = null;
+
+function showReview(o) {
+  order = o;
+  review.querySelectorAll('[data-o]').forEach((el) => { el.textContent = o[el.dataset.o]; });
+  review.querySelector('[data-terms="html"]').href = `terms/website-build-and-care-v${o.termsVersion}.html`;
+  review.querySelector('[data-terms="pdf"]').href = `terms/website-build-and-care-v${o.termsVersion}.pdf`;
+  acceptTerms.checked = acceptAuthority.checked = false;
+  syncAccept();
+  document.getElementById('formWrap').classList.add('submitted');
+  review.hidden = false;
+}
+function syncAccept() { acceptBtn.disabled = !(acceptTerms.checked && acceptAuthority.checked); }
+acceptTerms.addEventListener('change', syncAccept);
+acceptAuthority.addEventListener('change', syncAccept);
+
+acceptBtn.addEventListener('click', async () => {
+  const label = acceptBtn.innerHTML;
+  acceptBtn.disabled = true;
+  acceptBtn.textContent = 'Sending…';
+  let email = '', token = '';
+  try { email = localStorage.getItem('iternal_signup_email') || ''; token = localStorage.getItem('iternal_signup_token') || ''; } catch (e) {}
+  try {
+    const res = await fetch(new URL('/accept', form.action), {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ email, token, termsVersion: order.termsVersion, accepted: acceptTerms.checked, authorised: acceptAuthority.checked }),
+    });
+    if (res.status === 409) {
+      // The terms changed since sign-up: show the current ones to review afresh.
+      const fresh = (await res.json()).order;
+      try { localStorage.setItem('iternal_signup_order', JSON.stringify(fresh)); } catch (e) {}
+      acceptBtn.innerHTML = label;
+      showReview(fresh);
+      alert('Our terms have been updated since you signed up. Please review the new version before you accept.');
+      return;
+    }
+    if (!res.ok) throw new Error('Accept failed');
+    try { localStorage.removeItem('iternal_signup_order'); } catch (e) {}
+    location.href = 'questions.html';
+  } catch (e) {
+    acceptBtn.innerHTML = label;
+    syncAccept();
+    alert('Something went wrong. Please try again or email us directly at websites@iternal.life');
+  }
+});
+
+if (!PREVIEW) {
+  try { const kept = JSON.parse(localStorage.getItem('iternal_signup_order')); if (kept) showReview(kept); } catch (e) {}
 }
 
 form.addEventListener('submit', (e)=>{
@@ -901,13 +953,15 @@ form.addEventListener('submit', (e)=>{
     return res.json().catch(()=>({}));
   })
   .then(data=>{
+    if (!data || !data.order) throw new Error('No order to review');
     // The questions page prefills the email from this, and sends the token
     // with the answers so nobody else can submit answers under their email.
     try {
       localStorage.setItem('iternal_signup_email', document.getElementById('email').value.trim().toLowerCase());
-      if (data && data.token) localStorage.setItem('iternal_signup_token', data.token);
+      if (data.token) localStorage.setItem('iternal_signup_token', data.token);
+      localStorage.setItem('iternal_signup_order', JSON.stringify(data.order));
     } catch(e) {}
-    document.getElementById('formWrap').classList.add('submitted');
+    showReview(data.order);
   })
   .catch(()=>{
     submitBtn.style.opacity='1';

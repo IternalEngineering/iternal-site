@@ -1,9 +1,10 @@
 /**
  * Iternal funnel worker — the funnel's only backend.
  *
- * Flow: the client signs up and agrees the terms on start.html, answers the
- * questions, then books their call on the Google Calendar appointment page.
- * Booking takes NO payment; the deposit is handled separately by the team.
+ * Flow: the client signs up on start.html, reviews their order and accepts
+ * the Website Build and Care Terms there, answers the questions, then books
+ * their call on the Google Calendar appointment page. Nothing here takes
+ * payment; the team invoices.
  *
  * Everything a client enters goes to TWO destinations, independently:
  *   1. the website-build pipeline repo (PIPELINE_REPO) — the full record,
@@ -15,15 +16,20 @@
  *   POST /signup          The start.html form posts here after sign-up:
  *                         seeds their lead record in KV, then both
  *                         destinations (fire-and-forget, never blocking).
- *   POST /answers         The questions page posts drafts/finals here, keyed
+ *                         Answers with the order to review.
+ *   POST /accept          The client accepts the terms: records what they
+ *                         accepted, emails them a copy, tells the team to
+ *                         invoice, and updates both destinations.
+ *   POST /answers        The questions page posts drafts/finals here, keyed
  *                         by the email they give in the first question. The
  *                         first answers queue the pre-call demo build
  *                         (demoRequested) in the pipeline repo.
  *   GET  /health          Liveness check.
  *
- * Clients get NO email from us by design: Google Calendar sends the booking
- * invite. Team briefs go via Cloudflare's native
- * email (send_email binding) to verified destinations.
+ * Clients get ONE email from us: on accepting, a copy of their order and the
+ * terms, as the terms promise (CLIENT_MAIL, Cloudflare Email Service). Google
+ * Calendar sends the booking invite. Team briefs go via Cloudflare's native
+ * email (TEAM_MAIL) to verified destinations.
  *
  * Explicitly NOT here: payment (the team handles it, outside this worker),
  * booking (Google Calendar's), and any READ of the Lead Tracker (write-only
@@ -105,6 +111,74 @@ ${JSON.stringify(lead, null, 2)}`);
 const s = (v, max) => String(v === null || v === undefined ? '' : v).trim().slice(0, max);
 const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
+/* ── The terms the client accepts ─────────────────────────────────────────
+   The current version and the fees its order details print. Each version is
+   published as terms/website-build-and-care-v<version>.html and .pdf on the
+   site and never edited: a new version is new files plus a change here. */
+const TERMS = { name: 'Website Build and Care Terms', version: '1.0', buildFee: 750, carePlan: 50 };
+const termsUrl = (env, version, ext) => `${env.SITE_URL}/terms/website-build-and-care-v${version}.${ext}`;
+
+function newReference() {
+  const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O or 1/I to misread
+  const tail = Array.from(crypto.getRandomValues(new Uint8Array(4)), b => abc[b % abc.length]).join('');
+  return 'WB-' + new Date().toISOString().slice(2, 7).replace('-', '') + '-' + tail;
+}
+
+/** The order details as the client reviews them, from their lead record. */
+const orderOf = kv => ({
+  company: kv.org || '', name: kv.name || '', email: kv.email, reference: kv.reference || '',
+  buildFee: TERMS.buildFee, carePlan: TERMS.carePlan, termsVersion: TERMS.version,
+});
+
+/** The order as plain-text lines, worded as on the acceptance screen. */
+const orderText = o => [
+  ['Company', o.company], ['Your name', o.name], ['Email', o.email], ['Reference', o.reference],
+  ['Build fee', `£${o.buildFee} + VAT. 50% now, 50% on completion`],
+  ['Care plan', `£${o.carePlan} per month + VAT, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance`],
+  ['Terms', `${TERMS.name}, version ${o.termsVersion}`],
+].map(([k, v]) => `${k}: ${v}`).join('\n');
+
+const ukTime = iso => new Date(iso).toLocaleString('en-GB', { timeZone: 'Europe/London', dateStyle: 'long', timeStyle: 'short' });
+
+/** The copy the terms promise the client. If it cannot go, the team gets it to forward. */
+async function sendClientCopy(env, acc) {
+  const pdfUrl = termsUrl(env, acc.termsVersion, 'pdf');
+  const text = `Hello ${acc.name.split(' ')[0]},
+
+Thank you for accepting our terms. As promised, here are your order details. The ${TERMS.name}, version ${acc.termsVersion}, are attached, and are also at ${termsUrl(env, acc.termsVersion, 'html')}
+
+${orderText(acc)}
+Accepted: ${ukTime(acc.acceptedAt)} (UK time)
+
+If anything above is wrong, reply to this email and let us know.
+
+Iternal Ltd
+`;
+  try {
+    if (!env.CLIENT_MAIL) throw new Error('no CLIENT_MAIL binding');
+    const pdf = await fetch(pdfUrl);
+    if (!pdf.ok) throw new Error(`terms PDF ${pdf.status}`);
+    const [, fromName, fromEmail] = /^(.*?)\s*<([^>]+)>$/.exec(env.CLIENT_FROM) || [, '', env.CLIENT_FROM];
+    await env.CLIENT_MAIL.send({
+      to: acc.email, from: { name: fromName, email: fromEmail }, replyTo: env.CLIENT_REPLY_TO,
+      subject: `Your order with Iternal, ${acc.reference}`,
+      text,
+      attachments: [{ content: await pdf.arrayBuffer(), filename: `Iternal ${TERMS.name} v${acc.termsVersion}.pdf`, type: 'application/pdf', disposition: 'attachment' }],
+    });
+    console.log('client copy sent:', acc.reference);
+  } catch (e) {
+    const why = e && e.message ? e.message : String(e);
+    console.error('client copy FAILED:', why, acc.email);
+    await sendTeamEmail(env, `Website Pipeline: client copy FAILED — ${acc.company}`,
+      `${acc.name} accepted the terms, but the copy the terms promise them did not send (${why}).
+Forward the text below to ${acc.email}, with the terms PDF attached (${pdfUrl}).
+
+----
+
+${text}`);
+  }
+}
+
 /* Gallery slugs as sent by websites.html's per-site "start here" buttons
    (?from=slug). Coupled to the gallery — see HOUSEKEEPING.md. */
 const GALLERY_SITES = {
@@ -170,10 +244,10 @@ function progressOf(kv) {
   const step = kv.answersComplete ? 'sent'
     : kv.bookedAt ? 'booked'
     : CORE.every(given) ? 'essentials-done'
-    : Object.keys(a).some(id => id !== 'email' && id !== 'termsAgreed' && given(id)) ? 'answering'
-    : a.termsAgreed ? 'terms-agreed'
+    : Object.keys(a).some(id => id !== 'email' && given(id)) ? 'answering'
+    : kv.acceptance ? 'terms-agreed'
     : 'signed-up';
-  const lastActiveAt = [kv.signedUpAt, kv.answersUpdatedAt, kv.bookedAt].filter(Boolean).sort().pop() || null;
+  const lastActiveAt = [kv.signedUpAt, kv.acceptance && kv.acceptance.acceptedAt, kv.answersUpdatedAt, kv.bookedAt].filter(Boolean).sort().pop() || null;
   return { step, lastActiveAt };
 }
 
@@ -194,8 +268,7 @@ function projectToPipeline(kv, file, slug) {
   // Every question, in page order, answered or not (answer: null) — so the
   // dashboard can fill in what a client skipped without its own copy of the
   // question list. Then anything outside the map, from either side.
-  const ids = [...new Set([...labels.keys(), ...Object.keys(raw), ...prev.keys()])]
-    .filter(k => k !== 'termsAgreed');
+  const ids = [...new Set([...labels.keys(), ...Object.keys(raw), ...prev.keys()])];
   const same = (a, b) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
 
   rec.email = kv.email;
@@ -204,7 +277,9 @@ function projectToPipeline(kv, file, slug) {
   rec.website = kv.website || '';
   rec.inspiration = kv.inspiration || '';
   rec.signedUpAt = kv.signedUpAt || rec.signedUpAt || null;
-  rec.termsAgreedAt = raw.termsAgreed || rec.termsAgreedAt || null;
+  // What they accepted, exactly as it stood: the order details and the terms
+  // version, and when.
+  rec.acceptance = kv.acceptance || rec.acceptance || null;
   rec.answers = ids.map(id => {
     const fromClient = id in raw ? raw[id] : null;
     const was = prev.get(id);
@@ -307,7 +382,10 @@ async function handleSignup(request, env, ctx) {
   const email = s(body.email, 120).toLowerCase();
   if (!EMAIL.test(email)) return json(400, { error: 'email required' }, cors);
   const name = (s(body.firstName, 60) + ' ' + s(body.lastName, 60)).trim();
-  const org = s(body.organisation, 120) || name || email;
+  // Stored as given: it is the company named in their order. Briefs and the
+  // tracker fall back to the person.
+  const company = s(body.organisation, 120);
+  const org = company || name || email;
   const website = s(body.website, 200);
   // The gallery example they clicked through from (websites.html ?from=slug).
   // Whitelist: slugs match websites.html's g-cta links; unknown values drop.
@@ -316,13 +394,14 @@ async function handleSignup(request, env, ctx) {
   const key = `lead:${email}`;
   const existing = (await env.CLIENTS.get(key, 'json')) || { email, status: 'lead' };
   existing.name = name || existing.name || '';
-  existing.org = org || existing.org || '';
+  existing.org = company || existing.org || '';
   existing.website = website || existing.website || '';
   existing.inspiration = inspiration || existing.inspiration || '';
   existing.signedUpAt = existing.signedUpAt || new Date().toISOString();
   // The browser keeps this and sends it with the answers, so knowing someone's
   // email is not enough to rewrite their record.
   existing.token = existing.token || crypto.randomUUID();
+  existing.reference = existing.reference || newReference();
   await env.CLIENTS.put(key, JSON.stringify(existing));
 
   // Two destinations plus the team brief, all independent: one failing must
@@ -336,17 +415,71 @@ Email: ${email}
 Organisation: ${org}
 Website: ${website || 'none given'}${inspiration ? '\nCame in from the ' + inspiration + ' example in the gallery.' : ''}
 
-Their questions come next; a second brief follows when they answer.`),
+Next they review their order and accept the terms; a brief follows when they do.`),
     postToLeadTracker(env, {
       org, contact: name || email, email, website,
       source: 'website funnel',
-      message: 'Signed up on the website — heading into the project questions.'
+      message: 'Signed up on the website — next, reviewing and accepting the terms.'
         + (inspiration ? ' Came in from the ' + inspiration + ' example in the gallery — a steer for the concepts.' : ''),
     }),
     syncToPipeline(env, email, 'signed up'),
   ]));
 
-  return json(200, { ok: true, token: existing.token }, cors);
+  return json(200, { ok: true, token: existing.token, order: orderOf(existing) }, cors);
+}
+
+/** The client accepts the terms at the end of sign-up. The agreement is formed
+    here, so this records exactly what they saw: the order details and the
+    terms version. Both boxes must be ticked; the page cannot skip either. */
+async function handleAccept(request, env, ctx) {
+  const cors = corsHeaders(env);
+  let body;
+  try {
+    const raw = await request.text();
+    if (raw.length > 2048) return json(400, { error: 'too large' }, cors);
+    body = JSON.parse(raw);
+  } catch (e) { return json(400, { error: 'bad json' }, cors); }
+
+  const email = s(body.email, 120).toLowerCase();
+  const key = `lead:${email}`;
+  const kv = EMAIL.test(email) ? await env.CLIENTS.get(key, 'json') : null;
+  if (!kv || !kv.token) return json(404, { error: 'sign up first' }, cors);
+  if (s(body.token, 100) !== kv.token) return json(403, { error: 'not the browser that signed up' }, cors);
+  // Accepting twice changes nothing and sends nothing again.
+  if (kv.acceptance) return json(200, { ok: true }, cors);
+  const order = orderOf(kv);
+  // The page shows the version it was given at sign-up; if that has since
+  // changed, they review the new one rather than accept one they never saw.
+  if (s(body.termsVersion, 20) !== order.termsVersion) return json(409, { error: 'the terms have changed', order }, cors);
+  if (body.accepted !== true || body.authorised !== true) return json(400, { error: 'both boxes must be ticked' }, cors);
+  if (!order.company || !order.name) return json(400, { error: 'company and name required' }, cors);
+
+  kv.acceptance = { ...order, acceptedAt: new Date().toISOString() };
+  await env.CLIENTS.put(key, JSON.stringify(kv));
+  const acc = kv.acceptance;
+
+  ctx.waitUntil(Promise.allSettled([
+    sendClientCopy(env, acc),
+    sendTeamEmail(env,
+      `Website Pipeline: terms accepted — ${acc.company}`,
+      `${acc.name} accepted the ${TERMS.name}, version ${acc.termsVersion}, for ${acc.company}.
+
+${orderText(acc)}
+Accepted: ${ukTime(acc.acceptedAt)} (UK time)
+
+The first 50% of the build fee (£${acc.buildFee / 2} + VAT) is payable now: send the invoice. They have been emailed a copy of the order and the terms.
+Their questions come next; a brief follows when they answer.`),
+    postToLeadTracker(env, {
+      org: acc.company, contact: acc.name, email, website: kv.website || '',
+      source: 'website funnel',
+      message: `Accepted the ${TERMS.name}, version ${acc.termsVersion} (reference ${acc.reference}). `
+        + `Build fee £${acc.buildFee} + VAT, 50% now and 50% on completion: invoice the first 50%. `
+        + `Care plan £${acc.carePlan} per month + VAT from the month after the site goes live.`,
+    }),
+    syncToPipeline(env, email, 'accepted the terms'),
+  ]));
+
+  return json(200, { ok: true }, cors);
 }
 
 async function handleAnswers(request, env, ctx) {
@@ -359,9 +492,9 @@ async function handleAnswers(request, env, ctx) {
   } catch (e) { return json(400, { error: 'bad json' }, cors); }
 
   const kind = body.kind === 'complete' ? 'complete' : 'partial';
-  // 'update': answers the pages save by themselves as a prospect leaves (and
-  // the start page's terms agreement). They go to the dashboard only, so the
-  // team can see who stopped where; no team email.
+  // 'update': answers the questions page saves by itself as a prospect
+  // leaves. They go to the dashboard only, so the team can see who stopped
+  // where; no team email.
   const quiet = body.kind === 'update';
   const email = s(body.email, 120).toLowerCase();
   if (!EMAIL.test(email)) return json(400, { error: 'email required' }, cors);
@@ -441,6 +574,7 @@ export default {
     if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders(env) });
     if (url.pathname === '/health') return json(200, { ok: true });
     if (url.pathname === '/signup' && request.method === 'POST') return handleSignup(request, env, ctx);
+    if (url.pathname === '/accept' && request.method === 'POST') return handleAccept(request, env, ctx);
     if (url.pathname === '/answers' && request.method === 'POST') return handleAnswers(request, env, ctx);
     return json(404, { error: 'not found' });
   },

@@ -7,6 +7,7 @@ import worker from './worker.js';
 
 const store = new Map();
 const teamMail = [];
+const clientMail = [];
 const env = {
   CLIENTS: {
     async get(k, type) { const v = store.get(k); return v === undefined ? null : (type === 'json' ? JSON.parse(v) : v); },
@@ -14,6 +15,9 @@ const env = {
     async delete(k) { store.delete(k); },
   },
   TEAM_MAIL: { async send(msg) { teamMail.push(msg); } },
+  CLIENT_MAIL: { async send(msg) { clientMail.push(msg); } },
+  CLIENT_FROM: 'Iternal <websites@iternal.co.uk>',
+  CLIENT_REPLY_TO: 'websites@iternal.life',
   SITE_URL: 'https://iternal.co.uk',
   FROM_EMAIL: 'Website Pipeline <funnel@iternal.co.uk>',
   TEAM_EMAIL: 'paul@iternal.life',
@@ -47,6 +51,7 @@ const answerOf = (f, id) => f.answers.find(a => a.id === id);
 let outbound = [];
 globalThis.fetch = async (url, opts = {}) => {
   if (String(url).startsWith('https://api.github.com/')) return fakeGitHub(String(url), opts);
+  if (String(url).endsWith('.pdf')) return new Response(new Uint8Array([37, 80, 68, 70]), { status: 200 }); // the published terms
   outbound.push({ url: String(url), body: opts.body ? JSON.parse(opts.body) : null });
   return new Response('{}', { status: 200 });
 };
@@ -148,8 +153,12 @@ const slug = 'omar-kilnworks-co-uk';
 outbound = [];
 r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'Omar', lastName: 'Haddad', email: 'Omar@Kilnworks.co.uk', organisation: 'Kilnworks', website: 'kilnworks.co.uk', inspiration: 'bplaced' }) });
 assert.strictEqual(r.status, 200);
-const omarToken = (await r.json()).token;
+const { token: omarToken, order: omarOrder } = await r.json();
 assert.ok(omarToken && omarToken.length > 20); // the browser keeps this for /answers
+// ...and gets the order to review: their details, a reference, the fees and
+// the terms version
+assert.deepStrictEqual({ ...omarOrder, reference: 'x' }, { company: 'Kilnworks', name: 'Omar Haddad', email: 'omar@kilnworks.co.uk', reference: 'x', buildFee: 750, carePlan: 50, termsVersion: '1.0' });
+assert.match(omarOrder.reference, /^WB-\d{4}-[A-HJ-NP-Z2-9]{4}$/);
 await drain();
 {
   const f = ghFile(slug);
@@ -174,16 +183,92 @@ await drain();
   gh.files.set(`clients/${slug}.json`, { json: JSON.stringify(f), sha: 'sha-dashboard' });
 }
 
-// progress before booking: signed up, then the terms, then a first answer
-// saved as they leave. The team can see where they are; nothing is queued
-// and nobody is emailed.
+// ── Accepting the terms ─────────────────────────────────────────────────
 assert.deepStrictEqual(ghFile(slug).progress.step, 'signed-up');
-teamMail.length = 0;
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'update', answers: { termsAgreed: '2026-09-30T08:55:00.000Z' } }) });
+const accept = (extra = {}) => call('/accept', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, termsVersion: '1.0', accepted: true, authorised: true, ...extra }) });
+teamMail.length = 0; outbound = [];
+// refused: not their browser, no sign-up, a box left unticked, a version
+// they were never shown (which hands back the current order to review)
+assert.strictEqual((await accept({ token: 'guess' })).status, 403);
+assert.strictEqual((await call('/accept', { method: 'POST', body: JSON.stringify({ email: 'nobody@x.co.uk', token: omarToken, termsVersion: '1.0', accepted: true, authorised: true }) })).status, 404);
+assert.strictEqual((await accept({ authorised: false })).status, 400);
+assert.strictEqual((await accept({ accepted: 'yes' })).status, 400);
+r = await accept({ termsVersion: '0.9' });
+assert.strictEqual(r.status, 409);
+assert.strictEqual((await r.json()).order.termsVersion, '1.0');
+await drain();
+assert.ok(!JSON.parse(store.get('lead:omar@kilnworks.co.uk')).acceptance);
+assert.strictEqual(teamMail.length + clientMail.length + outbound.length, 0);
+// accepted: the record keeps exactly what they saw
+r = await accept();
 assert.strictEqual(r.status, 200);
 await drain();
-assert.strictEqual(ghFile(slug).progress.step, 'terms-agreed');
-assert.strictEqual(ghFile(slug).termsAgreedAt, '2026-09-30T08:55:00.000Z');
+{
+  const acc = JSON.parse(store.get('lead:omar@kilnworks.co.uk')).acceptance;
+  assert.deepStrictEqual({ ...acc, acceptedAt: 'x' }, { ...omarOrder, acceptedAt: 'x' });
+  assert.ok(Date.parse(acc.acceptedAt));
+  const f = ghFile(slug);
+  assert.deepStrictEqual(f.acceptance, acc); // on the dashboard too
+  assert.strictEqual(f.progress.step, 'terms-agreed');
+  // the client gets the copy the terms promise, with the terms attached
+  assert.strictEqual(clientMail.length, 1);
+  const m = clientMail[0];
+  assert.strictEqual(m.to, 'omar@kilnworks.co.uk');
+  assert.deepStrictEqual(m.from, { name: 'Iternal', email: 'websites@iternal.co.uk' });
+  assert.strictEqual(m.replyTo, 'websites@iternal.life');
+  assert.ok(m.subject.includes(acc.reference));
+  assert.ok(m.text.startsWith('Hello Omar,'));
+  assert.ok(m.text.includes('Company: Kilnworks\nYour name: Omar Haddad\nEmail: omar@kilnworks.co.uk\nReference: ' + acc.reference));
+  assert.ok(m.text.includes('Build fee: £750 + VAT. 50% now, 50% on completion'));
+  assert.ok(m.text.includes('Care plan: £50 per month + VAT, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance'));
+  assert.ok(m.text.includes('https://iternal.co.uk/terms/website-build-and-care-v1.0.html'));
+  assert.strictEqual(m.attachments[0].type, 'application/pdf');
+  assert.strictEqual(m.attachments[0].content.byteLength, 4);
+  // the team is told to invoice the first half; the tracker gets a note, never answers
+  const brief = teamMail.find(t => t.raw.includes('Subject: Website Pipeline: terms accepted — Kilnworks'));
+  assert.ok(brief && brief.raw.includes('(£375 + VAT) is payable now: send the invoice'));
+  const note = outbound.find(o => o.url.includes('action=createLead'));
+  assert.ok(note.body.message.includes('Accepted the Website Build and Care Terms, version 1.0 (reference ' + acc.reference + ')'));
+  assert.ok(!('answers' in note.body));
+}
+// accepting again changes nothing and sends nothing
+teamMail.length = 0; clientMail.length = 0; outbound = [];
+{
+  const before = store.get('lead:omar@kilnworks.co.uk');
+  assert.strictEqual((await accept()).status, 200);
+  await drain();
+  assert.strictEqual(store.get('lead:omar@kilnworks.co.uk'), before);
+  assert.strictEqual(teamMail.length + clientMail.length + outbound.length, 0);
+}
+// a sign-up without a company can never accept: the order must name one
+r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'Lee', email: 'lee@solo.co.uk' }) });
+{
+  const { token, order } = await r.json();
+  assert.strictEqual(order.company, '');
+  r = await call('/accept', { method: 'POST', body: JSON.stringify({ email: 'lee@solo.co.uk', token, termsVersion: '1.0', accepted: true, authorised: true }) });
+  assert.strictEqual(r.status, 400);
+  await drain();
+  assert.strictEqual(JSON.parse(store.get('lead:lee@solo.co.uk')).org, ''); // briefs fall back to the person; the order does not
+}
+// when the copy cannot go, the team gets it to forward: never silent
+{
+  const sendBefore = env.CLIENT_MAIL.send;
+  env.CLIENT_MAIL.send = async () => { throw Object.assign(new Error('Domain not onboarded'), { code: 'E_SENDER_DOMAIN_NOT_AVAILABLE' }); };
+  r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'Ana', lastName: 'Silva', email: 'ana@tidewater.co.uk', organisation: 'Tidewater' }) });
+  const { token } = await r.json();
+  teamMail.length = 0;
+  r = await call('/accept', { method: 'POST', body: JSON.stringify({ email: 'ana@tidewater.co.uk', token, termsVersion: '1.0', accepted: true, authorised: true }) });
+  assert.strictEqual(r.status, 200); // she has accepted; the failure is ours to handle
+  await drain();
+  env.CLIENT_MAIL.send = sendBefore;
+  const failMail = teamMail.find(t => t.raw.includes('client copy FAILED — Tidewater'));
+  assert.ok(failMail && failMail.raw.includes('Domain not onboarded') && failMail.raw.includes('Forward the text below to ana@tidewater.co.uk'));
+  assert.ok(failMail.raw.includes('Build fee: £750 + VAT. 50% now, 50% on completion'));
+}
+
+// progress after accepting: a first answer saved as they leave. The team can
+// see where they are; nothing is queued and nobody is emailed.
+teamMail.length = 0;
 r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'update', answers: { mainJob: 'Sell products or services' } }) });
 assert.strictEqual(r.status, 200);
 await drain();
@@ -202,10 +287,10 @@ assert.strictEqual(r.status, 200);
 await drain();
 assert.ok(!store.get('lead:passer@by.co.uk') && !gh.files.has('clients/passer-by-co-uk.json'));
 
-// first answers: labelled Q&A in page order, terms timestamp lifted out,
-// stage moves on, and the pre-call demo build is queued — through a 409
+// first answers: labelled Q&A in page order, stage moves on, and the
+// pre-call demo build is queued — through a 409
 gh.conflictOnce = true;
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'partial', answers: { timeline: 'Within a month', mainJob: 'Sell products or services', termsAgreed: '2026-09-30T09:00:00.000Z' } }) });
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, kind: 'partial', answers: { timeline: 'Within a month', mainJob: 'Sell products or services' } }) });
 assert.strictEqual(r.status, 200);
 await drain();
 {
@@ -215,8 +300,8 @@ await drain();
   assert.strictEqual(f.progress.step, 'booked'); // clicking Book your call queues the demo
   assert.strictEqual(f.demoRequested, true);
   assert.strictEqual(f.stageHistory.length, 2); // the queueing is still on the record
-  assert.strictEqual(f.termsAgreedAt, '2026-09-30T09:00:00.000Z');
-  assert.deepStrictEqual(answered(f).map(a => a.id), ['mainJob', 'timeline']); // page order, terms not an answer
+  assert.strictEqual(f.acceptance.reference, omarOrder.reference); // answers leave the acceptance alone
+  assert.deepStrictEqual(answered(f).map(a => a.id), ['mainJob', 'timeline']); // page order
   assert.strictEqual(answerOf(f, 'mainJob').question, "What's the site's main job?");
   assert.strictEqual(answerOf(f, 'mainJob').answer, 'Sell products or services');
   // every question is on the record, answered or not, so the dashboard can

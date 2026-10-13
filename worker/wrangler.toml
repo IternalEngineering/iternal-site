@@ -9,7 +9,14 @@ routes = [{ pattern = "api.iternal.co.uk", custom_domain = true }]
 # before deploying, and must match TEAM_EMAIL below.
 # NB: must sit up here, above every [section] header — anywhere lower, TOML
 # swallows it into the preceding table and the binding silently never exists.
-send_email = [{ name = "TEAM_MAIL", allowed_destination_addresses = ["websites@iternal.life", "john@iternal.life"] }]
+# CLIENT_MAIL sends each client the copy of their order and terms that the
+# terms promise. It is Cloudflare Email Service, not Email Routing: it reaches
+# any address once iternal.co.uk is onboarded as a sending domain (Workers
+# Paid plan). It may only send from CLIENT_FROM's address.
+send_email = [
+  { name = "TEAM_MAIL", allowed_destination_addresses = ["websites@iternal.life", "john@iternal.life"] },
+  { name = "CLIENT_MAIL", allowed_sender_addresses = ["websites@iternal.co.uk"] },
+]
 
 # Create with: wrangler kv namespace create CLIENTS  — then paste the id here.
 [[kv_namespaces]]
@@ -21,6 +28,10 @@ SITE_URL = "https://iternal.co.uk"
 FROM_EMAIL = "Website Pipeline <funnel@iternal.co.uk>"
 # Comma-separated; each gets its own copy of every team brief.
 TEAM_EMAIL = "websites@iternal.life, john@iternal.life"
+# The client's copy: from an iternal.co.uk address (the sending domain), with
+# replies going to the team's mailbox.
+CLIENT_FROM = "Iternal <websites@iternal.co.uk>"
+CLIENT_REPLY_TO = "websites@iternal.life"
 # The Lead Tracker's public "Anyone" /exec URL:
 LEAD_API_URL = "https://script.google.com/macros/s/AKfycbzwkFrrOZ_VqMP0CJnAjtCsUTU6BtOzbLyJ7SClkmaVJq6W3r4FSoxohBPLqZZbrTKI/exec"
 # The information & demo build dashboard's repo: the worker commits one

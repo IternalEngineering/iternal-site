@@ -7,20 +7,26 @@ changing anything.
 
 ## The pipeline, as built (30 Sep 2026)
 
-Sign up → agree the terms → questions → book the call → call → decide →
-2–3 concepts → build → live. **Booking takes no payment**; payments are
-requested separately by the team. Before the call, an agent session builds
-one concept homepage from the client's answers (the "initial build" the
-£100 covers).
+Sign up → review and accept the Website Build and Care Terms → questions →
+book the call → call → design and build → live. **Accepting forms the
+agreement** (13 Oct 2026). **Nothing on the site takes payment**: the team
+invoices, starting with the first 50% of the build fee on acceptance. Before
+the call, an agent session builds one concept homepage from the client's
+answers.
 
 - `websites.html` — the gallery, sole funnel entrance (curated; consent
   required per HOUSEKEEPING.md). Eight sites; each opens in a lightbox and
   carries a "Start yours" button that tags the sign-up with that site.
-- `start.html` — sign-up (4 fields, posted straight to the worker) +
-  "The engagement at a glance" (how it works, cost included; the full terms
-  are a contract signed after the call) + a required "I've read how it
-  works" tick that unlocks "Continue to Your Questions". The tick's time is
-  sent to the worker as `termsAgreed` (the internal name stays).
+- `start.html` — sign-up (4 fields, posted straight to the worker), then
+  "Review and accept", filled from the order the worker sends back: the
+  order details table, the terms (view or download), two required ticks
+  and "Accept and continue", which posts to `/accept` and goes on to the
+  questions only once the worker has recorded it. That screen's wording
+  was supplied with the terms: keep it word for word.
+- `terms/website-build-and-care-v<version>.html` + `.pdf` — the terms the
+  client accepts, as supplied, never edited. A new version is a new pair
+  of files (the PDF is printed from the page by `tools/terms-pdf.mjs`),
+  `TERMS` in `worker/worker.js`, and the terms link in start.html's hero.
 - `questions.html` — "Before you book your call": 5 essentials unlock the
   booking, 12 optional. Answers are saved to the worker as they go (when
   the page is hidden or closed), so the team can follow up anyone who stops;
@@ -28,7 +34,7 @@ one concept homepage from the client's answers (the "initial build" the
   Identity = the email they type. Booking button → a plain Google Calendar
   appointment schedule.
 - `worker/` — the only backend (`client-site-funnel` at
-  https://api.iternal.co.uk): `/signup`, `/answers`, `/health`. Every
+  https://api.iternal.co.uk): `/signup`, `/accept`, `/answers`, `/health`. Every
   sign-up goes to TWO destinations: the Website Build Platform repo (full
   record, answers included) and the Lead Tracker (a summary; never answers).
   Nothing in it takes or records payment (Stripe removed 7 Oct 2026). Deploy from
@@ -37,18 +43,13 @@ one concept homepage from the client's answers (the "initial build" the
   build dashboard. The worker commits `clients/<slug>.json` there; the
   `website-demo-build` skill drains its `demoRequested` queue. Its own
   CLAUDE.md and README hold the data contract.
-- Pricing language (Robbie, 1 Oct 2026; he expects it to change): £750 all
-  in. £100 covers the call and an initial build; the remaining £650 only if
-  the client decides to go ahead, at the end of the call or after it. Never
-  say payment is taken at booking, and say nothing about refunding the £100
-  until that is decided. Every place a figure is printed is listed in
-  HOUSEKEEPING.md §Payment.
-- The studio is an extra, offered gently (Robbie, 1 Oct 2026): "we also
-  offer our agentic studio, built in", priced separately from the £750,
-  with no published figure ("mention it on your call"). Never call it a
-  tier or set it up as a comparison, and never say or imply the £750
-  includes it. It appears as "Our studio, built in" in websites.html and in
-  the start.html terms.
+- Pricing language comes from the terms (version 1.0, 13 Oct 2026): build
+  fee £750 + VAT, 50% on acceptance and 50% on completion; care plan £50 a
+  month + VAT from the month after the site goes live, which includes the
+  web agent (our studio) for the client's own updates. Pages restate these
+  and never add to them: no figure, promise or refund the terms do not
+  make. Every place a figure is printed is listed in HOUSEKEEPING.md
+  §Payment.
 - Do not promise a number of concepts ("two or three") anywhere on these
   pages. We show them; we do not announce them.
 - `SITE-CHANGES.md` is the running log of what a visitor would notice, in
@@ -56,10 +57,13 @@ one concept homepage from the client's answers (the "initial build" the
   same commit, under "Waiting to deploy"; after a deploy, move those lines to
   "Live" under the date and update the version line at the top. It is in
   `.assetsignore`, so it is never published.
-- Clients get no email from us: Google Calendar sends the invite. Team
-  briefs go to websites@iternal.life and john@iternal.life as
-  "Website Pipeline <funnel@iternal.co.uk>" via the worker's send_email
-  binding.
+- Clients get one email from us: on accepting, a copy of their order and
+  the terms (PDF attached), as the terms promise, from
+  "Iternal <websites@iternal.co.uk>" with replies to websites@iternal.life
+  (`CLIENT_MAIL`, Cloudflare Email Service). If it cannot send, the team
+  gets it to forward. Google Calendar sends the invite. Team briefs go to
+  websites@iternal.life and john@iternal.life as
+  "Website Pipeline <funnel@iternal.co.uk>" (`TEAM_MAIL`).
 
 ## Currently DISABLED / dark (deliberate — do not "fix")
 
@@ -81,6 +85,7 @@ one concept homepage from the client's answers (the "initial build" the
 | **Lead Tracker** (Apps Script, separate `lead-tracker` repo) | `createLead` POSTs on sign-up, secret-gated (`LEAD_API_SECRET`) | `{ok, id}` and NOTHING else | **WRITE-ONLY. Never read tracker/Sheet data — it is private.** Dedupes by email: repeat posts become notes on the existing record. Never sent answers |
 | **Google Calendar** | the client (we just link to the appointment schedule URL) | nothing to our systems — the invite goes to the client | The schedule lives in Google's UI, not in code. No payment step |
 | **Cloudflare Email Routing** | team briefs | — | Every recipient must be a verified destination |
+| **Cloudflare Email Service** | the client's copy of their order and terms | message id | Sends from iternal.co.uk once it is onboarded as a sending domain (Workers Paid). A failure emails the team the copy to forward |
 | **Slack** | nothing directly — pings come from the Lead Tracker | — | |
 | **GitHub Action** (`.github/workflows/screenshots.yml`) | weekly gallery screenshot refresh commits | — | Gallery additions touch FOUR places — see HOUSEKEEPING.md |
 
@@ -96,16 +101,17 @@ fallback constant in questions.html.
 3. Deploy the site (held: only on Robbie's word, named in that moment).
 4. `?team` walkthrough: one real sign-up should yield a client file, a
    tracker row and both briefs.
-5. Decide how the £100 and the remainder are requested, and whether the
-   £100 is returned if the client does not go ahead. (Figures are in the
-   pages since 1 Oct.)
+5. ~~Decide how payment is requested~~ Settled by the terms (13 Oct 2026):
+   the team invoices 50% on acceptance and 50% on completion.
 6. Show the team the current front end — they have not seen the gallery,
    lightbox or question changes. They want the prospect experience to take
    its cue from the sleekness of existing sites; redesign after they have
    seen what exists.
-7. Legal: handled by a contract each client signs after the call (Robbie,
-   13 Oct 2026, after the team meeting). No separate privacy and legal
-   review; agents never draft or decide contract terms.
+7. Legal: the Website Build and Care Terms, supplied 13 Oct 2026 and
+   accepted online at the end of sign-up (they replace the earlier plan of
+   a contract signed after the call). No separate privacy and legal
+   review; agents never draft, edit or decide terms, and place supplied
+   wording word for word.
 8. bplaced-site production deploy (`npx wrangler pages deploy --branch
    main` from that repo) so its gallery card opens in the lightbox.
 9. Stale artefacts: the StateCraft diagram

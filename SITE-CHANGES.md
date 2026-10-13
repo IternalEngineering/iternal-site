@@ -12,18 +12,30 @@ Last deploy: **7 Oct 2026, third deploy** (version 8fb2c0c7). Local copy: `http:
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
 ### Sign-up page and websites gallery (still hidden from the public)
-- **"How it works", not "terms".** The legal terms are now a contract the client signs after
-  their call, so the sign-up page no longer says "This is the whole deal. No small print
-  elsewhere." or asks people to agree to terms. The box keeps its heading ("The engagement
-  at a glance") and now says the full terms come in a contract after the call; the tick
-  reads "I've read how it works"; the steps, buttons and the gallery's closing line say
-  "how it works". (terms wording)
+- **Review and accept our terms.** After signing up, the visitor sees "Review and accept":
+  their order details in a table (company, name, email, a reference, the build fee of £750
+  + VAT with half now and half on completion, the care plan of £50 a month + VAT, and the
+  Website Build and Care Terms, version 1.0, to view or download) and two boxes to tick:
+  that they have read and accept the terms and the order, and that they are authorised to
+  accept for their organisation, acting in the course of its business. "Accept and
+  continue" works only once both are ticked; it records the acceptance, emails them a copy
+  and takes them to their questions. The wording comes with the terms, word for word. It
+  replaces "The engagement at a glance" (the £100-to-begin, studio and "If no concept fits"
+  cards and its tick). Organisation and last name are now required, because the order
+  names them. (terms acceptance)
+- **The terms have their own page**, `terms/website-build-and-care-v1.0.html`, with a PDF
+  to download. Not indexed. (terms acceptance)
+- **Prices restated from the terms.** The gallery's "How it works" now leads "£750 + VAT to
+  build: half when you accept our terms, half on completion"; "Our studio, built in" became
+  "Looking after your site" (the £50 a month care plan, which includes the web agent); the
+  page descriptions and the closing line match. The sign-up page's steps say "Review and
+  accept", and its intro no longer promises refining the site "until it's yours" (the terms
+  include one round of revisions). (terms acceptance)
 
 ### Questions page (still hidden from the public)
 - **"Your answers are saved as you go."** The intro now says so: answers are saved to the
   team's dashboard whenever the visitor leaves the page, from the first answer, so someone
-  who stops part-way can be followed up. (Behind the scenes: the sign-up page also records
-  when they agree the terms.) (prospect progress)
+  who stops part-way can be followed up. (prospect progress)
 
 ---
 

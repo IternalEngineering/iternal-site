@@ -919,9 +919,6 @@ document.head.appendChild(style);
 
   // Pay-at-booking flow: identity is simply the email they give in the first
   // question. Booking the call afterwards takes no payment.
-  // The terms-agreed stamp travels from start.html via sessionStorage.
-  var TERMS_AGREED = '';
-  try { TERMS_AGREED = sessionStorage.getItem('iternal_terms_agreed') || ''; } catch (e) {}
 
   function save(){ try { sessionStorage.setItem(STORE, JSON.stringify(answers)); } catch(e) {} }
   function answered(q){ var v = answers[q.id]; return Array.isArray(v) ? v.length > 0 : !!(v && String(v).trim()); }
@@ -1032,7 +1029,7 @@ document.head.appendChild(style);
         // can still deliver it as the tab closes (the worker parses either).
         headers: leaving ? {} : { 'content-type': 'application/json' },
         keepalive: leaving,
-        body: JSON.stringify({ email: answers.email, token: SIGNUP_TOKEN, kind: kind, answers: TERMS_AGREED ? Object.assign({}, answers, { termsAgreed: TERMS_AGREED }) : answers })
+        body: JSON.stringify({ email: answers.email, token: SIGNUP_TOKEN, kind: kind, answers: answers })
       });
     }
     var fd = new FormData();

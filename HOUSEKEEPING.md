@@ -88,8 +88,18 @@ the token awaits org approval), so the worker can deploy regardless.
   tracker; remove those too.
 - `/signup` is the sign-up form's only destination (FormSubmit is gone from
   that page). Its spam check is the form's hidden honeypot field.
-- `/signup` answers `{ok, token}`; start.html keeps the token and the email
-  in localStorage, questions.html prefills the email from it and sends the
+- `/signup` answers `{ok, token, order}`. `order` is what start.html's
+  "Review and accept" shows: company, name, email, a reference (`WB-yymm-XXXX`,
+  made at sign-up and kept), the fees and the terms version, all from the
+  worker's `TERMS` constant. `/accept` takes `{email, token, termsVersion,
+  accepted, authorised}` and refuses anything short of both ticks, the
+  current version (409 hands back the current order to review), a company
+  and a name. It stores `acceptance` (the order as shown, plus
+  `acceptedAt`) on the lead record, then, independently: emails the client
+  their copy with the terms PDF attached (fetched from the site), briefs the
+  team to invoice the first 50%, posts a note to the tracker and syncs the
+  platform. Accepting twice changes and sends nothing.
+- start.html keeps the token and the email in localStorage, questions.html prefills the email from it and sends the
   token with every answers post. `/answers` refuses (403) answers for a
   record whose token does not match — knowing an email is not enough to
   rewrite someone's brief. A client on a different browser gets a message
@@ -97,9 +107,7 @@ the token awaits org approval), so the worker can deploy regardless.
 - Answers reach the platform as the prospect goes: whenever they switch
   away from or close the questions page with answers newer than the last
   send (`update`), on "Book your call" (`partial`, which records `bookedAt`)
-  and on "Send Answers" (`complete`). start.html also sends the terms
-  agreement as an `update` when they continue to the questions. `update`
-  posts go to the platform only (no team email), never create a record
+  and on "Send Answers" (`complete`). `update` posts go to the platform only (no team email), never create a record
   without a sign-up, and never queue the demo build: only booking or sending
   does. Each record carries `progress` (furthest step, last active) so the
   dashboard can flag prospects who have gone quiet. The tracker never gets
@@ -117,31 +125,28 @@ the token awaits org approval), so the worker can deploy regardless.
   a "FAILED" brief naming the client. Worker logs are retained
   (`[observability]` in wrangler.toml).
 
-## Payment (handled separately — 30 Sep 2026; figures set 1 Oct)
+## Payment and the terms (13 Oct 2026)
 
-- **Booking a call takes no payment.** The Google Calendar pay-at-booking
-  design is dropped. The team requests each payment separately.
-- **The structure (Robbie, 1 Oct 2026, and expected to change):** £100 covers
-  the call and an initial build. At the end of the call, or after it, the
-  client decides whether to go ahead; if they do, the remainder is invoiced
-  then. The pages print the total as £750 and the remainder as £650.
-- **The studio as an extra (Robbie, 1 Oct 2026).** The agentic studio can be
-  built into a site, priced separately from the £750 with no published
-  figure. It is mentioned plainly, never set up as a tier.
-- **Changing a price or the split.** The figures, and the studio's
-  wording, live only in these places. Search both files for `£` and
-  `studio` to find them all:
+- **The terms set the money.** The Website Build and Care Terms, version
+  1.0 (`terms/website-build-and-care-v1.0.html` + `.pdf`, supplied 13 Oct
+  2026 and placed word for word): build fee £750 + VAT, 50% payable on
+  accepting them and 50% on completion; care plan £50 a month + VAT from the
+  month after the site goes live, which includes the web agent (our studio).
+  Invoices are payable within 14 days.
+- **Accepting is the last step of sign-up**, on start.html, and forms the
+  agreement. The worker briefs the team to invoice the first 50%. Nothing on
+  the site takes payment, and booking a call takes none.
+- **Changing a price, or a new version of the terms.** A new version is
+  supplied wording, never ours. It means: a new pair of files in `terms/`
+  (print the PDF with `node tools/terms-pdf.mjs terms/<page>.html`; keep the
+  old pair, since clients who accepted it are bound by it), `TERMS` in
+  `worker/worker.js` (version and fees; then the worker tests and a worker
+  deploy), the terms link in start.html's hero note, and the figures the
+  pages restate. Search both files for `£` to find them:
   - `websites.html`: the meta description, the JSON-LD description, the
-    bold opening sentence of "How it works", and "Our studio, built in".
-  - `start.html`: the meta description, and the cards "The price", "£100 to
-    begin, the rest when you decide" and "Our studio, built in" in "The
-    engagement at a glance".
-  If the order of events changes too (when the initial build happens, when
-  the client decides), the "What the call starts" card in `start.html` and
-  the "How it works" paragraph describe it. Tell whoever prepares the
-  contract the client signs after the call, so the two never disagree.
-- **Not yet decided:** whether the £100 is returned if the client does not
-  go ahead. The pages say nothing either way until it is.
+    bold opening sentence of "How it works", and "Looking after your site".
+  - `start.html`: the meta description. The order table on "Review and
+    accept" takes its figures from the worker.
 - **No payment code anywhere (Robbie, 7 Oct 2026).** The Stripe webhook
   and its payment records were removed from the worker; whether and when a
   client has paid is kept by hand in the Lead Tracker. The old £375 Payment
@@ -160,8 +165,27 @@ Changing who receives them is a three-step change, not one:
    file. The two lists must match.
 
 The From (`funnel@iternal.co.uk`) is a label only — no mailbox behind it, and
-clients never see it. Clients get no email from us by design: Google Calendar
-sends the booking invite.
+clients never see it.
+
+## The client's copy (email)
+
+The terms promise each client "a copy of both" (the terms and their order)
+when they accept. The worker sends it through a second binding,
+`CLIENT_MAIL`, which is Cloudflare **Email Service** (outbound, in beta), not
+Email Routing: it can reach any address. Setting it up, once:
+
+1. Cloudflare → Email Service: onboard **iternal.co.uk** as a sending domain
+   (it adds the DNS records it needs). Sending to any address needs the
+   Workers Paid plan.
+2. `CLIENT_FROM` (`Iternal <websites@iternal.co.uk>`) must match the
+   binding's `allowed_sender_addresses` in `worker/wrangler.toml`. Replies
+   go to `CLIENT_REPLY_TO` (websites@iternal.life).
+3. Deploy the worker. Until all of this is in place every send fails, and
+   each failure emails the team "client copy FAILED" with the text to
+   forward by hand, so nobody goes without their copy.
+
+That is the only email a client gets from us: Google Calendar sends the
+booking invite.
 
 ## Page-side switches
 
@@ -184,11 +208,11 @@ Before lighting up:
 
 - The pipeline repo exists on GitHub and `PIPELINE_TOKEN` is set.
 - websites@iternal.life exists and both brief addresses are verified.
-- A `?team` walkthrough has produced a client file, a tracker row and both
-  briefs from one real sign-up.
-- The contract each client signs after the call is ready (it covers the
-  legal terms, including what happens to the £100 if the client does not go
-  ahead).
+- iternal.co.uk is onboarded as an Email Service sending domain (§The
+  client's copy).
+- A `?team` walkthrough has produced, from one real sign-up and acceptance,
+  a client file with its acceptance, a tracker row, the team briefs and the
+  client's copy with the terms PDF attached.
 - Jay's Transport has moved to the new site (the gallery shows the old one
   until then).
 
