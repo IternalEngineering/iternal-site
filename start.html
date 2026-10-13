@@ -843,7 +843,7 @@ const submitBtn = document.getElementById('submitBtn');
 
 // Dark-launch preview gate: the page is live for review, but sign-up stays
 // off until launch. The team appends ?team to use the real form. Remove
-// this whole block at light-up (with the nav-link revert).
+// this whole block at light-up (HOUSEKEEPING.md §Go-live, step 4).
 const PREVIEW = !/[?&]team\b/.test(location.search);
 if (PREVIEW) {
   submitBtn.disabled = true;

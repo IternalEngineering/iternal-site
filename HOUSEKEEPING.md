@@ -216,16 +216,36 @@ Before lighting up:
 - Jay's Transport has moved to the new site (the gallery shows the old one
   until then).
 
-LIGHTING UP (when the team says go), then redeploy:
+LIGHTING UP (when the team says go). Made directly on main on the day,
+never prepared ahead: a deploy ships main, so these edits can only land
+when the answer is go. About ten minutes; one commit, then the deploy.
 
-a. Merge the `light-up` branch (prepared 13 Oct 2026; rebase it on main
-   first if main has moved): Websites back in every public page's menu,
-   websites.html + start.html indexable, the gallery in the sitemap, the
-   `?team` preview gate and testing banner gone. It replaces the old revert
-   steps (the dark-launch commits are too old to revert cleanly). Main has
-   moved since (the terms acceptance, 3e4557e), so the rebase conflicts in
-   the `<head>` of websites.html and start.html and in start.html's script:
-   keep main's wording with light-up's `index, follow`, drop the
-   `PREVIEW` block, and restore the kept order without the
-   `if (!PREVIEW)` around it.
-b. Redeploy the site (`npx wrangler deploy` from the repo root).
+1. **The menu.** Add "Websites" straight after "Work", in both the desktop
+   menu (`<ul class="nav-links">`: `<li><a href="websites.html">Websites</a></li>`)
+   and the phone menu (`<div class="mobile-nav">`:
+   `<a href="websites.html">Websites</a>`), on all eleven pages without it:
+   index, services, about, insights, contact, privacy, and the five
+   `case-*.html` pages. websites.html, start.html and questions.html have it
+   already. Check: `grep -c 'href="websites.html">Websites' *.html` gives 2
+   on every page except websites.html, which gives 1 (its desktop link
+   carries `class="active"`).
+2. **Indexing.** websites.html and start.html: `<meta name="robots"
+   content="noindex, follow">` becomes `index, follow`. questions.html stays
+   `noindex` (a step page, reached only after sign-up).
+3. **The sitemap.** In `sitemap.xml`, after contact:
+   `<url><loc>https://iternal.life/websites.html</loc><priority>0.8</priority></url>`.
+4. **The preview gate**, in start.html's script: delete the "Dark-launch
+   preview gate" block (the `PREVIEW` constant, the disabled button, the
+   "Preview" notes and the gold "In testing" banner), the
+   `if (PREVIEW) return;` line in the form's submit handler, and the
+   `if (!PREVIEW) { … }` wrapper round restoring the kept order (keep the
+   line inside it). Check: `grep -n PREVIEW start.html` finds nothing.
+5. **The docs.** CLAUDE.md "Currently DISABLED / dark": replace the dark
+   launch and preview gate items with one saying the section is public.
+   This section: mark it lit, with the date. SITE-CHANGES.md: one line
+   under "Waiting to deploy".
+6. **Check, then deploy.** Serve the repo (`iternal-site` launch config),
+   open start.html without `?team`: no banner, and a real test sign-up
+   gets as far as "Review and accept". Then `git status` (a deploy ships
+   the working tree) and `npx wrangler deploy` from the repo root, on the
+   word "deploy the site".

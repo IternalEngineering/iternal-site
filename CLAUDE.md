@@ -68,8 +68,8 @@ answers.
 ## Currently DISABLED / dark (deliberate — do not "fix")
 
 - **Dark launch**: no public page links to the funnel; websites.html and
-  start.html are `noindex`; sitemap never lists them. Light-up = the
-  revert steps in HOUSEKEEPING.md §Go-live.
+  start.html are `noindex`; sitemap never lists them. Lighting up = the
+  checklist in HOUSEKEEPING.md §Go-live, done on main on the day.
 - **Preview gate** on start.html: sign-up is disabled and a gold
   "In testing" banner shows unless `?team` is on the URL. Removed at
   light-up.
