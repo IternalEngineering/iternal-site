@@ -102,11 +102,9 @@ fallback constant in questions.html.
    lightbox or question changes. They want the prospect experience to take
    its cue from the sleekness of existing sites; redesign after they have
    seen what exists.
-7. Legal: a person reviews and decides everything in the shared doc
-   "Website builds: privacy and legal review" (7 Oct 2026,
-   https://claude.ai/code/artifact/35f4d062-3c67-4d83-be90-5efaa26a536a):
-   the privacy notice, the terms, payment, company details, the ICO fee.
-   Agents gather facts for it; they never make those decisions.
+7. Legal: handled by a contract each client signs after the call (Robbie,
+   13 Oct 2026, after the team meeting). No separate privacy and legal
+   review; agents never draft or decide contract terms.
 8. bplaced-site production deploy (`npx wrangler pages deploy --branch
    main` from that repo) so its gallery card opens in the lightbox.
 9. Stale artefacts: the StateCraft diagram

@@ -138,9 +138,8 @@ the token awaits org approval), so the worker can deploy regardless.
     engagement at a glance".
   If the order of events changes too (when the initial build happens, when
   the client decides), the "What the call starts" card in `start.html` and
-  the "How it works" paragraph describe it. Then update the shared doc
-  "Website builds: privacy and legal review" (link in CLAUDE.md): the terms
-  card is the contract summary, quoted word for word there.
+  the "How it works" paragraph describe it. Tell whoever prepares the
+  contract the client signs after the call, so the two never disagree.
 - **Not yet decided:** whether the £100 is returned if the client does not
   go ahead. The pages say nothing either way until it is.
 - **No payment code anywhere (Robbie, 7 Oct 2026).** The Stripe webhook
@@ -187,9 +186,9 @@ Before lighting up:
 - websites@iternal.life exists and both brief addresses are verified.
 - A `?team` walkthrough has produced a client file, a tracker row and both
   briefs from one real sign-up.
-- A person has decided the questions in the shared review doc (privacy,
-  terms, payment, company details), including what happens to the £100 if
-  the client does not go ahead.
+- The contract each client signs after the call is ready (it covers the
+  legal terms, including what happens to the £100 if the client does not go
+  ahead).
 - Jay's Transport has moved to the new site (the gallery shows the old one
   until then).
 
