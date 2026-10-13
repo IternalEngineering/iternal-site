@@ -222,5 +222,10 @@ a. Merge the `light-up` branch (prepared 13 Oct 2026; rebase it on main
    first if main has moved): Websites back in every public page's menu,
    websites.html + start.html indexable, the gallery in the sitemap, the
    `?team` preview gate and testing banner gone. It replaces the old revert
-   steps (the dark-launch commits are too old to revert cleanly).
+   steps (the dark-launch commits are too old to revert cleanly). Main has
+   moved since (the terms acceptance, 3e4557e), so the rebase conflicts in
+   the `<head>` of websites.html and start.html and in start.html's script:
+   keep main's wording with light-up's `index, follow`, drop the
+   `PREVIEW` block, and restore the kept order without the
+   `if (!PREVIEW)` around it.
 b. Redeploy the site (`npx wrangler deploy` from the repo root).
