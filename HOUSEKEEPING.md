@@ -194,11 +194,9 @@ Before lighting up:
 
 LIGHTING UP (when the team says go), then redeploy:
 
-a. `git revert 32b1649` — restores the nav links and flips websites.html +
-   start.html robots back to "index, follow" (if it conflicts on the
-   _privacy_skeleton scratch files, keep them deleted with `git rm`).
-b. `git revert 7620e05 6914250` — removes the preview gate + testing banner
-   from start.html. Expect conflicts: that block has been edited since.
-   Resolve by deleting the whole `if (PREVIEW)` block and the `PREVIEW`
-   checks.
-c. Redeploy the site (`npx wrangler deploy` from the repo root).
+a. Merge the `light-up` branch (prepared 13 Oct 2026; rebase it on main
+   first if main has moved): Websites back in every public page's menu,
+   websites.html + start.html indexable, the gallery in the sitemap, the
+   `?team` preview gate and testing banner gone. It replaces the old revert
+   steps (the dark-launch commits are too old to revert cleanly).
+b. Redeploy the site (`npx wrangler deploy` from the repo root).
