@@ -3,20 +3,60 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>About — Iternal AI</title>
+<title>About — Iternal, Bristol AI consultancy</title>
 <meta name="description" content="A small Bristol-based team delivering outsized AI impact. Meet the people behind live agentic systems in healthcare, government and civic infrastructure.">
 <meta name="robots" content="index, follow">
-<meta property="og:title" content="About — Iternal AI">
+<meta property="og:title" content="About — Iternal, Bristol AI consultancy">
 <meta property="og:description" content="A small Bristol-based team delivering outsized AI impact. Meet the people behind live agentic systems in healthcare, government and civic infrastructure.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://iternal.life/about.html">
+<meta property="og:url" content="https://iternal.co.uk/about">
 <meta property="og:image" content="https://iternal.co.uk/og-image.png">
-<meta property="og:site_name" content="Iternal AI">
+<meta property="og:site_name" content="Iternal">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="About — Iternal AI">
+<meta name="twitter:title" content="About — Iternal, Bristol AI consultancy">
 <meta name="twitter:description" content="A small Bristol-based team delivering outsized AI impact. Meet the people behind live agentic systems in healthcare, government and civic infrastructure.">
 <meta name="twitter:image" content="https://iternal.co.uk/og-image.png">
-<link rel="canonical" href="https://iternal.life/about.html">
+<link rel="canonical" href="https://iternal.co.uk/about">
+<!-- The Organization node is the same as index.html's: change both together. -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "AboutPage",
+      "@id": "https://iternal.co.uk/about#webpage",
+      "url": "https://iternal.co.uk/about",
+      "name": "About Iternal",
+      "isPartOf": { "@id": "https://iternal.co.uk/#website" },
+      "about": { "@id": "https://iternal.co.uk/#organization" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://iternal.co.uk/#organization",
+      "name": "Iternal",
+      "legalName": "Iternal Ltd",
+      "url": "https://iternal.co.uk/",
+      "logo": "https://iternal.co.uk/assets/logo-navy.png",
+      "description": "Specialist AI consultancy building agentic systems for the NHS, GLA and enterprise clients across three continents.",
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "Companies House company number",
+        "value": "10849262"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Bristol",
+        "addressCountry": "GB"
+      },
+      "email": "hello@iternal.life",
+      "sameAs": [
+        "https://linkedin.com/company/iternal",
+        "https://find-and-update.company-information.service.gov.uk/company/10849262"
+      ]
+    }
+  ]
+}
+</script>
 <link rel="icon" href="assets/icon-navy.png" type="image/png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -702,18 +742,18 @@ html { overflow-x:clip; }
 
 <!-- ===== NAV ===== -->
 <nav id="nav">
-  <a href="index.html" class="nav-logo" aria-label="Iternal — home">
-    <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
-    <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
+  <a href="/" class="nav-logo" aria-label="Iternal — home">
+    <img width="1200" height="357" src="assets/logo-white.png" alt="Iternal" class="logo-dark">
+    <img width="1200" height="357" src="assets/logo-navy.png" alt="Iternal" class="logo-light">
   </a>
   <ul class="nav-links">
-    <li><a href="index.html#work">Work</a></li>
-    <li><a href="services.html">What We Do</a></li>
-    <li><a href="about.html" class="active">About</a></li>
-    <li><a href="insights.html">Insights</a></li>
-    <li><a href="contact.html">Contact</a></li>
+    <li><a href="/#work">Work</a></li>
+    <li><a href="/services">What We Do</a></li>
+    <li><a href="/about" class="active">About</a></li>
+    <li><a href="/insights">Insights</a></li>
+    <li><a href="/contact">Contact</a></li>
   </ul>
-  <a href="contact.html" class="nav-btn">Book a Call</a>
+  <a href="/contact" class="nav-btn">Book a Call</a>
   <button class="theme-toggle" aria-label="Toggle light/dark mode">
     <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
     <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -723,13 +763,13 @@ html { overflow-x:clip; }
   </button>
 </nav>
 <div class="mobile-nav" id="mobileNav">
-  <a href="index.html">Home</a>
-  <a href="index.html#work">Work</a>
-  <a href="services.html">What We Do</a>
-  <a href="about.html" class="active">About</a>
-  <a href="insights.html">Insights</a>
-  <a href="contact.html">Contact</a>
-  <a href="contact.html" class="mob-cta">Book a Call</a>
+  <a href="/">Home</a>
+  <a href="/#work">Work</a>
+  <a href="/services">What We Do</a>
+  <a href="/about" class="active">About</a>
+  <a href="/insights">Insights</a>
+  <a href="/contact">Contact</a>
+  <a href="/contact" class="mob-cta">Book a Call</a>
 </div>
 
 <main id="main">
@@ -891,11 +931,11 @@ html { overflow-x:clip; }
     <h2 class="closing-h rv">Ready to operate at a<br><em>different scale?</em></h2>
     <p class="closing-sub rv d1">Let's talk about where AI can genuinely move the needle for your organisation.</p>
     <div class="rv-scale d2">
-      <a href="contact.html" class="btn-sun">
+      <a href="/contact" class="btn-sun">
         Get in Touch
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a href="index.html#work" class="btn-line">See our work</a>
+      <a href="/#work" class="btn-line">See our work</a>
     </div>
   </div>
 </section>
@@ -907,19 +947,19 @@ html { overflow-x:clip; }
   <div class="footer-in">
     <div>
       <div class="f-logo">
-        <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
-        <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
+        <img width="1200" height="357" src="assets/logo-white.png" alt="Iternal" class="logo-dark">
+        <img width="1200" height="357" src="assets/logo-navy.png" alt="Iternal" class="logo-light">
       </div>
       <p class="f-desc">Specialist agentic AI consultancy and product studio. Building the systems that run tomorrow's organisations. Today.</p>
     </div>
     <div>
       <span class="f-col-lbl">Navigation</span>
       <ul class="f-links">
-        <li><a href="index.html#work">Work</a></li>
-        <li><a href="services.html">What We Do</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="insights.html">Insights</a></li>
-        <li><a href="contact.html">Contact</a></li>
+        <li><a href="/#work">Work</a></li>
+        <li><a href="/services">What We Do</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/insights">Insights</a></li>
+        <li><a href="/contact">Contact</a></li>
       </ul>
     </div>
     <div>
@@ -928,7 +968,7 @@ html { overflow-x:clip; }
         <li><a href="mailto:hello@iternal.life">hello@iternal.life</a></li>
         <li><a href="https://iternal.app" target="_blank" rel="noopener noreferrer">iternal.app</a></li>
         <li><a href="https://linkedin.com/company/iternal" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
-        <li><a href="contact.html">Book a Call</a></li>
+        <li><a href="/contact">Book a Call</a></li>
       </ul>
     </div>
   </div>

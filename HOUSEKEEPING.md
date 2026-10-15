@@ -265,7 +265,8 @@ when the answer is go. About ten minutes; one commit, then the deploy.
    content="noindex, follow">` becomes `index, follow`. questions.html stays
    `noindex` (a step page, reached only after sign-up).
 3. **The sitemap.** In `sitemap.xml`, after contact:
-   `<url><loc>https://iternal.life/websites.html</loc><priority>0.8</priority></url>`.
+   `<url><loc>https://iternal.co.uk/websites</loc><lastmod>YYYY-MM-DD</lastmod><priority>0.8</priority></url>`,
+   with that day's date.
 4. **The preview gate**, in start.html's script: delete the "Dark-launch
    preview gate" block (the `PREVIEW` constant, the disabled button, the
    "Preview" notes and the gold "In testing" banner), the

@@ -135,6 +135,12 @@ fallback constant in questions.html.
   2026), so a push to main needs the same word from Robbie as a deploy. A
   manual `npx wrangler deploy` ships the whole local working tree,
   including uncommitted and untracked files: check `git status` first.
+- `_headers` sets the security and asset-cache headers (Workers parses it; it
+  is never served, so keep it out of `.assetsignore`). Its CSP is
+  report-only: add any new third-party origin there before enforcing it.
+  Internal links use clean URLs (`/about`), which the `iternal-site` launch
+  config serves through `wrangler dev`, as production does; a plain static
+  server would 404 them.
 - Question wording is COUPLED to `worker/worker.js`'s QUESTIONS map;
   gallery entries are coupled across four places (incl. the worker's
   GALLERY_SITES slug map behind the per-site "Start yours" buttons) —

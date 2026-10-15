@@ -11,7 +11,21 @@ Last deploy: **20 Oct 2026** (version d4847422; pushing to main deploys the site
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-Nothing waiting.
+### Whole site (AI-readiness fixes from the site audit, branch aeo-audit-fixes)
+- **Page titles say which Iternal this is.** Every title now ends "Iternal, Bristol AI
+  consultancy" instead of "Iternal AI", and the homepage reads "Iternal, Bristol AI
+  consultancy — We Build AI That Works". Link previews show "Iternal" as the site name.
+  (aeo-audit-fixes)
+- **Menu and footer links go straight to the page** (/about rather than about.html, which
+  redirected). Nothing looks different. (aeo-audit-fixes)
+- **Services: model names no longer carry version numbers.** The model cards read "Opus ·
+  Sonnet · Haiku" and "OpenAI GPT" with "GPT · reasoning models · OpenAI API", and the FAQ
+  asks "Claude or GPT?". (aeo-audit-fixes)
+- **Contact: "Last name" loses its asterisk** (it was never required), and screen readers now
+  hear which budget is selected. (aeo-audit-fixes)
+- Not visible: canonical tags, link-preview URLs, structured data, the sitemap and robots.txt
+  now name iternal.co.uk instead of iternal.life; the organisation's structured data carries
+  its company number; security headers and /.well-known/security.txt are new. (aeo-audit-fixes)
 
 ---
 
