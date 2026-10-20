@@ -135,7 +135,6 @@ a { text-decoration: none; }
   position: absolute; border-radius: 50%;
   filter: blur(80px);
   opacity: 0;
-  animation: blobFloat linear infinite;
 }
 
 /* Warm tangerine blob — top right */
@@ -143,65 +142,30 @@ a { text-decoration: none; }
   width:700px; height:700px;
   top:-15%; right:-10%;
   background: radial-gradient(circle, rgba(226,103,19,0.22) 0%, transparent 70%);
-  animation-duration: 18s;
-  animation-delay: 0s;
   opacity:.50;
-  animation-name: blob1;
 }
 /* Gold blob — mid left */
 .blob-2 {
   width:500px; height:500px;
   top:30%; left:-8%;
   background: radial-gradient(circle, rgba(224,166,20,0.14) 0%, transparent 70%);
-  animation-duration: 22s;
-  animation-delay: -8s;
   opacity:.40;
-  animation-name: blob2;
 }
 /* Aqua blob — bottom right */
 .blob-3 {
   width:600px; height:600px;
   bottom:-10%; right:5%;
   background: radial-gradient(circle, rgba(11,175,170,0.12) 0%, transparent 70%);
-  animation-duration: 26s;
-  animation-delay: -14s;
   opacity:.35;
-  animation-name: blob3;
 }
 /* Navy deep blob — centre */
 .blob-4 {
   width:900px; height:900px;
   top:10%; left:20%;
   background: radial-gradient(circle, rgba(29,106,145,0.1) 0%, transparent 65%);
-  animation-duration: 30s;
-  animation-delay: -5s;
   opacity:.30;
-  animation-name: blob4;
 }
 
-@keyframes blob1 {
-  0%   { transform: translate(0,0) scale(1); }
-  33%  { transform: translate(-40px, 60px) scale(1.08); }
-  66%  { transform: translate(30px, -40px) scale(0.95); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes blob2 {
-  0%   { transform: translate(0,0) scale(1); }
-  25%  { transform: translate(60px, -30px) scale(1.1); }
-  75%  { transform: translate(-20px, 50px) scale(0.93); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes blob3 {
-  0%   { transform: translate(0,0) scale(1); }
-  40%  { transform: translate(-50px, -60px) scale(1.06); }
-  80%  { transform: translate(40px, 30px) scale(0.97); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes blob4 {
-  0%   { transform: translate(0,0) scale(1) rotate(0deg); }
-  50%  { transform: translate(20px, 20px) scale(1.04) rotate(3deg); }
-  100% { transform: translate(0,0) scale(1) rotate(0deg); }
-}
 
 /* Grain overlay */
 #grain {
@@ -379,19 +343,16 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 
 .cl-track {
-  display:flex;
-  animation:marq 30s linear infinite;
-  width:max-content;
+  display:flex; flex-wrap:wrap; justify-content:center; row-gap:20px;
 }
-.cl-track:hover { animation-play-state:paused; }
-@keyframes marq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
 .cl-item {
-  padding:0 56px;
+  padding:0 40px;
   border-right:1px solid var(--border);
   display:flex; flex-direction:column; align-items:center;
-  min-width:190px; white-space:nowrap;
+  white-space:nowrap;
 }
+.cl-item:last-child { border-right:none; }
 .cl-name {
   font-size:16px; font-weight:900;
   color:var(--t2); display:block;
@@ -667,9 +628,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   width:1000px; height:600px;
   background:radial-gradient(ellipse, rgba(226,103,19,.09) 0%, rgba(224,166,20,.05) 40%, transparent 70%);
   pointer-events:none;
-  animation:ctaPulse 6s ease-in-out infinite;
 }
-@keyframes ctaPulse { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-50%) scale(1.08)} }
 
 .cta-in {
   text-align:center; max-width:880px; margin:0 auto;
@@ -743,11 +702,8 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 /* ============================================================
    SCROLL REVEAL
    ============================================================ */
-.rv { opacity:0; transform:translateY(22px); transition:opacity .65s ease, transform .65s ease; }
-.rv-left { opacity:0; transform:translateX(-30px); transition:opacity .7s ease, transform .7s ease; }
-.rv-right { opacity:0; transform:translateX(30px); transition:opacity .7s ease, transform .7s ease; }
-.rv-scale { opacity:0; transform:scale(0.92); transition:opacity .7s ease, transform .7s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; transform:translate(0) scale(1); }
+.rv, .rv-left, .rv-right, .rv-scale { opacity:0; transition:opacity .6s ease; }
+.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; }
 .d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; }
 .d3 { transition-delay:.3s; } .d4 { transition-delay:.4s; }
 
@@ -806,6 +762,8 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 }
 @media (max-width:900px) {
   :root { --px:20px; }
+  .cl-track { display:grid; grid-template-columns:repeat(3,1fr); }
+  .cl-item { border-right:none; padding:0 8px; white-space:normal; text-align:center; }
   .hero-actions { flex-direction:column; align-items:stretch; gap:16px; }
   .hero-actions a { justify-content:center; }
   .hero-p { font-size:17px; line-height:1.65; }
@@ -821,7 +779,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .blob-1,.blob-2,.blob-3,.blob-4 { animation:none !important; }
+  .blob-1,.blob-2,.blob-3,.blob-4 { }
   .hero-ey,.hero-h1,.hero-sub,.hero-scroll,.hero-body,
   .hero-scroll-line { animation:none !important; opacity:1 !important; transform:none !important; }
   .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
@@ -1058,12 +1016,6 @@ html { overflow-x:clip; }
   <p class="cl-label">Trusted by organisations who can't afford to get AI wrong</p>
   <div style="overflow:hidden">
     <div class="cl-track">
-      <div class="cl-item"><span class="cl-name">NHS</span><span class="cl-sec">Health &amp; MedTech</span></div>
-      <div class="cl-item"><span class="cl-name">Kew Gardens</span><span class="cl-sec">Science &amp; Research</span></div>
-      <div class="cl-item"><span class="cl-name">GLA</span><span class="cl-sec">Local Government</span></div>
-      <div class="cl-item"><span class="cl-name">CivicNetZero</span><span class="cl-sec">Civic Innovation</span></div>
-      <div class="cl-item"><span class="cl-name">bPlaced</span><span class="cl-sec">Social Care</span></div>
-      <div class="cl-item"><span class="cl-name">First Bank UK</span><span class="cl-sec">Financial Services</span></div>
       <div class="cl-item"><span class="cl-name">NHS</span><span class="cl-sec">Health &amp; MedTech</span></div>
       <div class="cl-item"><span class="cl-name">Kew Gardens</span><span class="cl-sec">Science &amp; Research</span></div>
       <div class="cl-item"><span class="cl-name">GLA</span><span class="cl-sec">Local Government</span></div>
@@ -1432,31 +1384,6 @@ function countUp(el, target, duration) {
   }, 16);
 }
 
-/* ── Hero parallax ── */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const mesh = document.getElementById('mesh');
-  const heroContent = document.querySelector('.hero-in, .page-hero-in');
-  const heroSection = document.querySelector('#hero, .page-hero');
-  if(!mesh || !heroSection) return;
-  const limit = heroSection.offsetHeight || window.innerHeight;
-  let ticking = false;
-  window.addEventListener('scroll', function(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(function(){
-      const sy = window.scrollY;
-      if(sy <= limit){
-        mesh.style.transform = 'translateY(' + (sy * -0.08) + 'px)';
-        if(heroContent){
-          heroContent.style.transform = 'translateY(' + (sy * 0.35) + 'px)';
-          heroContent.style.opacity = 1 - (sy / limit) * 0.6;
-        }
-      }
-      ticking = false;
-    });
-  }, {passive: true});
-})();
 </script>
 </body>
 </html>

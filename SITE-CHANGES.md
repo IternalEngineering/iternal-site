@@ -18,6 +18,9 @@ nothing new written).
 - **The menu says "Services"** (was "What We Do"), and Insights is gone from the menu, the
   mobile menu and the footer. The footer no longer links to iternal.app, and its
   "Get in touch" goes to the contact page from every page. (rebuild 1)
+- **Calmer motion on every page.** Sections fade in rather than sliding in from the sides
+  or zooming; hero text no longer drifts and fades as you scroll; the soft colour shapes in
+  the background stand still. The particle network behind the hero stays. (rebuild 10)
 
 #### Services
 - **One list of ways to work, cheapest first**: Workshops & Training, AI Automations &
@@ -26,8 +29,13 @@ nothing new written).
   into one. (rebuild 2)
 - **The hero has one button, "Book a Discovery Call"**, and every booking button goes
   to the contact page instead of jumping down the page. (rebuild 2)
-- **Sections run in one direction**: services, the workshop, the process, the work,
-  models, sectors, FAQ. (rebuild 2)
+- **Sections run in one direction**: services, the workshop, the process, models,
+  sectors, FAQ. (rebuild 2; the work section went in rebuild 10)
+- **Shorter: about a quarter less page.** The case studies are gone (they are on the homepage
+  and their own pages); the FAQ keeps the three questions the page doesn't already answer
+  (getting burned before, security and compliance, how soon we can start); Agentic AI
+  Builds and AI Strategy & Advisory list their five strongest points (were seven and
+  nine). The closing glow no longer pulses. (rebuild 10)
 - **The "Learn More" buttons on the service cards can be clicked**: a hover glow sat
   on top of them. (rebuild 3)
 
@@ -37,6 +45,8 @@ nothing new written).
   to that service on the Services page; AI Augmentation stays as a fifth row, linking to
   the contact page. Its "Learn More" buttons can now be clicked (the same hover glow
   covered them). (rebuild 3)
+- **The client names sit still**, each once, in a row (a grid on a phone), instead of
+  scrolling past; the closing glow no longer pulses. (rebuild 10)
 - **The Forge section ("Most agencies charge for headcount") moved to About**, and the
   "Ideas worth reading" teasers are gone. The work section loses its "View All"
   button. (rebuild 3)
@@ -45,6 +55,7 @@ nothing new written).
 - **Says "AI consultancy"** (was "AI agency") under the hero. (rebuild 3)
 - **The Forge section replaces "Our operating principles"**, and "From first
   conversation to live system" is gone (the process is on Services). (rebuild 3)
+- **The Forge rings stand still.** (rebuild 10)
 - **"The people behind the work" is gone**, with its four named cards, until it returns
   as Wiseall and the named board members. Its search description no longer says "Meet the
   people", and llms.txt no longer lists the team. (rebuild 7)

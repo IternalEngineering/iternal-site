@@ -92,58 +92,26 @@ a { text-decoration: none; }
   position: absolute; border-radius: 50%;
   filter: blur(80px);
   opacity: 0;
-  animation: blobFloat linear infinite;
 }
 .blob-1 {
   width:700px; height:700px;
   top:-15%; right:-10%;
-  background: radial-gradient(circle, rgba(226,103,19,0.22) 0%, transparent 70%);
-  animation-duration: 18s; animation-delay: 0s; opacity:.50;
-  animation-name: blob1;
+  background: radial-gradient(circle, rgba(226,103,19,0.22) 0%, transparent 70%); opacity:.50;
 }
 .blob-2 {
   width:500px; height:500px;
   top:30%; left:-8%;
-  background: radial-gradient(circle, rgba(224,166,20,0.14) 0%, transparent 70%);
-  animation-duration: 22s; animation-delay: -8s; opacity:.40;
-  animation-name: blob2;
+  background: radial-gradient(circle, rgba(224,166,20,0.14) 0%, transparent 70%); opacity:.40;
 }
 .blob-3 {
   width:600px; height:600px;
   bottom:-10%; right:5%;
-  background: radial-gradient(circle, rgba(11,175,170,0.12) 0%, transparent 70%);
-  animation-duration: 26s; animation-delay: -14s; opacity:.35;
-  animation-name: blob3;
+  background: radial-gradient(circle, rgba(11,175,170,0.12) 0%, transparent 70%); opacity:.35;
 }
 .blob-4 {
   width:900px; height:900px;
   top:10%; left:20%;
-  background: radial-gradient(circle, rgba(29,106,145,0.1) 0%, transparent 65%);
-  animation-duration: 30s; animation-delay: -5s; opacity:.30;
-  animation-name: blob4;
-}
-@keyframes blob1 {
-  0%   { transform: translate(0,0) scale(1); }
-  33%  { transform: translate(-40px, 60px) scale(1.08); }
-  66%  { transform: translate(30px, -40px) scale(0.95); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes blob2 {
-  0%   { transform: translate(0,0) scale(1); }
-  25%  { transform: translate(60px, -30px) scale(1.1); }
-  75%  { transform: translate(-20px, 50px) scale(0.93); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes blob3 {
-  0%   { transform: translate(0,0) scale(1); }
-  40%  { transform: translate(-50px, -60px) scale(1.06); }
-  80%  { transform: translate(40px, 30px) scale(0.97); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes blob4 {
-  0%   { transform: translate(0,0) scale(1) rotate(0deg); }
-  50%  { transform: translate(20px, 20px) scale(1.04) rotate(3deg); }
-  100% { transform: translate(0,0) scale(1) rotate(0deg); }
+  background: radial-gradient(circle, rgba(29,106,145,0.1) 0%, transparent 65%); opacity:.30;
 }
 
 #grain {
@@ -430,11 +398,8 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 /* ============================================================
    SCROLL REVEAL
    ============================================================ */
-.rv { opacity:0; transform:translateY(22px); transition:opacity .65s ease, transform .65s ease; }
-.rv-left { opacity:0; transform:translateX(-30px); transition:opacity .7s ease, transform .7s ease; }
-.rv-right { opacity:0; transform:translateX(30px); transition:opacity .7s ease, transform .7s ease; }
-.rv-scale { opacity:0; transform:scale(0.92); transition:opacity .7s ease, transform .7s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; transform:translate(0) scale(1); }
+.rv, .rv-left, .rv-right, .rv-scale { opacity:0; transition:opacity .6s ease; }
+.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; }
 .d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; }
 .d3 { transition-delay:.3s; } .d4 { transition-delay:.4s; }
 
@@ -499,7 +464,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .blob-1,.blob-2,.blob-3,.blob-4 { animation:none !important; }
+  .blob-1,.blob-2,.blob-3,.blob-4 { }
   .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
 }
 
@@ -736,24 +701,6 @@ const rvObs = new IntersectionObserver(entries => {
 }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 rvEls.forEach(el => rvObs.observe(el));
 
-/* ── Hero parallax ── */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const mesh = document.getElementById('mesh');
-  if(!mesh) return;
-  let ticking = false;
-  window.addEventListener('scroll', function(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(function(){
-      const sy = window.scrollY;
-      if(sy <= window.innerHeight){
-        mesh.style.transform = 'translateY(' + (sy * -0.08) + 'px)';
-      }
-      ticking = false;
-    });
-  }, {passive: true});
-})();
 </script>
 </body>
 </html>
