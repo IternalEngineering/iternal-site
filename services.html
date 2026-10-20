@@ -203,6 +203,7 @@ section { padding:min(64px, 7vh) 0; border-bottom:1px solid var(--border); }
 
 .tier-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); }
 .tier-grid.two { grid-template-columns:repeat(4,1fr); }
+.tier-wide { grid-column:1 / -1; }
 @media (max-width:1199px) { .tier-grid.two { grid-template-columns:repeat(2,1fr); } }
 @media (max-width:768px) { .tier-grid.two { grid-template-columns:1fr; } }
 .tier-price { font-size:13px; font-weight:700; color:var(--tan); margin:-4px 0 16px; letter-spacing:.02em; }
@@ -896,16 +897,15 @@ html { overflow-x:clip; }
         <a href="/contact" class="tier-cta">Explore advisory <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
 
-    </div>
 
-    <div class="engage-grid" id="websites" style="grid-template-columns:1fr">
-      <div class="tier">
+      <div class="tier tier-wide" id="websites">
         <div class="tier-accent"></div>
         <span class="tier-tag">Website Design &middot; Build</span>
         <h3 class="tier-name">Websites</h3>
         <p class="tier-desc">Not every project needs a platform. Sometimes you need a really good website — designed, built and live in weeks.</p>
         <div style="display:flex; gap:28px; flex-wrap:wrap"><a href="/websites" class="tier-cta">See the websites we've made <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a href="/start" class="tier-cta">Build a Site With Us <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
       </div>
+
     </div>
   </div>
 </section>

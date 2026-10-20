@@ -266,7 +266,7 @@ when the answer is go. About ten minutes; one commit, then the deploy.
    funnel is linked while still in preview (banner up, nothing sent), so
    either light up at the same time or put these three back first.
    - services.html: delete `hidden` from the Websites entry
-     (`<div class="engage-grid rv d2" id="websites" hidden …>`) and the
+     (`<div class="tier tier-wide" id="websites" …>`) and the
      comment line above it. In the process section, "Every Iternal
      engagement follows" becomes "Every AI engagement follows" (website
      builds run their own steps).

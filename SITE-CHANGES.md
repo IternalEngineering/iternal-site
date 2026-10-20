@@ -33,6 +33,8 @@ nothing new written).
   a phone, where they had been squeezed into two thin columns): one sentence each, three
   points each, and the "Core offer" and "Strategic" labels are gone ("Starting point" and
   "Most requested" stay). The Websites entry keeps its first sentence and both buttons. (rebuild 14)
+- **Websites joins the four service cards as one block**, a full-width row under them
+  instead of a separate box below a gap. (rebuild 15)
 - **Websites is visible**: a wide entry under the four AI services, with "See the websites
   we've made" (the gallery) and "Build a site with us" (sign-up, still in preview: banner
   up, nothing sent). The process section now says "Every AI engagement". The homepage
