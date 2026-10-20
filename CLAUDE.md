@@ -130,7 +130,10 @@ fallback constant in questions.html.
   in that moment.
 - The live site is Workers **static assets only** (root `wrangler.toml`,
   filtered by `.assetsignore` — keep this file, HOUSEKEEPING.md, worker/,
-  tools/ and .git out of uploads). A deploy ships the whole working tree,
+  tools/ and .git out of uploads). **Pushing to main deploys the site**
+  (Cloudflare builds from GitHub within about a minute; confirmed 20 Oct
+  2026), so a push to main needs the same word from Robbie as a deploy. A
+  manual `npx wrangler deploy` ships the whole local working tree,
   including uncommitted and untracked files: check `git status` first.
 - Question wording is COUPLED to `worker/worker.js`'s QUESTIONS map;
   gallery entries are coupled across four places (incl. the worker's

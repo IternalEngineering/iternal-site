@@ -221,9 +221,11 @@ booking invite.
 
 ## Go-live (dark launch)
 
-Merging to main does NOT publish anything: the live site is the
-`iternal-site` worker, deployed manually with wrangler from the repo root (no
-Git auto-deploy). The funnel is live but DARK: no public page links to it
+**Pushing to main publishes the site.** Cloudflare builds the `iternal-site`
+worker from GitHub about a minute after every push to main (confirmed
+20 Oct 2026: pushed 10:51, live 10:52), the weekly screenshot commit
+included. A manual `npx wrangler deploy` from the repo root still works and
+ships the local working tree. The funnel is live but DARK: no public page links to it
 (the "Websites" nav item is removed everywhere, websites.html/start.html are
 noindex, the sitemap omits them), and without `?team` the sign-up and
 questions pages are a preview: every screen can be stepped through, but
@@ -279,6 +281,5 @@ when the answer is go. About ten minutes; one commit, then the deploy.
    under "Waiting to deploy".
 6. **Check, then deploy.** Serve the repo (`iternal-site` launch config),
    open start.html without `?team`: no banner, and a real test sign-up
-   gets as far as "Review and accept". Then `git status` (a deploy ships
-   the working tree) and `npx wrangler deploy` from the repo root, on the
-   word "deploy the site".
+   gets as far as "Review and accept". Then, on the word "deploy the
+   site", push main: that deploys it within about a minute.

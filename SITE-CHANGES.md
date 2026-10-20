@@ -5,13 +5,23 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **7 Oct 2026, third deploy** (version 8fb2c0c7). Local copy: `http://localhost:8734`.
+Last deploy: **20 Oct 2026** (version d4847422; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-### Sign-up page and websites gallery (still hidden from the public)
+Nothing waiting.
+
+---
+
+## Live
+
+### 20 Oct 2026 (version d4847422)
+
+Deployed automatically when main was pushed. The funnel is still dark.
+
+#### Sign-up page and websites gallery (still hidden from the public)
 - **The questions don't repeat the sign-up.** The questions page no longer asks for the
   work email, and skips "Do you have a website today?" when they gave a website at sign-up
   (it is still asked if they left that blank). The essentials count follows: "The first
@@ -46,17 +56,15 @@ Last deploy: **7 Oct 2026, third deploy** (version 8fb2c0c7). Local copy: `http:
   to download. Not indexed. (terms acceptance)
 - **No prices on the gallery page.** "How it works" and "Our studio, built in" are gone,
   and the page's descriptions no longer give prices; "After something bigger?" stays.
-  (gallery pricing removed) The sign-up page's steps say "Review and accept", and its intro no longer promises refining the site "until it's yours" (the terms
-  include one round of revisions). (terms acceptance)
+  (gallery pricing removed)
+- **The sign-up page's steps say "Review and accept"**, and its intro no longer promises
+  refining the site "until it's yours" (the terms include one round of revisions). (terms
+  acceptance)
 
-### Questions page (still hidden from the public)
+#### Questions page (still hidden from the public)
 - **"Your answers are saved as you go."** The intro now says so: answers are saved to the
   team's dashboard whenever the visitor leaves the page, from the first answer, so someone
   who stops part-way can be followed up. (prospect progress)
-
----
-
-## Live
 
 ### 7 Oct 2026, third deploy (version 8fb2c0c7)
 
