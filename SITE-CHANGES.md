@@ -12,6 +12,10 @@ Last deploy: **7 Oct 2026, third deploy** (version 8fb2c0c7). Local copy: `http:
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
 ### Sign-up page and websites gallery (still hidden from the public)
+- **The questions don't repeat the sign-up.** The questions page no longer asks for the
+  work email, and skips "Do you have a website today?" when they gave a website at sign-up
+  (it is still asked if they left that blank). The essentials count follows: "The first
+  three unlock your call booking" (or four). (sign-up not repeated)
 - **The sign-up fits one screen on laptops.** On desktop and laptop screens the sign-up
   form, and the "Review and accept" screen after it, tighten their spacing to fit the
   height of the window, down to the smallest common laptop (about 650px of browser

@@ -599,7 +599,7 @@ html { overflow-x:clip; }
           your call.
         </h1>
         <p class="page-hero-sub rv d2">
-          A few questions about your organisation and what the site has to do. The first five unlock your call booking. The rest are optional; each one sharpens what we build. Your answers are saved as you go.
+          A few questions about your organisation and what the site has to do. The first <span data-core-count>five</span> unlock your call booking. The rest are optional; each one sharpens what we build. Your answers are saved as you go.
         </p>
       </div>
 
@@ -910,14 +910,21 @@ document.head.appendChild(style);
   var bookBtn = document.getElementById('bookBtn');
   var answers = {};
   try { answers = JSON.parse(sessionStorage.getItem(STORE)) || {}; } catch(e) {}
-  // Carried over from sign-up: the email they used (fixed below, so a retyped
-  // one can't split them into two records) and the token the worker expects back.
-  var SIGNUP_TOKEN = '', SIGNUP_EMAIL = '';
+  // Carried over from sign-up, and not asked again: the email they used (so a
+  // retyped one can't split them into two records) and any website they gave.
+  // Plus the token the worker expects back. The preview keeps them for the tab.
+  var SIGNUP_TOKEN = '', SIGNUP_EMAIL = '', SIGNUP_WEBSITE = '';
   try {
     SIGNUP_EMAIL = localStorage.getItem('iternal_signup_email') || '';
-    if (SIGNUP_EMAIL) answers.email = SIGNUP_EMAIL;
+    SIGNUP_WEBSITE = localStorage.getItem('iternal_signup_website') || '';
+    if (PREVIEW) { SIGNUP_EMAIL = sessionStorage.getItem('iternal_signup_email') || ''; SIGNUP_WEBSITE = sessionStorage.getItem('iternal_signup_website') || ''; }
     SIGNUP_TOKEN = localStorage.getItem('iternal_signup_token') || '';
   } catch(e) {}
+  if (SIGNUP_EMAIL) answers.email = SIGNUP_EMAIL;
+  if (SIGNUP_WEBSITE) answers.hasSite = SIGNUP_WEBSITE;
+  function fromSignup(q){ return (q.id === 'email' && !!SIGNUP_EMAIL) || (q.id === 'hasSite' && !!SIGNUP_WEBSITE); }
+  var ASKED = QUESTIONS.filter(function(q){ return q.core && !fromSignup(q); });
+  var COUNT = ['no', 'one', 'two', 'three', 'four', 'five'][ASKED.length]; // the essentials still to answer
   var partialSent = false;
 
   // Pay-at-booking flow: identity is simply the email they give in the first
@@ -989,14 +996,14 @@ document.head.appendChild(style);
     }
   }
 
-  // The five essentials: always-visible fields.
-  QUESTIONS.filter(function(q){ return q.core; }).forEach(function(q){
+  // The essentials not already given at sign-up: always-visible fields.
+  ASKED.forEach(function(q){
     var d = document.createElement('div');
     d.innerHTML = fieldHTML(q, false);
     coreBody.appendChild(d);
     wire(q, d);
   });
-  if (SIGNUP_EMAIL) document.getElementById('qi-email').readOnly = true;
+  document.querySelectorAll('[data-core-count]').forEach(function(el){ el.textContent = COUNT; });
 
   // The rest: native <details> rows — click a question to open and answer it.
   QUESTIONS.filter(function(q){ return !q.core; }).forEach(function(q){
@@ -1014,7 +1021,7 @@ document.head.appendChild(style);
   function refresh(){
     var open = coreDone();
     unlockPanel.hidden = !(open || PREVIEW);
-    statusEl.textContent = open ? 'All five answered — your call is unlocked.' : 'These five unlock your call booking.';
+    statusEl.textContent = open ? 'All ' + COUNT + ' answered — your call is unlocked.' : 'These ' + COUNT + ' unlock your call booking.';
     optBody.querySelectorAll('details').forEach(function(d){
       var q = QUESTIONS.filter(function(x){ return x.id === d.dataset.q; })[0];
       d.querySelector('[data-done]').textContent = answered(q) ? '· answered' : '';
@@ -1049,7 +1056,7 @@ document.head.appendChild(style);
   }
 
   sendBtn.addEventListener('click', function(){
-    if (!coreDone() && !PREVIEW) { sendNote.textContent = 'The five essentials above are needed first — rough answers are fine.'; return; }
+    if (!coreDone() && !PREVIEW) { sendNote.textContent = 'The ' + COUNT + ' essentials above are needed first — rough answers are fine.'; return; }
     if (!PREVIEW && answers.email && answers.email.indexOf('@') === -1) { sendNote.textContent = 'That email doesn’t look right.'; return; }
     sendBtn.style.opacity = '.6'; sendBtn.style.pointerEvents = 'none';
     send('complete').then(function(res){

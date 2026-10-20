@@ -944,7 +944,7 @@ if (!PREVIEW) {
 
 form.addEventListener('submit', (e)=>{
   e.preventDefault();
-  if (PREVIEW) { showReview(sampleOrder()); return; }
+  if (PREVIEW) { const o = sampleOrder(); try { sessionStorage.setItem('iternal_signup_email', o.email); sessionStorage.setItem('iternal_signup_website', document.getElementById('website').value.trim()); } catch (e) {} showReview(o); return; }
 
   // Animate button
   submitBtn.style.opacity='.6';
@@ -988,6 +988,8 @@ form.addEventListener('submit', (e)=>{
     // with the answers so nobody else can submit answers under their email.
     try {
       localStorage.setItem('iternal_signup_email', document.getElementById('email').value.trim().toLowerCase());
+      // so the questions page doesn't ask again (an empty one is asked)
+      localStorage.setItem('iternal_signup_website', document.getElementById('website').value.trim());
       if (data.token) localStorage.setItem('iternal_signup_token', data.token);
       localStorage.setItem('iternal_signup_order', JSON.stringify(data.order));
     } catch(e) {}

@@ -28,7 +28,9 @@ answers.
   of files (the PDF is printed from the page by `tools/terms-pdf.mjs`),
   `TERMS` in `worker/worker.js`, and the terms link in start.html's hero.
 - `questions.html` — "Before you book your call": 5 essentials unlock the
-  booking, 12 optional. Answers are saved to the worker as they go (when
+  booking, 12 optional. What sign-up already collected is not asked again
+  (the email always, the website if they gave one; both still go with the
+  answers), so most clients see three or four essentials. Answers are saved to the worker as they go (when
   the page is hidden or closed), so the team can follow up anyone who stops;
   the page says so.
   Identity = the email they type. Booking button → a plain Google Calendar
