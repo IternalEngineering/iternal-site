@@ -146,7 +146,7 @@ the token awaits org approval), so the worker can deploy regardless.
   - `websites.html`: the meta description, the JSON-LD description, the
     bold opening sentence of "How it works", and "Looking after your site".
   - `start.html`: the meta description, and `sampleOrder()`, the
-    walkthrough's stand-in order (until it is removed at light-up). The real
+    preview's stand-in order (until it is removed at light-up). The real
     order table on "Review and accept" takes its figures from the worker.
 - **No payment code anywhere (Robbie, 7 Oct 2026).** The Stripe webhook
   and its payment records were removed from the worker; whether and when a
@@ -206,7 +206,9 @@ Merging to main does NOT publish anything: the live site is the
 `iternal-site` worker, deployed manually with wrangler from the repo root (no
 Git auto-deploy). The funnel is live but DARK: no public page links to it
 (the "Websites" nav item is removed everywhere, websites.html/start.html are
-noindex, the sitemap omits them), and sign-up is disabled without `?team`.
+noindex, the sitemap omits them), and without `?team` the sign-up and
+questions pages are a preview: every screen can be stepped through, but
+nothing is sent and no call is booked (`preview.js`).
 
 Before lighting up (Robbie, 20 Oct 2026: anything quick to update once
 live is not a blocker):
@@ -214,9 +216,8 @@ live is not a blocker):
 - The pipeline repo exists on GitHub and `PIPELINE_TOKEN` is set.
 - john@iternal.life is a verified Email Routing destination, and the worker
   is deployed.
-- The team has stepped through every screen in walkthrough mode
-  (`websites.html?walkthrough`: nothing is sent, nothing is booked) and is
-  happy with it.
+- The team has stepped through every screen in the preview (gallery,
+  sign-up, review and accept, questions, booking) and is happy with it.
 - A `?team` test run has produced, from one real sign-up and acceptance, a
   client file with its acceptance, a tracker row and the team brief; then
   sweep the test records (§Worker).
@@ -249,11 +250,10 @@ when the answer is go. About ten minutes; one commit, then the deploy.
    "Preview" notes and the gold "In testing" banner), the
    `if (PREVIEW) return;` line in the form's submit handler, and the
    `if (!PREVIEW) { … }` wrapper round restoring the kept order (keep the
-   line inside it). Also the walkthrough: delete `walkthrough.js`, its
-   `<script src="walkthrough.js">` tag on websites, start and questions, and
-   the `WALK` lines in start.html and questions.html (`sampleOrder()`
-   included). Check: `grep -n PREVIEW start.html` and
-   `grep -n -i walkthrough *.html` find nothing.
+   line inside it). Also delete `preview.js`, its `<script
+   src="preview.js">` tag on start and questions, and every `PREVIEW` line
+   in both pages (`sampleOrder()` included). Check: `grep -n PREVIEW
+   *.html` finds nothing.
 5. **The docs.** CLAUDE.md "Currently DISABLED / dark": replace the dark
    launch and preview gate items with one saying the section is public.
    This section: mark it lit, with the date. SITE-CHANGES.md: one line

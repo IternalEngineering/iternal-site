@@ -70,12 +70,11 @@ answers.
 - **Dark launch**: no public page links to the funnel; websites.html and
   start.html are `noindex`; sitemap never lists them. Lighting up = the
   checklist in HOUSEKEEPING.md §Go-live, done on main on the day.
-- **Preview gate** on start.html: sign-up is disabled and a gold
-  "In testing" banner shows unless `?team` is on the URL. Removed at
-  light-up.
-- **Walkthrough mode** (`walkthrough.js`): `?walkthrough` on websites,
-  start or questions lets the team step through every screen with the
-  gates off; nothing is sent and no call is booked. Removed at light-up.
+- **Preview** (`preview.js`, on start.html and questions.html): every
+  screen can be stepped through, empty fields included, but nothing is
+  sent and no call is booked; a gold banner says "Sign-ups and call
+  bookings aren't live yet." `?team` switches to the real sign-up for the
+  browser tab (`?team=off` switches back). Removed at light-up.
 - **The pipeline feed** is off until `PIPELINE_TOKEN` is set on the worker.
 - `privacy.html` exists but is deliberately unlinked pending legal review.
 

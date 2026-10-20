@@ -699,7 +699,7 @@ html { overflow-x:clip; }
   </div>
 </footer>
 
-<script src="walkthrough.js"></script>
+<script src="preview.js"></script>
 <script>
 /* ── Nav scroll ── */
 const nav = document.getElementById('nav');
@@ -877,7 +877,7 @@ document.head.appendChild(style);
   var WORKER_URL = 'https://api.iternal.co.uk'; // answers go to the funnel worker (KV + team brief)
   var SEND_TO = 'https://formsubmit.co/ajax/john@iternal.life'; // only used if WORKER_URL is ever emptied
   var STORE = 'iternal_call_prep';
-  var WALK = window.WALKTHROUGH === true; // walkthrough.js: nothing is sent, no call is booked
+  // PREVIEW (preview.js, dark launch only): nothing is sent and no call is booked.
 
   // core:true questions must all be answered to unlock the call booking.
   var QUESTIONS = [
@@ -1011,10 +1011,8 @@ document.head.appendChild(style);
 
   function refresh(){
     var open = coreDone();
-    unlockPanel.hidden = !(open || WALK);
-    statusEl.textContent = open ? 'All five answered — your call is unlocked.'
-      : WALK ? 'These five unlock your call booking (open anyway for the walkthrough).'
-      : 'These five unlock your call booking.';
+    unlockPanel.hidden = !(open || PREVIEW);
+    statusEl.textContent = open ? 'All five answered — your call is unlocked.' : 'These five unlock your call booking.';
     optBody.querySelectorAll('details').forEach(function(d){
       var q = QUESTIONS.filter(function(x){ return x.id === d.dataset.q; })[0];
       d.querySelector('[data-done]').textContent = answered(q) ? '· answered' : '';
@@ -1025,7 +1023,7 @@ document.head.appendChild(style);
   var lastSent = '';
   function send(kind){
     lastSent = JSON.stringify(answers);
-    if (WALK) return Promise.resolve({ ok: true });
+    if (PREVIEW) return Promise.resolve({ ok: true });
     if (WORKER_URL) {
       var leaving = kind === 'update';
       return fetch(WORKER_URL + '/answers', {
@@ -1049,8 +1047,8 @@ document.head.appendChild(style);
   }
 
   sendBtn.addEventListener('click', function(){
-    if (!coreDone() && !WALK) { sendNote.textContent = 'The five essentials above are needed first — rough answers are fine.'; return; }
-    if (!WALK && answers.email && answers.email.indexOf('@') === -1) { sendNote.textContent = 'That email doesn’t look right.'; return; }
+    if (!coreDone() && !PREVIEW) { sendNote.textContent = 'The five essentials above are needed first — rough answers are fine.'; return; }
+    if (!PREVIEW && answers.email && answers.email.indexOf('@') === -1) { sendNote.textContent = 'That email doesn’t look right.'; return; }
     sendBtn.style.opacity = '.6'; sendBtn.style.pointerEvents = 'none';
     send('complete').then(function(res){
       if (!res.ok) throw new Error(res.status === 403 ? 'not yours' : 'send failed');
@@ -1069,20 +1067,7 @@ document.head.appendChild(style);
   [bookBtn, bookBtnSuccess].forEach(function(a){
     if (!a) return;
     a.href = BOOKING_URL;
-    if (WALK) {
-      a.addEventListener('click', function(e){
-        e.preventDefault();
-        if (a.nextElementSibling && a.nextElementSibling.hasAttribute('data-walk-note')) return;
-        var p = document.createElement('p');
-        p.setAttribute('data-walk-note', '');
-        p.style.cssText = 'font-size:13px; color:var(--t2); margin:12px 0 0; line-height:1.6';
-        p.innerHTML = 'Walkthrough: this is where our booking calendar opens in a new tab' +
-          (a === bookBtn ? ', and the answers so far are saved' : '') +
-          '. <a href="' + BOOKING_URL + '" target="_blank" rel="noopener" style="color:var(--tan)">See the booking calendar</a>, but don’t choose a time: that books a real call.';
-        a.insertAdjacentElement('afterend', p);
-      });
-      return;
-    }
+    if (PREVIEW) { a.addEventListener('click', function(e){ e.preventDefault(); }); return; }
     if (external) {
       a.target = '_blank'; a.rel = 'noopener'; // Calendly opens in a new tab — their answers stay put
       if (a === bookBtn) a.addEventListener('click', function(){

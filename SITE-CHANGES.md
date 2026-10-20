@@ -12,15 +12,15 @@ Last deploy: **7 Oct 2026, third deploy** (version 8fb2c0c7). Local copy: `http:
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
 ### Sign-up page and websites gallery (still hidden from the public)
-- **Walkthrough mode, for the team's review only.** Adding `?walkthrough` to the gallery,
-  sign-up or questions address shows a teal "Walkthrough" bar and lets you step through
-  every screen without filling anything in: Sign Up goes straight to "Review and accept"
-  with a sample order, accepting goes on to the questions, the call booking is open
-  without the five essentials, and booking or sending explains what would happen instead
-  of doing it. Nothing is sent and no call is booked. "End walkthrough" turns it off.
-  Removed when the section goes public. (walkthrough)
+- **Every screen can be stepped through before launch.** The sign-up and questions
+  pages carry a gold banner, "Sign-ups and call bookings aren't live yet." (it used to say
+  "In testing — sign-ups aren't open yet", with Sign Up greyed out). Sign Up now goes on
+  to "Review and accept", even with nothing filled in, showing an example order; accepting
+  goes on to the questions; the call booking shows without the five essentials; sending
+  shows the thank-you screen. Nothing is sent and no call is booked (the booking button
+  does nothing). Goes when the section goes public. (preview)
 - **Our contact address in error messages is now john@iternal.life** (was
-  websites@iternal.life), on the sign-up and questions pages. (walkthrough)
+  websites@iternal.life), on the sign-up and questions pages. (preview)
 - **Review and accept our terms.** After signing up, the visitor sees "Review and accept":
   their order details in a table (company, name, email, a reference, the build fee of £750
   + VAT with half now and half on completion, the care plan of £50 a month + VAT, and the

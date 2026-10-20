@@ -790,7 +790,7 @@ html { overflow-x:clip; }
   </div>
 </footer>
 
-<script src="walkthrough.js"></script>
+<script src="preview.js"></script>
 <script>
 /* ── Nav scroll ── */
 const nav = document.getElementById('nav');
@@ -842,35 +842,21 @@ if (siteField) siteField.addEventListener('blur', () => {
 const form = document.getElementById('contactForm');
 const submitBtn = document.getElementById('submitBtn');
 
-// Dark-launch preview gate: the page is live for review, but sign-up stays
-// off until launch. The team appends ?team to use the real form, or
-// ?walkthrough to step through without sending (walkthrough.js). Remove
-// this whole block at light-up (HOUSEKEEPING.md §Go-live, step 4).
-const WALK = window.WALKTHROUGH === true;
-const PREVIEW = !WALK && !/[?&]team\b/.test(location.search);
-if (WALK) form.noValidate = true; // empty fields don't stop the walkthrough
+// Dark-launch preview (preview.js sets PREVIEW): every screen can be stepped
+// through, empty fields included, but nothing is sent. ?team uses the real
+// form. Remove these lines at light-up (HOUSEKEEPING.md §Go-live, step 4).
+if (PREVIEW) form.noValidate = true;
 
-// The walkthrough's stand-in for the order the worker sends back. The fees
+// The preview's stand-in for the order the worker sends back. The fees
 // restate worker.js TERMS (HOUSEKEEPING.md §Payment lists every copy).
 function sampleOrder() {
   const v = (id, fallback) => document.getElementById(id).value.trim() || fallback;
+  const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
   return {
     company: v('org', 'Example Ltd'), name: `${v('fname', 'Alex')} ${v('lname', 'Example')}`, email: v('email', 'alex@example.com'),
-    reference: `WB-${new Date().toISOString().slice(2, 7).replace('-', '')}-SAMPLE`,
+    reference: `WB-${new Date().toISOString().slice(2, 7).replace('-', '')}-${Array.from({ length: 4 }, () => abc[Math.floor(Math.random() * abc.length)]).join('')}`,
     buildFee: 750, carePlan: 50, termsVersion: '1.0',
   };
-}
-if (PREVIEW) {
-  submitBtn.disabled = true;
-  submitBtn.style.opacity = '.55';
-  submitBtn.style.pointerEvents = 'none';
-  document.querySelectorAll('.form-privacy').forEach((p) => {
-    p.textContent = 'Preview — sign-ups aren’t open just yet.';
-  });
-  const banner = document.createElement('div');
-  banner.textContent = 'In testing — sign-ups aren’t open yet.';
-  banner.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:200;background:#e0a614;color:#060f26;font-weight:700;font-size:13px;text-align:center;padding:8px 14px;letter-spacing:.02em';
-  document.body.appendChild(banner);
 }
 
 /* ── Review and accept ──
@@ -897,7 +883,7 @@ acceptTerms.addEventListener('change', syncAccept);
 acceptAuthority.addEventListener('change', syncAccept);
 
 acceptBtn.addEventListener('click', async () => {
-  if (WALK) { location.href = 'questions.html'; return; }
+  if (PREVIEW) { location.href = 'questions.html'; return; }
   const label = acceptBtn.innerHTML;
   acceptBtn.disabled = true;
   acceptBtn.textContent = 'Sending…';
@@ -928,14 +914,13 @@ acceptBtn.addEventListener('click', async () => {
   }
 });
 
-if (!PREVIEW && !WALK) {
+if (!PREVIEW) {
   try { const kept = JSON.parse(localStorage.getItem('iternal_signup_order')); if (kept) showReview(kept); } catch (e) {}
 }
 
 form.addEventListener('submit', (e)=>{
   e.preventDefault();
-  if (PREVIEW) return;
-  if (WALK) { showReview(sampleOrder()); return; }
+  if (PREVIEW) { showReview(sampleOrder()); return; }
 
   // Animate button
   submitBtn.style.opacity='.6';
