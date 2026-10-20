@@ -149,8 +149,9 @@ the token awaits org approval), so the worker can deploy regardless.
   the order details take priority where they differ. Since 20 Oct 2026
   (Robbie) the order states a **£100 downpayment + £650 upon completion,
   plus VAT** (`TERMS.downpayment` and `TERMS.completion` in the worker; the
-  order also carries the £750 total as `buildFee`). The care plan is £50 a
-  month + VAT from the month after the site goes live, which includes the web
+  order also carries the £750 total as `buildFee`). The care plan is **£50 a
+  month including VAT** (the order again overriding the terms' "all fees
+  exclude VAT"), from the month after the site goes live, which includes the web
   agent (our studio). Invoices are payable within 14 days. Per-client
   pricing is planned: the order's figures are its own fields for that reason.
 - **Accepting is the last step of sign-up**, on start.html, and forms the

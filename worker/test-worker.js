@@ -239,7 +239,7 @@ await drain();
   assert.ok(m.text.startsWith('Hello Omar,'));
   assert.ok(m.text.includes('Company: Kilnworks\nYour name: Omar Haddad\nEmail: omar@kilnworks.co.uk\nReference: ' + acc.reference));
   assert.ok(m.text.includes('Build fee: £100 downpayment + £650 upon completion, plus VAT'));
-  assert.ok(m.text.includes('Care plan: £50 per month + VAT, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance'));
+  assert.ok(m.text.includes('Care plan: £50 per month including VAT, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance'));
   assert.ok(m.text.includes('https://iternal.co.uk/terms/website-build-and-care-v1.0.html'));
   assert.strictEqual(m.attachments[0].type, 'application/pdf');
   assert.strictEqual(m.attachments[0].content.byteLength, 4);

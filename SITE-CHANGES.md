@@ -16,6 +16,9 @@ Last deploy: **20 Oct 2026, second deploy** (version a0b7490d; pushing to main d
   and accept" (was "£750 + VAT. 50% now, 50% on completion"), and so do the client's
   emailed copy and the team's brief, which now says to invoice the downpayment. The
   page's search description no longer gives prices. (downpayment)
+- **The care plan reads "£50 per month including VAT"** (was "+ VAT"), on "Review and
+  accept" and in the client's copy; payable monthly, quarterly, half-yearly or annually as
+  before. (care plan VAT)
 
 ---
 
