@@ -229,6 +229,7 @@ a.contact-detail:hover .detail-value { color:var(--tan); }
 .form-head p { font-size:15px; color:var(--t3); line-height:1.65; }
 
 /* Form fields */
+.hp { position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden; }
 .form-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .form-field { margin-bottom:20px; }
 .form-field:last-of-type { margin-bottom:0; }
@@ -677,6 +678,11 @@ html { overflow-x:clip; }
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_subject" value="New enquiry from iternal.life">
           <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+          <!-- Honeypot people never see: off-screen rather than display:none, so bots that skip hidden fields still fill it -->
+          <div class="hp" aria-hidden="true">
+            <label for="website_url">Your website</label>
+            <input type="text" id="website_url" name="website_url" tabindex="-1" autocomplete="off">
+          </div>
           <div class="form-head">
             <h2>Tell us about your project</h2>
             <p>The more context you share, the more useful our first conversation will be.</p>
@@ -849,9 +855,13 @@ form.addEventListener('submit', (e)=>{
     Sending…
   `;
 
+  const data = new FormData(form);
+  if (data.get('website_url')) { document.getElementById('formWrap').classList.add('submitted'); return; }
+  data.delete('website_url');
+
   fetch(form.action, {
     method: 'POST',
-    body: new FormData(form),
+    body: data,
     headers: { 'Accept': 'application/json' }
   })
   .then(res=>{

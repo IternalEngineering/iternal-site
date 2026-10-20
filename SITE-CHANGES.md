@@ -56,6 +56,10 @@ nothing new written).
   page**: Workshops & Training, AI Automations & Assistants, Agentic AI Builds, AI
   Strategy & Advisory, or not sure yet. (rebuild 4)
 
+- **The form has a second, stronger spam trap**: an off-screen field people never see. If a
+  bot fills it, nothing is sent and the bot sees the normal "Message sent" screen.
+  FormSubmit's own trap stays too. (rebuild 8)
+
 #### Large screens
 - **Pages use more of a wide screen**: the content column grows with the window, from
   1160px up to 1440px (no change on a laptop). Case-study and other long paragraphs keep
@@ -68,6 +72,8 @@ nothing new written).
   search description, and llms.txt (Enterprise Strategy and Consultancy & Advisory are
   one entry, AI Strategy & Advisory). The sitemap no longer lists Insights, and its
   unpublished article says "small consultancy" (was "small agency"). (rebuild 5)
+- **llms.txt names the co-founders**: Tom Ilube CBE, Tim Campbell MBE and Paul Wiseall FRSA.
+  (rebuild 8)
 
 ---
 
