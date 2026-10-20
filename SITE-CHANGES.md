@@ -35,10 +35,9 @@ nothing new written).
   into one. (rebuild 2)
 - **The hero has one button, "Book a Discovery Call"**, and every booking button goes
   to the contact page instead of jumping down the page. (rebuild 2)
-- **Sections run in one direction**: services, the workshop, the process, models,
-  sectors, FAQ. (rebuild 2; the work section went in rebuild 10)
-- **Shorter: about a quarter less page.** The case studies are gone (they are on the homepage
-  and their own pages); the FAQ keeps the three questions the page doesn't already answer
+- **Sections run in one direction**: services, the workshop, the process, the work,
+  models, sectors, FAQ. (rebuild 2)
+- **Shorter.** The FAQ keeps the three questions the page doesn't already answer
   (getting burned before, security and compliance, how soon we can start); Agentic AI
   Builds and AI Strategy & Advisory list their five strongest points (were seven and
   nine). The closing glow no longer pulses. (rebuild 10)

@@ -423,6 +423,81 @@ section { padding:min(64px, 7vh) 0; border-bottom:1px solid var(--border); }
 }
 
 /* ============================================================
+   CASE STUDIES — one per service type
+   ============================================================ */
+#cases { background:rgba(12,29,78,.25); }
+
+.cases-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-top:60px; }
+.cases-grid.wide { grid-template-columns:1.5fr 1fr 1fr; }
+
+.case {
+  background:rgba(12,18,50,.7); border:1px solid var(--border);
+  overflow:hidden; position:relative; transition:border-color .3s, box-shadow .3s;
+}
+.case:hover {
+  border-color:rgba(226,103,19,.3);
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+.case::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:var(--sunrise); transform:scaleX(0); transform-origin:left; transition:transform .4s;
+}
+.case:hover::before, .case:focus-within::before { transform:scaleX(1); }
+
+.case-ph {
+  height:200px; background:linear-gradient(145deg, rgba(10,33,86,.9) 0%, rgba(6,15,38,.7) 100%);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px;
+  position:relative; overflow:hidden;
+}
+.case.tall .case-ph { height:280px; }
+.case-ph-hatch { position:absolute; inset:0; background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(255,255,255,.018) 20px,rgba(255,255,255,.018) 21px); }
+.case-ph-lbl { font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--t4); position:relative; z-index:1; }
+.case-sector-dot { width:6px; height:6px; border-radius:50%; background:var(--tan); position:relative; z-index:1; }
+
+.case-body { padding:28px 30px; }
+.case-sector { font-size:12px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--tan); margin-bottom:10px; }
+.case-name { font-size:19px; font-weight:700; color:var(--white); margin-bottom:10px; line-height:1.25; }
+.case-result {
+  display:flex; align-items:flex-start; gap:12px; margin-bottom:16px;
+  padding:14px 16px; background:rgba(11,175,170,.07); border-left:3px solid var(--aqua);
+}
+.case-result-label { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--aqua); margin-bottom:4px; }
+.case-result-text { font-size:14px; color:var(--t2); line-height:1.5; }
+.case-desc { font-size:14px; color:var(--t3); line-height:1.7; margin-bottom:20px; }
+.case-lnk {
+  font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--aqua); display:inline-flex; align-items:center; gap:8px; transition:gap .2s;
+}
+.case .case-lnk::after, .case-featured .case-lnk::after {
+  content:''; position:absolute; inset:0; z-index:1;
+}
+.case:hover .case-lnk, .case:focus-within .case-lnk { gap:12px; }
+
+/* ============================================================
+   TECH4GOOD FEATURED CASE
+   ============================================================ */
+.case-featured {
+  grid-column: 1 / -1;
+  display:grid; grid-template-columns:1fr 1fr;
+  background:rgba(12,18,50,.7); border:1px solid var(--border);
+  overflow:hidden; transition:border-color .3s;
+  position:relative;
+}
+.case-featured:hover { border-color:rgba(226,103,19,.3); }
+.case-featured::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:1px;
+  background:var(--sunrise); transform:scaleX(0); transform-origin:left; transition:transform .4s;
+}
+.case-featured:hover::before { transform:scaleX(1); }
+.case-featured-ph {
+  background:linear-gradient(145deg, rgba(10,33,86,.95) 0%, rgba(6,15,38,.8) 100%);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px;
+  padding:60px; position:relative; overflow:hidden; min-height:320px;
+}
+.case-featured-ph-hatch { position:absolute; inset:0; background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(255,255,255,.015) 20px,rgba(255,255,255,.015) 21px); }
+.case-featured-body { padding:52px 48px; display:flex; flex-direction:column; justify-content:center; }
+
+/* ============================================================
    FAQ / OBJECTIONS
    ============================================================ */
 #faq {}
@@ -547,6 +622,8 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   .model-grid { grid-template-columns:1fr; }
   .workshop-grid { grid-template-columns:1fr; gap:48px; }
   .process-grid { grid-template-columns:1fr 1fr; }
+  .cases-grid, .cases-grid.wide { grid-template-columns:1fr; }
+  .case-featured { grid-template-columns:1fr; }
   .faq-grid { grid-template-columns:1fr; }
   .sec-grid { grid-template-columns:1fr 1fr; }
   .footer-in { grid-template-columns:1fr 1fr; }
@@ -641,6 +718,18 @@ html[data-theme="light"] .workshop-cta-box { background:rgba(226,103,19,.04); bo
 /* ── Process section ── */
 html[data-theme="light"] .proc-step { background:rgba(255,255,255,0.6); }
 html[data-theme="light"] .proc-step:hover { background:rgba(255,255,255,0.85); }
+
+/* ── Case studies section ── */
+html[data-theme="light"] #cases { background:rgba(10,33,86,0.03); }
+html[data-theme="light"] .case { background:rgba(255,255,255,0.6); }
+html[data-theme="light"] .case:hover { background:rgba(255,255,255,0.8); border-color:rgba(226,103,19,.25); box-shadow:0 20px 60px rgba(0,0,0,.08); }
+html[data-theme="light"] .case-ph { background:linear-gradient(145deg, rgba(10,33,86,.06) 0%, rgba(10,33,86,.03) 100%); }
+html[data-theme="light"] .case-ph-hatch { background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(10,33,86,.03) 20px,rgba(10,33,86,.03) 21px); }
+html[data-theme="light"] .case-featured { background:rgba(255,255,255,0.6); }
+html[data-theme="light"] .case-featured:hover { background:rgba(255,255,255,0.8); border-color:rgba(226,103,19,.25); }
+html[data-theme="light"] .case-featured-ph { background:linear-gradient(145deg, rgba(10,33,86,.06) 0%, rgba(10,33,86,.03) 100%); }
+html[data-theme="light"] .case-featured-ph-hatch { background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(10,33,86,.025) 20px,rgba(10,33,86,.025) 21px); }
+html[data-theme="light"] .case-result { background:rgba(11,175,170,.05); }
 
 /* ── FAQ section ── */
 
@@ -932,6 +1021,89 @@ html { overflow-x:clip; }
         <div class="proc-name">Deploy &amp; Evolve</div>
         <div class="proc-desc">We launch into your live environment and stay close. Ongoing support, monitoring and iteration as your needs grow. We're not done when it ships.</div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CASE STUDIES ===== -->
+<section id="cases" aria-label="Case studies">
+  <div class="w">
+    <div class="sec-intro">
+      <h2 class="sec-h">AI that actually shipped.</h2>
+      <p class="sec-sub">Every project below is live, in use, and delivering real outcomes for real organisations. Not demos. Not pilots.</p>
+    </div>
+
+    <!-- Featured: Tech4Good -->
+    <div class="case-featured" style="position:relative; margin-bottom:24px;">
+      <div class="case-featured-ph">
+        <img width="1440" height="900" src="assets/screenshot-tech4good.webp" alt="Tech4Good South West homepage, live at tech4goodsouthwest.org" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center;">
+        <a href="/case-tech4good" aria-label="Tech4Good — view project details" style="position:absolute; inset:0; z-index:1;"></a>
+      </div>
+      <div class="case-featured-body">
+        <div class="case-sector">Social Impact · AI Platform</div>
+        <h3 class="case-name" style="font-size:26px; margin-bottom:14px;">Tech4Good: AI for Social Change</h3>
+        <div class="case-result">
+          <div>
+            <div class="case-result-label">Outcome</div>
+            <div class="case-result-text">AI-powered platform connecting technology resources and expertise with social impact organisations across the UK, accelerating the reach of good tech.</div>
+          </div>
+        </div>
+        <p class="case-desc">A flagship example of Iternal's approach to purpose-driven AI, building systems that extend the reach of organisations doing meaningful work, not just optimising commercial operations.</p>
+        <a href="/case-tech4good" class="case-lnk">Full Case Study <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+
+    <div class="cases-grid">
+      <div class="case">
+        <div class="case-ph"><picture><source srcset="assets/screenshot-goodnews-mobile.webp" media="(max-width:700px)"><img width="1440" height="900" src="assets/screenshot-goodnews.webp" alt="Good News London homepage" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center;"></picture><a href="/case-good-news-london" aria-label="Good News London — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
+        <div class="case-body">
+          <div class="case-sector">Civic AI · Local Government</div>
+          <h3 class="case-name">Good News London: Greater London Authority</h3>
+          <div class="case-result">
+            <div>
+              <div class="case-result-label">Result</div>
+              <div class="case-result-text">Deployed live on london.gov.uk. Zero pen-test failures at launch. Delivered in 8 weeks.</div>
+            </div>
+          </div>
+          <p class="case-desc">AI platform surfacing positive stories from London's 33 boroughs. Full public-sector security compliance, Cloudflare deployment, Sanity CMS.</p>
+          <a href="/case-good-news-london" class="case-lnk">Case Study <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+      <div class="case">
+        <div class="case-ph"><img width="1200" height="813" src="assets/screenshot-civicnetzero.webp" alt="CivicNetZero city carbon intelligence platform" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center;"><a href="/case-civicnetzero" aria-label="CivicNetZero — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
+        <div class="case-body">
+          <div class="case-sector">Agentic Infrastructure · Sustainability</div>
+          <h3 class="case-name">CivicNetZero: Global Carbon Intelligence</h3>
+          <div class="case-result">
+            <div>
+              <div class="case-result-label">Result</div>
+              <div class="case-result-text">Live across city networks on 3 continents. Real-time carbon intelligence for government decision-makers.</div>
+            </div>
+          </div>
+          <p class="case-desc">Agentic AI platform helping city governments make (and keep) net-zero commitments backed by live data.</p>
+          <a href="/case-civicnetzero" class="case-lnk">Case Study <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+      <div class="case">
+        <div class="case-ph"><img width="1440" height="900" src="assets/screenshot-bplaced.webp" alt="bPlaced care-placement matching platform" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center;"><a href="/case-bplaced" aria-label="bPlaced — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
+        <div class="case-body">
+          <div class="case-sector">AI Matching · Social Care</div>
+          <h3 class="case-name">bPlaced: Social Care Platform</h3>
+          <div class="case-result">
+            <div>
+              <div class="case-result-label">Result</div>
+              <div class="case-result-text">AI matching engine connecting local authorities with care providers. Full Risk Ledger and AWS security compliance.</div>
+            </div>
+          </div>
+          <p class="case-desc">Production AI platform for one of the UK's most sensitive welfare sectors. Built to enterprise security standards from day one.</p>
+          <a href="/case-bplaced" class="case-lnk">Case Study <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:48px; display:flex; align-items:baseline; gap:28px; flex-wrap:wrap">
+      <p style="font-size:15px; color:var(--t3); margin:0">These systems do their work quietly, every day. If yours could too, we should talk.</p>
+      <a href="/contact" class="case-lnk">Start a conversation <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
   </div>
 </section>
