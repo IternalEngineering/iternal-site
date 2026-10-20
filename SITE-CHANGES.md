@@ -11,7 +11,7 @@ Last deploy: **20 Oct 2026, third deploy** (version f85a948c; pushing to main de
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-On branch `site-rebuild` (the overhaul, phase 1: existing content rearranged or removed,
+On branch `website-rework` (the overhaul, phase 1: existing content rearranged or removed,
 nothing new written).
 
 #### Whole site
