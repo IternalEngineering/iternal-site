@@ -45,6 +45,9 @@ nothing new written).
 - **Says "AI consultancy"** (was "AI agency") under the hero. (rebuild 3)
 - **The Forge section replaces "Our operating principles"**, and "From first
   conversation to live system" is gone (the process is on Services). (rebuild 3)
+- **"The people behind the work" is gone**, with its four named cards, until it returns
+  as Wiseall and the named board members. Its search description no longer says "Meet the
+  people", and llms.txt no longer lists the team. (rebuild 7)
 
 #### Contact
 - **"Good reasons to reach out" sits beside the form** (above it on a phone) instead of
