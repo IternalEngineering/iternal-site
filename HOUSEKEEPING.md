@@ -261,6 +261,10 @@ when the answer is go. About ten minutes; one commit, then the deploy.
 
 1. **The way in is Services, not the menu.** websites.html, start.html and
    questions.html already mark "Services" as the current section.
+   ALREADY DONE on branch `site-rebuild` (20 Oct 2026, so the team can review
+   Websites in place): if that branch reaches main before the light-up, the
+   funnel is linked while still in preview (banner up, nothing sent), so
+   either light up at the same time or put these three back first.
    - services.html: delete `hidden` from the Websites entry
      (`<div class="engage-grid rv d2" id="websites" hidden …>`) and the
      comment line above it. In the process section, "Every Iternal

@@ -29,6 +29,11 @@ nothing new written).
   UK" (the search data already carried it; the site audit asked for it on the page). (rebuild 11)
 
 #### Services
+- **Websites is visible**: a wide entry under the four AI services, with "See the websites
+  we've made" (the gallery) and "Build a site with us" (sign-up, still in preview: banner
+  up, nothing sent). The process section now says "Every AI engagement". The homepage
+  gets a Websites row in "Ways to work", and the contact form a "Website" option. Links
+  that jump to a section (homepage and Services) now stop below the menu. (rebuild 13)
 - **One list of ways to work, cheapest first**: Workshops & Training, AI Automations &
   Assistants, Agentic AI Builds, AI Strategy & Advisory, each with its typical price
   (moved up from the FAQ, which now points to them). Advisory's two lists are merged
