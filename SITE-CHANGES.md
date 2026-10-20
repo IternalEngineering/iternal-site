@@ -53,6 +53,12 @@ nothing new written).
   page**: Workshops & Training, AI Automations & Assistants, Agentic AI Builds, AI
   Strategy & Advisory, or not sure yet. (rebuild 4)
 
+#### Behind the pages
+- **Search and AI descriptions use the same four service names**: the Services page's
+  search description, and llms.txt (Enterprise Strategy and Consultancy & Advisory are
+  one entry, AI Strategy & Advisory). The sitemap no longer lists Insights, and its
+  unpublished article says "small consultancy" (was "small agency"). (rebuild 5)
+
 ---
 
 ## Live

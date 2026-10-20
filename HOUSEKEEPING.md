@@ -233,7 +233,7 @@ worker from GitHub about a minute after every push to main (confirmed
 20 Oct 2026: pushed 10:51, live 10:52), the weekly screenshot commit
 included. A manual `npx wrangler deploy` from the repo root still works and
 ships the local working tree. The funnel is live but DARK: no public page links to it
-(the "Websites" nav item is removed everywhere, websites.html/start.html are
+(no menu item or Services entry leads to it, websites.html/start.html are
 noindex, the sitemap omits them), and without `?team` the sign-up and
 questions pages are a preview: every screen can be stepped through, but
 nothing is sent and no call is booked (`preview.js`).
@@ -259,15 +259,26 @@ LIGHTING UP (when the team says go). Made directly on main on the day,
 never prepared ahead: a deploy ships main, so these edits can only land
 when the answer is go. About ten minutes; one commit, then the deploy.
 
-1. **The menu.** Add "Websites" straight after "Work", in both the desktop
-   menu (`<ul class="nav-links">`: `<li><a href="websites.html">Websites</a></li>`)
-   and the phone menu (`<div class="mobile-nav">`:
-   `<a href="websites.html">Websites</a>`), on all eleven pages without it:
-   index, services, about, insights, contact, privacy, and the five
-   `case-*.html` pages. websites.html, start.html and questions.html have it
-   already. Check: `grep -c 'href="websites.html">Websites' *.html` gives 2
-   on every page except websites.html, which gives 1 (its desktop link
-   carries `class="active"`).
+1. **The way in is Services, not the menu.** websites.html, start.html and
+   questions.html already mark "Services" as the current section.
+   - services.html: delete `hidden` from the Websites entry
+     (`<div class="engage-grid rv d2" id="websites" hidden …>`) and the
+     comment line above it. In the process section, "Every Iternal
+     engagement follows" becomes "Every AI engagement follows" (website
+     builds run their own steps).
+   - index.html: in "Ways to work", add a row after AI Strategy & Advisory:
+     ```html
+     <div class="svc">
+       <div class="svc-top-line"></div>
+       <h3 class="svc-h">Websites</h3>
+       <p class="svc-p">Not every project needs a platform. Sometimes you need a really good website — designed, built and live in weeks.</p>
+       <a href="/services#websites" class="svc-cta">Learn More <!-- the arrow svg the other rows use --></a>
+     </div>
+     ```
+   - contact.html: add `<option>Website</option>` to "What kind of
+     engagement?", before "Not sure yet".
+   - Check: `grep -c 'id="websites" hidden' services.html` gives 0 and
+     `grep -c 'services#websites' index.html` gives 1.
 2. **Indexing.** websites.html and start.html: `<meta name="robots"
    content="noindex, follow">` becomes `index, follow`. questions.html stays
    `noindex` (a step page, reached only after sign-up).
