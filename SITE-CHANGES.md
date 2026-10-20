@@ -53,6 +53,13 @@ nothing new written).
   page**: Workshops & Training, AI Automations & Assistants, Agentic AI Builds, AI
   Strategy & Advisory, or not sure yet. (rebuild 4)
 
+#### Large screens
+- **Pages use more of a wide screen**: the content column grows with the window, from
+  1160px up to 1440px (no change on a laptop). Case-study and other long paragraphs keep
+  their reading width. On Services, the four service cards sit in one row from 1700px
+  wide, and the closing call to action on the homepage and Services takes three lines
+  instead of four. (rebuild 6)
+
 #### Behind the pages
 - **Search and AI descriptions use the same four service names**: the Services page's
   search description, and llms.txt (Enterprise Strategy and Consultancy & Advisory are

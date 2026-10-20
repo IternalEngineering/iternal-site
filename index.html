@@ -65,7 +65,7 @@
   --dawn:    linear-gradient(160deg, #0bafaa 0%, #1d6a91 50%, #0a2156 100%);
 
   --f: 'Maven Pro', sans-serif;
-  --max: 1160px;
+  --max: clamp(1160px, 76vw, 1440px);
   --px: 64px;
 }
 
@@ -672,7 +672,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 @keyframes ctaPulse { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-50%) scale(1.08)} }
 
 .cta-in {
-  text-align:center; max-width:720px; margin:0 auto;
+  text-align:center; max-width:880px; margin:0 auto;
   position:relative; z-index:2;
 }
 .cta-in .ey { justify-content:center; margin-bottom:28px; }
