@@ -103,7 +103,7 @@ the token awaits org approval), so the worker can deploy regardless.
   token with every answers post. `/answers` refuses (403) answers for a
   record whose token does not match — knowing an email is not enough to
   rewrite someone's brief. A client on a different browser gets a message
-  pointing them to websites@iternal.life.
+  pointing them to john@iternal.life.
 - Answers reach the platform as the prospect goes: whenever they switch
   away from or close the questions page with answers newer than the last
   send (`update`), on "Book your call" (`partial`, which records `bookedAt`)
@@ -145,8 +145,9 @@ the token awaits org approval), so the worker can deploy regardless.
   pages restate. Search both files for `£` to find them:
   - `websites.html`: the meta description, the JSON-LD description, the
     bold opening sentence of "How it works", and "Looking after your site".
-  - `start.html`: the meta description. The order table on "Review and
-    accept" takes its figures from the worker.
+  - `start.html`: the meta description, and `sampleOrder()`, the
+    walkthrough's stand-in order (until it is removed at light-up). The real
+    order table on "Review and accept" takes its figures from the worker.
 - **No payment code anywhere (Robbie, 7 Oct 2026).** The Stripe webhook
   and its payment records were removed from the worker; whether and when a
   client has paid is kept by hand in the Lead Tracker. The old £375 Payment
@@ -155,7 +156,10 @@ the token awaits org approval), so the worker can deploy regardless.
 ## Team briefs (email)
 
 Briefs go to every address in `TEAM_EMAIL` (comma-separated), one copy each.
-Changing who receives them is a three-step change, not one:
+Since 20 Oct 2026 that is john@iternal.life alone (Robbie: default to John),
+who also receives clients' replies (`CLIENT_REPLY_TO`); websites@iternal.life
+can join once it exists. Changing who receives them is a three-step change,
+not one:
 
 1. Verify each new address as an Email Routing destination
    (Cloudflare → iternal.co.uk → Email Routing; they click a link). Do this
@@ -179,7 +183,7 @@ Email Routing: it can reach any address. Setting it up, once:
    Workers Paid plan.
 2. `CLIENT_FROM` (`Iternal <websites@iternal.co.uk>`) must match the
    binding's `allowed_sender_addresses` in `worker/wrangler.toml`. Replies
-   go to `CLIENT_REPLY_TO` (websites@iternal.life).
+   go to `CLIENT_REPLY_TO` (john@iternal.life).
 3. Deploy the worker. Until all of this is in place every send fails, and
    each failure emails the team "client copy FAILED" with the text to
    forward by hand, so nobody goes without their copy.
@@ -204,17 +208,23 @@ Git auto-deploy). The funnel is live but DARK: no public page links to it
 (the "Websites" nav item is removed everywhere, websites.html/start.html are
 noindex, the sitemap omits them), and sign-up is disabled without `?team`.
 
-Before lighting up:
+Before lighting up (Robbie, 20 Oct 2026: anything quick to update once
+live is not a blocker):
 
 - The pipeline repo exists on GitHub and `PIPELINE_TOKEN` is set.
-- websites@iternal.life exists and both brief addresses are verified.
-- iternal.co.uk is onboarded as an Email Service sending domain (§The
-  client's copy).
-- A `?team` walkthrough has produced, from one real sign-up and acceptance,
-  a client file with its acceptance, a tracker row, the team briefs and the
-  client's copy with the terms PDF attached.
-- Jay's Transport has moved to the new site (the gallery shows the old one
-  until then).
+- john@iternal.life is a verified Email Routing destination, and the worker
+  is deployed.
+- The team has stepped through every screen in walkthrough mode
+  (`websites.html?walkthrough`: nothing is sent, nothing is booked) and is
+  happy with it.
+- A `?team` test run has produced, from one real sign-up and acceptance, a
+  client file with its acceptance, a tracker row and the team brief; then
+  sweep the test records (§Worker).
+
+After lighting up (follow-ups, not blockers): onboard iternal.co.uk as an
+Email Service sending domain (until then each client's copy reaches John to
+forward); create websites@iternal.life and add it to the briefs; refresh the
+gallery's Jay's Transport card if their site changes.
 
 LIGHTING UP (when the team says go). Made directly on main on the day,
 never prepared ahead: a deploy ships main, so these edits can only land
@@ -239,7 +249,11 @@ when the answer is go. About ten minutes; one commit, then the deploy.
    "Preview" notes and the gold "In testing" banner), the
    `if (PREVIEW) return;` line in the form's submit handler, and the
    `if (!PREVIEW) { … }` wrapper round restoring the kept order (keep the
-   line inside it). Check: `grep -n PREVIEW start.html` finds nothing.
+   line inside it). Also the walkthrough: delete `walkthrough.js`, its
+   `<script src="walkthrough.js">` tag on websites, start and questions, and
+   the `WALK` lines in start.html and questions.html (`sampleOrder()`
+   included). Check: `grep -n PREVIEW start.html` and
+   `grep -n -i walkthrough *.html` find nothing.
 5. **The docs.** CLAUDE.md "Currently DISABLED / dark": replace the dark
    launch and preview gate items with one saying the section is public.
    This section: mark it lit, with the date. SITE-CHANGES.md: one line

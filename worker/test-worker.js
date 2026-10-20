@@ -17,7 +17,7 @@ const env = {
   TEAM_MAIL: { async send(msg) { teamMail.push(msg); } },
   CLIENT_MAIL: { async send(msg) { clientMail.push(msg); } },
   CLIENT_FROM: 'Iternal <websites@iternal.co.uk>',
-  CLIENT_REPLY_TO: 'websites@iternal.life',
+  CLIENT_REPLY_TO: 'john@iternal.life',
   SITE_URL: 'https://iternal.co.uk',
   FROM_EMAIL: 'Website Pipeline <funnel@iternal.co.uk>',
   TEAM_EMAIL: 'paul@iternal.life',
@@ -215,7 +215,7 @@ await drain();
   const m = clientMail[0];
   assert.strictEqual(m.to, 'omar@kilnworks.co.uk');
   assert.deepStrictEqual(m.from, { name: 'Iternal', email: 'websites@iternal.co.uk' });
-  assert.strictEqual(m.replyTo, 'websites@iternal.life');
+  assert.strictEqual(m.replyTo, 'john@iternal.life');
   assert.ok(m.subject.includes(acc.reference));
   assert.ok(m.text.startsWith('Hello Omar,'));
   assert.ok(m.text.includes('Company: Kilnworks\nYour name: Omar Haddad\nEmail: omar@kilnworks.co.uk\nReference: ' + acc.reference));

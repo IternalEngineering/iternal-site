@@ -790,6 +790,7 @@ html { overflow-x:clip; }
   </div>
 </footer>
 
+<script src="walkthrough.js"></script>
 <script>
 /* ── Nav scroll ── */
 const nav = document.getElementById('nav');
@@ -842,9 +843,23 @@ const form = document.getElementById('contactForm');
 const submitBtn = document.getElementById('submitBtn');
 
 // Dark-launch preview gate: the page is live for review, but sign-up stays
-// off until launch. The team appends ?team to use the real form. Remove
+// off until launch. The team appends ?team to use the real form, or
+// ?walkthrough to step through without sending (walkthrough.js). Remove
 // this whole block at light-up (HOUSEKEEPING.md §Go-live, step 4).
-const PREVIEW = !/[?&]team\b/.test(location.search);
+const WALK = window.WALKTHROUGH === true;
+const PREVIEW = !WALK && !/[?&]team\b/.test(location.search);
+if (WALK) form.noValidate = true; // empty fields don't stop the walkthrough
+
+// The walkthrough's stand-in for the order the worker sends back. The fees
+// restate worker.js TERMS (HOUSEKEEPING.md §Payment lists every copy).
+function sampleOrder() {
+  const v = (id, fallback) => document.getElementById(id).value.trim() || fallback;
+  return {
+    company: v('org', 'Example Ltd'), name: `${v('fname', 'Alex')} ${v('lname', 'Example')}`, email: v('email', 'alex@example.com'),
+    reference: `WB-${new Date().toISOString().slice(2, 7).replace('-', '')}-SAMPLE`,
+    buildFee: 750, carePlan: 50, termsVersion: '1.0',
+  };
+}
 if (PREVIEW) {
   submitBtn.disabled = true;
   submitBtn.style.opacity = '.55';
@@ -882,6 +897,7 @@ acceptTerms.addEventListener('change', syncAccept);
 acceptAuthority.addEventListener('change', syncAccept);
 
 acceptBtn.addEventListener('click', async () => {
+  if (WALK) { location.href = 'questions.html'; return; }
   const label = acceptBtn.innerHTML;
   acceptBtn.disabled = true;
   acceptBtn.textContent = 'Sending…';
@@ -908,17 +924,18 @@ acceptBtn.addEventListener('click', async () => {
   } catch (e) {
     acceptBtn.innerHTML = label;
     syncAccept();
-    alert('Something went wrong. Please try again or email us directly at websites@iternal.life');
+    alert('Something went wrong. Please try again or email us directly at john@iternal.life');
   }
 });
 
-if (!PREVIEW) {
+if (!PREVIEW && !WALK) {
   try { const kept = JSON.parse(localStorage.getItem('iternal_signup_order')); if (kept) showReview(kept); } catch (e) {}
 }
 
 form.addEventListener('submit', (e)=>{
   e.preventDefault();
   if (PREVIEW) return;
+  if (WALK) { showReview(sampleOrder()); return; }
 
   // Animate button
   submitBtn.style.opacity='.6';
@@ -970,7 +987,7 @@ form.addEventListener('submit', (e)=>{
       Sign Up
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     `;
-    alert('Something went wrong. Please try again or email us directly at websites@iternal.life');
+    alert('Something went wrong. Please try again or email us directly at john@iternal.life');
   });
 });
 

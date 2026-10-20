@@ -14,7 +14,7 @@ routes = [{ pattern = "api.iternal.co.uk", custom_domain = true }]
 # any address once iternal.co.uk is onboarded as a sending domain (Workers
 # Paid plan). It may only send from CLIENT_FROM's address.
 send_email = [
-  { name = "TEAM_MAIL", allowed_destination_addresses = ["websites@iternal.life", "john@iternal.life"] },
+  { name = "TEAM_MAIL", allowed_destination_addresses = ["john@iternal.life"] },
   { name = "CLIENT_MAIL", allowed_sender_addresses = ["websites@iternal.co.uk"] },
 ]
 
@@ -27,11 +27,11 @@ id = "bf744fdf07b945719b644e314b69b780"
 SITE_URL = "https://iternal.co.uk"
 FROM_EMAIL = "Website Pipeline <funnel@iternal.co.uk>"
 # Comma-separated; each gets its own copy of every team brief.
-TEAM_EMAIL = "websites@iternal.life, john@iternal.life"
+TEAM_EMAIL = "john@iternal.life"
 # The client's copy: from an iternal.co.uk address (the sending domain), with
 # replies going to the team's mailbox.
 CLIENT_FROM = "Iternal <websites@iternal.co.uk>"
-CLIENT_REPLY_TO = "websites@iternal.life"
+CLIENT_REPLY_TO = "john@iternal.life"
 # The Lead Tracker's public "Anyone" /exec URL:
 LEAD_API_URL = "https://script.google.com/macros/s/AKfycbzwkFrrOZ_VqMP0CJnAjtCsUTU6BtOzbLyJ7SClkmaVJq6W3r4FSoxohBPLqZZbrTKI/exec"
 # The information & demo build dashboard's repo: the worker commits one

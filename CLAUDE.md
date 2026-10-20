@@ -59,10 +59,10 @@ answers.
   `.assetsignore`, so it is never published.
 - Clients get one email from us: on accepting, a copy of their order and
   the terms (PDF attached), as the terms promise, from
-  "Iternal <websites@iternal.co.uk>" with replies to websites@iternal.life
+  "Iternal <websites@iternal.co.uk>" with replies to john@iternal.life
   (`CLIENT_MAIL`, Cloudflare Email Service). If it cannot send, the team
   gets it to forward. Google Calendar sends the invite. Team briefs go to
-  websites@iternal.life and john@iternal.life as
+  john@iternal.life (the one address since 20 Oct 2026) as
   "Website Pipeline <funnel@iternal.co.uk>" (`TEAM_MAIL`).
 
 ## Currently DISABLED / dark (deliberate — do not "fix")
@@ -73,6 +73,9 @@ answers.
 - **Preview gate** on start.html: sign-up is disabled and a gold
   "In testing" banner shows unless `?team` is on the URL. Removed at
   light-up.
+- **Walkthrough mode** (`walkthrough.js`): `?walkthrough` on websites,
+  start or questions lets the team step through every screen with the
+  gates off; nothing is sent and no call is booked. Removed at light-up.
 - **The pipeline feed** is off until `PIPELINE_TOKEN` is set on the worker.
 - `privacy.html` exists but is deliberately unlinked pending legal review.
 
@@ -96,8 +99,9 @@ fallback constant in questions.html.
 
 1. Create the private GitHub repo for `../website-build-platform`, push it,
    and set the worker's `PIPELINE_TOKEN`.
-2. Create websites@iternal.life; verify it and john@iternal.life as Email
-   Routing destinations; then deploy the worker.
+2. Verify john@iternal.life as an Email Routing destination (since 20 Oct
+   2026 it receives the briefs and clients' replies; websites@iternal.life
+   can follow), then deploy the worker.
 3. Deploy the site (held: only on Robbie's word, named in that moment).
 4. `?team` walkthrough: one real sign-up should yield a client file, a
    tracker row and both briefs.
