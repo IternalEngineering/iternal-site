@@ -34,11 +34,9 @@ Last deploy: **7 Oct 2026, third deploy** (version 8fb2c0c7). Local copy: `http:
   names them. (terms acceptance)
 - **The terms have their own page**, `terms/website-build-and-care-v1.0.html`, with a PDF
   to download. Not indexed. (terms acceptance)
-- **Prices restated from the terms.** The gallery's "How it works" now leads "£750 + VAT to
-  build: half when you accept our terms, half on completion"; "Our studio, built in" became
-  "Looking after your site" (the £50 a month care plan, which includes the web agent); the
-  page descriptions and the closing line match. The sign-up page's steps say "Review and
-  accept", and its intro no longer promises refining the site "until it's yours" (the terms
+- **No prices on the gallery page.** "How it works" and "Our studio, built in" are gone,
+  and the page's descriptions no longer give prices; "After something bigger?" stays.
+  (gallery pricing removed) The sign-up page's steps say "Review and accept", and its intro no longer promises refining the site "until it's yours" (the terms
   include one round of revisions). (terms acceptance)
 
 ### Questions page (still hidden from the public)

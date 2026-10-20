@@ -158,8 +158,10 @@ the token awaits org approval), so the worker can deploy regardless.
   `worker/worker.js` (version and fees; then the worker tests and a worker
   deploy), the terms link in start.html's hero note, and the figures the
   pages restate. Search both files for `£` to find them:
-  - `websites.html`: the meta description, the JSON-LD description, the
-    bold opening sentence of "How it works", and "Looking after your site".
+  - `websites.html`: none. Robbie took the pricing off the gallery page on
+    20 Oct 2026 ("How it works", "Looking after your site" and the prices in
+    its descriptions), ahead of moving to "£100 to start, quoted after the
+    call" once new terms are supplied.
   - `start.html`: the meta description, and `sampleOrder()`, the
     preview's stand-in order (until it is removed at light-up). The real
     order table on "Review and accept" takes its figures from the worker.
