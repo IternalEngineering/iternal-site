@@ -35,6 +35,10 @@ nothing new written).
   "Most requested" stay). The Websites entry keeps its first sentence and both buttons. (rebuild 14)
 - **Websites joins the four service cards as one block**, a full-width row under them
   instead of a separate box below a gap. (rebuild 15)
+- **The Discovery Workshop section is half the height** (587px from 1,133px on a laptop):
+  the paragraph saying what it is (the "most organisations know…" lead-in is gone), what you
+  leave with as a plain list instead of four boxes, the four steps by name and timing
+  without their descriptions, and the price box without its repeated title. (rebuild 16)
 - **Websites is visible**: a wide entry under the four AI services, with "See the websites
   we've made" (the gallery) and "Build a site with us" (sign-up, still in preview: banner
   up, nothing sent). The process section now says "Every AI engagement". The homepage

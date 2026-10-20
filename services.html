@@ -332,29 +332,26 @@ section { padding:min(64px, 7vh) 0; border-bottom:1px solid var(--border); }
    ============================================================ */
 #workshop { background:rgba(12,29,78,.35); }
 
-.workshop-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:start; }
+.workshop-grid { display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start; }
 
 .workshop-copy .ey { margin-bottom:24px; }
 .workshop-copy .sec-h { margin-bottom:20px; }
 .workshop-copy p { font-size:16px; color:var(--t3); line-height:1.8; margin-bottom:20px; }
 .workshop-copy p strong { color:var(--white); font-weight:700; }
 
-.workshop-outcomes { margin-top:36px; }
-.outcome-label { font-size:12px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--t4); margin-bottom:18px; }
-.outcomes-list { display:flex; flex-direction:column; gap:14px; }
-.outcome {
-  display:flex; align-items:flex-start; gap:14px;
-  padding:16px 20px; background:rgba(255,255,255,.03);
-  border:1px solid var(--border); border-left:3px solid var(--aqua);
-}
-.outcome-text { font-size:14px; color:var(--t2); line-height:1.6; }
+.workshop-outcomes { margin-top:24px; }
+.outcome-label { font-size:12px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--t4); margin-bottom:12px; }
+.outcomes-list { display:flex; flex-direction:column; gap:8px; }
+.outcome { display:flex; align-items:flex-start; gap:10px; }
+.outcome::before { content:''; width:5px; height:5px; border-radius:50%; background:var(--aqua); margin-top:9px; flex-shrink:0; }
+.outcome-text { font-size:15px; color:var(--t2); line-height:1.6; }
 
 /* Workshop visual — process steps */
 .workshop-steps { display:flex; flex-direction:column; gap:0; }
 
 .step {
-  display:grid; grid-template-columns:56px 1fr;
-  gap:20px; padding:28px 0;
+  display:grid; grid-template-columns:36px 1fr; align-items:center;
+  gap:16px; padding:14px 0;
   border-bottom:1px solid var(--border); position:relative;
 }
 .step:first-child { border-top:1px solid var(--border); }
@@ -363,33 +360,30 @@ section { padding:min(64px, 7vh) 0; border-bottom:1px solid var(--border); }
 /* Connecting line */
 .step::before {
   content:''; position:absolute;
-  left:27px; top:56px; bottom:-1px;
+  left:17px; top:50px; bottom:-1px;
   width:1px; background:var(--border);
 }
 .step:last-child::before { display:none; }
 
 .step-n {
-  width:56px; height:56px; border-radius:50%;
+  width:36px; height:36px; border-radius:50%;
   background:rgba(255,255,255,.04); border:1px solid var(--border2);
   display:flex; align-items:center; justify-content:center;
-  font-size:16px; font-weight:900; color:var(--aqua); flex-shrink:0;
+  font-size:14px; font-weight:900; color:var(--aqua); flex-shrink:0;
   position:relative; z-index:1;
 }
-.step-body { padding-top:14px; }
-.step-name { font-size:16px; font-weight:700; color:var(--white); margin-bottom:7px; }
-.step-desc { font-size:14px; color:var(--t3); line-height:1.65; }
-.step-meta { font-size:12px; color:var(--tan); font-weight:700; letter-spacing:.08em; margin-top:8px; }
+.step-name { font-size:16px; font-weight:700; color:var(--white); margin-bottom:2px; }
+.step-meta { font-size:12px; color:var(--tan); font-weight:700; letter-spacing:.08em; }
 
 .workshop-cta-box {
-  margin-top:40px; padding:32px 36px;
+  margin-top:24px; padding:24px 28px;
   background:rgba(226,103,19,.06); border:1px solid rgba(226,103,19,.2);
-  display:flex; flex-direction:column; gap:18px;
+  display:flex; flex-direction:column; gap:14px;
 }
-.workshop-cta-box h3 { font-size:18px; font-weight:700; color:var(--white); }
 .workshop-cta-box p { font-size:14px; color:var(--t3); line-height:1.65; }
 .workshop-price {
   display:flex; align-items:baseline; gap:8px;
-  font-size:32px; font-weight:900; color:var(--white);
+  font-size:28px; font-weight:900; color:var(--white);
 }
 .workshop-price span { font-size:14px; font-weight:400; color:var(--t4); }
 
@@ -713,7 +707,6 @@ html[data-theme="light"] .sec-c:hover { background:rgba(255,255,255,0.85); }
 
 /* ── Workshop section ── */
 html[data-theme="light"] #workshop { background:rgba(10,33,86,0.03); }
-html[data-theme="light"] .outcome { background:rgba(10,33,86,0.03); }
 html[data-theme="light"] .step-n { background:rgba(10,33,86,0.04); }
 html[data-theme="light"] .workshop-cta-box { background:rgba(226,103,19,.04); border-color:rgba(226,103,19,.15); }
 
@@ -917,7 +910,6 @@ html { overflow-x:clip; }
 
       <div class="workshop-copy">
         <h2 class="sec-h">Start with the<br>AI Discovery Workshop.</h2>
-        <p>Most organisations know AI should be doing more for them. Very few know exactly <strong>where to start, which problems are actually worth automating, and which vendors to trust</strong>.</p>
         <p>The Iternal Discovery Workshop is a focused half-day session that cuts through the noise. We come to you, map your workflows, and leave you with a clear, prioritised AI roadmap, whether you go on to build with us or not.</p>
 
         <div class="workshop-outcomes">
@@ -937,7 +929,6 @@ html { overflow-x:clip; }
             <div class="step-n">1</div>
             <div class="step-body">
               <div class="step-name">Pre-workshop briefing</div>
-              <div class="step-desc">We send a short diagnostic questionnaire to your key stakeholders before the session. No homework. Just enough context for us to make every minute count.</div>
               <div class="step-meta">2 days before · 20 mins</div>
             </div>
           </div>
@@ -945,7 +936,6 @@ html { overflow-x:clip; }
             <div class="step-n">2</div>
             <div class="step-body">
               <div class="step-name">Workflow mapping session</div>
-              <div class="step-desc">A structured half-day with your team. We map your current processes, identify friction points, and pressure-test where AI would actually move the needle.</div>
               <div class="step-meta">Half day · in-person or remote</div>
             </div>
           </div>
@@ -953,7 +943,6 @@ html { overflow-x:clip; }
             <div class="step-n">3</div>
             <div class="step-body">
               <div class="step-name">Analysis &amp; opportunity ranking</div>
-              <div class="step-desc">We spend 3–5 days mapping everything to real AI capabilities, sizing effort and ROI, and identifying any quick wins that can be delivered immediately.</div>
               <div class="step-meta">3–5 business days</div>
             </div>
           </div>
@@ -961,14 +950,12 @@ html { overflow-x:clip; }
             <div class="step-n">4</div>
             <div class="step-body">
               <div class="step-name">Roadmap presentation</div>
-              <div class="step-desc">We return with a clear, honest roadmap. Prioritised opportunities, realistic costings, model recommendations and a decision on whether a build makes sense.</div>
               <div class="step-meta">1 hour readout session</div>
             </div>
           </div>
         </div>
 
         <div class="workshop-cta-box">
-          <h3>AI Discovery Workshop</h3>
           <p>Fixed-price. Usually completed within two weeks of booking. The cost is credited against any subsequent build engagement.</p>
           <div class="workshop-price">£2,500 <span>+ VAT · fixed price</span></div>
           <a href="/contact" class="btn-sun" style="align-self:flex-start">
