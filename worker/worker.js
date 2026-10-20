@@ -97,7 +97,9 @@ async function postToLeadTracker(env, lead) {
       body: JSON.stringify(lead),
     });
     const body = res.ok ? await res.json().catch(() => ({})) : {};
-    if (!res.ok || body.ok === false) why = `HTTP ${res.status}${body.error ? ' — ' + body.error : ''}`;
+    // Only the tracker's own {ok: true} counts: Apps Script answers a sign-in
+    // or "unable to open" page with status 200 too.
+    if (!res.ok || body.ok !== true) why = `HTTP ${res.status}${body.error ? ' — ' + body.error : body.ok === undefined ? ' — not a tracker reply' : ''}`;
   } catch (e) { why = e && e.message ? e.message : String(e); }
   if (!why) return;
   // Never silent: the client saw "ok", so the team must hear it went missing.
@@ -210,7 +212,7 @@ const QUESTIONS = [
   ['content', 'Where will the words come from?'],
   ['assets', 'What do you already have that we can use?'],
   ['wrong', 'If you have a site now — what does it get wrong?'],
-  ['feel', 'When someone they respect sees the finished site, what should they think?'],
+  ['feel', 'When someone you respect sees the finished site, what should they think?'],
   ['anything', 'Anything else we should know before the call?'],
 ];
 
@@ -277,6 +279,8 @@ function projectToPipeline(kv, file, slug) {
   rec.website = kv.website || '';
   rec.inspiration = kv.inspiration || '';
   rec.signedUpAt = kv.signedUpAt || rec.signedUpAt || null;
+  // Shown to the client at sign-up, so the team can match it before acceptance.
+  rec.reference = kv.reference || rec.reference || null;
   // What they accepted, exactly as it stood: the order details and the terms
   // version, and when.
   rec.acceptance = kv.acceptance || rec.acceptance || null;
@@ -393,6 +397,12 @@ async function handleSignup(request, env, ctx) {
 
   const key = `lead:${email}`;
   const existing = (await env.CLIENTS.get(key, 'json')) || { email, status: 'lead' };
+  // One sign-up per email: a second one would hand over the token and let
+  // anyone who knows the address rewrite the record and accept for them.
+  if (existing.token) {
+    if (s(body.token, 100) !== existing.token) return json(409, { error: 'already signed up' }, cors);
+    return json(200, { ok: true, token: existing.token, order: orderOf(existing) }, cors);
+  }
   existing.name = name || existing.name || '';
   existing.org = company || existing.org || '';
   existing.website = website || existing.website || '';
@@ -413,13 +423,14 @@ async function handleSignup(request, env, ctx) {
 
 Email: ${email}
 Organisation: ${org}
-Website: ${website || 'none given'}${inspiration ? '\nCame in from the ' + inspiration + ' example in the gallery.' : ''}
+Website: ${website || 'none given'}
+Reference: ${existing.reference}${inspiration ? '\nCame in from the ' + inspiration + ' example in the gallery.' : ''}
 
 Next they review their order and accept the terms; a brief follows when they do.`),
     postToLeadTracker(env, {
       org, contact: name || email, email, website,
-      source: 'website funnel',
-      message: 'Signed up on the website — next, reviewing and accepting the terms.'
+      source: 'website funnel', event: 'signed-up',
+      message: `Signed up on the website (reference ${existing.reference}) — next, reviewing and accepting the terms.`
         + (inspiration ? ' Came in from the ' + inspiration + ' example in the gallery — a steer for the concepts.' : ''),
     }),
     syncToPipeline(env, email, 'signed up'),
@@ -471,7 +482,7 @@ The first 50% of the build fee (£${acc.buildFee / 2} + VAT) is payable now: sen
 Their questions come next; a brief follows when they answer.`),
     postToLeadTracker(env, {
       org: acc.company, contact: acc.name, email, website: kv.website || '',
-      source: 'website funnel',
+      source: 'website funnel', event: 'accepted',
       message: `Accepted the ${TERMS.name}, version ${acc.termsVersion} (reference ${acc.reference}). `
         + `Build fee £${acc.buildFee} + VAT, 50% now and 50% on completion: invoice the first 50%. `
         + `Care plan £${acc.carePlan} per month + VAT from the month after the site goes live.`,
@@ -514,12 +525,12 @@ async function handleAnswers(request, env, ctx) {
   // An archived client may still have the questions page open; a late answer
   // must not bring their record back.
   if (!stored && await leftThePlatform(env, email)) return json(200, { ok: true }, cors);
-  // A page saving by itself never creates a record: only a sign-up, a booking
-  // or a send does.
-  if (!stored && quiet) return json(200, { ok: true }, cors);
-  const existing = stored || { email, status: 'lead' };
-  // A record made by a sign-up carries a token; answers must present it.
-  if (existing.token && s(body.token, 100) !== existing.token) {
+  // Answers belong to a client who signed up and accepted the terms (the page
+  // only leads to the questions after both). A page saving by itself is
+  // ignored; a booking or a send is told to finish signing up.
+  if (!stored || !stored.acceptance) return quiet ? json(200, { ok: true }, cors) : json(409, { error: 'finish signing up first' }, cors);
+  const existing = stored;
+  if (s(body.token, 100) !== existing.token) {
     return json(403, { error: 'not the browser that signed up' }, cors);
   }
   const merged = { ...(existing.answers || {}), ...answers };

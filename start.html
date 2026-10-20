@@ -948,9 +948,13 @@ form.addEventListener('submit', (e)=>{
       // a steer for the concepts, whitelisted worker-side.
       inspiration: (location.search.match(/[?&]from=([\w-]{1,40})/)||[])[1] || '',
       _honey: document.getElementById('honey').value,
+      // Signing up again from the same browser gets the same order back; the
+      // worker refuses a second sign-up for that email from anywhere else.
+      token: (() => { try { return localStorage.getItem('iternal_signup_token') || ''; } catch (e) { return ''; } })(),
     })
   })
   .then(res=>{
+    if (res.status === 409) throw new Error('already signed up');
     if (!res.ok) throw new Error('Sign-up failed');
     return res.json().catch(()=>({}));
   })
@@ -965,14 +969,16 @@ form.addEventListener('submit', (e)=>{
     } catch(e) {}
     showReview(data.order);
   })
-  .catch(()=>{
+  .catch((err)=>{
     submitBtn.style.opacity='1';
     submitBtn.style.pointerEvents='auto';
     submitBtn.innerHTML = `
       Sign Up
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     `;
-    alert('Something went wrong. Please try again or email us directly at john@iternal.life');
+    alert(err && err.message === 'already signed up'
+      ? 'You have already signed up with this email. Please carry on in the browser you signed up in, or email us at john@iternal.life.'
+      : 'Something went wrong. Please try again or email us directly at john@iternal.life');
   });
 });
 

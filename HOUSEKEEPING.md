@@ -87,7 +87,12 @@ the token awaits org approval), so the worker can deploy regardless.
   A test sign-up also leaves a file in the pipeline repo and a row in the
   tracker; remove those too.
 - `/signup` is the sign-up form's only destination (FormSubmit is gone from
-  that page). Its spam check is the form's hidden honeypot field.
+  that page). Its spam check is the form's hidden honeypot field. One
+  sign-up per email: a second one is refused (409; the page asks them to
+  carry on in the browser they signed up in, or email john@iternal.life)
+  unless it comes from that browser, which gets the same order back.
+  Nothing changes either way, so knowing someone's email is not enough to
+  take over their sign-up or accept for them.
 - `/signup` answers `{ok, token, order}`. `order` is what start.html's
   "Review and accept" shows: company, name, email, a reference (`WB-yymm-XXXX`,
   made at sign-up and kept), the fees and the terms version, all from the
@@ -104,6 +109,10 @@ the token awaits org approval), so the worker can deploy regardless.
   record whose token does not match — knowing an email is not enough to
   rewrite someone's brief. A client on a different browser gets a message
   pointing them to john@iternal.life.
+- Answers count only from a client who has signed up and accepted the
+  terms: a booking or send from anyone else is refused (409; the page asks
+  them to finish signing up first), and a page saving by itself is ignored.
+  So nothing reaches the dashboard's demo queue without an agreement.
 - Answers reach the platform as the prospect goes: whenever they switch
   away from or close the questions page with answers newer than the last
   send (`update`), on "Book your call" (`partial`, which records `bookedAt`)
@@ -120,10 +129,16 @@ the token awaits org approval), so the worker can deploy regardless.
   client never recreates their record (it checks that history file). A
   fresh sign-up starts a new one. Details: the platform README, "Archiving
   a client".
-- Nothing fails silently: a tracker post the Sheet rejects, or a platform
-  sync GitHub rejects (expired token, slug clash, bad file), emails the team
-  a "FAILED" brief naming the client. Worker logs are retained
-  (`[observability]` in wrangler.toml).
+- Nothing fails silently: a tracker post the Sheet rejects (anything but
+  the tracker's own `{ok: true}`, so an Apps Script sign-in page counts as
+  a failure), or a platform sync GitHub rejects (expired token, slug clash,
+  bad file), emails the team a "FAILED" brief naming the client. Worker logs
+  are retained (`[observability]` in wrangler.toml).
+- Tracker posts carry `event` (`signed-up` or `accepted`); the tracker
+  words its Slack ping by it ("accepted the terms: invoice the first 50%").
+- After the first deploy of this code, delete the two secrets it no longer
+  uses: `npx wrangler secret delete MAGIC_SECRET` and
+  `npx wrangler secret delete STRIPE_WEBHOOK_SECRET`.
 
 ## Payment and the terms (13 Oct 2026)
 
@@ -148,6 +163,8 @@ the token awaits org approval), so the worker can deploy regardless.
   - `start.html`: the meta description, and `sampleOrder()`, the
     preview's stand-in order (until it is removed at light-up). The real
     order table on "Review and accept" takes its figures from the worker.
+  - The Lead Tracker (`../lead-tracker`, `apps-script/LeadApi.gs`): every
+    website lead starts with `budget: 750`.
 - **No payment code anywhere (Robbie, 7 Oct 2026).** The Stripe webhook
   and its payment records were removed from the worker; whether and when a
   client has paid is kept by hand in the Lead Tracker. The old £375 Payment

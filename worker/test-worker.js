@@ -53,7 +53,8 @@ globalThis.fetch = async (url, opts = {}) => {
   if (String(url).startsWith('https://api.github.com/')) return fakeGitHub(String(url), opts);
   if (String(url).endsWith('.pdf')) return new Response(new Uint8Array([37, 80, 68, 70]), { status: 200 }); // the published terms
   outbound.push({ url: String(url), body: opts.body ? JSON.parse(opts.body) : null });
-  return new Response('{}', { status: 200 });
+  // the Lead Tracker answers {ok, id}; nothing else is called
+  return new Response(String(url).includes('script.example') ? '{"ok":true,"id":"t1"}' : '{}', { status: 200 });
 };
 
 const pending = [];
@@ -73,9 +74,23 @@ let r = await call('/stripe-webhook', { method: 'POST', body: '{}' });
 assert.strictEqual(r.status, 404);
 assert.strictEqual(store.size, 0);
 
-// answers with an email: stored on the lead record and briefed to the team;
-// the tracker never receives answers
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'Sam@BrightPaws.co.uk', kind: 'complete', answers: { mainJob: 'Take bookings', audience: 'gift buyers', pages: ['Home', 'Contact'] } }) });
+// answers need a sign-up and an accepted order: anyone else's are refused,
+// and nothing is stored or sent
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'Sam@BrightPaws.co.uk', kind: 'complete', answers: { mainJob: 'Take bookings' } }) });
+assert.strictEqual(r.status, 409);
+await drain();
+assert.ok(!store.get('lead:sam@brightpaws.co.uk'));
+assert.strictEqual(outbound.length + teamMail.length + clientMail.length, 0);
+
+// signed up and accepted: answers are stored on the lead record and briefed
+// to the team; the tracker never receives answers
+r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'Sam', lastName: 'Okafor', email: 'Sam@BrightPaws.co.uk', organisation: 'Bright Paws' }) });
+const { token: samToken } = await r.json();
+r = await call('/accept', { method: 'POST', body: JSON.stringify({ email: 'sam@brightpaws.co.uk', token: samToken, termsVersion: '1.0', accepted: true, authorised: true }) });
+assert.strictEqual(r.status, 200);
+await drain();
+outbound = []; teamMail.length = 0; clientMail.length = 0;
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'Sam@BrightPaws.co.uk', token: samToken, kind: 'complete', answers: { mainJob: 'Take bookings', audience: 'gift buyers', pages: ['Home', 'Contact'] } }) });
 assert.strictEqual(r.status, 200);
 await drain();
 {
@@ -113,11 +128,14 @@ await drain();
   assert.ok(outbound[0].url.includes('action=createLead'));
   assert.strictEqual(outbound[0].body.email, 'nadia@harbourlightcafe.co.uk');
   assert.ok(outbound[0].body.message.includes('Signed up'));
+  assert.strictEqual(outbound[0].body.event, 'signed-up'); // the tracker words its ping by this
+  assert.ok(outbound[0].body.message.includes('reference ' + lead.reference));
   assert.ok(outbound[0].body.message.includes('Pawlett Pavilion example'));
   // the worker briefs the team itself — no third-party relay in the sign-up
   assert.strictEqual(teamMail.length, 1);
   assert.ok(teamMail[0].raw.includes('Subject: Website Pipeline: new sign-up — Harbourlight Cafe'));
   assert.ok(teamMail[0].raw.includes('Email: nadia@harbourlightcafe.co.uk'));
+  assert.ok(teamMail[0].raw.includes('Reference: ' + lead.reference));
 }
 // a bot that fills the honeypot gets an OK and leaves no trace anywhere
 outbound = []; teamMail.length = 0;
@@ -167,6 +185,7 @@ await drain();
   assert.strictEqual(f.contact, 'Omar Haddad');
   assert.strictEqual(f.org, 'Kilnworks');
   assert.strictEqual(f.inspiration, 'bPlaced');
+  assert.strictEqual(f.reference, omarOrder.reference); // the team can match it before acceptance
   assert.strictEqual(f.stage, 'signed-up');
   assert.strictEqual(f.demoRequested, false); // nothing to build from yet
   assert.ok(!('payment' in f)); // payment lives in the tracker, never here
@@ -228,6 +247,7 @@ await drain();
   const brief = teamMail.find(t => t.raw.includes('Subject: Website Pipeline: terms accepted — Kilnworks'));
   assert.ok(brief && brief.raw.includes('(£375 + VAT) is payable now: send the invoice'));
   const note = outbound.find(o => o.url.includes('action=createLead'));
+  assert.strictEqual(note.body.event, 'accepted');
   assert.ok(note.body.message.includes('Accepted the Website Build and Care Terms, version 1.0 (reference ' + acc.reference + ')'));
   assert.ok(!('answers' in note.body));
 }
@@ -236,6 +256,21 @@ teamMail.length = 0; clientMail.length = 0; outbound = [];
 {
   const before = store.get('lead:omar@kilnworks.co.uk');
   assert.strictEqual((await accept()).status, 200);
+  await drain();
+  assert.strictEqual(store.get('lead:omar@kilnworks.co.uk'), before);
+  assert.strictEqual(teamMail.length + clientMail.length + outbound.length, 0);
+}
+// one sign-up per email: anyone else is refused and nothing changes (no
+// token, no new company on the order); the browser that signed up gets its
+// order back
+{
+  const before = store.get('lead:omar@kilnworks.co.uk');
+  r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'Mallory', email: 'omar@kilnworks.co.uk', organisation: 'Other Ltd' }) });
+  assert.strictEqual(r.status, 409);
+  assert.ok(!('token' in await r.json()));
+  r = await call('/signup', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', organisation: 'Other Ltd', token: omarToken }) });
+  assert.strictEqual(r.status, 200);
+  assert.strictEqual((await r.json()).order.company, 'Kilnworks');
   await drain();
   assert.strictEqual(store.get('lead:omar@kilnworks.co.uk'), before);
   assert.strictEqual(teamMail.length + clientMail.length + outbound.length, 0);
@@ -410,8 +445,19 @@ outbound = []; teamMail.length = 0;
   assert.strictEqual(teamMail.length, 0);
   assert.strictEqual(JSON.stringify(ghFile(slug)), before);
 }
-// a record with no token (made before this check) still accepts answers
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'sam@brightpaws.co.uk', kind: 'partial', answers: { pages: ['Home'] } }) });
+// signed up but never accepted: booking or sending is refused, saving is ignored
+{
+  const lee = JSON.parse(store.get('lead:lee@solo.co.uk'));
+  r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'lee@solo.co.uk', token: lee.token, kind: 'partial', answers: { mainJob: 'x' } }) });
+  assert.strictEqual(r.status, 409);
+  r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'lee@solo.co.uk', token: lee.token, kind: 'update', answers: { mainJob: 'x' } }) });
+  assert.strictEqual(r.status, 200);
+  await drain();
+  assert.ok(!JSON.parse(store.get('lead:lee@solo.co.uk')).answers);
+  assert.strictEqual(teamMail.length, 0);
+}
+// Sam's answers reach the dashboard too, now the feed is on
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'sam@brightpaws.co.uk', token: samToken, kind: 'partial', answers: { pages: ['Home'] } }) });
 assert.strictEqual(r.status, 200);
 
 // resending identical answers does not move answersUpdatedAt
@@ -470,6 +516,17 @@ teamMail.length = 0;
   const failMail = teamMail.find(m => m.raw.includes('tracker post FAILED'));
   assert.ok(failMail && failMail.raw.includes('unauthorised') && failMail.raw.includes('tracker@test.co.uk'));
 }
+// ...and so is a sign-in page answered with status 200 (Apps Script does this)
+teamMail.length = 0;
+{
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url, opts) => String(url).includes('script.example')
+    ? new Response('<html>Sign in</html>', { status: 200 }) : realFetch(url, opts);
+  r = await call('/signup', { method: 'POST', body: JSON.stringify({ email: 'signin@test.co.uk', organisation: 'Sign In Ltd' }) });
+  await drain();
+  globalThis.fetch = realFetch;
+  assert.ok(teamMail.some(m => m.raw.includes('tracker post FAILED') && m.raw.includes('not a tracker reply')));
+}
 
 // client text in a subject cannot forge mail headers
 teamMail.length = 0;
@@ -512,7 +569,7 @@ assert.ok(!store.get('lead:omar@kilnworks.co.uk'));
 // recreates the platform file
 assert.ok(gh.files.has('clients/sam-brightpaws-co-uk.json'));
 archive('sam@brightpaws.co.uk', 'sam-brightpaws-co-uk', { keepKv: true });
-r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'sam@brightpaws.co.uk', kind: 'partial', answers: { feel: 'Late' } }) });
+r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'sam@brightpaws.co.uk', token: samToken, kind: 'partial', answers: { feel: 'Late' } }) });
 assert.strictEqual(r.status, 200);
 await drain();
 assert.ok(!gh.files.has('clients/sam-brightpaws-co-uk.json'));

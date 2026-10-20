@@ -910,11 +910,12 @@ document.head.appendChild(style);
   var bookBtn = document.getElementById('bookBtn');
   var answers = {};
   try { answers = JSON.parse(sessionStorage.getItem(STORE)) || {}; } catch(e) {}
-  // Carried over from sign-up: the email they used (so a retyped one can't
-  // split them into two records) and the token the worker expects back.
-  var SIGNUP_TOKEN = '';
+  // Carried over from sign-up: the email they used (fixed below, so a retyped
+  // one can't split them into two records) and the token the worker expects back.
+  var SIGNUP_TOKEN = '', SIGNUP_EMAIL = '';
   try {
-    if (!answers.email && localStorage.getItem('iternal_signup_email')) answers.email = localStorage.getItem('iternal_signup_email');
+    SIGNUP_EMAIL = localStorage.getItem('iternal_signup_email') || '';
+    if (SIGNUP_EMAIL) answers.email = SIGNUP_EMAIL;
     SIGNUP_TOKEN = localStorage.getItem('iternal_signup_token') || '';
   } catch(e) {}
   var partialSent = false;
@@ -995,6 +996,7 @@ document.head.appendChild(style);
     coreBody.appendChild(d);
     wire(q, d);
   });
+  if (SIGNUP_EMAIL) document.getElementById('qi-email').readOnly = true;
 
   // The rest: native <details> rows — click a question to open and answer it.
   QUESTIONS.filter(function(q){ return !q.core; }).forEach(function(q){
@@ -1051,16 +1053,21 @@ document.head.appendChild(style);
     if (!PREVIEW && answers.email && answers.email.indexOf('@') === -1) { sendNote.textContent = 'That email doesn’t look right.'; return; }
     sendBtn.style.opacity = '.6'; sendBtn.style.pointerEvents = 'none';
     send('complete').then(function(res){
-      if (!res.ok) throw new Error(res.status === 403 ? 'not yours' : 'send failed');
+      if (!res.ok) throw Object.assign(new Error('refused'), { status: res.status });
       try { sessionStorage.removeItem(STORE); } catch(e) {}
       document.getElementById('formWrap').classList.add('submitted');
     }).catch(function(err){
       sendBtn.style.opacity = '1'; sendBtn.style.pointerEvents = 'auto';
-      sendNote.textContent = err && err.message === 'not yours'
-        ? 'These answers don’t match the sign-up for that email. Please use the browser you signed up in, or email your answers to john@iternal.life.'
-        : 'Sending failed — please try again, or email your answers to john@iternal.life.';
+      sendNote.innerHTML = refusal(err && err.status);
     });
   });
+
+  // What a refused send means, in words the client can act on.
+  function refusal(status){
+    return status === 409 ? 'Please finish signing up first: <a href="start.html" style="color:var(--tan)">sign up and accept our terms</a>, then come back here.'
+      : status === 403 ? 'These answers don’t match the sign-up for that email. Please use the browser you signed up in, or email your answers to john@iternal.life.'
+      : 'Sending failed — please try again, or email your answers to john@iternal.life.';
+  }
 
   var external = BOOKING_URL.indexOf('http') === 0; // true once the Calendly URL is in
   var bookBtnSuccess = document.getElementById('bookBtnSuccess');
@@ -1070,8 +1077,20 @@ document.head.appendChild(style);
     if (PREVIEW) { a.addEventListener('click', function(e){ e.preventDefault(); }); return; }
     if (external) {
       a.target = '_blank'; a.rel = 'noopener'; // Calendly opens in a new tab — their answers stay put
+      // The calendar opens either way; if the worker refuses the booking's
+      // answers, say so here so they don't book a call we know nothing about.
       if (a === bookBtn) a.addEventListener('click', function(){
-        if (!partialSent) { partialSent = true; try { send('partial'); } catch(e) {} }
+        if (partialSent) return;
+        partialSent = true;
+        send('partial').then(function(res){ return res.ok ? null : res.status; }, function(){ return 0; }).then(function(status){
+          if (status === null) return;
+          partialSent = false;
+          var p = unlockPanel.querySelector('[data-book-note]') || document.createElement('p');
+          p.setAttribute('data-book-note', '');
+          p.style.cssText = 'font-size:14px; color:var(--t2); margin:12px 0 0; line-height:1.6';
+          p.innerHTML = refusal(status);
+          a.insertAdjacentElement('afterend', p);
+        });
       });
     } else {
       // No Calendly yet: clicking sends the answers and confirms right here —

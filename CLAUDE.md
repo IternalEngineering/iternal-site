@@ -84,7 +84,7 @@ answers.
 |---|---|---|---|
 | **Worker /signup, /answers** (ours) | sign-up fields and answers, from the pages | `{ok}` | The page shows success only once the worker has it |
 | **GitHub** (platform repo) | one `clients/<slug>.json` per client: identity and answers (never payment) | file sha, used for the next write | Personal data in a private repo. Token scoped to that one repo. Named as a processor in the privacy draft |
-| **Lead Tracker** (Apps Script, separate `lead-tracker` repo) | `createLead` POSTs on sign-up, secret-gated (`LEAD_API_SECRET`) | `{ok, id}` and NOTHING else | **WRITE-ONLY. Never read tracker/Sheet data — it is private.** Dedupes by email: repeat posts become notes on the existing record. Never sent answers |
+| **Lead Tracker** (Apps Script, separate `lead-tracker` repo) | `createLead` POSTs on sign-up and on accepting the terms (with `event`), secret-gated (`LEAD_API_SECRET`) | `{ok, id}` and NOTHING else | **WRITE-ONLY. Never read tracker/Sheet data — it is private.** Dedupes by email: repeat posts become notes on the existing record. Never sent answers |
 | **Google Calendar** | the client (we just link to the appointment schedule URL) | nothing to our systems — the invite goes to the client | The schedule lives in Google's UI, not in code. No payment step |
 | **Cloudflare Email Routing** | team briefs | — | Every recipient must be a verified destination |
 | **Cloudflare Email Service** | the client's copy of their order and terms | message id | Sends from iternal.co.uk once it is onboarded as a sending domain (Workers Paid). A failure emails the team the copy to forward |
@@ -140,7 +140,7 @@ fallback constant in questions.html.
   heredoc into python/node collapses them — use the Write/Edit tools for
   such code.
 - The Lead Tracker app lives in the separate `lead-tracker` repo
-  (IternalEngineering/LeadManagement); its public deployment redeploy has
+  (IternalEngineering/SiteManagement); its public deployment redeploy has
   a manifest-access dance documented in that repo's memory. Its data is
   private: diagnose via code, never by reading records.
 - The company is "Iternal Ltd" (legal entity history: formerly Deathio Ltd —
