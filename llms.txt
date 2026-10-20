@@ -4,7 +4,7 @@
 
 Key facts:
 
-- Legal name: Iternal Ltd. Based in Bristol, UK, working globally.
+- Legal name: Iternal Ltd, Companies House number 10849262. Based in Bristol, UK, working globally.
 - Founders: Iternal was co-founded by Tom Ilube CBE, Tim Campbell MBE and Paul Wiseall FRSA.
 - Website: https://iternal.co.uk (iternal.life redirects here). Email: hello@iternal.life. LinkedIn: https://linkedin.com/company/iternal
 - Specialism: agentic AI, meaning systems that plan, reason and act across real infrastructure rather than only generating text. Anthropic's Claude is the primary build platform; Iternal also builds on OpenAI models and recommends whichever fits the task.

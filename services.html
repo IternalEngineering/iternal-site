@@ -134,9 +134,6 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .btn-outline:hover { color:var(--white); border-color:var(--tan); }
 
 /* ── Scroll reveal ── */
-.rv, .rv-left, .rv-right, .rv-scale { opacity:0; transition:opacity .6s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; }
-.d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s} .d4{transition-delay:.4s}
 
 
 /* ============================================================
@@ -569,7 +566,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 
 @media (prefers-reduced-motion: reduce) {
   .blob-1,.blob-2,.blob-3,.blob-4 { }
-  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
 }
 
 /* ============================================================
@@ -726,14 +722,14 @@ html { overflow-x:clip; }
 <div class="page-hero">
   <canvas id="hero-canvas"></canvas>
   <div class="page-hero-in">
-    <h1 class="page-hero-h rv d1">
+    <h1 class="page-hero-h">
       From your first<br>automation to full<br>
       <span class="grad">enterprise AI.</span>
     </h1>
-    <p class="page-hero-sub rv d2">
+    <p class="page-hero-sub">
       Iternal works across the full spectrum of AI capability, from simple workflow automations that save your team hours each week, to <strong>complex multi-agent systems running inside enterprise infrastructure</strong> across three continents. We meet you where you are.
     </p>
-    <div class="hero-ctas rv d3">
+    <div class="hero-ctas">
       <a href="/contact" class="btn-sun">
         Book a Discovery Call
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -746,11 +742,11 @@ html { overflow-x:clip; }
 <!-- ===== SERVICE TIERS ===== -->
 <section id="tiers" aria-label="Service tiers">
   <div class="w">
-    <div class="sec-intro rv">
+    <div class="sec-intro">
       <h2 class="sec-h">Ways to work<br>with Iternal.</h2>
       <p class="sec-sub">Every engagement starts with understanding your real problem. Whether you need hands-on builds, strategic guidance or team capability building, we'll tell you honestly which fits.</p>
     </div>
-    <div class="tier-grid two rv d1">
+    <div class="tier-grid two">
 
       <div class="tier" id="training">
         <div class="tier-accent"></div>
@@ -823,7 +819,7 @@ html { overflow-x:clip; }
     </div>
 
     <!-- Websites: remove `hidden` at the website funnel's light-up (HOUSEKEEPING.md §Go-live) -->
-    <div class="engage-grid rv d2" id="websites" hidden style="grid-template-columns:1fr">
+    <div class="engage-grid" id="websites" hidden style="grid-template-columns:1fr">
       <div class="tier">
         <div class="tier-accent"></div>
         <span class="tier-tag">Website Design &middot; Build</span>
@@ -841,7 +837,7 @@ html { overflow-x:clip; }
   <div class="w">
     <div class="workshop-grid">
 
-      <div class="workshop-copy rv-left">
+      <div class="workshop-copy">
         <h2 class="sec-h">Start with the<br>AI Discovery Workshop.</h2>
         <p>Most organisations know AI should be doing more for them. Very few know exactly <strong>where to start, which problems are actually worth automating, and which vendors to trust</strong>.</p>
         <p>The Iternal Discovery Workshop is a focused half-day session that cuts through the noise. We come to you, map your workflows, and leave you with a clear, prioritised AI roadmap, whether you go on to build with us or not.</p>
@@ -857,7 +853,7 @@ html { overflow-x:clip; }
         </div>
       </div>
 
-      <div class="rv-right d2">
+      <div>
         <div class="workshop-steps">
           <div class="step">
             <div class="step-n">1</div>
@@ -911,11 +907,11 @@ html { overflow-x:clip; }
 <!-- ===== PROCESS ===== -->
 <section id="process">
   <div class="w">
-    <div class="sec-intro rv">
+    <div class="sec-intro">
       <h2 class="sec-h">Simple. Structured.<br>No surprises.</h2>
       <p class="sec-sub">Every Iternal engagement follows the same four-stage process, whether you're automating one workflow or deploying across an enterprise.</p>
     </div>
-    <div class="process-grid rv d1">
+    <div class="process-grid">
       <div class="proc-step">
         <div class="proc-n">01</div>
         <div class="proc-name">Discover</div>
@@ -943,12 +939,12 @@ html { overflow-x:clip; }
 <!-- ===== MODEL EXPERTISE ===== -->
 <section id="models" aria-label="AI models and expertise">
   <div class="w">
-    <div class="sec-intro rv">
+    <div class="sec-intro">
       <h2 class="sec-h">We're Claude and OpenAI specialists.<br>Not generalists. Not box-tickers.</h2>
       <p class="sec-sub">Most AI agencies can prompt ChatGPT. Very few have the depth to architect production-grade systems on top of frontier models. We do, and we know when each model is the right tool for the job.</p>
     </div>
 
-    <div class="model-grid rv d1">
+    <div class="model-grid">
 
       <div class="model-card">
         <span class="model-logo claude">Anthropic Claude</span>
@@ -978,7 +974,7 @@ html { overflow-x:clip; }
 
     </div>
 
-    <div class="experts-bar rv d2">
+    <div class="experts-bar">
       <div class="experts-bar-copy">
         <h3>We also work across the broader AI ecosystem</h3>
         <p>Including n8n, Make, LangChain, CrewAI, Composio, Supabase, Pinecone and the full modern AI stack, whatever your infrastructure requires.</p>
@@ -998,12 +994,12 @@ html { overflow-x:clip; }
 <!-- ===== SECTORS ===== -->
 <section id="sectors" aria-label="Sectors">
   <div class="w">
-    <div class="sec-head rv">
+    <div class="sec-head">
       <div>
         <h2 class="sec-h">Sectors where AI needs<br>to be right first time.</h2>
       </div>
     </div>
-    <div class="sec-grid rv d1">
+    <div class="sec-grid">
       <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"/><path d="M5 18V10M9.5 18V10M14.5 18V10M19 18V10"/><path d="M12 3 3 8h18z"/></svg><div class="sec-name">Civic Innovation</div><p class="sec-desc">Smart city platforms, public service AI, citizen-facing tools, local government automation, net-zero infrastructure.</p></div>
       <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/><path d="M3.5 12H9l1-1.8 2 4.6 2-7 1.6 4.2H21"/></svg><div class="sec-name">Health &amp; MedTech</div><p class="sec-desc">Patient pathway intelligence, clinical workflow automation, NHS-compliant AI infrastructure, health data systems.</p></div>
       <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M14.8 8.6A2.6 2.6 0 0 0 10 9.8V16"/><path d="M8.5 12.5h5"/><path d="M8.5 16h7"/></svg><div class="sec-name">Financial Services</div><p class="sec-desc">Risk intelligence, agentic advisory systems, compliance automation, AI-augmented client services.</p></div>
@@ -1015,19 +1011,19 @@ html { overflow-x:clip; }
 <!-- ===== FAQ ===== -->
 <section id="faq">
   <div class="w">
-    <div class="sec-intro rv">
+    <div class="sec-intro">
       <h2 class="sec-h">Things people ask<br>before working with us.</h2>
     </div>
     <div class="faq-grid">
-      <div class="faq-item rv-left d3">
+      <div class="faq-item">
         <div class="faq-q">We've been burned by AI projects that never shipped. How is Iternal different?</div>
         <div class="faq-a">Every project we reference is live and in production. We don't showcase pilots. <strong>Our delivery model (Forge) is built around shipping fast and iterating in the real world,</strong> not spending months in design phases. We also scope everything with fixed pricing so you're never surprised by the cost of getting to live.</div>
       </div>
-      <div class="faq-item rv-right d4">
+      <div class="faq-item">
         <div class="faq-q">Can you work within our existing security and compliance requirements?</div>
         <div class="faq-a">Yes, this is genuinely one of our strengths. We have direct experience deploying inside NHS infrastructure, local government security requirements, AWS-compliant environments, and public-sector pen-testing processes. <strong>Compliance isn't an afterthought for us. It's built into how we scope and build from day one.</strong></div>
       </div>
-      <div class="faq-item rv-right">
+      <div class="faq-item">
         <div class="faq-q">How quickly can you start?</div>
         <div class="faq-a"><strong>A Discovery Workshop can usually be booked within 1–2 weeks.</strong> Build engagements typically start 2–4 weeks after scoping is agreed. We'll be transparent about our availability from the first call.</div>
       </div>
@@ -1038,7 +1034,7 @@ html { overflow-x:clip; }
 <!-- ===== CTA ===== -->
 <section id="cta" aria-label="Get in touch">
   <div class="w">
-    <div class="cta-in rv-scale">
+    <div class="cta-in">
       <h2 class="cta-h">Tell us what you're <span class="warm">working on.</span></h2>
       <p class="cta-p">Discovery calls are 30 minutes, focused and free. You'll come away with a clear view of how we'd approach it, whether you work with us or not.</p>
       <div class="cta-row">
@@ -1084,7 +1080,7 @@ html { overflow-x:clip; }
     </div>
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">© 2026 Iternal Ltd · Bristol, UK</span>
+    <span class="f-copy">© 2026 Iternal Ltd · Company no. 10849262 · Bristol, UK</span>
     <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
   </div>
 </footer>
@@ -1113,22 +1109,6 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-/* ── Scroll reveal ── */
-const rvObs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('on');rvObs.unobserve(e.target);} });
-},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale').forEach(el=>rvObs.observe(el));
-
-/* ── Magnetic tilt on case cards ── */
-document.querySelectorAll('.case,.tier').forEach(card=>{
-  card.addEventListener('mousemove',e=>{
-    const r=card.getBoundingClientRect();
-    const x=e.clientX-r.left-r.width/2;
-    const y=e.clientY-r.top-r.height/2;
-    card.style.transform=`perspective(800px) rotateX(${(y/r.height)*4}deg) rotateY(${-(x/r.width)*4}deg) translateY(-2px)`;
-  });
-  card.addEventListener('mouseleave',()=>{card.style.transform='';});
-});
 
 /* ── Theme toggle ── */
 (function(){

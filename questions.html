@@ -123,9 +123,6 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .nav-btn { background:var(--sunrise); color:#060f26; font-family:var(--f); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:10px 22px; border-radius:3px; border:none; transition:opacity .2s, transform .15s, box-shadow .2s; }
 .nav-btn:hover { opacity:.88; transform:translateY(-1px); box-shadow:0 8px 28px rgba(226,103,19,.3); }
 /* ── Scroll reveal ── */
-.rv, .rv-left, .rv-right, .rv-scale { opacity:0; transition:opacity .6s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; }
-.d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s} .d4{transition-delay:.4s} .d5{transition-delay:.5s}
 
 
 /* ── Buttons ── */
@@ -398,7 +395,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 
 @media (prefers-reduced-motion: reduce) {
   .blob-1,.blob-2,.blob-3,.blob-4 { }
-  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
 }
 
 /* ============================================================
@@ -548,8 +544,8 @@ html { overflow-x:clip; }
 <!-- ===== NAV ===== -->
 <nav id="nav">
   <a href="/" class="nav-logo" aria-label="Iternal — home">
-    <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
-    <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
+    <img width="1200" height="357" src="assets/logo-white.png" alt="Iternal" class="logo-dark">
+    <img width="1200" height="357" src="assets/logo-navy.png" alt="Iternal" class="logo-light">
   </a>
   <ul class="nav-links">
     <li><a href="/#work">Work</a></li>
@@ -584,23 +580,23 @@ html { overflow-x:clip; }
     <!-- Left: heading, subtitle, contact details -->
     <div class="hero-left">
       <div>
-        <h1 class="page-hero-h rv d1">
+        <h1 class="page-hero-h">
           Before<br>
           <span class="dim">you book</span><br>
           your call.
         </h1>
-        <p class="page-hero-sub rv d2">
+        <p class="page-hero-sub">
           A few questions about your organisation and what the site has to do. The first <span data-core-count>five</span> unlock your call booking. The rest are optional; each one sharpens what we build. Your answers are saved as you go.
         </p>
       </div>
 
-      <div class="response-note rv d4">
+      <div class="response-note">
             <p><strong>Skip anything you're not sure about.</strong> "Don't know yet" is an answer we can work with — that's half of what the call is for.</p>
       </div>
     </div>
 
     <!-- Right: form -->
-    <div class="rv-right d1" id="form">
+    <div id="form">
       <div class="form-wrap" id="formWrap">
 
         <div class="form-inner" id="quiz">
@@ -659,8 +655,8 @@ html { overflow-x:clip; }
   <div class="footer-in">
     <div>
       <div class="f-logo">
-        <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
-        <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
+        <img width="1200" height="357" src="assets/logo-white.png" alt="Iternal" class="logo-dark">
+        <img width="1200" height="357" src="assets/logo-navy.png" alt="Iternal" class="logo-light">
       </div>
       <p class="f-desc">Specialist agentic AI consultancy and product studio. Building the systems that run tomorrow's organisations. Today.</p>
     </div>
@@ -683,7 +679,7 @@ html { overflow-x:clip; }
     </div>
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">© 2026 Iternal Ltd · Bristol, UK</span>
+    <span class="f-copy">© 2026 Iternal Ltd · Company no. 10849262 · Bristol, UK</span>
     <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
   </div>
 </footer>
@@ -714,11 +710,6 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-/* ── Scroll reveal ── */
-const rvObs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('on');rvObs.unobserve(e.target);} });
-},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale').forEach(el=>rvObs.observe(el));
 
 /* ── Budget chip toggle ── */
 document.querySelectorAll('.budget-chip').forEach(chip=>{

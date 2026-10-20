@@ -523,10 +523,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 /* ============================================================
    SCROLL REVEAL
    ============================================================ */
-.rv, .rv-left, .rv-right, .rv-scale { opacity:0; transition:opacity .6s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; }
-.d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; }
-.d3 { transition-delay:.3s; } .d4 { transition-delay:.4s; }
 
 /* ── Hamburger button ── */
 .nav-hamburger {
@@ -590,7 +586,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 
 @media (prefers-reduced-motion: reduce) {
   .blob-1,.blob-2,.blob-3,.blob-4 { }
-  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
 }
 
 /* ============================================================
@@ -668,8 +663,8 @@ html { overflow-x:clip; }
 <!-- ===== NAV ===== -->
 <nav id="nav">
   <a href="/" class="nav-logo" aria-label="Iternal — home">
-    <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
-    <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
+    <img width="1200" height="357" src="assets/logo-white.png" alt="Iternal" class="logo-dark">
+    <img width="1200" height="357" src="assets/logo-navy.png" alt="Iternal" class="logo-light">
   </a>
   <ul class="nav-links">
     <li><a href="/#work">Work</a></li>
@@ -700,9 +695,9 @@ html { overflow-x:clip; }
 <!-- ===== HERO ===== -->
 <section class="cs-hero">
   <div class="w">
-    <div class="cs-sector rv d1">Website Design &middot; Build</div>
-    <h1 class="cs-h1 rv d2">Websites<br><em>we've made</em></h1>
-    <p class="cs-intro rv d3">Not every project needs a platform. Sometimes you need a really good website — designed, built and live in weeks. Here's what ours look like.</p>
+    <div class="cs-sector">Website Design &middot; Build</div>
+    <h1 class="cs-h1">Websites<br><em>we've made</em></h1>
+    <p class="cs-intro">Not every project needs a platform. Sometimes you need a really good website — designed, built and live in weeks. Here's what ours look like.</p>
   </div>
   <div class="cs-hero-pan" aria-hidden="true"></div>
 </section>
@@ -814,7 +809,7 @@ html { overflow-x:clip; }
 <!-- ===== THE OFFER ===== -->
 <section class="cs-details">
   <div class="w">
-    <div class="cs-body rv d1" style="max-width:760px">
+    <div class="cs-body" style="max-width:760px">
       <h2>After something bigger?</h2>
       <p>Some organisations arrive here wanting a website and realise they need a platform — the kind of systems in <a href="/#work" style="color:var(--tan); text-decoration:underline; text-underline-offset:3px">our case studies</a>, like the one behind Good News London. That's a different conversation, and it starts with a <a href="/contact" style="color:var(--tan); text-decoration:underline; text-underline-offset:3px">discovery call</a>.</p>
     </div>
@@ -824,9 +819,9 @@ html { overflow-x:clip; }
 <!-- ===== CTA ===== -->
 <section class="closing" aria-label="Get started">
   <div class="w">
-    <h2 class="closing-h rv">The next site on this page <em>could be yours.</em></h2>
-    <p class="closing-sub rv d1">Sign-up takes a minute, and you see the full cost and our terms before you agree to anything.</p>
-    <div class="rv-scale d2">
+    <h2 class="closing-h">The next site on this page <em>could be yours.</em></h2>
+    <p class="closing-sub">Sign-up takes a minute, and you see the full cost and our terms before you agree to anything.</p>
+    <div>
       <a href="start.html" class="btn-sun">
         Build a Site With Us
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -853,8 +848,8 @@ html { overflow-x:clip; }
   <div class="footer-in">
     <div>
       <div class="f-logo">
-        <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
-        <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
+        <img width="1200" height="357" src="assets/logo-white.png" alt="Iternal" class="logo-dark">
+        <img width="1200" height="357" src="assets/logo-navy.png" alt="Iternal" class="logo-light">
       </div>
       <p class="f-desc">Specialist agentic AI consultancy and product studio. Building the systems that run tomorrow's organisations. Today.</p>
     </div>
@@ -877,7 +872,7 @@ html { overflow-x:clip; }
     </div>
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Bristol, UK</span>
+    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Company no. 10849262 &middot; Bristol, UK</span>
     <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
   </div>
 </footer>
@@ -942,14 +937,6 @@ document.addEventListener('keydown', function(e){
   });
 })();
 
-/* ── Scroll reveal ── */
-const rvEls = document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale');
-const rvObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('on'); rvObs.unobserve(e.target); }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-rvEls.forEach(el => rvObs.observe(el));
 
 /* ── Site lightbox ── */
 (function(){

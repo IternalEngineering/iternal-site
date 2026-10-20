@@ -256,7 +256,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 
 .hero-ey {
   margin-bottom:44px;
-  opacity:0; animation:up .8s ease .3s forwards;
+
 }
 
 /* ── Word-by-word title reveal (Composio style) ── */
@@ -267,12 +267,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   margin-bottom:min(52px, 4vh);
 }
 
-.word {
-  display:inline-block;
-  opacity:0; transform:translateY(40px);
-  transition:opacity .6s ease, transform .6s ease;
-}
-.word.show { opacity:1; transform:translateY(0); }
+.word { display:inline-block; }
 
 .w-normal { color:var(--white); }
 .w-dim    { color:rgba(255,255,255,.45); font-weight:500; }
@@ -285,7 +280,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .hero-body {
   display:flex; flex-direction:column; gap:28px;
   max-width:600px;
-  opacity:0; animation:up .9s ease .9s forwards;
+
 }
 
 .hero-p {
@@ -323,7 +318,6 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .btn-line:hover { color:var(--white); border-color:var(--tan); }
 
 
-@keyframes up { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
 
 /* ============================================================
    CLIENTS
@@ -384,13 +378,11 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   font-weight:900; color:var(--white); line-height:1.05;
 }
 
-/* Magnetic card effect via JS */
 .card {
   background:rgba(12,18,50,.7);
   border:1px solid var(--border);
   overflow:hidden; position:relative;
   transition:border-color .3s, box-shadow .3s;
-  will-change:transform;
 }
 .card:hover {
   border-color:rgba(226,103,19,.3);
@@ -436,16 +428,6 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   background:linear-gradient(145deg, rgba(10,33,86,.9) 0%, rgba(6,15,38,.7) 100%);
   position:relative; overflow:hidden;
 }
-/* Animated scan line on hover */
-.ph::after {
-  content:''; position:absolute;
-  top:-100%; left:0; right:0; height:2px;
-  background:linear-gradient(to right, transparent, rgba(226,103,19,.4), transparent);
-  animation:scan 3s ease-in-out infinite;
-  opacity:0; transition:opacity .3s;
-}
-.card:hover .ph::after { opacity:1; }
-@keyframes scan { 0%{top:-5%} 100%{top:105%} }
 
 .ph-hatch {
   position:absolute; inset:0;
@@ -702,10 +684,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 /* ============================================================
    SCROLL REVEAL
    ============================================================ */
-.rv, .rv-left, .rv-right, .rv-scale { opacity:0; transition:opacity .6s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; }
-.d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; }
-.d3 { transition-delay:.3s; } .d4 { transition-delay:.4s; }
 
 
 /* ── Hamburger button ── */
@@ -780,9 +758,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 
 @media (prefers-reduced-motion: reduce) {
   .blob-1,.blob-2,.blob-3,.blob-4 { }
-  .hero-ey,.hero-h1,.hero-sub,.hero-scroll,.hero-body,
-  .hero-scroll-line { animation:none !important; opacity:1 !important; transform:none !important; }
-  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
 }
 
 /* ============================================================
@@ -1029,12 +1004,12 @@ html { overflow-x:clip; }
 <!-- ===== SERVICES ===== -->
 <section id="svcs">
   <div class="w">
-    <div class="sec-head rv">
+    <div class="sec-head">
       <div>
         <h2 class="sec-h2">Ways to work<br>with Iternal.</h2>
       </div>
     </div>
-    <div class="svcs-grid rv d1">
+    <div class="svcs-grid">
       <div class="svc">
         <div class="svc-top-line"></div>
         <h3 class="svc-h">Workshops &amp; Training</h3>
@@ -1072,13 +1047,13 @@ html { overflow-x:clip; }
 <!-- ===== WORK ===== -->
 <section id="work" aria-label="Our work">
   <div class="w">
-    <div class="sec-head rv">
+    <div class="sec-head">
       <div>
         <h2 class="sec-h2">AI in production,<br>not in PowerPoint.</h2>
       </div>
     </div>
 
-    <div class="work-feat rv-scale d1">
+    <div class="work-feat">
       <div class="card">
         <div class="card-img xl">
           <picture>
@@ -1108,7 +1083,7 @@ html { overflow-x:clip; }
       </div>
     </div>
 
-    <div class="work-3 rv d2" style="margin-top:20px">
+    <div class="work-3" style="margin-top:20px">
       <div class="card">
         <div class="card-img sm"><img width="1440" height="900" src="assets/screenshot-bplaced.webp" alt="bPlaced platform" class="card-screenshot"><a href="/case-bplaced" aria-label="bPlaced — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
         <div class="card-body">
@@ -1138,7 +1113,7 @@ html { overflow-x:clip; }
       </div>
     </div>
 
-    <div class="rv" style="margin-top:52px; display:flex; align-items:baseline; gap:28px; flex-wrap:wrap">
+    <div style="margin-top:52px; display:flex; align-items:baseline; gap:28px; flex-wrap:wrap">
       <p style="font-size:15px; color:var(--t3); margin:0">Everything above was designed and built by our team, and runs in production today.</p>
       <a href="/contact" class="btn-line">Talk to us about yours <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
@@ -1148,7 +1123,7 @@ html { overflow-x:clip; }
 <!-- ===== CTA ===== -->
 <section id="cta" aria-label="Get in touch">
   <div class="w">
-    <div class="cta-in rv-scale">
+    <div class="cta-in">
       <h2 class="cta-h">If you're building something that needs AI done <span class="warm">properly</span>, let's talk.</h2>
       <p class="cta-p">Discovery calls are 30 minutes, focused and free. Tell us what you're working on and we'll give you a straight answer on how we'd approach it.</p>
       <div class="cta-row">
@@ -1194,7 +1169,7 @@ html { overflow-x:clip; }
     </div>
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">© 2026 Iternal Ltd · Bristol, UK</span>
+    <span class="f-copy">© 2026 Iternal Ltd · Company no. 10849262 · Bristol, UK</span>
     <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
   </div>
 </footer>
@@ -1207,12 +1182,6 @@ html { overflow-x:clip; }
 const nav = document.getElementById('nav');
 window.addEventListener('scroll', () => {
   nav.classList.toggle('scrolled', window.scrollY > 40);
-});
-
-/* ── Word-by-word hero reveal ── */
-const words = document.querySelectorAll('.word');
-words.forEach((w, i) => {
-  setTimeout(() => w.classList.add('show'), 600 + i * 130);
 });
 
 /* ── Mobile nav toggle ── */
@@ -1232,29 +1201,6 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-/* ── Scroll reveal ── */
-const rvEls = document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale');
-const rvObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('on'); rvObs.unobserve(e.target); }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-rvEls.forEach(el => rvObs.observe(el));
-
-/* ── Magnetic card effect (Composio style) ── */
-document.querySelectorAll('.card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const r = card.getBoundingClientRect();
-    const x = e.clientX - r.left - r.width / 2;
-    const y = e.clientY - r.top - r.height / 2;
-    const tiltX = (y / r.height) * 6;
-    const tiltY = -(x / r.width) * 6;
-    card.style.transform = `perspective(800px) rotateX(${tiltX}deg) rotateY(${tiltY}deg) translateY(-4px)`;
-  });
-  card.addEventListener('mouseleave', () => {
-    card.style.transform = '';
-  });
-});
 
 /* ── Theme toggle ── */
 (function(){
@@ -1374,15 +1320,6 @@ document.querySelectorAll('.card').forEach(card => {
   // Defer until hero has its full dimensions
   window.addEventListener('load', () => { init(); draw(); });
 })();
-function countUp(el, target, duration) {
-  let start = 0;
-  const step = target / (duration / 16);
-  const timer = setInterval(() => {
-    start += step;
-    if (start >= target) { el.textContent = target + el.dataset.suffix; clearInterval(timer); }
-    else el.textContent = Math.floor(start) + el.dataset.suffix;
-  }, 16);
-}
 
 </script>
 </body>

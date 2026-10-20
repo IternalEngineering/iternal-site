@@ -270,13 +270,13 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   position:relative; z-index:2;
   max-width:calc(var(--max) - 2 * var(--px)); margin:0 auto; width:100%;
 }
-.hero-ey { margin-bottom:44px; opacity:0; animation:up .8s ease .3s forwards; }
+.hero-ey { margin-bottom:44px; }
 
 .hero-h1 {
   font-size:clamp(40px, min(5.4vw, 9vh), 72px);
   font-weight:900; line-height:.96; letter-spacing:-.04em;
   color:var(--t1); margin-bottom:24px;
-  opacity:0; animation:up .8s ease .5s forwards;
+
 }
 .hero-h1 em {
   font-style:normal;
@@ -287,9 +287,8 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .hero-sub {
   font-size:clamp(17px, 1.8vw, 21px); font-weight:400;
   color:var(--t2); max-width:540px; line-height:1.7;
-  opacity:0; animation:up .8s ease .7s forwards;
+
 }
-@keyframes up { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
 
 /* ============================================================
    ORIGIN
@@ -592,10 +591,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 /* ============================================================
    SCROLL REVEAL
    ============================================================ */
-.rv, .rv-left, .rv-right, .rv-scale { opacity:0; transition:opacity .6s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; }
-.d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; }
-.d3 { transition-delay:.3s; } .d4 { transition-delay:.4s; }
 
 
 /* ── Hamburger button ── */
@@ -664,8 +659,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 
 @media (prefers-reduced-motion: reduce) {
   .blob-1,.blob-2,.blob-3,.blob-4 { }
-  .hero-ey,.hero-h1,.hero-sub,.hero-body { animation:none !important; opacity:1 !important; transform:none !important; }
-  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
 }
 
 /* ============================================================
@@ -803,10 +796,10 @@ html { overflow-x:clip; }
 <section class="origin" aria-label="Our story">
   <div class="w">
     <div class="origin-grid">
-      <div class="rv-left">
+      <div>
         <h2 class="sec-h">Built on a<br>simple <em>premise</em></h2>
       </div>
-      <div class="origin-body rv-right d1">
+      <div class="origin-body">
         <p>Iternal was founded with a straightforward belief: <strong>AI doesn't level the playing field by itself, but the right AI strategy does.</strong> Organisations that understand how to deploy intelligent systems don't just save time. They operate at a fundamentally different scale.</p>
         <p>We started as a small team in Bristol. We still are. But through deep expertise in agentic AI and a ruthless focus on what actually moves the needle, we build and deploy systems that let our clients punch well above their weight. The same way we do.</p>
         <p>Every project we take on is informed by the same question: <strong>what would this look like if it ran itself?</strong></p>
@@ -820,7 +813,7 @@ html { overflow-x:clip; }
   <div class="w">
     <div class="diff-grid">
       <!-- Orbital visual -->
-      <div class="diff-visual rv-left">
+      <div class="diff-visual">
         <div class="orbital-wrap">
           <!-- Rings -->
           <div class="ring ring-1"><div class="ring-dot"></div></div>
@@ -839,7 +832,7 @@ html { overflow-x:clip; }
       </div>
 
       <!-- Copy -->
-      <div class="diff-copy-side rv-right d2">
+      <div class="diff-copy-side">
         <h2 class="diff-h2">
           Most agencies charge for headcount.<br>
           <span class="warm">We're built differently.</span>
@@ -849,7 +842,7 @@ html { overflow-x:clip; }
         </p>
       </div>
 
-      <div class="pts rv d3">
+      <div class="pts">
           <div class="pt"><span class="pt-n">01</span><div><div class="pt-h">Agentic, not just generative</div><p class="pt-p">Systems that plan, orchestrate, and deliver outcomes inside real-world infrastructure.</p></div></div>
           <div class="pt"><span class="pt-n">02</span><div><div class="pt-h">Live systems, not pilots</div><p class="pt-p">Good News London is live with the GLA on london.gov.uk. CivicNetZero runs across three continents.</p></div></div>
           <div class="pt"><span class="pt-n">03</span><div><div class="pt-h">Senior team on every project</div><p class="pt-p">The people who scoped it build it. No account management layer, no junior bench.</p></div></div>
@@ -861,10 +854,10 @@ html { overflow-x:clip; }
 <!-- ===== CLIENTS ===== -->
 <section class="clients">
   <div class="w">
-    <div class="clients-header rv">
+    <div class="clients-header">
       <h2 class="sec-h" style="text-align:center;">Organisations we've<br>built alongside</h2>
     </div>
-    <div class="clients-logos rv d1">
+    <div class="clients-logos">
       <div class="client-chip">Greater London Authority</div>
       <div class="client-chip">CivicNetZero</div>
       <div class="client-chip">NHS</div>
@@ -879,9 +872,9 @@ html { overflow-x:clip; }
 <!-- ===== CLOSING CTA ===== -->
 <section class="closing" aria-label="Get started">
   <div class="w">
-    <h2 class="closing-h rv">Ready to operate at a<br><em>different scale?</em></h2>
-    <p class="closing-sub rv d1">Let's talk about where AI can genuinely move the needle for your organisation.</p>
-    <div class="rv-scale d2">
+    <h2 class="closing-h">Ready to operate at a<br><em>different scale?</em></h2>
+    <p class="closing-sub">Let's talk about where AI can genuinely move the needle for your organisation.</p>
+    <div>
       <a href="/contact" class="btn-sun">
         Get in Touch
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -922,7 +915,7 @@ html { overflow-x:clip; }
     </div>
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Bristol, UK</span>
+    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Company no. 10849262 &middot; Bristol, UK</span>
     <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
   </div>
 </footer>
@@ -952,14 +945,6 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-/* ── Scroll reveal ── */
-const rvEls = document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale');
-const rvObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('on'); rvObs.unobserve(e.target); }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-rvEls.forEach(el => rvObs.observe(el));
 
 /* ── Theme toggle ── */
 (function(){

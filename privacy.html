@@ -398,10 +398,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 /* ============================================================
    SCROLL REVEAL
    ============================================================ */
-.rv, .rv-left, .rv-right, .rv-scale { opacity:0; transition:opacity .6s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; }
-.d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; }
-.d3 { transition-delay:.3s; } .d4 { transition-delay:.4s; }
 
 /* ── Hamburger button ── */
 .nav-hamburger {
@@ -465,7 +461,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 
 @media (prefers-reduced-motion: reduce) {
   .blob-1,.blob-2,.blob-3,.blob-4 { }
-  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
 }
 
 /* ============================================================
@@ -575,16 +570,16 @@ html { overflow-x:clip; }
 <!-- ===== HERO ===== -->
 <section class="cs-hero">
   <div class="w">
-    <div class="cs-sector rv d1">Last updated · September 2026</div>
-    <h1 class="cs-h1 rv d2">Privacy,<br><em>in plain English</em></h1>
-    <p class="cs-intro rv d3">What we collect, where it goes, and what you can ask of us. No tracking cookies, no data sold, no noise — and short enough to actually read.</p>
+    <div class="cs-sector">Last updated · September 2026</div>
+    <h1 class="cs-h1">Privacy,<br><em>in plain English</em></h1>
+    <p class="cs-intro">What we collect, where it goes, and what you can ask of us. No tracking cookies, no data sold, no noise — and short enough to actually read.</p>
   </div>
 </section>
 
 <!-- ===== POLICY ===== -->
 <section class="cs-details">
   <div class="w">
-    <div class="cs-body rv d1" style="max-width:760px">
+    <div class="cs-body" style="max-width:760px">
 
       <h2>Who we are</h2>
       <p>Iternal Ltd, Bristol, UK — the company behind iternal.co.uk and iternal.life. Anything in this policy, or anything about your data, comes to <a href="mailto:hello@iternal.life" style="color:var(--tan); text-decoration:underline; text-underline-offset:3px">hello@iternal.life</a> and a person will answer.</p>
@@ -646,7 +641,7 @@ html { overflow-x:clip; }
     </div>
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Bristol, UK</span>
+    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Company no. 10849262 &middot; Bristol, UK</span>
     <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
   </div>
 </footer>
@@ -692,14 +687,6 @@ document.addEventListener('keydown', function(e){
   });
 })();
 
-/* ── Scroll reveal ── */
-const rvEls = document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale');
-const rvObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('on'); rvObs.unobserve(e.target); }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-rvEls.forEach(el => rvObs.observe(el));
 
 </script>
 </body>

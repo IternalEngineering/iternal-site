@@ -21,6 +21,12 @@ nothing new written).
 - **Calmer motion on every page.** Sections fade in rather than sliding in from the sides
   or zooming; hero text no longer drifts and fades as you scroll; the soft colour shapes in
   the background stand still. The particle network behind the hero stays. (rebuild 10)
+- **Nothing moves on its own except the particle network.** Sections no longer fade in as
+  you scroll (everything is simply there), hero text no longer animates in, the homepage
+  headline appears whole instead of word by word, and cards no longer tilt towards the
+  mouse (homepage work, Services). Hover colour changes stay. (rebuild 11)
+- **The footer gives the company number**: "Iternal Ltd · Company no. 10849262 · Bristol,
+  UK" (the search data already carried it; the site audit asked for it on the page). (rebuild 11)
 
 #### Services
 - **One list of ways to work, cheapest first**: Workshops & Training, AI Automations &
@@ -86,6 +92,9 @@ nothing new written).
   search description, and llms.txt (Enterprise Strategy and Consultancy & Advisory are
   one entry, AI Strategy & Advisory). The sitemap no longer lists Insights, and its
   unpublished article says "small consultancy" (was "small agency"). (rebuild 5)
+- **Insights stays out of search** (noindex) until it has articles; llms.txt gives the
+  Companies House number; the logos on the website pages reserve their space while
+  loading. (rebuild 11)
 - **llms.txt names the co-founders**: Tom Ilube CBE, Tim Campbell MBE and Paul Wiseall FRSA.
   (rebuild 8)
 

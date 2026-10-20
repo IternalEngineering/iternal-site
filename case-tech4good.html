@@ -410,10 +410,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 /* ============================================================
    SCROLL REVEAL
    ============================================================ */
-.rv, .rv-left, .rv-right, .rv-scale { opacity:0; transition:opacity .6s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; }
-.d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; }
-.d3 { transition-delay:.3s; } .d4 { transition-delay:.4s; }
 
 /* ── Hamburger button ── */
 .nav-hamburger {
@@ -477,7 +473,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 
 @media (prefers-reduced-motion: reduce) {
   .blob-1,.blob-2,.blob-3,.blob-4 { }
-  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
 }
 
 /* ============================================================
@@ -585,20 +580,20 @@ html { overflow-x:clip; }
 <!-- ===== HERO ===== -->
 <section class="cs-hero">
   <div class="w">
-    <a href="/#work" class="cs-back rv">
+    <a href="/#work" class="cs-back">
       <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Back to Work
     </a>
-    <div class="cs-sector rv d1">Social Impact &middot; AI Advisory</div>
-    <h1 class="cs-h1 rv d2">Tech4Good:<br><em>South West</em></h1>
-    <p class="cs-intro rv d3">AI advisory supporting industry-leading Living Labs programmes with organisations like Age UK. Live at <a href="https://tech4goodsouthwest.org" target="_blank" rel="noopener" style="color:var(--tan); text-decoration:underline; text-underline-offset:3px">tech4goodsouthwest.org</a>.</p>
+    <div class="cs-sector">Social Impact &middot; AI Advisory</div>
+    <h1 class="cs-h1">Tech4Good:<br><em>South West</em></h1>
+    <p class="cs-intro">AI advisory supporting industry-leading Living Labs programmes with organisations like Age UK. Live at <a href="https://tech4goodsouthwest.org" target="_blank" rel="noopener" style="color:var(--tan); text-decoration:underline; text-underline-offset:3px">tech4goodsouthwest.org</a>.</p>
   </div>
 </section>
 
 <!-- ===== IMAGE ===== -->
 <section class="cs-img-section">
   <div class="w">
-    <div class="rv-scale">
+    <div>
       <img width="1440" height="900" src="assets/screenshot-tech4good.webp" alt="Tech4Good South West homepage, live at tech4goodsouthwest.org" style="width:100%; display:block; border:1px solid var(--border); border-radius:4px; height:auto;">
     </div>
   </div>
@@ -608,7 +603,7 @@ html { overflow-x:clip; }
 <section class="cs-details">
   <div class="w">
     <div class="cs-grid">
-      <div class="rv-left">
+      <div>
         <div class="cs-meta-group">
           <div class="cs-meta-label">Client</div>
           <div class="cs-meta-value">Tech4Good</div>
@@ -630,7 +625,7 @@ html { overflow-x:clip; }
           <div class="cs-meta-value">AI Platform &middot; Matching Engine &middot; Cloud Infrastructure</div>
         </div>
       </div>
-      <div class="cs-body rv-right d1">
+      <div class="cs-body">
         <h2>The Challenge</h2>
         <p>The UK has no shortage of technology talent or social impact organisations doing vital work. What it lacks is an efficient way to connect the two. Tech4Good needed a platform that could intelligently match technology resources and expertise with the organisations that need them most, at scale, and without the manual overhead that had previously limited their reach.</p>
 
@@ -643,7 +638,7 @@ html { overflow-x:clip; }
       </div>
     </div>
 
-    <div class="cs-highlights rv d2">
+    <div class="cs-highlights">
       <div class="cs-hl">
         <div class="cs-hl-val">UK-wide</div>
         <div class="cs-hl-lbl">Connecting orgs across the country</div>
@@ -663,9 +658,9 @@ html { overflow-x:clip; }
 <!-- ===== CTA ===== -->
 <section class="closing" aria-label="Get started">
   <div class="w">
-    <h2 class="closing-h rv">Interested in what AI could do for <em>your organisation?</em></h2>
-    <p class="closing-sub rv d1">Discovery calls are 30 minutes, focused and free.</p>
-    <div class="rv-scale d2">
+    <h2 class="closing-h">Interested in what AI could do for <em>your organisation?</em></h2>
+    <p class="closing-sub">Discovery calls are 30 minutes, focused and free.</p>
+    <div>
       <a href="/contact" class="btn-sun">
         Book a Discovery Call
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -706,7 +701,7 @@ html { overflow-x:clip; }
     </div>
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Bristol, UK</span>
+    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Company no. 10849262 &middot; Bristol, UK</span>
     <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
   </div>
 </footer>
@@ -751,14 +746,6 @@ document.addEventListener('keydown', function(e){
   });
 })();
 
-/* ── Scroll reveal ── */
-const rvEls = document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale');
-const rvObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('on'); rvObs.unobserve(e.target); }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-rvEls.forEach(el => rvObs.observe(el));
 
 </script>
 </body>

@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insights — Iternal, Bristol AI consultancy</title>
 <meta name="description" content="Thinking on agentic AI, delivery models and the gap between proof-of-concept and production — from the Iternal team.">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, follow">
 <meta property="og:title" content="Insights — Iternal, Bristol AI consultancy">
 <meta property="og:description" content="Thinking on agentic AI, delivery models and the gap between proof-of-concept and production — from the Iternal team.">
 <meta property="og:type" content="website">
@@ -128,10 +128,6 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .btn-sun:hover svg { transform:translateX(4px); }
 
 /* ── Scroll reveal ── */
-.rv, .rv-left, .rv-right, .rv-scale { opacity:0; transition:opacity .6s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; }
-.d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; } .d3 { transition-delay:.3s; }
-.d4 { transition-delay:.4s; } .d5 { transition-delay:.5s; }
 
 /* ── Mobile nav ── */
 .nav-hamburger {
@@ -258,7 +254,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 
 @media (prefers-reduced-motion: reduce) {
   .blob-1,.blob-2,.blob-3,.blob-4 { }
-  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
 }
 
 /* ============================================================
@@ -395,11 +390,11 @@ html { overflow-x:clip; }
 <div class="page-hero" aria-label="Page introduction">
   <canvas id="hero-canvas"></canvas>
   <div class="page-hero-in">
-    <h1 class="page-hero-h rv d1">
+    <h1 class="page-hero-h">
       Ideas worth<br>
       <span class="grad">reading.</span>
     </h1>
-    <p class="page-hero-sub rv d2">Thinking on agentic AI, delivery models and the gap between proof-of-concept and production, from the team building it every day.</p>
+    <p class="page-hero-sub">Thinking on agentic AI, delivery models and the gap between proof-of-concept and production, from the team building it every day.</p>
   </div>
 </div>
 
@@ -407,12 +402,12 @@ html { overflow-x:clip; }
 <section id="insights-list" aria-label="Articles">
   <div class="w">
     <div class="insights-grid">
-      <div class="idea-card rv-left d1">
+      <div class="idea-card">
         <div class="idea-meta"><span class="idea-tag">Agentic AI</span><span class="idea-date">Coming soon</span></div>
         <h2 class="idea-h">Why "agentic" is not just a marketing word, and how to tell when it is</h2>
         <p class="idea-p">The word "agentic" is everywhere. Most of what's called agentic AI is still just generative AI with a longer prompt. Here's how to tell the difference, and why it matters for anyone commissioning AI work.</p>
       </div>
-      <div class="idea-card rv-right d2">
+      <div class="idea-card">
         <div class="idea-meta"><span class="idea-tag">Delivery Model</span><span class="idea-date">Coming soon</span></div>
         <h2 class="idea-h">The 10x team: how AI augmentation is changing what a small consultancy can deliver</h2>
         <p class="idea-p">We've built an internal delivery model called Forge that lets a small team operate at the capacity of an agency many times its size. This is how it works, and what it means for the economics of building with AI.</p>
@@ -452,7 +447,7 @@ html { overflow-x:clip; }
     </div>
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">© 2026 Iternal Ltd · Bristol, UK</span>
+    <span class="f-copy">© 2026 Iternal Ltd · Company no. 10849262 · Bristol, UK</span>
     <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
   </div>
 </footer>
@@ -481,11 +476,6 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-/* ── Scroll reveal ── */
-const rvObs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('on');rvObs.unobserve(e.target);} });
-},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale').forEach(el=>rvObs.observe(el));
 
 /* ── Theme toggle ── */
 (function(){

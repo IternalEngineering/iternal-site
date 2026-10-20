@@ -123,9 +123,6 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .nav-btn { background:var(--sunrise); color:#060f26; font-family:var(--f); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:10px 22px; border-radius:3px; border:none; cursor:pointer; transition:opacity .2s, transform .15s, box-shadow .2s; }
 .nav-btn:hover { opacity:.88; transform:translateY(-1px); box-shadow:0 8px 28px rgba(226,103,19,.3); }
 /* ── Scroll reveal ── */
-.rv, .rv-left, .rv-right, .rv-scale { opacity:0; transition:opacity .6s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; }
-.d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s} .d4{transition-delay:.4s} .d5{transition-delay:.5s}
 
 
 /* ── Buttons ── */
@@ -393,7 +390,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 
 @media (prefers-reduced-motion: reduce) {
   .blob-1,.blob-2,.blob-3,.blob-4 { }
-  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
 }
 
 /* ============================================================
@@ -585,17 +581,17 @@ html { overflow-x:clip; }
     <!-- Left: heading, subtitle, contact details -->
     <div class="hero-left">
       <div>
-        <h1 class="page-hero-h rv d1">
+        <h1 class="page-hero-h">
           Let's talk<br>
           <span class="dim">about your</span><br>
           next build.
         </h1>
-        <p class="page-hero-sub rv d2">
+        <p class="page-hero-sub">
           Tell us what you're working on and we'll come back to you with a straight answer on how we'd approach it.
         </p>
       </div>
 
-      <div class="contact-details rv d3">
+      <div class="contact-details">
         <a href="mailto:hello@iternal.life" class="contact-detail">
           <div class="detail-icon">
             <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -625,35 +621,35 @@ html { overflow-x:clip; }
         </a>
       </div>
 
-      <div class="response-note rv d4">
+      <div class="response-note">
             <p><strong>We aim to respond within one working day.</strong> Discovery calls are 30 minutes, focused and free.</p>
       </div>
 
       <div class="reasons-section" aria-label="Good reasons to reach out">
-        <div class="reasons-lbl rv">Good reasons to reach out</div>
+        <div class="reasons-lbl">Good reasons to reach out</div>
         <div class="reason-grid">
-          <div class="reason rv d1">
+          <div class="reason">
             <span class="reason-n">01</span>
             <div class="reason-body">
               <div class="reason-title">You have an AI project that keeps stalling</div>
               <div class="reason-desc">Most AI initiatives fail between proof-of-concept and production. That's exactly the gap we specialise in.</div>
             </div>
           </div>
-          <div class="reason rv d2">
+          <div class="reason">
             <span class="reason-n">02</span>
             <div class="reason-body">
               <div class="reason-title">You're not sure where to start</div>
               <div class="reason-desc">Our Discovery Workshop maps your highest-impact AI opportunities in a focused half-day session. No commitment required.</div>
             </div>
           </div>
-          <div class="reason rv d3">
+          <div class="reason">
             <span class="reason-n">03</span>
             <div class="reason-body">
               <div class="reason-title">You need enterprise-grade delivery</div>
               <div class="reason-desc">Security compliance, pen-testing, regulated sectors. We've delivered inside NHS and GLA infrastructure. We know what that requires.</div>
             </div>
           </div>
-          <div class="reason rv d4">
+          <div class="reason">
             <span class="reason-n">04</span>
             <div class="reason-body">
               <div class="reason-title">You want Claude or OpenAI expertise</div>
@@ -665,7 +661,7 @@ html { overflow-x:clip; }
     </div>
 
     <!-- Right: form -->
-    <div class="rv-right d1" id="form">
+    <div id="form">
       <div class="form-wrap" id="formWrap">
 
         <form class="form-inner" id="contactForm" method="POST" action="https://formsubmit.co/ajax/paul@iternal.life">
@@ -788,7 +784,7 @@ html { overflow-x:clip; }
     </div>
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">© 2026 Iternal Ltd · Bristol, UK</span>
+    <span class="f-copy">© 2026 Iternal Ltd · Company no. 10849262 · Bristol, UK</span>
     <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
   </div>
 </footer>
@@ -817,11 +813,6 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-/* ── Scroll reveal ── */
-const rvObs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('on');rvObs.unobserve(e.target);} });
-},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale').forEach(el=>rvObs.observe(el));
 
 /* ── Budget chip toggle ── */
 document.querySelectorAll('.budget-chip').forEach(chip=>{
