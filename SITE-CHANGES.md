@@ -5,13 +5,23 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **20 Oct 2026, second deploy** (version a0b7490d; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
+Last deploy: **20 Oct 2026, third deploy** (version ; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-### Sign-up page (still hidden from the public)
+Nothing waiting.
+
+---
+
+## Live
+
+### 20 Oct 2026, third deploy (version )
+
+The funnel is still dark (preview banner up).
+
+#### Sign-up page (still hidden from the public)
 - **The build fee reads "£100 downpayment + £650 upon completion, including VAT"** on "Review
   and accept" (was "£750 + VAT. 50% now, 50% on completion"), and so do the client's
   emailed copy and the team's brief, which now says to invoice the downpayment. The
@@ -19,10 +29,6 @@ Last deploy: **20 Oct 2026, second deploy** (version a0b7490d; pushing to main d
 - **The care plan reads "£50 per month including VAT"** (was "+ VAT"), on "Review and
   accept" and in the client's copy; payable monthly, quarterly, half-yearly or annually as
   before. (care plan VAT)
-
----
-
-## Live
 
 ### 20 Oct 2026, second deploy (version a0b7490d)
 
