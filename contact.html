@@ -195,21 +195,16 @@ a.contact-detail:hover .detail-value { color:var(--tan); }
 .response-note strong { color:var(--white); font-weight:700; }
 
 /* ============================================================
-   REASONS SECTION (below hero, 2×2 grid)
+   REASONS (hero left column, under the contact details)
    ============================================================ */
-.reasons-section {
-  padding:min(64px, 7vh) var(--px) min(88px, 10vh);
-  max-width:var(--max); margin:0 auto;
-  border-top:1px solid var(--border);
-}
-.reasons-lbl { font-size:12px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--t4); margin-bottom:32px; }
+.reasons-lbl { font-size:12px; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--t4); margin-bottom:16px; }
 .reason-grid {
-  display:grid; grid-template-columns:1fr 1fr; gap:32px 48px;
+  display:grid; grid-template-columns:1fr; gap:12px;
 }
 .reason {
   display:flex; align-items:flex-start; gap:16px;
-  padding:24px; border:1px solid var(--border);
-  cursor:pointer; transition:border-color .2s;
+  padding:20px 24px; border:1px solid var(--border);
+  transition:border-color .2s;
 }
 .reason:hover { border-color:var(--border2); }
 .reason-n {
@@ -637,6 +632,40 @@ html { overflow-x:clip; }
       <div class="response-note rv d4">
             <p><strong>We aim to respond within one working day.</strong> Discovery calls are 30 minutes, focused and free.</p>
       </div>
+
+      <div class="reasons-section" aria-label="Good reasons to reach out">
+        <div class="reasons-lbl rv">Good reasons to reach out</div>
+        <div class="reason-grid">
+          <div class="reason rv d1">
+            <span class="reason-n">01</span>
+            <div class="reason-body">
+              <div class="reason-title">You have an AI project that keeps stalling</div>
+              <div class="reason-desc">Most AI initiatives fail between proof-of-concept and production. That's exactly the gap we specialise in.</div>
+            </div>
+          </div>
+          <div class="reason rv d2">
+            <span class="reason-n">02</span>
+            <div class="reason-body">
+              <div class="reason-title">You're not sure where to start</div>
+              <div class="reason-desc">Our Discovery Workshop maps your highest-impact AI opportunities in a focused half-day session. No commitment required.</div>
+            </div>
+          </div>
+          <div class="reason rv d3">
+            <span class="reason-n">03</span>
+            <div class="reason-body">
+              <div class="reason-title">You need enterprise-grade delivery</div>
+              <div class="reason-desc">Security compliance, pen-testing, regulated sectors. We've delivered inside NHS and GLA infrastructure. We know what that requires.</div>
+            </div>
+          </div>
+          <div class="reason rv d4">
+            <span class="reason-n">04</span>
+            <div class="reason-body">
+              <div class="reason-title">You want Claude or OpenAI expertise</div>
+              <div class="reason-desc">We're not generalists. We're deep specialists in Anthropic and OpenAI model architectures, and we'll recommend the right model for your use case, not our preferred one.</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Right: form -->
@@ -678,10 +707,10 @@ html { overflow-x:clip; }
             <label for="engagement">What kind of engagement? <span>*</span></label>
             <select id="engagement" name="engagement" required aria-required="true">
               <option value="" disabled selected>Select one</option>
-              <option>AI Discovery Workshop</option>
-              <option>Agentic AI Build</option>
-              <option>Simple Automation or Chatbot</option>
-              <option>Enterprise AI Strategy</option>
+              <option>Workshops &amp; Training</option>
+              <option>AI Automations &amp; Assistants</option>
+              <option>Agentic AI Builds</option>
+              <option>AI Strategy &amp; Advisory</option>
               <option>Not sure yet? Let's talk</option>
             </select>
           </div>
@@ -724,41 +753,6 @@ html { overflow-x:clip; }
       </div>
     </div>
 
-  </div>
-</div>
-
-<!-- ===== GOOD REASONS ===== -->
-<div class="reasons-section" aria-label="Good reasons to reach out">
-  <div class="reasons-lbl rv">Good reasons to reach out</div>
-  <div class="reason-grid">
-    <div class="reason rv d1">
-      <span class="reason-n">01</span>
-      <div class="reason-body">
-        <div class="reason-title">You have an AI project that keeps stalling</div>
-        <div class="reason-desc">Most AI initiatives fail between proof-of-concept and production. That's exactly the gap we specialise in.</div>
-      </div>
-    </div>
-    <div class="reason rv d2">
-      <span class="reason-n">02</span>
-      <div class="reason-body">
-        <div class="reason-title">You're not sure where to start</div>
-        <div class="reason-desc">Our Discovery Workshop maps your highest-impact AI opportunities in a focused half-day session. No commitment required.</div>
-      </div>
-    </div>
-    <div class="reason rv d3">
-      <span class="reason-n">03</span>
-      <div class="reason-body">
-        <div class="reason-title">You need enterprise-grade delivery</div>
-        <div class="reason-desc">Security compliance, pen-testing, regulated sectors. We've delivered inside NHS and GLA infrastructure. We know what that requires.</div>
-      </div>
-    </div>
-    <div class="reason rv d4">
-      <span class="reason-n">04</span>
-      <div class="reason-body">
-        <div class="reason-title">You want Claude or OpenAI expertise</div>
-        <div class="reason-desc">We're not generalists. We're deep specialists in Anthropic and OpenAI model architectures, and we'll recommend the right model for your use case, not our preferred one.</div>
-      </div>
-    </div>
   </div>
 </div>
 

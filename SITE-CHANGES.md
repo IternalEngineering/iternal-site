@@ -46,6 +46,13 @@ nothing new written).
 - **The Forge section replaces "Our operating principles"**, and "From first
   conversation to live system" is gone (the process is on Services). (rebuild 3)
 
+#### Contact
+- **"Good reasons to reach out" sits beside the form** (above it on a phone) instead of
+  below it. (rebuild 4)
+- **"What kind of engagement?" lists the services by their names on the Services
+  page**: Workshops & Training, AI Automations & Assistants, Agentic AI Builds, AI
+  Strategy & Advisory, or not sure yet. (rebuild 4)
+
 ---
 
 ## Live
