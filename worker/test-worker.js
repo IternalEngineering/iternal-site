@@ -130,6 +130,8 @@ await drain();
   assert.ok(outbound[0].body.message.includes('Signed up'));
   assert.strictEqual(outbound[0].body.event, 'signed-up'); // the tracker words its ping by this
   assert.ok(outbound[0].body.message.includes('reference ' + lead.reference));
+  assert.strictEqual(outbound[0].body.reference, lead.reference); // its own column in the tracker
+  assert.strictEqual(store.get('ref:' + lead.reference), 'nadia@harbourlightcafe.co.uk'); // claimed for good
   assert.ok(outbound[0].body.message.includes('Pawlett Pavilion example'));
   // the worker briefs the team itself — no third-party relay in the sign-up
   assert.strictEqual(teamMail.length, 1);
@@ -157,6 +159,22 @@ await drain();
 }
 r = await call('/signup', { method: 'POST', body: JSON.stringify({ organisation: 'No Email Ltd' }) });
 assert.strictEqual(r.status, 400); // email required
+
+// a reference already issued is never issued again: a clashing draw is redrawn
+{
+  const yymm = new Date().toISOString().slice(2, 7).replace('-', '');
+  store.set(`ref:WB-${yymm}-AAAA`, 'someone@else.co.uk');
+  let draws = 0;
+  crypto.getRandomValues = function (arr) { return ++draws === 1 ? arr.fill(0) : Object.getPrototypeOf(crypto).getRandomValues.call(crypto, arr); }; // first draw: AAAA
+  r = await call('/signup', { method: 'POST', body: JSON.stringify({ email: 'clash@test.co.uk', organisation: 'Clash Ltd' }) });
+  delete crypto.getRandomValues;
+  const { order } = await r.json();
+  assert.strictEqual(draws, 2);
+  assert.notStrictEqual(order.reference, `WB-${yymm}-AAAA`);
+  assert.strictEqual(store.get(`ref:${order.reference}`), 'clash@test.co.uk');
+  assert.strictEqual(store.get(`ref:WB-${yymm}-AAAA`), 'someone@else.co.uk'); // untouched
+  await drain();
+}
 
 // oversized body refused
 r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'a@b.c', answers: { x: 'y'.repeat(40000) } }) });

@@ -125,10 +125,21 @@ const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 const TERMS = { name: 'Website Build and Care Terms', version: '1.0', downpayment: 100, completion: 650, carePlan: 50 };
 const termsUrl = (env, version, ext) => `${env.SITE_URL}/terms/website-build-and-care-v${version}.${ext}`;
 
-function newReference() {
+/** A reference no client has had before: drawn at random, checked against the
+    `ref:<reference>` index and claimed there. The index is never deleted (archiving
+    removes only the lead record), so a reference is never handed out twice.
+    ponytail: KV has no atomic claim; two sign-ups drawing the same reference in the
+    same second is the gap (one in a million per month, squared). */
+async function newReference(env, email) {
   const abc = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O or 1/I to misread
-  const tail = Array.from(crypto.getRandomValues(new Uint8Array(4)), b => abc[b % abc.length]).join('');
-  return 'WB-' + new Date().toISOString().slice(2, 7).replace('-', '') + '-' + tail;
+  for (let attempt = 0; attempt < 20; attempt++) {
+    const tail = Array.from(crypto.getRandomValues(new Uint8Array(4)), b => abc[b % abc.length]).join('');
+    const ref = 'WB-' + new Date().toISOString().slice(2, 7).replace('-', '') + '-' + tail;
+    if (await env.CLIENTS.get(`ref:${ref}`)) continue;
+    await env.CLIENTS.put(`ref:${ref}`, email);
+    return ref;
+  }
+  throw new Error('no free reference after 20 draws');
 }
 
 /** The order details as the client reviews them, from their lead record. */
@@ -417,7 +428,7 @@ async function handleSignup(request, env, ctx) {
   // The browser keeps this and sends it with the answers, so knowing someone's
   // email is not enough to rewrite their record.
   existing.token = existing.token || crypto.randomUUID();
-  existing.reference = existing.reference || newReference();
+  existing.reference = existing.reference || await newReference(env, email);
   await env.CLIENTS.put(key, JSON.stringify(existing));
 
   // Two destinations plus the team brief, all independent: one failing must
@@ -434,7 +445,7 @@ Reference: ${existing.reference}${inspiration ? '\nCame in from the ' + inspirat
 
 Next they review their order and accept the terms; a brief follows when they do.`),
     postToLeadTracker(env, {
-      org, contact: name || email, email, website,
+      org, contact: name || email, email, website, reference: existing.reference,
       source: 'website funnel', event: 'signed-up',
       message: `Signed up on the website (reference ${existing.reference}) — next, reviewing and accepting the terms.`
         + (inspiration ? ' Came in from the ' + inspiration + ' example in the gallery — a steer for the concepts.' : ''),
@@ -487,7 +498,7 @@ Accepted: ${ukTime(acc.acceptedAt)} (UK time)
 The £${acc.downpayment} downpayment (including VAT) is payable now: send the invoice. £${acc.completion} (including VAT) follows on completion. They have been emailed a copy of the order and the terms.
 Their questions come next; a brief follows when they answer.`),
     postToLeadTracker(env, {
-      org: acc.company, contact: acc.name, email, website: kv.website || '',
+      org: acc.company, contact: acc.name, email, website: kv.website || '', reference: acc.reference,
       source: 'website funnel', event: 'accepted',
       message: `Accepted the ${TERMS.name}, version ${acc.termsVersion} (reference ${acc.reference}). `
         + `Build fee £${acc.downpayment} downpayment + £${acc.completion} upon completion, including VAT: invoice the downpayment. `
