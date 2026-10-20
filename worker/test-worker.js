@@ -175,7 +175,7 @@ const { token: omarToken, order: omarOrder } = await r.json();
 assert.ok(omarToken && omarToken.length > 20); // the browser keeps this for /answers
 // ...and gets the order to review: their details, a reference, the fees and
 // the terms version
-assert.deepStrictEqual({ ...omarOrder, reference: 'x' }, { company: 'Kilnworks', name: 'Omar Haddad', email: 'omar@kilnworks.co.uk', reference: 'x', buildFee: 750, carePlan: 50, termsVersion: '1.0' });
+assert.deepStrictEqual({ ...omarOrder, reference: 'x' }, { company: 'Kilnworks', name: 'Omar Haddad', email: 'omar@kilnworks.co.uk', reference: 'x', buildFee: 750, downpayment: 100, completion: 650, carePlan: 50, termsVersion: '1.0' });
 assert.match(omarOrder.reference, /^WB-\d{4}-[A-HJ-NP-Z2-9]{4}$/);
 await drain();
 {
@@ -238,17 +238,18 @@ await drain();
   assert.ok(m.subject.includes(acc.reference));
   assert.ok(m.text.startsWith('Hello Omar,'));
   assert.ok(m.text.includes('Company: Kilnworks\nYour name: Omar Haddad\nEmail: omar@kilnworks.co.uk\nReference: ' + acc.reference));
-  assert.ok(m.text.includes('Build fee: £750 + VAT. 50% now, 50% on completion'));
+  assert.ok(m.text.includes('Build fee: £100 downpayment + £650 upon completion, plus VAT'));
   assert.ok(m.text.includes('Care plan: £50 per month + VAT, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance'));
   assert.ok(m.text.includes('https://iternal.co.uk/terms/website-build-and-care-v1.0.html'));
   assert.strictEqual(m.attachments[0].type, 'application/pdf');
   assert.strictEqual(m.attachments[0].content.byteLength, 4);
-  // the team is told to invoice the first half; the tracker gets a note, never answers
+  // the team is told to invoice the downpayment; the tracker gets a note, never answers
   const brief = teamMail.find(t => t.raw.includes('Subject: Website Pipeline: terms accepted — Kilnworks'));
-  assert.ok(brief && brief.raw.includes('(£375 + VAT) is payable now: send the invoice'));
+  assert.ok(brief && brief.raw.includes('£100 downpayment (+ VAT) is payable now: send the invoice. £650 (+ VAT) follows on completion'));
   const note = outbound.find(o => o.url.includes('action=createLead'));
   assert.strictEqual(note.body.event, 'accepted');
   assert.ok(note.body.message.includes('Accepted the Website Build and Care Terms, version 1.0 (reference ' + acc.reference + ')'));
+  assert.ok(note.body.message.includes('£100 downpayment + £650 upon completion, plus VAT: invoice the downpayment'));
   assert.ok(!('answers' in note.body));
 }
 // accepting again changes nothing and sends nothing
@@ -298,7 +299,7 @@ r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'L
   env.CLIENT_MAIL.send = sendBefore;
   const failMail = teamMail.find(t => t.raw.includes('client copy FAILED — Tidewater'));
   assert.ok(failMail && failMail.raw.includes('Domain not onboarded') && failMail.raw.includes('Forward the text below to ana@tidewater.co.uk'));
-  assert.ok(failMail.raw.includes('Build fee: £750 + VAT. 50% now, 50% on completion'));
+  assert.ok(failMail.raw.includes('Build fee: £100 downpayment + £650 upon completion, plus VAT'));
 }
 
 // progress after accepting: a first answer saved as they leave. The team can

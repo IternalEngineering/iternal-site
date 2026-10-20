@@ -142,29 +142,35 @@ the token awaits org approval), so the worker can deploy regardless.
 
 ## Payment and the terms (13 Oct 2026)
 
-- **The terms set the money.** The Website Build and Care Terms, version
-  1.0 (`terms/website-build-and-care-v1.0.html` + `.pdf`, supplied 13 Oct
-  2026 and placed word for word): build fee £750 + VAT, 50% payable on
-  accepting them and 50% on completion; care plan £50 a month + VAT from the
-  month after the site goes live, which includes the web agent (our studio).
-  Invoices are payable within 14 days.
+- **The terms and the order set the money.** The Website Build and Care
+  Terms, version 1.0 (`terms/website-build-and-care-v1.0.html` + `.pdf`,
+  supplied 13 Oct 2026 and placed word for word), set a £750 + VAT build fee
+  paid 50/50 "unless your order details state a different amount", and say
+  the order details take priority where they differ. Since 20 Oct 2026
+  (Robbie) the order states a **£100 downpayment + £650 upon completion,
+  plus VAT** (`TERMS.downpayment` and `TERMS.completion` in the worker; the
+  order also carries the £750 total as `buildFee`). The care plan is £50 a
+  month + VAT from the month after the site goes live, which includes the web
+  agent (our studio). Invoices are payable within 14 days. Per-client
+  pricing is planned: the order's figures are its own fields for that reason.
 - **Accepting is the last step of sign-up**, on start.html, and forms the
-  agreement. The worker briefs the team to invoice the first 50%. Nothing on
+  agreement. The worker briefs the team to invoice the downpayment. Nothing on
   the site takes payment, and booking a call takes none.
 - **Changing a price, or a new version of the terms.** A new version is
   supplied wording, never ours. It means: a new pair of files in `terms/`
   (print the PDF with `node tools/terms-pdf.mjs terms/<page>.html`; keep the
   old pair, since clients who accepted it are bound by it), `TERMS` in
-  `worker/worker.js` (version and fees; then the worker tests and a worker
-  deploy), the terms link in start.html's hero note, and the figures the
+  `worker/worker.js` (version, downpayment, completion and care plan; then
+  the worker tests and a worker deploy), the terms link in start.html's hero note, and the figures the
   pages restate. Search both files for `£` to find them:
   - `websites.html`: none. Robbie took the pricing off the gallery page on
     20 Oct 2026 ("How it works", "Looking after your site" and the prices in
     its descriptions), ahead of moving to "£100 to start, quoted after the
     call" once new terms are supplied.
-  - `start.html`: the meta description, and `sampleOrder()`, the
-    preview's stand-in order (until it is removed at light-up). The real
-    order table on "Review and accept" takes its figures from the worker.
+  - `start.html`: `sampleOrder()`, the preview's stand-in order (until it
+    is removed at light-up). The real order table on "Review and accept"
+    takes its figures from the worker. The meta description no longer
+    carries prices (20 Oct 2026).
   - The Lead Tracker (`../lead-tracker`, `apps-script/LeadApi.gs`): every
     website lead starts with `budget: 750`.
 - **No payment code anywhere (Robbie, 7 Oct 2026).** The Stripe webhook

@@ -45,10 +45,12 @@ answers.
   build dashboard. The worker commits `clients/<slug>.json` there; the
   `website-demo-build` skill drains its `demoRequested` queue. Its own
   CLAUDE.md and README hold the data contract.
-- Pricing language comes from the terms (version 1.0, 13 Oct 2026): build
-  fee £750 + VAT, 50% on acceptance and 50% on completion; care plan £50 a
-  month + VAT from the month after the site goes live, which includes the
-  web agent (our studio) for the client's own updates. Pages restate these
+- Pricing language comes from the terms (version 1.0, 13 Oct 2026) and the
+  order the client accepts, which takes priority where they differ: since 20
+  Oct 2026 the order states a £100 downpayment + £650 upon completion, plus
+  VAT (the terms' default is £750 paid 50/50); care plan £50 a month + VAT
+  from the month after the site goes live, which includes the web agent (our
+  studio) for the client's own updates. Pages restate these
   and never add to them: no figure, promise or refund the terms do not
   make. Every place a figure is printed is listed in HOUSEKEEPING.md
   §Payment.

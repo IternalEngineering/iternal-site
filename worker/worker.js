@@ -117,7 +117,10 @@ const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
    The current version and the fees its order details print. Each version is
    published as terms/website-build-and-care-v<version>.html and .pdf on the
    site and never edited: a new version is new files plus a change here. */
-const TERMS = { name: 'Website Build and Care Terms', version: '1.0', buildFee: 750, carePlan: 50 };
+// The standard order. The terms set a £750 build fee paid 50/50 "unless your order
+// details state a different amount", and order details take priority over the terms,
+// so the order's downpayment + completion split is what the client agrees to.
+const TERMS = { name: 'Website Build and Care Terms', version: '1.0', downpayment: 100, completion: 650, carePlan: 50 };
 const termsUrl = (env, version, ext) => `${env.SITE_URL}/terms/website-build-and-care-v${version}.${ext}`;
 
 function newReference() {
@@ -129,13 +132,14 @@ function newReference() {
 /** The order details as the client reviews them, from their lead record. */
 const orderOf = kv => ({
   company: kv.org || '', name: kv.name || '', email: kv.email, reference: kv.reference || '',
-  buildFee: TERMS.buildFee, carePlan: TERMS.carePlan, termsVersion: TERMS.version,
+  buildFee: TERMS.downpayment + TERMS.completion, downpayment: TERMS.downpayment, completion: TERMS.completion,
+  carePlan: TERMS.carePlan, termsVersion: TERMS.version,
 });
 
 /** The order as plain-text lines, worded as on the acceptance screen. */
 const orderText = o => [
   ['Company', o.company], ['Your name', o.name], ['Email', o.email], ['Reference', o.reference],
-  ['Build fee', `£${o.buildFee} + VAT. 50% now, 50% on completion`],
+  ['Build fee', `£${o.downpayment} downpayment + £${o.completion} upon completion, plus VAT`],
   ['Care plan', `£${o.carePlan} per month + VAT, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance`],
   ['Terms', `${TERMS.name}, version ${o.termsVersion}`],
 ].map(([k, v]) => `${k}: ${v}`).join('\n');
@@ -478,13 +482,13 @@ async function handleAccept(request, env, ctx) {
 ${orderText(acc)}
 Accepted: ${ukTime(acc.acceptedAt)} (UK time)
 
-The first 50% of the build fee (£${acc.buildFee / 2} + VAT) is payable now: send the invoice. They have been emailed a copy of the order and the terms.
+The £${acc.downpayment} downpayment (+ VAT) is payable now: send the invoice. £${acc.completion} (+ VAT) follows on completion. They have been emailed a copy of the order and the terms.
 Their questions come next; a brief follows when they answer.`),
     postToLeadTracker(env, {
       org: acc.company, contact: acc.name, email, website: kv.website || '',
       source: 'website funnel', event: 'accepted',
       message: `Accepted the ${TERMS.name}, version ${acc.termsVersion} (reference ${acc.reference}). `
-        + `Build fee £${acc.buildFee} + VAT, 50% now and 50% on completion: invoice the first 50%. `
+        + `Build fee £${acc.downpayment} downpayment + £${acc.completion} upon completion, plus VAT: invoice the downpayment. `
         + `Care plan £${acc.carePlan} per month + VAT from the month after the site goes live.`,
     }),
     syncToPipeline(env, email, 'accepted the terms'),

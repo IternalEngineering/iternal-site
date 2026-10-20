@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Build a Site With Us — Iternal, Bristol AI consultancy</title>
-<meta name="description" content="We design and build your website with you. Sign up, review and accept our terms, and we'll design your site with you from your answers. £750 + VAT to build, then £50 a month + VAT to look after it.">
+<meta name="description" content="We design and build your website with you. Sign up, review and accept our terms, and we'll design your site with you from your answers.">
 <meta name="robots" content="noindex, follow">
 <meta property="og:title" content="Build a Site With Us — Iternal, Bristol AI consultancy">
 <meta property="og:description" content="We design and build your website with you. Sign up, review and accept our terms, and we'll design your site with you from your answers.">
@@ -751,7 +751,7 @@ html { overflow-x:clip; }
           <tr><th scope="row">Your name</th><td data-o="name"></td></tr>
           <tr><th scope="row">Email</th><td data-o="email"></td></tr>
           <tr><th scope="row">Reference</th><td data-o="reference"></td></tr>
-          <tr><th scope="row">Build fee</th><td>£<span data-o="buildFee"></span> + VAT. 50% now, 50% on completion</td></tr>
+          <tr><th scope="row">Build fee</th><td>£<span data-o="downpayment"></span> downpayment + £<span data-o="completion"></span> upon completion, plus VAT</td></tr>
           <tr><th scope="row">Care plan</th><td>£<span data-o="carePlan"></span> per month + VAT, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance</td></tr>
           <tr><th scope="row">Terms</th><td>Website Build and Care Terms, version <span data-o="termsVersion"></span> (<a data-terms="html" target="_blank" rel="noopener">view</a> or <a data-terms="pdf" download>download</a>)</td></tr>
         </tbody>
@@ -879,7 +879,7 @@ function sampleOrder() {
   return {
     company: v('org', 'Example Ltd'), name: `${v('fname', 'Alex')} ${v('lname', 'Example')}`, email: v('email', 'alex@example.com'),
     reference: `WB-${new Date().toISOString().slice(2, 7).replace('-', '')}-${Array.from({ length: 4 }, () => abc[Math.floor(Math.random() * abc.length)]).join('')}`,
-    buildFee: 750, carePlan: 50, termsVersion: '1.0',
+    buildFee: 750, downpayment: 100, completion: 650, carePlan: 50, termsVersion: '1.0',
   };
 }
 
