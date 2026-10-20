@@ -29,6 +29,10 @@ nothing new written).
   UK" (the search data already carried it; the site audit asked for it on the page). (rebuild 11)
 
 #### Services
+- **"AI that actually shipped" is hidden on Services for now**: the same work is on the
+  homepage, the case pages and Agentic AI Builds. (rebuild 20)
+- **The AEO audit is a single offer box** on AI Strategy & Advisory: the heading, one sentence
+  and "Ask about an AEO audit" (was a paragraph and six points). (rebuild 20)
 - **The workshop no longer shows a price**: "AI Discovery Workshop: fixed price" on its card
   and page, and the £2,500 figure is gone from the booking box, search descriptions and
   llms.txt. (rebuild 19)
