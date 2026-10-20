@@ -12,7 +12,7 @@ Last deploy: **20 Oct 2026, second deploy** (version a0b7490d; pushing to main d
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
 ### Sign-up page (still hidden from the public)
-- **The build fee reads "£100 downpayment + £650 upon completion, plus VAT"** on "Review
+- **The build fee reads "£100 downpayment + £650 upon completion, including VAT"** on "Review
   and accept" (was "£750 + VAT. 50% now, 50% on completion"), and so do the client's
   emailed copy and the team's brief, which now says to invoice the downpayment. The
   page's search description no longer gives prices. (downpayment)

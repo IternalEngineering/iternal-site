@@ -119,8 +119,9 @@ const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
    site and never edited: a new version is new files plus a change here. */
 // The standard order. The terms set a £750 build fee paid 50/50 "unless your order
 // details state a different amount", and order details take priority over the terms,
-// so the order's downpayment + completion split is what the client agrees to. The
-// care plan is VAT-inclusive (Robbie, 20 Oct 2026); the build fee is plus VAT.
+// so the order's downpayment + completion split is what the client agrees to. Every
+// figure in the order includes VAT (Robbie, 20 Oct 2026), the order again taking
+// priority over the terms' "all fees exclude VAT".
 const TERMS = { name: 'Website Build and Care Terms', version: '1.0', downpayment: 100, completion: 650, carePlan: 50 };
 const termsUrl = (env, version, ext) => `${env.SITE_URL}/terms/website-build-and-care-v${version}.${ext}`;
 
@@ -140,7 +141,7 @@ const orderOf = kv => ({
 /** The order as plain-text lines, worded as on the acceptance screen. */
 const orderText = o => [
   ['Company', o.company], ['Your name', o.name], ['Email', o.email], ['Reference', o.reference],
-  ['Build fee', `£${o.downpayment} downpayment + £${o.completion} upon completion, plus VAT`],
+  ['Build fee', `£${o.downpayment} downpayment + £${o.completion} upon completion, including VAT`],
   ['Care plan', `£${o.carePlan} per month including VAT, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance`],
   ['Terms', `${TERMS.name}, version ${o.termsVersion}`],
 ].map(([k, v]) => `${k}: ${v}`).join('\n');
@@ -483,13 +484,13 @@ async function handleAccept(request, env, ctx) {
 ${orderText(acc)}
 Accepted: ${ukTime(acc.acceptedAt)} (UK time)
 
-The £${acc.downpayment} downpayment (+ VAT) is payable now: send the invoice. £${acc.completion} (+ VAT) follows on completion. They have been emailed a copy of the order and the terms.
+The £${acc.downpayment} downpayment (including VAT) is payable now: send the invoice. £${acc.completion} (including VAT) follows on completion. They have been emailed a copy of the order and the terms.
 Their questions come next; a brief follows when they answer.`),
     postToLeadTracker(env, {
       org: acc.company, contact: acc.name, email, website: kv.website || '',
       source: 'website funnel', event: 'accepted',
       message: `Accepted the ${TERMS.name}, version ${acc.termsVersion} (reference ${acc.reference}). `
-        + `Build fee £${acc.downpayment} downpayment + £${acc.completion} upon completion, plus VAT: invoice the downpayment. `
+        + `Build fee £${acc.downpayment} downpayment + £${acc.completion} upon completion, including VAT: invoice the downpayment. `
         + `Care plan £${acc.carePlan} per month including VAT from the month after the site goes live.`,
     }),
     syncToPipeline(env, email, 'accepted the terms'),

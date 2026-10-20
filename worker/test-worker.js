@@ -238,18 +238,18 @@ await drain();
   assert.ok(m.subject.includes(acc.reference));
   assert.ok(m.text.startsWith('Hello Omar,'));
   assert.ok(m.text.includes('Company: Kilnworks\nYour name: Omar Haddad\nEmail: omar@kilnworks.co.uk\nReference: ' + acc.reference));
-  assert.ok(m.text.includes('Build fee: £100 downpayment + £650 upon completion, plus VAT'));
+  assert.ok(m.text.includes('Build fee: £100 downpayment + £650 upon completion, including VAT'));
   assert.ok(m.text.includes('Care plan: £50 per month including VAT, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance'));
   assert.ok(m.text.includes('https://iternal.co.uk/terms/website-build-and-care-v1.0.html'));
   assert.strictEqual(m.attachments[0].type, 'application/pdf');
   assert.strictEqual(m.attachments[0].content.byteLength, 4);
   // the team is told to invoice the downpayment; the tracker gets a note, never answers
   const brief = teamMail.find(t => t.raw.includes('Subject: Website Pipeline: terms accepted — Kilnworks'));
-  assert.ok(brief && brief.raw.includes('£100 downpayment (+ VAT) is payable now: send the invoice. £650 (+ VAT) follows on completion'));
+  assert.ok(brief && brief.raw.includes('£100 downpayment (including VAT) is payable now: send the invoice. £650 (including VAT) follows on completion'));
   const note = outbound.find(o => o.url.includes('action=createLead'));
   assert.strictEqual(note.body.event, 'accepted');
   assert.ok(note.body.message.includes('Accepted the Website Build and Care Terms, version 1.0 (reference ' + acc.reference + ')'));
-  assert.ok(note.body.message.includes('£100 downpayment + £650 upon completion, plus VAT: invoice the downpayment'));
+  assert.ok(note.body.message.includes('£100 downpayment + £650 upon completion, including VAT: invoice the downpayment'));
   assert.ok(!('answers' in note.body));
 }
 // accepting again changes nothing and sends nothing
@@ -299,7 +299,7 @@ r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'L
   env.CLIENT_MAIL.send = sendBefore;
   const failMail = teamMail.find(t => t.raw.includes('client copy FAILED — Tidewater'));
   assert.ok(failMail && failMail.raw.includes('Domain not onboarded') && failMail.raw.includes('Forward the text below to ana@tidewater.co.uk'));
-  assert.ok(failMail.raw.includes('Build fee: £100 downpayment + £650 upon completion, plus VAT'));
+  assert.ok(failMail.raw.includes('Build fee: £100 downpayment + £650 upon completion, including VAT'));
 }
 
 // progress after accepting: a first answer saved as they leave. The team can
