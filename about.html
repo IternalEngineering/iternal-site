@@ -105,7 +105,7 @@
   --dawn:    linear-gradient(160deg, #0bafaa 0%, #1d6a91 50%, #0a2156 100%);
 
   --f:   'Maven Pro', sans-serif;
-  --max: clamp(1160px, 76vw, 1440px);
+  --max: clamp(1220px, 80vw, 1520px);
   --px:  64px;
 }
 
@@ -778,6 +778,8 @@ html[data-theme="light"] .icon-moon { display:none; }
 }
 .mobile-nav .mob-cta, .mobile-nav .mob-cta:hover { color:#060f26; }
 html { overflow-x:clip; }
+/* Laptops and up render at 95% (100% read as oversized); --max is set in pre-zoom pixels, hence its larger figures */
+@media (min-width:1025px) { html { zoom:.95; } }
 </style>
 </head>
 <body>

@@ -61,6 +61,9 @@ nothing new written).
   FormSubmit's own trap stays too. (rebuild 8)
 
 #### Large screens
+- **Everything is drawn at 95% on laptops and larger screens** (100% read as oversized,
+  90% as too small); phones and tablets are unchanged. The column keeps its width and the
+  homepage's first screen still ends with the client strip. (rebuild 9)
 - **Pages use more of a wide screen**: the content column grows with the window, from
   1160px up to 1440px (no change on a laptop). Case-study and other long paragraphs keep
   their reading width. On Services, the four service cards sit in one row from 1700px
