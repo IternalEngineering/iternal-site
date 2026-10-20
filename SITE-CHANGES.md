@@ -29,6 +29,15 @@ nothing new written).
   UK" (the search data already carried it; the site audit asked for it on the page). (rebuild 11)
 
 #### Services
+- **The workshop no longer shows a price**: "AI Discovery Workshop: fixed price" on its card
+  and page, and the £2,500 figure is gone from the booking box, search descriptions and
+  llms.txt. (rebuild 19)
+- **AI Automations features Site Agent**: an AI assistant that updates the text and images on
+  a client's own site from plain-English requests, with "Talk to us about Site Agent". New
+  copy, the first in the overhaul, at Robbie's request. (rebuild 19)
+- **AI Strategy & Advisory opens with "Start with an AEO audit"**: how AI assistants see
+  your organisation, what the audit checks and the scored report, with "Ask about an AEO
+  audit". New copy, at Robbie's request. (rebuild 19)
 - **Each service opens its own page**, and Services becomes the hub: five short cards (name,
   one sentence, price), each opening its page when clicked anywhere. The pages carry the full
   description, price and list of points that the cards had trimmed, all existing copy:
