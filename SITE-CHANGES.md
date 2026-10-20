@@ -5,13 +5,21 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **20 Oct 2026** (version d4847422; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
+Last deploy: **20 Oct 2026, second deploy** (version a0b7490d; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-### Whole site (AI-readiness fixes from the site audit, branch aeo-audit-fixes)
+Nothing waiting.
+
+---
+
+## Live
+
+### 20 Oct 2026, second deploy (version a0b7490d)
+
+#### Whole site (AI-readiness fixes from the site audit, branch aeo-audit-fixes)
 - **Page titles say which Iternal this is.** Every title now ends "Iternal, Bristol AI
   consultancy" instead of "Iternal AI", and the homepage reads "Iternal, Bristol AI
   consultancy — We Build AI That Works". Link previews show "Iternal" as the site name.
@@ -27,11 +35,7 @@ Last deploy: **20 Oct 2026** (version d4847422; pushing to main deploys the site
   now name iternal.co.uk instead of iternal.life; the organisation's structured data carries
   its company number; security headers and /.well-known/security.txt are new. (aeo-audit-fixes)
 
----
-
-## Live
-
-### 20 Oct 2026 (version d4847422)
+### 20 Oct 2026, first deploy (version d4847422)
 
 Deployed automatically when main was pushed. The funnel is still dark.
 
