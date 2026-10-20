@@ -60,6 +60,9 @@ nothing new written).
   on top of them. (rebuild 3)
 
 #### Homepage
+- **"Ways to work" is tighter**: each row is about 80px on a laptop (was 107–132px), with
+  less padding, a wider description so most fit on two lines, and a slightly smaller name;
+  the section is 774px from 988px. (rebuild 17)
 - **Runs hero, clients, "Ways to work with Iternal", the work, then the call to
   action.** "Ways to work" (was "Three ways") is one short row per service, each linking
   to that service on the Services page; AI Augmentation stays as a fifth row, linking to
