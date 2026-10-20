@@ -309,6 +309,7 @@ textarea { resize:vertical; min-height:130px; line-height:1.65; }
 .submit-btn:disabled svg { transform:none; }
 
 /* ── Review and accept ── */
+#terms { scroll-margin-top:24px; } /* the jump to it lands clear of the fixed menu */
 .order { width:100%; border-collapse:collapse; font-size:15px; line-height:1.55; }
 .order th, .order td { border:1px solid var(--border2); padding:11px 16px; text-align:left; vertical-align:top; }
 .order thead th, .order thead td { background:var(--surf2); color:var(--t3); font-weight:500; }
@@ -331,6 +332,29 @@ label.tick input { width:18px; height:18px; margin:2px 0 0; flex-shrink:0; accen
   .order th, .order td { border:none; }
   .order tbody th { width:auto; padding:10px 14px 0; font-size:13px; color:var(--t3); white-space:normal; }
   .order td { padding:2px 14px 10px; overflow-wrap:anywhere; }
+}
+
+/* Side by side, the sign-up and its review each fit one screen: vertical
+   spacing shrinks in step with the screen's height from 900px down to 640px
+   (--sq, 0 to 260px), then stops, and shorter screens scroll. */
+@media (min-width:1025px) {
+  :root { --sq:clamp(0px, 900px - 100vh, 260px); }
+  .page-hero { padding-top:calc(124px - var(--sq) * .154); }
+  .order { line-height:calc(23px - var(--sq) * .015); }
+  .order th, .order td { padding-top:calc(11px - var(--sq) * .027); padding-bottom:calc(11px - var(--sq) * .027); }
+  label.tick { margin-bottom:calc(16px - var(--sq) * .031); }
+  #terms .form-wrap { padding-top:calc(52px - var(--sq) * .123); padding-bottom:calc(52px - var(--sq) * .123); }
+  #terms .form-head { margin-bottom:calc(40px - var(--sq) * .108); }
+  #terms .form-submit { margin-top:calc(36px - var(--sq) * .092); }
+  .form-wrap { padding-top:calc(52px - var(--sq) * .092); padding-bottom:calc(52px - var(--sq) * .092); }
+  .form-head { margin-bottom:calc(40px - var(--sq) * .092); }
+  #contactForm .form-row, #contactForm .form-field { margin-bottom:calc(20px - var(--sq) * .038); }
+  #contactForm .form-row .form-field, #contactForm .form-field:last-of-type { margin-bottom:0; }
+  #contactForm label { margin-bottom:calc(9px - var(--sq) * .015); }
+  #contactForm input { padding-top:calc(14px - var(--sq) * .019); padding-bottom:calc(14px - var(--sq) * .019); }
+  .form-submit { margin-top:calc(36px - var(--sq) * .069); }
+  .submit-btn { padding-top:calc(18px - var(--sq) * .019); padding-bottom:calc(18px - var(--sq) * .019); }
+  .form-privacy { margin-top:calc(16px - var(--sq) * .031); }
 }
 
 /* ── Success state ── */

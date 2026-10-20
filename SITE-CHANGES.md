@@ -12,6 +12,12 @@ Last deploy: **7 Oct 2026, third deploy** (version 8fb2c0c7). Local copy: `http:
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
 ### Sign-up page and websites gallery (still hidden from the public)
+- **The sign-up fits one screen on laptops.** On desktop and laptop screens the sign-up
+  form, and the "Review and accept" screen after it, tighten their spacing to fit the
+  height of the window, down to the smallest common laptop (about 650px of browser
+  window); shorter windows scroll. On a tall screen nothing changes. The jump to "Review
+  and accept" now lands with its heading clear of the menu bar. Phones are unchanged.
+  (fit to screen)
 - **Every screen can be stepped through before launch.** The sign-up and questions
   pages carry a gold banner, "Sign-ups and call bookings aren't live yet." (it used to say
   "In testing — sign-ups aren't open yet", with Sign Up greyed out). Sign Up now goes on
