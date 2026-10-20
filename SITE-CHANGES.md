@@ -29,6 +29,10 @@ nothing new written).
   UK" (the search data already carried it; the site audit asked for it on the page). (rebuild 11)
 
 #### Services
+- **The service cards are shorter and sit four across on a laptop** (two on a tablet, one on
+  a phone, where they had been squeezed into two thin columns): one sentence each, three
+  points each, and the "Core offer" and "Strategic" labels are gone ("Starting point" and
+  "Most requested" stay). The Websites entry keeps its first sentence and both buttons. (rebuild 14)
 - **Websites is visible**: a wide entry under the four AI services, with "See the websites
   we've made" (the gallery) and "Build a site with us" (sign-up, still in preview: banner
   up, nothing sent). The process section now says "Every AI engagement". The homepage

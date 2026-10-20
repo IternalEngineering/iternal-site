@@ -202,14 +202,15 @@ section { padding:min(64px, 7vh) 0; border-bottom:1px solid var(--border); }
 #tiers { background:rgba(12,29,78,.25); }
 
 .tier-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); }
-.tier-grid.two { grid-template-columns:repeat(2,1fr); }
-@media (min-width:1700px) { .tier-grid.two { grid-template-columns:repeat(4,1fr); } }
-.tier-price { font-size:13px; font-weight:700; color:var(--tan); margin:-6px 0 22px; letter-spacing:.02em; }
+.tier-grid.two { grid-template-columns:repeat(4,1fr); }
+@media (max-width:1199px) { .tier-grid.two { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:768px) { .tier-grid.two { grid-template-columns:1fr; } }
+.tier-price { font-size:13px; font-weight:700; color:var(--tan); margin:-4px 0 16px; letter-spacing:.02em; }
 [hidden] { display:none !important; }
 .engage-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-top:48px; }
 
 .tier {
-  background:rgba(8,16,50,.8); padding:38px 32px;
+  background:rgba(8,16,50,.8); padding:28px 26px;
   position:relative; overflow:hidden; transition:background .3s;
   display:flex; flex-direction:column;
 }
@@ -248,17 +249,17 @@ section { padding:min(64px, 7vh) 0; border-bottom:1px solid var(--border); }
   background:rgba(226,103,19,.12); border:1px solid rgba(226,103,19,.25);
   color:var(--tan); font-size:11px; font-weight:700;
   letter-spacing:.1em; text-transform:uppercase;
-  padding:5px 12px 5px 10px; border-radius:999px; margin-bottom:18px; align-self:flex-start;
+  padding:5px 12px 5px 10px; border-radius:999px; margin-bottom:12px; align-self:flex-start;
 }
 .tier-popular::before { content:''; width:6px; height:6px; border-radius:50%; background:var(--tan); }
 
-.tier-name { font-size:24px; font-weight:900; color:var(--white); margin-bottom:14px; }
-.tier-desc { font-size:15px; color:var(--t3); line-height:1.7; margin-bottom:22px; }
+.tier-name { font-size:21px; font-weight:900; color:var(--white); margin-bottom:10px; }
+.tier-desc { font-size:15px; color:var(--t3); line-height:1.65; margin-bottom:16px; }
 .tier-ideal {
   font-size:12px; font-weight:700; color:var(--t4);
-  letter-spacing:.08em; text-transform:uppercase; margin-bottom:16px;
+  letter-spacing:.08em; text-transform:uppercase; margin-bottom:10px;
 }
-.tier-list { list-style:none; display:flex; flex-direction:column; gap:10px; margin-bottom:28px; flex:1; }
+.tier-list { list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:20px; flex:1; }
 .tier-list li {
   font-size:14px; color:var(--t2); display:flex; align-items:flex-start; gap:10px; line-height:1.5;
 }
@@ -841,15 +842,13 @@ html { overflow-x:clip; }
         <div class="tier-accent"></div>
         <span class="tier-tag">Starting Point</span>
         <h3 class="tier-name">Workshops &amp; Training</h3>
-        <p class="tier-desc">Structured sessions that give your team clarity on where AI fits, how to use it effectively and what to prioritise. From half-day discovery workshops to multi-session capability programmes.</p>
+        <p class="tier-desc">Structured sessions that give your team clarity on where AI fits, how to use it effectively and what to prioritise.</p>
         <div class="tier-price">AI Discovery Workshop: £2,500 + VAT, fixed price</div>
         <div class="tier-ideal">Includes</div>
         <ul class="tier-list">
           <li>AI Discovery Workshop (half-day, fixed price)</li>
           <li>Team AI capability and prompt engineering sessions</li>
           <li>Executive AI literacy briefings</li>
-          <li>Workflow mapping and opportunity identification</li>
-          <li>Bespoke training programmes for technical teams</li>
         </ul>
         <a href="#workshop" class="tier-cta">See the workshop <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
@@ -857,15 +856,13 @@ html { overflow-x:clip; }
       <div class="tier" id="automations">
         <div class="tier-accent"></div>
         <h3 class="tier-name">AI Automations &amp; Assistants</h3>
-        <p class="tier-desc">Fast-to-deploy AI that takes repetitive work off your team's plate and gives your customers or staff an intelligent first line of response. Built in days, not months.</p>
+        <p class="tier-desc">Fast-to-deploy AI that takes repetitive work off your team's plate and gives your customers or staff an intelligent first line of response.</p>
         <div class="tier-price">Typically £5k–£15k</div>
         <div class="tier-ideal">Ideal for</div>
         <ul class="tier-list">
-          <li>Teams spending hours on repetitive admin</li>
           <li>Customer-facing chatbots and knowledge bases</li>
           <li>Document processing and data extraction</li>
           <li>Slack, email and CRM workflow automation</li>
-          <li>Internal Q&amp;A bots on your own data</li>
         </ul>
         <a href="/contact" class="tier-cta">Start here <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
@@ -873,16 +870,13 @@ html { overflow-x:clip; }
       <div class="tier featured" id="builds">
         <div class="tier-accent"></div>
         <div class="tier-popular">Most requested</div>
-        <span class="tier-tag" style="color:var(--tan)">Core Offer</span>
         <h3 class="tier-name">Agentic AI Builds</h3>
-        <p class="tier-desc">End-to-end design and delivery of production agentic AI systems. Systems that plan, reason and execute across your real infrastructure, not just generate text.</p>
+        <p class="tier-desc">End-to-end design and delivery of production agentic AI systems.</p>
         <div class="tier-price">From around £25k, scaling with complexity</div>
         <div class="tier-ideal">Ideal for</div>
         <ul class="tier-list">
           <li>Multi-step autonomous workflows</li>
-          <li>Systems connecting multiple tools and data sources</li>
           <li>RAG systems on proprietary knowledge</li>
-          <li>AI-powered civic platforms</li>
           <li>Public-sector and regulated-industry deployments</li>
         </ul>
         <a href="/contact" class="tier-cta">Talk about a build <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -890,16 +884,13 @@ html { overflow-x:clip; }
 
       <div class="tier" id="advisory">
         <div class="tier-accent"></div>
-        <span class="tier-tag">Strategic</span>
         <h3 class="tier-name">AI Strategy &amp; Advisory</h3>
-        <p class="tier-desc">Sprint engagements and fractional advisory for leadership teams navigating the shift to AI-first operations. Make the right decisions before committing to a build.</p>
+        <p class="tier-desc">Sprint engagements and fractional advisory for leadership teams navigating the shift to AI-first operations.</p>
         <div class="tier-price">Scoped individually</div>
         <div class="tier-ideal">Ideal for</div>
         <ul class="tier-list">
           <li>Board-level AI strategy and due diligence</li>
-          <li>AI readiness assessments</li>
           <li>AI governance and compliance frameworks</li>
-          <li>Vendor and model selection</li>
           <li>Fractional Chief AI Officer engagement</li>
         </ul>
         <a href="/contact" class="tier-cta">Explore advisory <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -913,7 +904,6 @@ html { overflow-x:clip; }
         <span class="tier-tag">Website Design &middot; Build</span>
         <h3 class="tier-name">Websites</h3>
         <p class="tier-desc">Not every project needs a platform. Sometimes you need a really good website — designed, built and live in weeks.</p>
-        <p class="tier-desc">Sign-up takes a minute, and you see the full cost and our terms before you agree to anything.</p>
         <div style="display:flex; gap:28px; flex-wrap:wrap"><a href="/websites" class="tier-cta">See the websites we've made <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a href="/start" class="tier-cta">Build a Site With Us <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
       </div>
     </div>
