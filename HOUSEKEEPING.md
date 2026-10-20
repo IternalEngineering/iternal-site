@@ -276,13 +276,13 @@ when the answer is go. About ten minutes; one commit, then the deploy.
        <div class="svc-top-line"></div>
        <h3 class="svc-h">Websites</h3>
        <p class="svc-p">Not every project needs a platform. Sometimes you need a really good website — designed, built and live in weeks.</p>
-       <a href="/services#websites" class="svc-cta">Learn More <!-- the arrow svg the other rows use --></a>
+       <a href="/websites" class="svc-cta">Learn More <!-- the arrow svg the other rows use --></a>
      </div>
      ```
    - contact.html: add `<option>Website</option>` to "What kind of
      engagement?", before "Not sure yet".
    - Check: `grep -c 'id="websites" hidden' services.html` gives 0 and
-     `grep -c 'services#websites' index.html` gives 1.
+     `grep -c 'href="/websites"' index.html` gives 1.
 2. **Indexing.** websites.html and start.html: `<meta name="robots"
    content="noindex, follow">` becomes `index, follow`. questions.html stays
    `noindex` (a step page, reached only after sign-up).

@@ -19,23 +19,23 @@ Key facts:
 
 ## Services
 
-- [Services overview](https://iternal.co.uk/services.html): The ways to work with Iternal, which models it builds on, the sectors it covers, pricing and frequently asked questions.
-- Workshops & Training: The half-day AI Discovery Workshop produces a ranked list of AI opportunities and a 90-day roadmap with costings, and is usually complete within two weeks of booking. Team and executive AI training is also available.
-- AI Automations & Assistants: Chatbots, knowledge bases, document processing, and Slack, email and CRM automation, built in days rather than months.
-- Agentic AI Builds: End-to-end design and delivery of production agentic systems, including multi-step autonomous workflows, retrieval (RAG) systems on proprietary knowledge, and public-sector and regulated deployments. This is Iternal's most requested service.
-- AI Strategy & Advisory: Board-level AI strategy and due diligence, AI governance and compliance frameworks, architecture reviews, vendor and model selection, organisation-wide capability building, and fractional Chief AI Officer engagements or ongoing retainers.
+- [Services overview](https://iternal.co.uk/services): The ways to work with Iternal, each with its own page, plus pricing, how projects run, case studies, the sectors it covers and frequently asked questions.
+- [Workshops & Training](https://iternal.co.uk/workshops-training): The half-day AI Discovery Workshop produces a ranked list of AI opportunities and a 90-day roadmap with costings, and is usually complete within two weeks of booking. Team and executive AI training is also available.
+- [AI Automations & Assistants](https://iternal.co.uk/ai-automations): Chatbots, knowledge bases, document processing, and Slack, email and CRM automation, built in days rather than months.
+- [Agentic AI Builds](https://iternal.co.uk/agentic-ai-builds): End-to-end design and delivery of production agentic systems, including multi-step autonomous workflows, retrieval (RAG) systems on proprietary knowledge, and public-sector and regulated deployments. This is Iternal's most requested service.
+- [AI Strategy & Advisory](https://iternal.co.uk/ai-strategy-advisory): Board-level AI strategy and due diligence, AI governance and compliance frameworks, architecture reviews, vendor and model selection, organisation-wide capability building, and fractional Chief AI Officer engagements or ongoing retainers.
 
 ## Work
 
 All of these systems are live in production.
 
-- [Good News London](https://iternal.co.uk/case-good-news-london.html): An AI platform built with the Greater London Authority that surfaces positive stories from all 33 London boroughs, live at goodnews.london.gov.uk. It was delivered in eight weeks and passed its penetration test with zero failures.
-- [CivicNetZero](https://iternal.co.uk/case-civicnetzero.html): An agentic carbon-intelligence platform that helps city governments make and keep net-zero commitments, live across city networks on three continents.
-- [bPlaced](https://iternal.co.uk/case-bplaced.html): An AI matching engine that connects local authorities with care providers for placements of young people, built on AWS with Risk Ledger compliance and full audit trails.
-- [Bristol Children's Hospital: The Grand Appeal](https://iternal.co.uk/case-nhs.html): A digital diary supporting parents of sick children, co-designed with clinicians, with NHS security compliance and clinical governance.
-- [Tech4Good South West](https://iternal.co.uk/case-tech4good.html): AI advisory for Living Labs programmes with organisations including Age UK, live at tech4goodsouthwest.org.
+- [Good News London](https://iternal.co.uk/case-good-news-london): An AI platform built with the Greater London Authority that surfaces positive stories from all 33 London boroughs, live at goodnews.london.gov.uk. It was delivered in eight weeks and passed its penetration test with zero failures.
+- [CivicNetZero](https://iternal.co.uk/case-civicnetzero): An agentic carbon-intelligence platform that helps city governments make and keep net-zero commitments, live across city networks on three continents.
+- [bPlaced](https://iternal.co.uk/case-bplaced): An AI matching engine that connects local authorities with care providers for placements of young people, built on AWS with Risk Ledger compliance and full audit trails.
+- [Bristol Children's Hospital: The Grand Appeal](https://iternal.co.uk/case-nhs): A digital diary supporting parents of sick children, co-designed with clinicians, with NHS security compliance and clinical governance.
+- [Tech4Good South West](https://iternal.co.uk/case-tech4good): AI advisory for Living Labs programmes with organisations including Age UK, live at tech4goodsouthwest.org.
 
 ## Company
 
-- [About](https://iternal.co.uk/about.html): Why Iternal exists, its operating principles, the team, and how projects run from discovery to support.
-- [Contact](https://iternal.co.uk/contact.html): How to book a free 30-minute discovery call or email the team.
+- [About](https://iternal.co.uk/about): Why Iternal exists, its operating principles, the team, and how projects run from discovery to support.
+- [Contact](https://iternal.co.uk/contact): How to book a free 30-minute discovery call or email the team.

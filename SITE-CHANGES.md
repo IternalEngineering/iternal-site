@@ -29,6 +29,15 @@ nothing new written).
   UK" (the search data already carried it; the site audit asked for it on the page). (rebuild 11)
 
 #### Services
+- **Each service opens its own page**, and Services becomes the hub: five short cards (name,
+  one sentence, price), each opening its page when clicked anywhere. The pages carry the full
+  description, price and list of points that the cards had trimmed, all existing copy:
+  /workshops-training (with "Start with the AI Discovery Workshop" in full), /ai-automations,
+  /agentic-ai-builds (with the GLA, CivicNetZero and bPlaced case studies and "We're Claude
+  and OpenAI specialists", both moved off the hub), /ai-strategy-advisory; Websites opens
+  /websites. The hub keeps the process, every case study, sectors and the FAQ; its "Or book a
+  Workshop first" goes to the workshops page. The homepage rows open the pages directly; the
+  sitemap and llms.txt list them. (rebuild 18)
 - **The service cards are shorter and sit four across on a laptop** (two on a tablet, one on
   a phone, where they had been squeezed into two thin columns): one sentence each, three
   points each, and the "Core offer" and "Strategic" labels are gone ("Starting point" and
