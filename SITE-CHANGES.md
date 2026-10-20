@@ -11,7 +11,40 @@ Last deploy: **20 Oct 2026, third deploy** (version f85a948c; pushing to main de
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-Nothing waiting.
+On branch `site-rebuild` (the overhaul, phase 1: existing content rearranged or removed,
+nothing new written).
+
+#### Whole site
+- **The menu says "Services"** (was "What We Do"), and Insights is gone from the menu, the
+  mobile menu and the footer. The footer no longer links to iternal.app, and its
+  "Get in touch" goes to the contact page from every page. (rebuild 1)
+
+#### Services
+- **One list of ways to work, cheapest first**: Workshops & Training, AI Automations &
+  Assistants, Agentic AI Builds, AI Strategy & Advisory, each with its typical price
+  (moved up from the FAQ, which now points to them). Advisory's two lists are merged
+  into one. (rebuild 2)
+- **The hero has one button, "Book a Discovery Call"**, and every booking button goes
+  to the contact page instead of jumping down the page. (rebuild 2)
+- **Sections run in one direction**: services, the workshop, the process, the work,
+  models, sectors, FAQ. (rebuild 2)
+- **The "Learn More" buttons on the service cards can be clicked**: a hover glow sat
+  on top of them. (rebuild 3)
+
+#### Homepage
+- **Runs hero, clients, "Ways to work with Iternal", the work, then the call to
+  action.** "Ways to work" (was "Three ways") is one short row per service, each linking
+  to that service on the Services page; AI Augmentation stays as a fifth row, linking to
+  the contact page. Its "Learn More" buttons can now be clicked (the same hover glow
+  covered them). (rebuild 3)
+- **The Forge section ("Most agencies charge for headcount") moved to About**, and the
+  "Ideas worth reading" teasers are gone. The work section loses its "View All"
+  button. (rebuild 3)
+
+#### About
+- **Says "AI consultancy"** (was "AI agency") under the hero. (rebuild 3)
+- **The Forge section replaces "Our operating principles"**, and "From first
+  conversation to live system" is gone (the process is on Services). (rebuild 3)
 
 ---
 

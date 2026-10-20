@@ -224,7 +224,7 @@ section { padding:min(64px, 7vh) 0; border-bottom:1px solid var(--border); }
 }
 .tier:hover, .tier:focus-within { background:rgba(12,26,68,.95); }
 .tier::after {
-  content:''; position:absolute; inset:0;
+  content:''; position:absolute; inset:0; pointer-events:none;
   background:radial-gradient(ellipse at top left, rgba(226,103,19,.06) 0%, transparent 60%);
   opacity:0; transition:opacity .4s;
 }

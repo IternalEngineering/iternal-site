@@ -405,128 +405,6 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 
 /* ============================================================
-   DIFFERENCE
-   ============================================================ */
-/* Sized to fit one laptop screen below the nav: the orbital takes a fixed column, the
-   copy the rest, and the three points run as a row under both. */
-#diff {
-  padding:min(64px, 7vh) 0;
-  border-bottom:1px solid var(--border);
-}
-
-.diff-grid {
-  display:grid; grid-template-columns:380px 1fr;
-  gap:min(44px, 5vh) 72px; align-items:center;
-}
-
-/* Orbital SVG animation (Composio style) */
-.diff-visual {
-  position:relative; display:flex;
-  align-items:center; justify-content:center;
-  height:380px;
-}
-
-.orbital-wrap {
-  position:relative; width:360px; height:360px;
-}
-
-/* Centre glyph */
-.orb-centre {
-  position:absolute; top:50%; left:50%;
-  transform:translate(-50%,-50%);
-  width:80px; height:80px;
-  display:flex; align-items:center; justify-content:center;
-}
-.orb-logo { width:64px; height:64px; filter:brightness(0) invert(1); transition:filter .3s; }
-html[data-theme="light"] .orb-logo { filter:none; }
-
-/* Rings */
-.ring {
-  position:absolute; top:50%; left:50%;
-  border-radius:50%;
-  border:1px solid;
-  transform:translate(-50%,-50%);
-}
-.ring-1 {
-  width:160px; height:160px;
-  border-color:rgba(226,103,19,.25);
-  animation:spin 12s linear infinite;
-}
-.ring-2 {
-  width:260px; height:260px;
-  border-color:rgba(224,166,20,.15);
-  animation:spin 20s linear infinite reverse;
-}
-.ring-3 {
-  width:360px; height:360px;
-  border-color:rgba(11,175,170,.1);
-  animation:spin 32s linear infinite;
-}
-
-@keyframes spin { from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(360deg)} }
-
-/* Dot nodes on rings */
-.ring-dot {
-  position:absolute;
-  width:8px; height:8px;
-  border-radius:50%;
-  margin:-4px;
-}
-.ring-1 .ring-dot { background:var(--tan); top:0; left:50%; box-shadow:0 0 12px rgba(226,103,19,.6); }
-.ring-2 .ring-dot { background:var(--gold); top:0; left:50%; box-shadow:0 0 12px rgba(224,166,20,.5); }
-.ring-3 .ring-dot { background:var(--aqua); top:0; left:50%; box-shadow:0 0 12px rgba(11,175,170,.5); }
-
-/* Floating labels around orbital */
-.orb-label {
-  position:absolute;
-  font-size:12px; font-weight:700;
-  letter-spacing:.1em; text-transform:uppercase;
-  color:var(--t4); white-space:nowrap;
-  background:rgba(6,15,38,.85);
-  border:1px solid var(--border2);
-  padding:7px 16px; border-radius:2px;
-  backdrop-filter:blur(8px);
-}
-.orb-label.top   { top:0;   left:50%; transform:translateX(-50%); }
-.orb-label.right { right:0; top:50%; transform:translateY(-50%); }
-.orb-label.bot   { bottom:0; left:50%; transform:translateX(-50%); }
-.orb-label.left  { left:0; top:50%; transform:translateY(-50%); }
-
-.diff-copy-side { position:relative; }
-.diff-copy-side .ey { margin-bottom:28px; }
-
-.diff-h2 {
-  position:relative;
-  font-size:clamp(30px, 3.3vw, 46px);
-  font-weight:900; color:var(--white);
-  line-height:1.06; margin-bottom:22px;
-}
-.diff-h2 .warm {
-  background:var(--sunrise);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-
-.diff-p {
-  font-size:17px; line-height:1.75;
-  color:var(--t3); max-width:36em;
-}
-
-/* Points: one row of three under both columns */
-.pts { grid-column:1 / -1; display:grid; grid-template-columns:repeat(3, 1fr); gap:0 40px; }
-.pt {
-  display:grid; grid-template-columns:32px 1fr;
-  gap:14px; padding:22px 0 0;
-  border-top:1px solid var(--border);
-}
-.pt-n {
-  font-size:12px; font-weight:700;
-  color:var(--tan); letter-spacing:.12em; padding-top:3px;
-}
-.pt-h { font-size:15px; color:var(--white); margin-bottom:7px; font-weight:700; }
-.pt-p { font-size:14px; color:var(--t3); line-height:1.7; }
-
-/* ============================================================
    WORK
    ============================================================ */
 #work {
@@ -684,13 +562,14 @@ html[data-theme="light"] .orb-logo { filter:none; }
 }
 
 .svcs-grid {
-  display:grid; grid-template-columns:repeat(3,1fr);
+  display:grid; grid-template-columns:1fr;
   gap:1px; background:var(--border);
   border:1px solid var(--border); margin-top:60px;
 }
 
 .svc {
-  background:rgba(12,18,50,.6); padding:44px 36px;
+  display:grid; grid-template-columns:300px 1fr auto; gap:12px 48px; align-items:center;
+  background:rgba(12,18,50,.6); padding:30px 36px;
   position:relative; overflow:hidden;
   transition:background .3s;
 }
@@ -698,7 +577,7 @@ html[data-theme="light"] .orb-logo { filter:none; }
 
 /* Warm wash on hover */
 .svc::after {
-  content:''; position:absolute; inset:0;
+  content:''; position:absolute; inset:0; pointer-events:none;
   background:radial-gradient(ellipse at top left, rgba(226,103,19,.07) 0%, transparent 60%);
   opacity:0; transition:opacity .4s;
 }
@@ -709,21 +588,12 @@ html[data-theme="light"] .orb-logo { filter:none; }
   transform:scaleX(0); transform-origin:left;
   transition:transform .4s ease;
 }
-.svc:nth-child(1) .svc-top-line { background:var(--tan); }
-.svc:nth-child(2) .svc-top-line { background:var(--aqua); }
-.svc:nth-child(3) .svc-top-line { background:var(--gold); }
+.svc:nth-child(3n+1) .svc-top-line { background:var(--tan); }
+.svc:nth-child(3n+2) .svc-top-line { background:var(--aqua); }
+.svc:nth-child(3n) .svc-top-line { background:var(--gold); }
 .svc:hover .svc-top-line { transform:scaleX(1); }
-
-.svc-n { font-size:12px; font-weight:700; color:var(--tan); letter-spacing:.15em; margin-bottom:28px; display:block; }
-.svc-h { font-size:21px; color:var(--white); margin-bottom:13px; font-weight:700; }
-.svc-p { font-size:15px; color:var(--t3); line-height:1.75; margin-bottom:28px; }
-
-.svc-tags { display:flex; flex-direction:column; gap:10px; margin-bottom:32px; }
-.svc-tag {
-  font-size:14px; color:var(--t2);
-  display:flex; gap:10px; align-items:flex-start;
-}
-.svc-tag::before { content:'→'; color:var(--aqua); font-weight:700; font-size:12px; min-width:16px; margin-top:2px; }
+.svc-h { font-size:21px; color:var(--white); font-weight:700; }
+.svc-p { font-size:15px; color:var(--t3); line-height:1.75; max-width:38em; }
 
 .svc-cta {
   font-size:12px; font-weight:700; letter-spacing:.1em;
@@ -784,40 +654,6 @@ html[data-theme="light"] .orb-logo { filter:none; }
 /* ============================================================
    SECTORS
    ============================================================ */
-
-/* ============================================================
-   INSIGHTS
-   ============================================================ */
-#ideas {
-  padding:min(64px, 7vh) 0;
-  border-bottom:1px solid var(--border);
-  background:rgba(12,29,78,.3);
-}
-
-.ideas-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:60px; }
-
-.idea-card {
-  background:rgba(12,18,50,.7);
-  border:1px solid var(--border); padding:36px;
-  transition:border-color .3s, transform .3s;
-}
-.idea-card:hover { border-color:rgba(11,175,170,.3); transform:translateY(-3px); }
-
-.idea-meta { display:flex; gap:14px; align-items:center; margin-bottom:18px; }
-.idea-tag {
-  font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
-  background:rgba(11,175,170,.12); color:var(--aqua);
-  padding:5px 13px; border-radius:2px;
-}
-.idea-date { font-size:13px; color:var(--t4); font-weight:700; }
-.idea-h { font-size:20px; color:var(--white); margin-bottom:12px; line-height:1.3; font-weight:700; }
-.idea-p { font-size:15px; color:var(--t3); line-height:1.75; margin-bottom:26px; }
-.idea-lnk {
-  font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--aqua); display:inline-flex; align-items:center; gap:8px;
-  transition:gap .2s;
-}
-.idea-card:hover .idea-lnk { gap:12px; }
 
 /* ============================================================
    CTA
@@ -956,15 +792,10 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 @media (max-width:1024px) {
   :root { --px:32px; }
   .hero-actions { flex-wrap:wrap; }
-  .diff-grid { grid-template-columns:1fr; gap:36px; }
-  .diff-visual { display:none; }
-  .pts { grid-template-columns:1fr; }
-  .pt { padding:14px 0; }
   .work-feat { grid-template-columns:1fr; }
   .work-3 { grid-template-columns:1fr 1fr; }
-  .svcs-grid { grid-template-columns:1fr; }
+  .svc { grid-template-columns:1fr; justify-items:start; }
   .team-grid { grid-template-columns:1fr 1fr; }
-  .ideas-grid { grid-template-columns:1fr; }
   .footer-in { grid-template-columns:1fr 1fr; }
 }
 /* Six nav items need more room: switch to the menu earlier than 900px */
@@ -1047,9 +878,6 @@ html[data-theme="light"] .btn-line { border-bottom-color:rgba(10,33,86,0.18); }
 
 /* Clients ticker */
 
-/* Orbital labels */
-html[data-theme="light"] .orb-label { background:rgba(255,255,255,0.85); }
-
 /* Work section bg */
 html[data-theme="light"] #work { background:rgba(10,33,86,0.03); }
 
@@ -1078,14 +906,6 @@ html[data-theme="light"] .tm-card:nth-child(2) .tm-photo { background:linear-gra
 html[data-theme="light"] .tm-card:nth-child(3) .tm-photo { background:linear-gradient(160deg, rgba(224,166,20,0.06) 0%, #f4f1ec 70%); }
 html[data-theme="light"] .tm-av { background:rgba(10,33,86,0.04); }
 html[data-theme="light"] .tm-av svg { color:rgba(10,33,86,0.25); }
-
-/* Ideas section bg */
-html[data-theme="light"] #ideas { background:rgba(10,33,86,0.03); }
-
-/* Idea cards */
-html[data-theme="light"] .idea-card { background:rgba(255,255,255,0.6); }
-html[data-theme="light"] .idea-card:hover { border-color:rgba(11,175,170,0.25); }
-html[data-theme="light"] .idea-tag { background:rgba(11,175,170,0.08); }
 
 /* Footer */
 html[data-theme="light"] footer { background:rgba(244,241,236,0.6); }
@@ -1248,44 +1068,44 @@ html { overflow-x:clip; }
   </div>
 </section>
 
-<!-- ===== DIFFERENCE ===== -->
-<section id="diff" aria-label="What makes us different">
+<!-- ===== SERVICES ===== -->
+<section id="svcs">
   <div class="w">
-    <div class="diff-grid">
-      <!-- Orbital visual -->
-      <div class="diff-visual rv-left">
-        <div class="orbital-wrap">
-          <!-- Rings -->
-          <div class="ring ring-1"><div class="ring-dot"></div></div>
-          <div class="ring ring-2"><div class="ring-dot"></div></div>
-          <div class="ring ring-3"><div class="ring-dot"></div></div>
-          <!-- Centre mark -->
-          <div class="orb-centre">
-            <img width="373" height="357" src="assets/icon-navy.png" alt="Iternal" class="orb-logo">
-          </div>
-          <!-- Labels -->
-          <div class="orb-label top">Agentic AI</div>
-          <div class="orb-label right">Live Systems</div>
-          <div class="orb-label bot">Senior Team</div>
-          <div class="orb-label left">Strategy</div>
-        </div>
+    <div class="sec-head rv">
+      <div>
+        <h2 class="sec-h2">Ways to work<br>with Iternal.</h2>
       </div>
-
-      <!-- Copy -->
-      <div class="diff-copy-side rv-right d2">
-        <h2 class="diff-h2">
-          Most agencies charge for headcount.<br>
-          <span class="warm">We're built differently.</span>
-        </h2>
-        <p class="diff-p">
-          Iternal runs a unique AI-augmented delivery model called Forge. A small core team, amplified by an internal suite of agentic tools, delivers at a capacity most agencies many times our size would struggle to match.
-        </p>
+    </div>
+    <div class="svcs-grid rv d1">
+      <div class="svc">
+        <div class="svc-top-line"></div>
+        <h3 class="svc-h">Workshops &amp; Training</h3>
+        <p class="svc-p">Structured sessions that give your team clarity on where AI fits, how to use it effectively and what to prioritise.</p>
+        <a href="/services#training" class="svc-cta">Learn More <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
-
-      <div class="pts rv d3">
-          <div class="pt"><span class="pt-n">01</span><div><div class="pt-h">Agentic, not just generative</div><p class="pt-p">Systems that plan, orchestrate, and deliver outcomes inside real-world infrastructure.</p></div></div>
-          <div class="pt"><span class="pt-n">02</span><div><div class="pt-h">Live systems, not pilots</div><p class="pt-p">Good News London is live with the GLA on london.gov.uk. CivicNetZero runs across three continents.</p></div></div>
-          <div class="pt"><span class="pt-n">03</span><div><div class="pt-h">Senior team on every project</div><p class="pt-p">The people who scoped it build it. No account management layer, no junior bench.</p></div></div>
+      <div class="svc">
+        <div class="svc-top-line"></div>
+        <h3 class="svc-h">AI Automations &amp; Assistants</h3>
+        <p class="svc-p">Fast-to-deploy AI that takes repetitive work off your team's plate and gives your customers or staff an intelligent first line of response.</p>
+        <a href="/services#automations" class="svc-cta">Learn More <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="svc">
+        <div class="svc-top-line"></div>
+        <h3 class="svc-h">Agentic AI Builds</h3>
+        <p class="svc-p">End-to-end design and delivery of production agentic AI systems, from brief to live deployment, including security compliance and full stack integration.</p>
+        <a href="/services#builds" class="svc-cta">Learn More <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="svc">
+        <div class="svc-top-line"></div>
+        <h3 class="svc-h">AI Strategy &amp; Advisory</h3>
+        <p class="svc-p">Sprint engagements and fractional advisory for leadership teams navigating the shift to AI-first operations. Make the right decisions before committing to a build.</p>
+        <a href="/services#advisory" class="svc-cta">Learn More <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+      <div class="svc">
+        <div class="svc-top-line"></div>
+        <h3 class="svc-h">AI Augmentation</h3>
+        <p class="svc-p">Embed Iternal's augmented delivery model inside your team. We install the tools, workflows and agent infrastructure so your people operate at a level they couldn't reach alone.</p>
+        <a href="/contact" class="svc-cta">Talk to Us <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
     </div>
   </div>
@@ -1298,7 +1118,6 @@ html { overflow-x:clip; }
       <div>
         <h2 class="sec-h2">AI in production,<br>not in PowerPoint.</h2>
       </div>
-      <a href="/services#cases" class="btn-line">View All <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
 
     <div class="work-feat rv-scale d1">
@@ -1364,83 +1183,6 @@ html { overflow-x:clip; }
     <div class="rv" style="margin-top:52px; display:flex; align-items:baseline; gap:28px; flex-wrap:wrap">
       <p style="font-size:15px; color:var(--t3); margin:0">Everything above was designed and built by our team, and runs in production today.</p>
       <a href="/contact" class="btn-line">Talk to us about yours <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    </div>
-  </div>
-</section>
-
-<!-- ===== SERVICES ===== -->
-<section id="svcs">
-  <div class="w">
-    <div class="sec-head rv">
-      <div>
-        <h2 class="sec-h2">Three ways to work<br>with Iternal.</h2>
-      </div>
-    </div>
-    <div class="svcs-grid rv d1">
-      <div class="svc">
-        <div class="svc-top-line"></div>
-        <span class="svc-n">01</span>
-        <h3 class="svc-h">Agentic AI Builds</h3>
-        <p class="svc-p">End-to-end design and delivery of production agentic AI systems, from brief to live deployment, including security compliance and full stack integration.</p>
-        <div class="svc-tags">
-          <span class="svc-tag">Autonomous workflow systems</span>
-          <span class="svc-tag">AI-powered civic platforms</span>
-          <span class="svc-tag">Multi-agent orchestration</span>
-          <span class="svc-tag">RAG and knowledge systems</span>
-        </div>
-        <a href="/services" class="svc-cta">Learn More <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-      <div class="svc">
-        <div class="svc-top-line"></div>
-        <span class="svc-n">02</span>
-        <h3 class="svc-h">AI Strategy &amp; Advisory</h3>
-        <p class="svc-p">Sprint engagements and fractional advisory for leadership teams navigating the shift to AI-first operations. Make the right decisions before committing to a build.</p>
-        <div class="svc-tags">
-          <span class="svc-tag">AI readiness assessments</span>
-          <span class="svc-tag">Board-level AI strategy</span>
-          <span class="svc-tag">Vendor and platform selection</span>
-          <span class="svc-tag">Team capability building</span>
-        </div>
-        <a href="/services" class="svc-cta">Learn More <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-      <div class="svc">
-        <div class="svc-top-line"></div>
-        <span class="svc-n">03</span>
-        <h3 class="svc-h">AI Augmentation</h3>
-        <p class="svc-p">Embed Iternal's augmented delivery model inside your team. We install the tools, workflows and agent infrastructure so your people operate at a level they couldn't reach alone.</p>
-        <div class="svc-tags">
-          <span class="svc-tag">Internal agent deployment</span>
-          <span class="svc-tag">Team workflow automation</span>
-          <span class="svc-tag">AI toolchain setup</span>
-          <span class="svc-tag">Ongoing support</span>
-        </div>
-        <a href="/services" class="svc-cta">Learn More <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== SECTORS ===== -->
-<!-- ===== INSIGHTS ===== -->
-<section id="ideas" aria-label="Ideas and insights">
-  <div class="w">
-    <div class="sec-head rv">
-      <div>
-        <h2 class="sec-h2">Ideas worth reading.</h2>
-      </div>
-      <a href="/insights" class="btn-line">All Insights <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-    </div>
-    <div class="ideas-grid">
-      <div class="idea-card rv-left d1">
-        <div class="idea-meta"><span class="idea-tag">Agentic AI</span><span class="idea-date">Coming soon</span></div>
-        <h3 class="idea-h">Why "agentic" is not just a marketing word, and how to tell when it is</h3>
-        <p class="idea-p">The word "agentic" is everywhere. Most of what's called agentic AI is still just generative AI with a longer prompt. Here's how to tell the difference, and why it matters for anyone commissioning AI work.</p>
-      </div>
-      <div class="idea-card rv-right d2">
-        <div class="idea-meta"><span class="idea-tag">Delivery Model</span><span class="idea-date">Coming soon</span></div>
-        <h3 class="idea-h">The 10x team: how AI augmentation is changing what a small agency can deliver</h3>
-        <p class="idea-p">We've built an internal delivery model called Forge that lets a small team operate at the capacity of an agency many times its size. This is how it works, and what it means for the economics of building with AI.</p>
-      </div>
     </div>
   </div>
 </section>

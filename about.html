@@ -336,36 +336,125 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .origin-body strong { color:var(--white); font-weight:700; }
 
 /* ============================================================
-   BELIEFS
+   FORGE
    ============================================================ */
-.beliefs { padding:min(64px, 7vh) 0; background:rgba(7,19,58,.5); }
-.beliefs-header { margin-bottom:72px; }
-.beliefs-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:2px; }
+/* Sized to fit one laptop screen below the nav: the orbital takes a fixed column, the
+   copy the rest, and the three points run as a row under both. */
+#diff {
+  padding:min(64px, 7vh) 0;
+  border-bottom:1px solid var(--border);
+}
 
-.belief-card {
-  padding:48px 40px; background:var(--deep);
-  border:1px solid var(--border);
-  transition: border-color .3s, background .3s;
-  position:relative; overflow:hidden;
+.diff-grid {
+  display:grid; grid-template-columns:380px 1fr;
+  gap:min(44px, 5vh) 72px; align-items:center;
 }
-.belief-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background:var(--sunrise); transform:scaleX(0);
-  transform-origin:left; transition:transform .4s ease;
-}
-.belief-card:hover::before { transform:scaleX(1); }
-.belief-card:hover { background:var(--surf); border-color:var(--border2); }
 
-.belief-number {
-  font-size:13px; font-weight:700;
-  color:var(--tan);
-  line-height:1; margin-bottom:16px; letter-spacing:.14em;
+/* Orbital SVG animation (Composio style) */
+.diff-visual {
+  position:relative; display:flex;
+  align-items:center; justify-content:center;
+  height:380px;
 }
-.belief-title {
-  font-size:22px; font-weight:700; color:var(--t1);
-  margin-bottom:14px; line-height:1.2;
+
+.orbital-wrap {
+  position:relative; width:360px; height:360px;
 }
-.belief-text { font-size:15px; font-weight:400; color:var(--t3); line-height:1.72; }
+
+/* Centre glyph */
+.orb-centre {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:80px; height:80px;
+  display:flex; align-items:center; justify-content:center;
+}
+.orb-logo { width:64px; height:64px; filter:brightness(0) invert(1); transition:filter .3s; }
+html[data-theme="light"] .orb-logo { filter:none; }
+
+/* Rings */
+.ring {
+  position:absolute; top:50%; left:50%;
+  border-radius:50%;
+  border:1px solid;
+  transform:translate(-50%,-50%);
+}
+.ring-1 {
+  width:160px; height:160px;
+  border-color:rgba(226,103,19,.25);
+  animation:spin 12s linear infinite;
+}
+.ring-2 {
+  width:260px; height:260px;
+  border-color:rgba(224,166,20,.15);
+  animation:spin 20s linear infinite reverse;
+}
+.ring-3 {
+  width:360px; height:360px;
+  border-color:rgba(11,175,170,.1);
+  animation:spin 32s linear infinite;
+}
+
+@keyframes spin { from{transform:translate(-50%,-50%) rotate(0deg)} to{transform:translate(-50%,-50%) rotate(360deg)} }
+
+/* Dot nodes on rings */
+.ring-dot {
+  position:absolute;
+  width:8px; height:8px;
+  border-radius:50%;
+  margin:-4px;
+}
+.ring-1 .ring-dot { background:var(--tan); top:0; left:50%; box-shadow:0 0 12px rgba(226,103,19,.6); }
+.ring-2 .ring-dot { background:var(--gold); top:0; left:50%; box-shadow:0 0 12px rgba(224,166,20,.5); }
+.ring-3 .ring-dot { background:var(--aqua); top:0; left:50%; box-shadow:0 0 12px rgba(11,175,170,.5); }
+
+/* Floating labels around orbital */
+.orb-label {
+  position:absolute;
+  font-size:12px; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase;
+  color:var(--t4); white-space:nowrap;
+  background:rgba(6,15,38,.85);
+  border:1px solid var(--border2);
+  padding:7px 16px; border-radius:2px;
+  backdrop-filter:blur(8px);
+}
+.orb-label.top   { top:0;   left:50%; transform:translateX(-50%); }
+.orb-label.right { right:0; top:50%; transform:translateY(-50%); }
+.orb-label.bot   { bottom:0; left:50%; transform:translateX(-50%); }
+.orb-label.left  { left:0; top:50%; transform:translateY(-50%); }
+
+.diff-copy-side { position:relative; }
+
+.diff-h2 {
+  position:relative;
+  font-size:clamp(30px, 3.3vw, 46px);
+  font-weight:900; color:var(--white);
+  line-height:1.06; margin-bottom:22px;
+}
+.diff-h2 .warm {
+  background:var(--sunrise);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.diff-p {
+  font-size:17px; line-height:1.75;
+  color:var(--t3); max-width:36em;
+}
+
+/* Points: one row of three under both columns */
+.pts { grid-column:1 / -1; display:grid; grid-template-columns:repeat(3, 1fr); gap:0 40px; }
+.pt {
+  display:grid; grid-template-columns:32px 1fr;
+  gap:14px; padding:22px 0 0;
+  border-top:1px solid var(--border);
+}
+.pt-n {
+  font-size:12px; font-weight:700;
+  color:var(--tan); letter-spacing:.12em; padding-top:3px;
+}
+.pt-h { font-size:15px; color:var(--white); margin-bottom:7px; font-weight:700; }
+.pt-p { font-size:14px; color:var(--t3); line-height:1.7; }
 
 /* ============================================================
    TEAM
@@ -444,38 +533,6 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   transition: color .2s, border-color .2s;
 }
 .client-chip:hover { color:var(--white); border-color:rgba(226,103,19,0.3); }
-
-/* ============================================================
-   HOW WE WORK
-   ============================================================ */
-.howwework { padding:min(64px, 7vh) 0; }
-.hww-header { max-width:620px; margin-bottom:72px; }
-.hww-steps { display:grid; grid-template-columns:repeat(4, 1fr); border:1px solid var(--border); }
-.hww-step {
-  padding:48px 36px; background:var(--deep);
-  position:relative; border-right:1px solid var(--border);
-  transition: background .3s;
-}
-.hww-step:last-child { border-right:none; }
-.hww-step:hover { background:var(--surf); }
-.hww-step::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background:var(--sunrise); transform:scaleX(0);
-  transform-origin:left; transition:transform .4s ease;
-}
-.hww-step:hover::before { transform:scaleX(1); }
-
-.hww-step-num {
-  font-size:11px; font-weight:700; color:var(--tan);
-  letter-spacing:.15em; text-transform:uppercase;
-  margin-bottom:30px; display:flex; align-items:center; gap:8px;
-}
-.hww-step-num::before { content:''; display:block; width:22px; height:1px; background:var(--tan); }
-.hww-step-title {
-  font-size:22px; font-weight:700; color:var(--t1);
-  margin-bottom:14px; line-height:1.2;
-}
-.hww-step-text { font-size:14px; font-weight:400; color:var(--t3); line-height:1.72; }
 
 /* ============================================================
    CLOSING CTA
@@ -621,9 +678,10 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   :root { --px:32px; }
   .origin-grid, .team-header, .team-grid-founders { grid-template-columns:1fr; gap:40px; }
   .team-grid { grid-template-columns:1fr 1fr; }
-  .beliefs-grid { grid-template-columns:1fr; }
-  .hww-steps { grid-template-columns:1fr 1fr; }
-  .hww-step { border-right:none; border-bottom:1px solid var(--border); }
+  .diff-grid { grid-template-columns:1fr; gap:36px; }
+  .diff-visual { display:none; }
+  .pts { grid-template-columns:1fr; }
+  .pt { padding:14px 0; }
   .footer-in { grid-template-columns:1fr 1fr; }
 }
 /* Six nav items need more room: switch to the menu earlier than 900px */
@@ -638,7 +696,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   .nav-links { display:none; }
   .nav-btn { display:none; }
   .nav-hamburger { display:flex; }
-  .team-grid, .hww-steps { grid-template-columns:1fr; }
+  .team-grid { grid-template-columns:1fr; }
   .footer-in { grid-template-columns:1fr; gap:36px; }
   .f-bot { flex-direction:column; gap:10px; }
 }
@@ -647,6 +705,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   .blob-1,.blob-2,.blob-3,.blob-4 { animation:none !important; }
   .hero-ey,.hero-h1,.hero-sub,.hero-body { animation:none !important; opacity:1 !important; transform:none !important; }
   .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
+  .ring { animation:none !important; }
 }
 
 /* ============================================================
@@ -687,12 +746,6 @@ html[data-theme="light"] .btn-sun { color:#060f26; }
 html[data-theme="light"] .mobile-nav { background:rgba(244,241,236,0.97); }
 html[data-theme="light"] footer { background:rgba(244,241,236,0.6); }
 
-/* Beliefs */
-html[data-theme="light"] .beliefs { background:rgba(10,33,86,0.03); }
-html[data-theme="light"] .belief-card { background:rgba(255,255,255,0.6); }
-html[data-theme="light"] .belief-card:hover { background:rgba(255,255,255,0.8); }
-html[data-theme="light"] .belief-number { color:#b9530f; }
-
 /* Team */
 html[data-theme="light"] .team-card { background:rgba(255,255,255,0.6); }
 html[data-theme="light"] .team-card:hover { border-color:rgba(226,103,19,0.25); }
@@ -704,9 +757,8 @@ html[data-theme="light"] .team-avatar-glow { background:radial-gradient(ellipse 
 html[data-theme="light"] .clients { background:rgba(10,33,86,0.03); }
 html[data-theme="light"] .client-chip { background:rgba(255,255,255,0.6); }
 
-/* How we work */
-html[data-theme="light"] .hww-step { background:rgba(255,255,255,0.6); }
-html[data-theme="light"] .hww-step:hover { background:rgba(255,255,255,0.8); }
+/* Orbital labels */
+html[data-theme="light"] .orb-label { background:rgba(255,255,255,0.85); }
 
 /* Closing CTA */
 html[data-theme="light"] .closing { background:rgba(10,33,86,0.03); }
@@ -780,7 +832,7 @@ html { overflow-x:clip; }
       Small team.<br><em>Outsized</em><br>impact.
     </h1>
     <p class="hero-sub">
-      We're a Bristol-based AI agency that builds agentic systems for organisations ready to operate at a level they couldn't reach before.
+      We're a Bristol-based AI consultancy that builds agentic systems for organisations ready to operate at a level they couldn't reach before.
     </p>
   </div>
 </section>
@@ -801,27 +853,44 @@ html { overflow-x:clip; }
   </div>
 </section>
 
-<!-- ===== BELIEFS ===== -->
-<section class="beliefs" aria-label="Operating principles">
+<!-- ===== FORGE ===== -->
+<section id="diff" aria-label="What makes us different">
   <div class="w">
-    <div class="beliefs-header rv">
-      <h2 class="sec-h">Our operating<br>principles</h2>
-    </div>
-    <div class="beliefs-grid">
-      <div class="belief-card rv-left">
-        <div class="belief-number">01</div>
-        <h3 class="belief-title">AI should do the heavy lifting</h3>
-        <p class="belief-text">We don't believe in AI as a novelty. We build systems that take on real workloads (research, coordination, generation, decision support) so your team can focus on what only humans can do.</p>
+    <div class="diff-grid">
+      <!-- Orbital visual -->
+      <div class="diff-visual rv-left">
+        <div class="orbital-wrap">
+          <!-- Rings -->
+          <div class="ring ring-1"><div class="ring-dot"></div></div>
+          <div class="ring ring-2"><div class="ring-dot"></div></div>
+          <div class="ring ring-3"><div class="ring-dot"></div></div>
+          <!-- Centre mark -->
+          <div class="orb-centre">
+            <img width="373" height="357" src="assets/icon-navy.png" alt="Iternal" class="orb-logo">
+          </div>
+          <!-- Labels -->
+          <div class="orb-label top">Agentic AI</div>
+          <div class="orb-label right">Live Systems</div>
+          <div class="orb-label bot">Senior Team</div>
+          <div class="orb-label left">Strategy</div>
+        </div>
       </div>
-      <div class="belief-card rv-right d1">
-        <div class="belief-number">02</div>
-        <h3 class="belief-title">Speed is a strategic advantage</h3>
-        <p class="belief-text">The organisations that move fastest with AI will define the next decade of their industries. We build with urgency, and we bring that same pace to every engagement we take on.</p>
+
+      <!-- Copy -->
+      <div class="diff-copy-side rv-right d2">
+        <h2 class="diff-h2">
+          Most agencies charge for headcount.<br>
+          <span class="warm">We're built differently.</span>
+        </h2>
+        <p class="diff-p">
+          Iternal runs a unique AI-augmented delivery model called Forge. A small core team, amplified by an internal suite of agentic tools, delivers at a capacity most agencies many times our size would struggle to match.
+        </p>
       </div>
-      <div class="belief-card rv-left d2">
-        <div class="belief-number">03</div>
-        <h3 class="belief-title">Practical over theoretical</h3>
-        <p class="belief-text">We're not a research lab. We're builders. Every solution we design has to work in the real world, integrate with existing tools, and deliver measurable value, not just look good in a demo.</p>
+
+      <div class="pts rv d3">
+          <div class="pt"><span class="pt-n">01</span><div><div class="pt-h">Agentic, not just generative</div><p class="pt-p">Systems that plan, orchestrate, and deliver outcomes inside real-world infrastructure.</p></div></div>
+          <div class="pt"><span class="pt-n">02</span><div><div class="pt-h">Live systems, not pilots</div><p class="pt-p">Good News London is live with the GLA on london.gov.uk. CivicNetZero runs across three continents.</p></div></div>
+          <div class="pt"><span class="pt-n">03</span><div><div class="pt-h">Senior team on every project</div><p class="pt-p">The people who scoped it build it. No account management layer, no junior bench.</p></div></div>
       </div>
     </div>
   </div>
@@ -888,37 +957,6 @@ html { overflow-x:clip; }
       <div class="client-chip">Kew Gardens</div>
       <div class="client-chip">Tech4Good</div>
       <div class="client-chip">African Science Academy</div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== HOW WE WORK ===== -->
-<section class="howwework">
-  <div class="w">
-    <div class="hww-header rv">
-      <h2 class="sec-h">From first conversation<br>to live system</h2>
-    </div>
-    <div class="hww-steps">
-      <div class="hww-step rv-left">
-        <div class="hww-step-num">01</div>
-        <h3 class="hww-step-title">Discover</h3>
-        <p class="hww-step-text">We start by understanding your world. Your processes, your bottlenecks and where intelligent automation will actually make a difference.</p>
-      </div>
-      <div class="hww-step rv-right d1">
-        <div class="hww-step-num">02</div>
-        <h3 class="hww-step-title">Design</h3>
-        <p class="hww-step-text">We map out the architecture: what agents are needed, how they connect, and how they integrate with your existing stack.</p>
-      </div>
-      <div class="hww-step rv-left d2">
-        <div class="hww-step-num">03</div>
-        <h3 class="hww-step-title">Build</h3>
-        <p class="hww-step-text">We build fast and in the open. You see working systems early, not decks and prototypes. Iteration happens in real time.</p>
-      </div>
-      <div class="hww-step rv-right d3">
-        <div class="hww-step-num">04</div>
-        <h3 class="hww-step-title">Support</h3>
-        <p class="hww-step-text">We don't disappear at launch. We stay involved, monitor performance, and evolve the system as your needs grow.</p>
-      </div>
     </div>
   </div>
 </section>
