@@ -5,7 +5,7 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **20 Oct 2026, third deploy** (version ; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
+Last deploy: **20 Oct 2026, third deploy** (version f85a948c; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
@@ -17,7 +17,7 @@ Nothing waiting.
 
 ## Live
 
-### 20 Oct 2026, third deploy (version )
+### 20 Oct 2026, third deploy (version f85a948c)
 
 The funnel is still dark (preview banner up).
 
