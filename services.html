@@ -212,6 +212,9 @@ section { padding:min(64px, 7vh) 0; border-bottom:1px solid var(--border); }
 #tiers { background:rgba(12,29,78,.25); }
 
 .tier-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border); border:1px solid var(--border); }
+.tier-grid.two { grid-template-columns:repeat(2,1fr); }
+.tier-price { font-size:13px; font-weight:700; color:var(--tan); margin:-6px 0 22px; letter-spacing:.02em; }
+[hidden] { display:none !important; }
 .engage-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--border); border:1px solid var(--border); margin-top:48px; }
 
 .tier {
@@ -826,11 +829,10 @@ html { overflow-x:clip; }
       Iternal works across the full spectrum of AI capability, from simple workflow automations that save your team hours each week, to <strong>complex multi-agent systems running inside enterprise infrastructure</strong> across three continents. We meet you where you are.
     </p>
     <div class="hero-ctas rv d3">
-      <a href="#tiers" class="btn-sun">
-        See Our Services
+      <a href="/contact" class="btn-sun">
+        Book a Discovery Call
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
-      <a href="#cta" class="btn-outline">Book a Discovery Call</a>
     </div>
 
   </div>
@@ -840,93 +842,17 @@ html { overflow-x:clip; }
 <section id="tiers" aria-label="Service tiers">
   <div class="w">
     <div class="sec-intro rv">
-      <h2 class="sec-h">Five ways to work<br>with Iternal.</h2>
+      <h2 class="sec-h">Ways to work<br>with Iternal.</h2>
       <p class="sec-sub">Every engagement starts with understanding your real problem. Whether you need hands-on builds, strategic guidance or team capability building, we'll tell you honestly which fits.</p>
     </div>
-    <div class="tier-grid rv d1">
+    <div class="tier-grid two rv d1">
 
-      <!-- Tier 1: Automation & Chatbots -->
-      <div class="tier">
-        <div class="tier-accent"></div>
-        <span class="tier-tag">Entry Point</span>
-        <h3 class="tier-name">AI Automations &amp; Assistants</h3>
-        <p class="tier-desc">Fast-to-deploy AI that takes repetitive work off your team's plate and gives your customers or staff an intelligent first line of response. Built in days, not months.</p>
-        <div class="tier-ideal">Ideal for</div>
-        <ul class="tier-list">
-          <li>Teams spending hours on repetitive admin</li>
-          <li>Customer-facing chatbots and knowledge bases</li>
-          <li>Document processing and data extraction</li>
-          <li>Slack, email and CRM workflow automation</li>
-          <li>Internal Q&amp;A bots on your own data</li>
-        </ul>
-        <a href="#cta" class="tier-cta">Start here <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-
-      <!-- Tier 2: Agentic Builds — FEATURED -->
-      <div class="tier featured">
-        <div class="tier-accent"></div>
-        <div class="tier-popular">Most requested</div>
-        <span class="tier-tag" style="color:var(--tan)">Core Offer</span>
-        <h3 class="tier-name">Agentic AI Builds</h3>
-        <p class="tier-desc">End-to-end design and delivery of production agentic AI systems. Systems that plan, reason and execute across your real infrastructure, not just generate text.</p>
-        <div class="tier-ideal">Ideal for</div>
-        <ul class="tier-list">
-          <li>Multi-step autonomous workflows</li>
-          <li>Systems connecting multiple tools and data sources</li>
-          <li>Public-sector and regulated-industry deployments</li>
-          <li>Platforms requiring security compliance and pen-testing</li>
-          <li>RAG systems on proprietary knowledge</li>
-          <li>Claude + OpenAI model orchestration</li>
-        </ul>
-        <a href="#cta" class="tier-cta">Talk about a build <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-
-      <!-- Tier 3: Enterprise -->
-      <div class="tier">
-        <div class="tier-accent"></div>
-        <span class="tier-tag">Strategic</span>
-        <h3 class="tier-name">Enterprise AI Strategy &amp; Rollout</h3>
-        <p class="tier-desc">Board-level AI strategy, full organisational AI readiness, and end-to-end deployment across enterprise teams. For organisations where the stakes are high and the governance requirements are real.</p>
-        <div class="tier-ideal">Ideal for</div>
-        <ul class="tier-list">
-          <li>C-suite AI strategy and board advisory</li>
-          <li>Organisation-wide AI capability building</li>
-          <li>Multi-team agentic infrastructure rollout</li>
-          <li>AI governance and compliance frameworks</li>
-          <li>Vendor and model selection strategy</li>
-          <li>Fractional Chief AI Officer engagement</li>
-        </ul>
-        <a href="#cta" class="tier-cta">Discuss enterprise <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-
-    </div>
-
-    <!-- Engagement row: Consultancy + Workshops -->
-    <div class="engage-grid rv d2">
-
-      <!-- Consultancy & Advisory -->
-      <div class="tier">
-        <div class="tier-accent"></div>
-        <span class="tier-tag">Ongoing</span>
-        <h3 class="tier-name">Consultancy &amp; Advisory</h3>
-        <p class="tier-desc">Retained AI expertise without the overhead of building an in-house team. Strategic guidance, architecture review and hands-on problem-solving on a flexible, ongoing basis.</p>
-        <div class="tier-ideal">Ideal for</div>
-        <ul class="tier-list">
-          <li>Fractional Chief AI Officer arrangements</li>
-          <li>Architecture and technical design reviews</li>
-          <li>AI vendor and model selection guidance</li>
-          <li>Board-level AI strategy and due diligence</li>
-          <li>Ongoing advisory retainers</li>
-        </ul>
-        <a href="#cta" class="tier-cta">Explore advisory <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-
-      <!-- Workshops & Training -->
-      <div class="tier">
+      <div class="tier" id="training">
         <div class="tier-accent"></div>
         <span class="tier-tag">Starting Point</span>
         <h3 class="tier-name">Workshops &amp; Training</h3>
         <p class="tier-desc">Structured sessions that give your team clarity on where AI fits, how to use it effectively and what to prioritise. From half-day discovery workshops to multi-session capability programmes.</p>
+        <div class="tier-price">AI Discovery Workshop: £2,500 + VAT, fixed price</div>
         <div class="tier-ideal">Includes</div>
         <ul class="tier-list">
           <li>AI Discovery Workshop (half-day, fixed price)</li>
@@ -938,78 +864,75 @@ html { overflow-x:clip; }
         <a href="#workshop" class="tier-cta">See the workshop <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
 
-    </div>
-  </div>
-</section>
-
-<!-- ===== MODEL EXPERTISE ===== -->
-<section id="models" aria-label="AI models and expertise">
-  <div class="w">
-    <div class="sec-intro rv">
-      <h2 class="sec-h">We're Claude and OpenAI specialists.<br>Not generalists. Not box-tickers.</h2>
-      <p class="sec-sub">Most AI agencies can prompt ChatGPT. Very few have the depth to architect production-grade systems on top of frontier models. We do, and we know when each model is the right tool for the job.</p>
-    </div>
-
-    <div class="model-grid rv d1">
-
-      <div class="model-card">
-        <span class="model-logo claude">Anthropic Claude</span>
-        <div class="model-card-sub">Opus · Sonnet · Haiku</div>
-        <p class="model-card-desc">Claude is our primary build platform. Its superior reasoning, long context window and constitutional AI design make it the right choice for high-stakes enterprise and civic deployments where accuracy, tone, and safety matter.</p>
-        <div class="model-caps">
-          <div class="model-cap">Long-context document and knowledge processing</div>
-          <div class="model-cap">Agentic tool use and multi-step reasoning</div>
-          <div class="model-cap">Regulated sector deployments (NHS, government, finance)</div>
-          <div class="model-cap">RAG systems with Pinecone and vector stores</div>
-          <div class="model-cap">API integration and production deployment</div>
-        </div>
+      <div class="tier" id="automations">
+        <div class="tier-accent"></div>
+        <h3 class="tier-name">AI Automations &amp; Assistants</h3>
+        <p class="tier-desc">Fast-to-deploy AI that takes repetitive work off your team's plate and gives your customers or staff an intelligent first line of response. Built in days, not months.</p>
+        <div class="tier-price">Typically £5k–£15k</div>
+        <div class="tier-ideal">Ideal for</div>
+        <ul class="tier-list">
+          <li>Teams spending hours on repetitive admin</li>
+          <li>Customer-facing chatbots and knowledge bases</li>
+          <li>Document processing and data extraction</li>
+          <li>Slack, email and CRM workflow automation</li>
+          <li>Internal Q&amp;A bots on your own data</li>
+        </ul>
+        <a href="/contact" class="tier-cta">Start here <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
 
-      <div class="model-card">
-        <span class="model-logo openai">OpenAI GPT</span>
-        <div class="model-card-sub">GPT · reasoning models · OpenAI API</div>
-        <p class="model-card-desc">We work extensively with OpenAI's model suite, particularly for multimodal applications, code generation, and use cases that benefit from OpenAI's ecosystem of tools and integrations.</p>
-        <div class="model-caps">
-          <div class="model-cap">Vision and multimodal workflows</div>
-          <div class="model-cap">Code generation and technical automation</div>
-          <div class="model-cap">Assistants API and thread management</div>
-          <div class="model-cap">Function calling and structured outputs</div>
-          <div class="model-cap">Fine-tuning for domain-specific tasks</div>
-        </div>
+      <div class="tier featured" id="builds">
+        <div class="tier-accent"></div>
+        <div class="tier-popular">Most requested</div>
+        <span class="tier-tag" style="color:var(--tan)">Core Offer</span>
+        <h3 class="tier-name">Agentic AI Builds</h3>
+        <p class="tier-desc">End-to-end design and delivery of production agentic AI systems. Systems that plan, reason and execute across your real infrastructure, not just generate text.</p>
+        <div class="tier-price">From around £25k, scaling with complexity</div>
+        <div class="tier-ideal">Ideal for</div>
+        <ul class="tier-list">
+          <li>Multi-step autonomous workflows</li>
+          <li>Systems connecting multiple tools and data sources</li>
+          <li>Multi-agent orchestration across Claude and OpenAI</li>
+          <li>RAG systems on proprietary knowledge</li>
+          <li>AI-powered civic platforms</li>
+          <li>Public-sector and regulated-industry deployments</li>
+          <li>Platforms requiring security compliance and pen-testing</li>
+        </ul>
+        <a href="/contact" class="tier-cta">Talk about a build <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+
+      <div class="tier" id="advisory">
+        <div class="tier-accent"></div>
+        <span class="tier-tag">Strategic</span>
+        <h3 class="tier-name">AI Strategy &amp; Advisory</h3>
+        <p class="tier-desc">Sprint engagements and fractional advisory for leadership teams navigating the shift to AI-first operations. Make the right decisions before committing to a build.</p>
+        <div class="tier-price">Scoped individually</div>
+        <div class="tier-ideal">Ideal for</div>
+        <ul class="tier-list">
+          <li>Board-level AI strategy and due diligence</li>
+          <li>AI readiness assessments</li>
+          <li>AI governance and compliance frameworks</li>
+          <li>Vendor and model selection</li>
+          <li>Architecture and technical design reviews</li>
+          <li>Organisation-wide AI capability building</li>
+          <li>Multi-team agentic infrastructure rollout</li>
+          <li>Fractional Chief AI Officer engagement</li>
+          <li>Ongoing advisory retainers</li>
+        </ul>
+        <a href="/contact" class="tier-cta">Explore advisory <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
 
     </div>
 
-    <div class="experts-bar rv d2">
-      <div class="experts-bar-copy">
-        <h3>We also work across the broader AI ecosystem</h3>
-        <p>Including n8n, Make, LangChain, CrewAI, Composio, Supabase, Pinecone and the full modern AI stack, whatever your infrastructure requires.</p>
+    <!-- Websites: remove `hidden` at the website funnel's light-up (HOUSEKEEPING.md §Go-live) -->
+    <div class="engage-grid rv d2" id="websites" hidden style="grid-template-columns:1fr">
+      <div class="tier">
+        <div class="tier-accent"></div>
+        <span class="tier-tag">Website Design &middot; Build</span>
+        <h3 class="tier-name">Websites</h3>
+        <p class="tier-desc">Not every project needs a platform. Sometimes you need a really good website — designed, built and live in weeks.</p>
+        <p class="tier-desc">Sign-up takes a minute, and you see the full cost and our terms before you agree to anything.</p>
+        <div style="display:flex; gap:28px; flex-wrap:wrap"><a href="websites.html" class="tier-cta">See the websites we've made <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a href="start.html" class="tier-cta">Build a Site With Us <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
       </div>
-      <div class="experts-bar-logos">
-        <div class="expert-chip">n8n</div>
-        <div class="expert-chip">LangChain</div>
-        <div class="expert-chip">CrewAI</div>
-        <div class="expert-chip">Pinecone</div>
-        <div class="expert-chip">Supabase</div>
-        <div class="expert-chip">Composio</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ===== SECTORS ===== -->
-<section id="sectors" aria-label="Sectors">
-  <div class="w">
-    <div class="sec-head rv">
-      <div>
-        <h2 class="sec-h">Sectors where AI needs<br>to be right first time.</h2>
-      </div>
-    </div>
-    <div class="sec-grid rv d1">
-      <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"/><path d="M5 18V10M9.5 18V10M14.5 18V10M19 18V10"/><path d="M12 3 3 8h18z"/></svg><div class="sec-name">Civic Innovation</div><p class="sec-desc">Smart city platforms, public service AI, citizen-facing tools, local government automation, net-zero infrastructure.</p></div>
-      <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/><path d="M3.5 12H9l1-1.8 2 4.6 2-7 1.6 4.2H21"/></svg><div class="sec-name">Health &amp; MedTech</div><p class="sec-desc">Patient pathway intelligence, clinical workflow automation, NHS-compliant AI infrastructure, health data systems.</p></div>
-      <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M14.8 8.6A2.6 2.6 0 0 0 10 9.8V16"/><path d="M8.5 12.5h5"/><path d="M8.5 16h7"/></svg><div class="sec-name">Financial Services</div><p class="sec-desc">Risk intelligence, agentic advisory systems, compliance automation, AI-augmented client services.</p></div>
-      <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.9-5.4 5.1-6 2.4-.5 4.9-2 5.9-3"/></svg><div class="sec-name">Sustainability</div><p class="sec-desc">Carbon intelligence platforms, ESG data systems, conservation AI, climate action tooling for governments and NGOs.</p></div>
     </div>
   </div>
 </section>
@@ -1075,7 +998,7 @@ html { overflow-x:clip; }
           <h3>AI Discovery Workshop</h3>
           <p>Fixed-price. Usually completed within two weeks of booking. The cost is credited against any subsequent build engagement.</p>
           <div class="workshop-price">£2,500 <span>+ VAT · fixed price</span></div>
-          <a href="#cta" class="btn-sun" style="align-self:flex-start">
+          <a href="/contact" class="btn-sun" style="align-self:flex-start">
             Book a Workshop
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </a>
@@ -1201,6 +1124,78 @@ html { overflow-x:clip; }
   </div>
 </section>
 
+<!-- ===== MODEL EXPERTISE ===== -->
+<section id="models" aria-label="AI models and expertise">
+  <div class="w">
+    <div class="sec-intro rv">
+      <h2 class="sec-h">We're Claude and OpenAI specialists.<br>Not generalists. Not box-tickers.</h2>
+      <p class="sec-sub">Most AI agencies can prompt ChatGPT. Very few have the depth to architect production-grade systems on top of frontier models. We do, and we know when each model is the right tool for the job.</p>
+    </div>
+
+    <div class="model-grid rv d1">
+
+      <div class="model-card">
+        <span class="model-logo claude">Anthropic Claude</span>
+        <div class="model-card-sub">Opus · Sonnet · Haiku</div>
+        <p class="model-card-desc">Claude is our primary build platform. Its superior reasoning, long context window and constitutional AI design make it the right choice for high-stakes enterprise and civic deployments where accuracy, tone, and safety matter.</p>
+        <div class="model-caps">
+          <div class="model-cap">Long-context document and knowledge processing</div>
+          <div class="model-cap">Agentic tool use and multi-step reasoning</div>
+          <div class="model-cap">Regulated sector deployments (NHS, government, finance)</div>
+          <div class="model-cap">RAG systems with Pinecone and vector stores</div>
+          <div class="model-cap">API integration and production deployment</div>
+        </div>
+      </div>
+
+      <div class="model-card">
+        <span class="model-logo openai">OpenAI GPT</span>
+        <div class="model-card-sub">GPT · reasoning models · OpenAI API</div>
+        <p class="model-card-desc">We work extensively with OpenAI's model suite, particularly for multimodal applications, code generation, and use cases that benefit from OpenAI's ecosystem of tools and integrations.</p>
+        <div class="model-caps">
+          <div class="model-cap">Vision and multimodal workflows</div>
+          <div class="model-cap">Code generation and technical automation</div>
+          <div class="model-cap">Assistants API and thread management</div>
+          <div class="model-cap">Function calling and structured outputs</div>
+          <div class="model-cap">Fine-tuning for domain-specific tasks</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="experts-bar rv d2">
+      <div class="experts-bar-copy">
+        <h3>We also work across the broader AI ecosystem</h3>
+        <p>Including n8n, Make, LangChain, CrewAI, Composio, Supabase, Pinecone and the full modern AI stack, whatever your infrastructure requires.</p>
+      </div>
+      <div class="experts-bar-logos">
+        <div class="expert-chip">n8n</div>
+        <div class="expert-chip">LangChain</div>
+        <div class="expert-chip">CrewAI</div>
+        <div class="expert-chip">Pinecone</div>
+        <div class="expert-chip">Supabase</div>
+        <div class="expert-chip">Composio</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTORS ===== -->
+<section id="sectors" aria-label="Sectors">
+  <div class="w">
+    <div class="sec-head rv">
+      <div>
+        <h2 class="sec-h">Sectors where AI needs<br>to be right first time.</h2>
+      </div>
+    </div>
+    <div class="sec-grid rv d1">
+      <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 21h18"/><path d="M5 18V10M9.5 18V10M14.5 18V10M19 18V10"/><path d="M12 3 3 8h18z"/></svg><div class="sec-name">Civic Innovation</div><p class="sec-desc">Smart city platforms, public service AI, citizen-facing tools, local government automation, net-zero infrastructure.</p></div>
+      <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/><path d="M3.5 12H9l1-1.8 2 4.6 2-7 1.6 4.2H21"/></svg><div class="sec-name">Health &amp; MedTech</div><p class="sec-desc">Patient pathway intelligence, clinical workflow automation, NHS-compliant AI infrastructure, health data systems.</p></div>
+      <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M14.8 8.6A2.6 2.6 0 0 0 10 9.8V16"/><path d="M8.5 12.5h5"/><path d="M8.5 16h7"/></svg><div class="sec-name">Financial Services</div><p class="sec-desc">Risk intelligence, agentic advisory systems, compliance automation, AI-augmented client services.</p></div>
+      <div class="sec-c"><svg class="sec-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10z"/><path d="M2 21c0-3 1.9-5.4 5.1-6 2.4-.5 4.9-2 5.9-3"/></svg><div class="sec-name">Sustainability</div><p class="sec-desc">Carbon intelligence platforms, ESG data systems, conservation AI, climate action tooling for governments and NGOs.</p></div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== FAQ ===== -->
 <section id="faq">
   <div class="w">
@@ -1226,7 +1221,7 @@ html { overflow-x:clip; }
       </div>
       <div class="faq-item rv-left">
         <div class="faq-q">What does a project typically cost?</div>
-        <div class="faq-a">It varies considerably by scope. A simple automation or chatbot typically runs from £5k–£15k. A full agentic build starts around £25k and scales with complexity. Enterprise strategy engagements are scoped individually. <strong>Everything is fixed-price. No day-rate surprises.</strong> The Discovery Workshop (£2,500) will give you precise costings before you commit to anything.</div>
+        <div class="faq-a">It varies by scope; each service above shows its typical range. <strong>Everything is fixed-price. No day-rate surprises.</strong> The Discovery Workshop will give you precise costings before you commit to anything.</div>
       </div>
       <div class="faq-item rv-right">
         <div class="faq-q">How quickly can you start?</div>
@@ -1247,7 +1242,7 @@ html { overflow-x:clip; }
           Book a Discovery Call
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
-        <a href="#workshop" class="btn-outline">Or book a Workshop first</a>
+        <a href="/contact" class="btn-outline">Or book a Workshop first</a>
       </div>
       <p class="cta-note">We aim to respond to every enquiry within one working day.</p>
     </div>
