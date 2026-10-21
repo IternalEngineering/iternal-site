@@ -15,11 +15,6 @@ On branch `website-rework` (the overhaul, phase 1: existing content rearranged o
 nothing new written).
 
 #### Whole site
-- **"Book a Call" and "Book a Discovery Call" now book**: all 68 open the discovery-call
-  calendar in a new tab, instead of the contact form. "Book a Workshop" and the other enquiry
-  buttons still go to the contact form. (rebuild 22)
-- **Discovery calls are 60 minutes** everywhere the site says how long they are (was 30),
-  matching the calendar. (rebuild 23)
 - **The menu says "Services"** (was "What We Do"), and Insights is gone from the menu, the
   mobile menu and the footer. The footer no longer links to iternal.app, and its
   "Get in touch" goes to the contact page from every page. (rebuild 1)

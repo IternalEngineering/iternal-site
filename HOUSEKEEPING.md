@@ -223,12 +223,11 @@ booking invite.
   shows success only once the worker has the sign-up.
 - `questions.html` `WORKER_URL` — `https://api.iternal.co.uk`; an empty
   string falls back to FormSubmit (the pre-worker path, not in use).
-- **Discovery calls** — every "Book a Call" and "Book a Discovery Call" (menu, footer,
-  heroes and closing sections on all pages) opens John's Google Calendar schedule
-  "Disco Meeting", https://calendar.app.google/fNGuEjKBSpoPMhAL6, in a new tab (since
-  21 Oct 2026). Its slots are 60 minutes, which is what every page and llms.txt say. Changing it is a find-and-replace of that URL across `*.html` and
-  llms.txt. "Book a Workshop" and the other enquiry buttons stay on /contact.
-- `questions.html` `BOOKING_URL` — the website sign-up's own Google Calendar appointment schedule.
+- `questions.html` `BOOKING_URL` — the website-build meeting: John's Google Calendar
+  schedule "Disco Meeting" (60 minutes), https://calendar.app.google/fNGuEjKBSpoPMhAL6
+  (since 21 Oct 2026; was Paul's "A chat with Paul"). It is strictly for website-build
+  meetings (Robbie): every other "Book a Call" / "Book a Discovery Call" goes to /contact,
+  and those discovery calls stay "30 minutes".
   Lives here only. A plain schedule: no payment step.
 
 ## Go-live (dark launch)

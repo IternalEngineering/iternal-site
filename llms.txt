@@ -14,7 +14,7 @@ Key facts:
 - Pricing: every engagement is fixed-price, with no day rates. Automations and assistants typically cost £5k–£15k. Agentic builds start at around £25k. Strategy and advisory work is scoped individually. The AI Discovery Workshop is fixed-price, and the fee is credited against any build that follows.
 - Starting small: many client relationships begin with a single automation or chatbot.
 - Timing: a Discovery Workshop can usually be booked within one to two weeks. Builds usually start two to four weeks after scope is agreed.
-- Discovery calls: 60 minutes and free, booked at https://calendar.app.google/fNGuEjKBSpoPMhAL6. Iternal aims to answer enquiries within one working day.
+- Discovery calls: 30 minutes and free. Iternal aims to answer enquiries within one working day.
 - Other organisations Iternal has worked with: Kew Gardens, First Bank UK, African Science Academy.
 
 ## Services
@@ -38,4 +38,4 @@ All of these systems are live in production.
 ## Company
 
 - [About](https://iternal.co.uk/about): Why Iternal exists, its Forge delivery model, and the organisations it has built alongside.
-- [Contact](https://iternal.co.uk/contact): How to book a free 60-minute discovery call or email the team.
+- [Contact](https://iternal.co.uk/contact): How to book a free 30-minute discovery call or email the team.
