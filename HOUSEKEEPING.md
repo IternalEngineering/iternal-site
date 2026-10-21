@@ -226,7 +226,7 @@ booking invite.
 - **Discovery calls** — every "Book a Call" and "Book a Discovery Call" (menu, footer,
   heroes and closing sections on all pages) opens John's Google Calendar schedule
   "Disco Meeting", https://calendar.app.google/fNGuEjKBSpoPMhAL6, in a new tab (since
-  21 Oct 2026). Changing it is a find-and-replace of that URL across `*.html` and
+  21 Oct 2026). Its slots are 60 minutes, which is what every page and llms.txt say. Changing it is a find-and-replace of that URL across `*.html` and
   llms.txt. "Book a Workshop" and the other enquiry buttons stay on /contact.
 - `questions.html` `BOOKING_URL` — the website sign-up's own Google Calendar appointment schedule.
   Lives here only. A plain schedule: no payment step.
