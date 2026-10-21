@@ -151,8 +151,8 @@ the token awaits org approval), so the worker can deploy regardless.
   including VAT** (`TERMS.downpayment` and `TERMS.completion` in the worker; the
   order also carries the £750 total as `buildFee`). The care plan is **£50 a
   month including VAT**. Every figure in the order includes VAT, the order
-  again overriding the terms' "all fees exclude VAT"; from the month after the site goes live, which includes the web
-  agent (our studio). Invoices are payable within 14 days. Per-client
+  again overriding the terms' "all fees exclude VAT"; from the month after the site goes live, which includes Site
+  Agent (our agentic studio). Invoices are payable within 14 days. Per-client
   pricing is planned: the order's figures are its own fields for that reason.
 - **Accepting is the last step of sign-up**, on start.html, and forms the
   agreement. The worker briefs the team to invoice the downpayment. Nothing on

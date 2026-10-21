@@ -19,9 +19,9 @@ Key facts:
 
 ## Services
 
-- [Services overview](https://iternal.co.uk/services): The ways to work with Iternal, each with its own page, plus pricing, how projects run, case studies, the sectors it covers and frequently asked questions.
+- [Services overview](https://iternal.co.uk/services): The ways to work with Iternal, each with its own page and the case studies that belong to it, plus pricing, how projects run, the sectors it covers and frequently asked questions.
 - [Workshops & Training](https://iternal.co.uk/workshops-training): The half-day AI Discovery Workshop produces a ranked list of AI opportunities and a 90-day roadmap with costings, and is usually complete within two weeks of booking. Team and executive AI training is also available.
-- [AI Automations & Assistants](https://iternal.co.uk/ai-automations): Chatbots, knowledge bases, document processing, and Slack, email and CRM automation, built in days rather than months. Includes Site Agent, an AI assistant that updates the text and images on a client's own website from plain-English requests.
+- [AI Automations & Assistants](https://iternal.co.uk/ai-automations): Chatbots, knowledge bases, document processing, and Slack, email and CRM automation, built in days rather than months. Includes Site Agent, Iternal's agentic studio: an AI assistant that updates the text and images on a client's own website from plain-English requests.
 - [Agentic AI Builds](https://iternal.co.uk/agentic-ai-builds): End-to-end design and delivery of production agentic systems, including multi-step autonomous workflows, retrieval (RAG) systems on proprietary knowledge, and public-sector and regulated deployments. This is Iternal's most requested service.
 - [AI Strategy & Advisory](https://iternal.co.uk/ai-strategy-advisory): Starts with an AEO (answer engine optimisation) audit of how AI assistants and AI search see the organisation, with a scored report and ranked fixes. Then board-level AI strategy and due diligence, AI governance and compliance frameworks, architecture reviews, vendor and model selection, organisation-wide capability building, and fractional Chief AI Officer engagements or ongoing retainers.
 
@@ -37,5 +37,5 @@ All of these systems are live in production.
 
 ## Company
 
-- [About](https://iternal.co.uk/about): Why Iternal exists, its operating principles, the team, and how projects run from discovery to support.
+- [About](https://iternal.co.uk/about): Why Iternal exists, its Forge delivery model, and the organisations it has built alongside.
 - [Contact](https://iternal.co.uk/contact): How to book a free 30-minute discovery call or email the team.

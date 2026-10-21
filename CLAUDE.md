@@ -45,15 +45,16 @@ answers.
   build dashboard. The worker commits `clients/<slug>.json` there; the
   `website-demo-build` skill drains its `demoRequested` queue. Its own
   CLAUDE.md and README hold the data contract.
-- Pricing language comes from the terms (version 1.0, 13 Oct 2026) and the
-  order the client accepts, which takes priority where they differ: since 20
+- Pricing comes from the order the team set, never from the terms: since 20
   Oct 2026 the order states a £100 downpayment + £650 upon completion,
-  including VAT (the terms' default is £750 paid 50/50); care plan £50 a month
-  including VAT from the month after the site goes live, which includes the web agent (our
-  studio) for the client's own updates. Pages restate these
-  and never add to them: no figure, promise or refund the terms do not
-  make. Every place a figure is printed is listed in HOUSEKEEPING.md
-  §Payment.
+  including VAT; care plan £50 a month including VAT from the month after the
+  site goes live, which includes Site Agent (our agentic studio) for the
+  client's own updates. **The terms file (version 1.0, 13 Oct 2026) is
+  invalid** (Robbie, 20-21 Oct 2026): it stays in the preview sign-up only
+  until the real terms are supplied, and no fact, figure, name or promise is
+  ever taken from it, in copy or in reviews. Pages never add a figure,
+  promise or refund the team has not set. Every place a figure is printed is
+  listed in HOUSEKEEPING.md §Payment.
 - Do not promise a number of concepts ("two or three") anywhere on these
   pages. We show them; we do not announce them.
 - `SITE-CHANGES.md` is the running log of what a visitor would notice, in

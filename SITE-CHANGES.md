@@ -29,8 +29,12 @@ nothing new written).
   UK" (the search data already carried it; the site audit asked for it on the page). (rebuild 11)
 
 #### Services
-- **"AI that actually shipped" is hidden on Services for now**: the same work is on the
-  homepage, the case pages and Agentic AI Builds. (rebuild 20)
+- **Each case study sits with its service, not on the Services hub**: Agentic AI Builds
+  shows the GLA, CivicNetZero, bPlaced and Bristol Children's Hospital, two by two; AI
+  Strategy & Advisory shows Tech4Good, with room beside it for the First Bank and Covers
+  work. The hub no longer carries a hidden copy. (rebuild 21; hidden in rebuild 20)
+- **Site Agent is named as our agentic studio** on AI Automations and in the Tech4Good
+  gallery caption ("through Site Agent, our agentic studio"). (rebuild 21)
 - **The AEO audit is a single offer box** on AI Strategy & Advisory: the heading, one sentence
   and "Ask about an AEO audit" (was a paragraph and six points). (rebuild 20)
 - **The workshop no longer shows a price**: "AI Discovery Workshop: fixed price" on its card
