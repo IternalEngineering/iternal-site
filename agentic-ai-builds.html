@@ -543,7 +543,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 .f-links a:hover { color:var(--tan); }
 .f-bot { max-width:var(--max); margin:40px auto 0; padding-top:28px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
 .f-copy { font-size:13px; color:var(--t4); }
-.f-built { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--t5); }
 
 /* ── Hamburger button ── */
 .nav-hamburger {
@@ -770,6 +769,17 @@ a.ey:hover { color:var(--white); }
 .step-desc { font-size:14px; color:var(--t3); line-height:1.6; margin:2px 0 4px; }
 @media (max-width:768px) { .tier-list.point-grid, .cases-grid.two { grid-template-columns:1fr; } }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Agentic AI Builds",
+  "description": "End-to-end design and delivery of production agentic AI systems.",
+  "url": "https://iternal.co.uk/agentic-ai-builds",
+  "provider": { "@type": "Organization", "@id": "https://iternal.co.uk/#organization", "name": "Iternal", "url": "https://iternal.co.uk/" },
+  "areaServed": "GB"
+}
+</script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -823,7 +833,7 @@ a.ey:hover { color:var(--white); }
     <p class="page-hero-sub">End-to-end design and delivery of production agentic AI systems. Systems that plan, reason and execute across your real infrastructure, not just generate text.</p>
     <div class="svc-price">From around £25k, scaling with complexity</div>
     <div class="hero-ctas">
-      <a href="/contact" class="btn-sun">
+      <a href="/contact?service=builds" class="btn-sun">
         Talk about a build
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
@@ -861,7 +871,7 @@ a.ey:hover { color:var(--white); }
         <div class="case-ph"><picture><source srcset="assets/screenshot-goodnews-mobile.webp" media="(max-width:700px)"><img width="1440" height="900" src="assets/screenshot-goodnews.webp" alt="Good News London homepage" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center;"></picture><a href="/case-good-news-london" aria-label="Good News London — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
         <div class="case-body">
           <div class="case-sector">Civic AI · Local Government</div>
-          <h3 class="case-name">Good News London: Greater London Authority</h3>
+          <h3 class="case-name">Good News London</h3>
           <div class="case-result">
             <div>
               <div class="case-result-label">Result</div>
@@ -876,7 +886,7 @@ a.ey:hover { color:var(--white); }
         <div class="case-ph"><img width="1200" height="813" src="assets/screenshot-civicnetzero.webp" alt="CivicNetZero city carbon intelligence platform" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center;"><a href="/case-civicnetzero" aria-label="CivicNetZero — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
         <div class="case-body">
           <div class="case-sector">Agentic Infrastructure · Sustainability</div>
-          <h3 class="case-name">CivicNetZero: Global Carbon Intelligence</h3>
+          <h3 class="case-name">CivicNetZero</h3>
           <div class="case-result">
             <div>
               <div class="case-result-label">Result</div>
@@ -891,7 +901,7 @@ a.ey:hover { color:var(--white); }
         <div class="case-ph"><img width="1440" height="900" src="assets/screenshot-bplaced.webp" alt="bPlaced care-placement matching platform" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:top center;"><a href="/case-bplaced" aria-label="bPlaced — view project details" style="position:absolute; inset:0; z-index:1;"></a></div>
         <div class="case-body">
           <div class="case-sector">AI Matching · Social Care</div>
-          <h3 class="case-name">bPlaced: Social Care Platform</h3>
+          <h3 class="case-name">bPlaced: Smarter Care</h3>
           <div class="case-result">
             <div>
               <div class="case-result-label">Result</div>
@@ -977,7 +987,7 @@ a.ey:hover { color:var(--white); }
       <h2 class="cta-h">Tell us what you're <span class="warm">working on.</span></h2>
       <p class="cta-p">Discovery calls are 30 minutes, focused and free. You'll come away with a clear view of how we'd approach it, whether you work with us or not.</p>
       <div class="cta-row">
-        <a href="/contact" class="btn-sun">
+        <a href="/contact?service=builds" class="btn-sun">
           Book a Discovery Call
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -1023,7 +1033,6 @@ a.ey:hover { color:var(--white); }
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
     <span class="f-copy">© 2026 Iternal Ltd · Company no. 10849262 · Bristol, UK</span>
-    <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
   </div>
 </footer>
 

@@ -15,6 +15,12 @@ On branch `website-rework` (the overhaul, phase 1: existing content rearranged o
 nothing new written).
 
 #### Whole site
+- **No "Built with Forge" line in the footer** (Forge is explained on About). (rebuild 24)
+- **Case studies lead somewhere**: each case's top link goes to its service (Agentic AI Builds,
+  or AI Strategy & Advisory for Tech4Good) instead of "Back to Work", and each closes with
+  "Next case: …" beside "See more work". (rebuild 24)
+- **Service buttons pre-fill the contact form**: arriving from a service page (or AI
+  Augmentation on the homepage) selects that service in "What kind of engagement?". (rebuild 24)
 - **The menu says "Services"** (was "What We Do"), and Insights is gone from the menu, the
   mobile menu and the footer. The footer no longer links to iternal.app, and its
   "Get in touch" goes to the contact page from every page. (rebuild 1)
@@ -29,6 +35,9 @@ nothing new written).
   UK" (the search data already carried it; the site audit asked for it on the page). (rebuild 11)
 
 #### Services
+- **Builds uses the homepage's case titles** (Good News London, CivicNetZero, bPlaced: Smarter
+  Care); the AEO box spells out "answer engine optimisation" and its button is the outline
+  style; /websites gets the "All services" link and clean /start links. (rebuild 24)
 - **Each case study sits with its service, not on the Services hub**: Agentic AI Builds
   shows the GLA, CivicNetZero, bPlaced and Bristol Children's Hospital, two by two; AI
   Strategy & Advisory shows Tech4Good, with room beside it for the First Bank and Covers
@@ -86,6 +95,10 @@ nothing new written).
   on top of them. (rebuild 3)
 
 #### Homepage
+- **A line under the headline says what agentic AI is** ("systems that plan, reason and
+  execute across your real infrastructure, not just generate text", from the Builds page), and
+  Tech4Good joins the client strip. The first screen still ends with the strip on laptops,
+  short ones included. (rebuild 24)
 - **"Ways to work" is tighter**: each row is about 80px on a laptop (was 107–132px), with
   less padding, a wider description so most fit on two lines, and a slightly smaller name;
   the section is 774px from 988px. (rebuild 17)
@@ -101,6 +114,7 @@ nothing new written).
   button. (rebuild 3)
 
 #### About
+- **"See our services"** joins the closing buttons. (rebuild 24)
 - **Says "AI consultancy"** (was "AI agency") under the hero. (rebuild 3)
 - **The Forge section replaces "Our operating principles"**, and "From first
   conversation to live system" is gone (the process is on Services). (rebuild 3)
@@ -110,6 +124,7 @@ nothing new written).
   people", and llms.txt no longer lists the team. (rebuild 7)
 
 #### Contact
+- **The dropdown says "Websites"** and the thank-you message points to "our services". (rebuild 24)
 - **"Good reasons to reach out" sits beside the form** (above it on a phone) instead of
   below it. (rebuild 4)
 - **"What kind of engagement?" lists the services by their names on the Services
@@ -131,6 +146,9 @@ nothing new written).
   instead of four. (rebuild 6)
 
 #### Behind the pages
+- **The four AI service pages carry Service structured data**; the go-live checklist adds
+  Websites to llms.txt on launch day. The website sign-up's "Book your call" now opens the
+  website-build calendar (John's, 60 minutes) instead of Paul's. (rebuild 24)
 - **Search and AI descriptions use the same four service names**: the Services page's
   search description, and llms.txt (Enterprise Strategy and Consultancy & Advisory are
   one entry, AI Strategy & Advisory). The sitemap no longer lists Insights, and its

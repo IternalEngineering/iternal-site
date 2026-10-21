@@ -27,7 +27,7 @@ no promise that new sites are coming. Once the call is made, four places move
 together:
 
 1. `websites.html` — the gallery entry (label, description, screenshot img,
-   and the "Start yours" button whose `start.html?from=<slug>` link tags the
+   and the "Start yours" button whose `/start?from=<slug>` link tags the
    sign-up with the example that hooked them). The screenshot is wrapped in
    an `<a class="g-view">` to the live site with `data-embed`, which opens
    the click in the lightbox instead of a new tab. That needs the site's
@@ -283,7 +283,7 @@ when the answer is go. About ten minutes; one commit, then the deploy.
        <a href="/websites" class="svc-cta">Learn More <!-- the arrow svg the other rows use --></a>
      </div>
      ```
-   - contact.html: add `<option>Website</option>` to "What kind of
+   - contact.html: add `<option>Websites</option>` to "What kind of
      engagement?", before "Not sure yet".
    - Check: `grep -c 'id="websites" hidden' services.html` gives 0 and
      `grep -c 'href="/websites"' index.html` gives 1.
@@ -292,7 +292,9 @@ when the answer is go. About ten minutes; one commit, then the deploy.
    `noindex` (a step page, reached only after sign-up).
 3. **The sitemap.** In `sitemap.xml`, after contact:
    `<url><loc>https://iternal.co.uk/websites</loc><lastmod>YYYY-MM-DD</lastmod><priority>0.8</priority></url>`,
-   with that day's date.
+   with that day's date. In `llms.txt`, add a Websites entry under "## Services", after AI
+   Strategy & Advisory: `- [Websites](https://iternal.co.uk/websites): Not every project needs a
+   platform. Sometimes you need a really good website, designed, built and live in weeks.`
 4. **The preview gate**, in start.html's script: delete the "Dark-launch
    preview gate" block (the `PREVIEW` constant, the disabled button, the
    "Preview" notes and the gold "In testing" banner), the

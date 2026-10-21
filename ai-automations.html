@@ -543,7 +543,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 .f-links a:hover { color:var(--tan); }
 .f-bot { max-width:var(--max); margin:40px auto 0; padding-top:28px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
 .f-copy { font-size:13px; color:var(--t4); }
-.f-built { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--t5); }
 
 /* ── Hamburger button ── */
 .nav-hamburger {
@@ -769,6 +768,17 @@ a.ey:hover { color:var(--white); }
 .step-desc { font-size:14px; color:var(--t3); line-height:1.6; margin:2px 0 4px; }
 @media (max-width:768px) { .tier-list.point-grid { grid-template-columns:1fr; } }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "AI Automations & Assistants",
+  "description": "Fast-to-deploy AI that takes repetitive work off your team's plate and gives your customers or staff an intelligent first line of response.",
+  "url": "https://iternal.co.uk/ai-automations",
+  "provider": { "@type": "Organization", "@id": "https://iternal.co.uk/#organization", "name": "Iternal", "url": "https://iternal.co.uk/" },
+  "areaServed": "GB"
+}
+</script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -822,7 +832,7 @@ a.ey:hover { color:var(--white); }
     <p class="page-hero-sub">Fast-to-deploy AI that takes repetitive work off your team's plate and gives your customers or staff an intelligent first line of response. Built in days, not months.</p>
     <div class="svc-price">Typically £5k–£15k</div>
     <div class="hero-ctas">
-      <a href="/contact" class="btn-sun">
+      <a href="/contact?service=automations" class="btn-sun">
         Start here
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
@@ -859,7 +869,7 @@ a.ey:hover { color:var(--white); }
       <li>Works within your site's existing design</li>
       <li>Every change can be undone</li>
     </ul>
-    <div class="hero-ctas" style="margin-top:32px"><a href="/contact" class="btn-outline">Talk to us about Site Agent</a></div>
+    <div class="hero-ctas" style="margin-top:32px"><a href="/contact?service=automations" class="btn-outline">Talk to us about Site Agent</a></div>
   </div>
 </section>
 
@@ -870,7 +880,7 @@ a.ey:hover { color:var(--white); }
       <h2 class="cta-h">Tell us what you're <span class="warm">working on.</span></h2>
       <p class="cta-p">Discovery calls are 30 minutes, focused and free. You'll come away with a clear view of how we'd approach it, whether you work with us or not.</p>
       <div class="cta-row">
-        <a href="/contact" class="btn-sun">
+        <a href="/contact?service=automations" class="btn-sun">
           Book a Discovery Call
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -916,7 +926,6 @@ a.ey:hover { color:var(--white); }
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
     <span class="f-copy">© 2026 Iternal Ltd · Company no. 10849262 · Bristol, UK</span>
-    <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
   </div>
 </footer>
 

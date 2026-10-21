@@ -326,7 +326,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 .f-links a:hover { color:var(--tan); }
 .f-bot { max-width:var(--max); margin:40px auto 0; padding-top:28px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
 .f-copy { font-size:13px; color:var(--t4); }
-.f-built { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--t5); }
 
 /* ── Hamburger button ── */
 .nav-hamburger {
@@ -708,7 +707,7 @@ html { overflow-x:clip; }
               <option>AI Automations &amp; Assistants</option>
               <option>Agentic AI Builds</option>
               <option>AI Strategy &amp; Advisory</option>
-              <option>Website</option>
+              <option>Websites</option>
               <option>Not sure yet? Let's talk</option>
             </select>
           </div>
@@ -745,7 +744,7 @@ html { overflow-x:clip; }
             <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
           <h3 class="success-h">Message sent.</h3>
-          <p class="success-p">We aim to come back to you within one working day. In the meantime, take a look at <a href="/services" style="color:var(--tan)">what we do</a> or <a href="/#work" style="color:var(--tan)">our work</a>.</p>
+          <p class="success-p">We aim to come back to you within one working day. In the meantime, take a look at <a href="/services" style="color:var(--tan)">our services</a> or <a href="/#work" style="color:var(--tan)">our work</a>.</p>
         </div>
 
       </div>
@@ -786,7 +785,6 @@ html { overflow-x:clip; }
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
     <span class="f-copy">© 2026 Iternal Ltd · Company no. 10849262 · Bristol, UK</span>
-    <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
   </div>
 </footer>
 
@@ -826,6 +824,16 @@ document.querySelectorAll('.budget-chip').forEach(chip=>{
 });
 
 /* ── Form submit via FormSubmit ── */
+/* ── Pre-select the service the visitor came from (/contact?service=…) ── */
+(function(){
+  var labels = { workshops:'Workshops & Training', automations:'AI Automations & Assistants', builds:'Agentic AI Builds',
+                 advisory:'AI Strategy & Advisory', websites:'Websites', unsure:"Not sure yet? Let's talk" };
+  var want = labels[new URLSearchParams(location.search).get('service')];
+  var sel = document.getElementById('engagement');
+  if (!want || !sel) return;
+  for (var i = 0; i < sel.options.length; i++) if (sel.options[i].text === want) { sel.selectedIndex = i; break; }
+})();
+
 const form = document.getElementById('contactForm');
 const submitBtn = document.getElementById('submitBtn');
 

@@ -259,7 +259,6 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 
 }
 
-/* ── Word-by-word title reveal (Composio style) ── */
 .hero-h1 {
   font-size:clamp(48px, min(8.5vw, 10.5vh), 112px);
   font-weight:900; line-height:.94;
@@ -288,6 +287,14 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   color:var(--t2); max-width:500px;
 }
 .hero-p strong { color:var(--white); font-weight:700; }
+.hero-def { font-size:16px; line-height:1.6; color:var(--t3); max-width:520px; margin-bottom:-12px; }
+/* Short laptop screens: tighter hero spacing so the client strip still ends the first screen */
+@media (min-width:1025px) and (max-height:820px) {
+  .hero-in { padding-top:76px; }
+  .hero-body { gap:20px; }
+  .hero-def { margin-bottom:-8px; }
+  .hero-p { line-height:1.6; }
+}
 
 .hero-actions { display:flex; flex-direction:row; align-items:center; gap:28px; }
 
@@ -341,7 +348,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 
 .cl-item {
-  padding:0 40px;
+  padding:0 28px;
   border-right:1px solid var(--border);
   display:flex; flex-direction:column; align-items:center;
   white-space:nowrap;
@@ -679,7 +686,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   display:flex; justify-content:space-between; align-items:center;
 }
 .f-copy { font-size:13px; color:var(--t4); }
-.f-built { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--t5); }
 
 /* ============================================================
    SCROLL REVEAL
@@ -969,6 +975,7 @@ html { overflow-x:clip; }
     </h1>
 
     <div class="hero-body">
+      <p class="hero-def">Agentic AI: systems that plan, reason and execute across your real infrastructure, not just generate text.</p>
       <p class="hero-p">
         Most AI projects stall between proof-of-concept and production. Iternal specialises in the gap, building systems that are <strong>live inside the NHS, the Greater London Authority and civic infrastructure across three continents.</strong>
       </p>
@@ -997,6 +1004,7 @@ html { overflow-x:clip; }
       <div class="cl-item"><span class="cl-name">CivicNetZero</span><span class="cl-sec">Civic Innovation</span></div>
       <div class="cl-item"><span class="cl-name">bPlaced</span><span class="cl-sec">Social Care</span></div>
       <div class="cl-item"><span class="cl-name">First Bank UK</span><span class="cl-sec">Financial Services</span></div>
+      <div class="cl-item"><span class="cl-name">Tech4Good</span><span class="cl-sec">Social Impact</span></div>
     </div>
   </div>
 </section>
@@ -1044,7 +1052,7 @@ html { overflow-x:clip; }
         <div class="svc-top-line"></div>
         <h3 class="svc-h">AI Augmentation</h3>
         <p class="svc-p">Embed Iternal's augmented delivery model inside your team. We install the tools, workflows and agent infrastructure so your people operate at a level they couldn't reach alone.</p>
-        <a href="/contact" class="svc-cta">Talk to Us <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="/contact?service=unsure" class="svc-cta">Talk to Us <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
       </div>
     </div>
   </div>
@@ -1176,7 +1184,6 @@ html { overflow-x:clip; }
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
     <span class="f-copy">© 2026 Iternal Ltd · Company no. 10849262 · Bristol, UK</span>
-    <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
   </div>
 </footer>
 
