@@ -14,6 +14,10 @@ Last deploy: **20 Oct 2026, third deploy** (version f85a948c; pushing to main de
 On branch `website-rework` (the overhaul, phase 1: existing content rearranged or removed,
 nothing new written).
 
+**For this release, Websites stays hidden**: the Services entry and the homepage row are
+in the pages but hidden, and the contact form has no Websites option, until the website
+sign-up launches. The Websites lines below describe the launch-day state.
+
 #### Whole site
 - **No "Built with Forge" line in the footer** (Forge is explained on About). (rebuild 24)
 - **Case studies lead somewhere**: each case's top link goes to its service (Agentic AI Builds,
