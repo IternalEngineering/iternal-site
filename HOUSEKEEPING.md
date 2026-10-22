@@ -174,36 +174,39 @@ the token awaits org approval), so the worker can deploy regardless.
     is removed at light-up). The real order table on "Review and accept"
     takes its figures from the worker. The meta description no longer
     carries prices (20 Oct 2026).
+  - The booking page's payment amount (Google Calendar, hello@iternal.life):
+    it must equal the downpayment, or the worker ignores the payment as not
+    a booking.
   - The Lead Tracker (`../lead-tracker`, `apps-script/LeadApi.gs`): every
     website lead starts with `budget: 750`.
 - **Booking payment (restored 22 Oct 2026, at the team's request).** A booking
-  is confirmed only once its payment is. Three parts, two of them set up
-  outside the code:
-  1. The website-build booking schedule (`BOOKING_URL`, John's "Disco
-     Meeting") requires payment: in that Google account, Calendar → the
-     appointment schedule → Payments → Require payment, connect Iternal's
-     Stripe account, amount = the downpayment. Google then confirms a
-     booking only once Stripe has taken it. (Needs a Workspace plan that
-     offers payments; Stripe's brand name is "Iternal Ltd".)
+  is confirmed only once its £100 payment is. The final payment is completely
+  separate and outside this project. Three parts, two of them set up outside
+  the code:
+  1. The website-build booking schedule lives in the **hello@iternal.life**
+     Google account (Robbie, 22 Oct 2026; not John's). It requires payment:
+     Calendar → the appointment schedule → Payments → Require payment, connect
+     Iternal's Stripe account, amount £100 = `TERMS.downpayment`. Google then
+     confirms a booking only once Stripe has taken it. (Needs a Workspace plan
+     that offers payments; Stripe's brand name is "Iternal Ltd".) Its booking
+     link goes in `questions.html` `BOOKING_URL` (Page-side switches).
   2. Stripe dashboard → Developers → Webhooks: endpoint
      `https://api.iternal.co.uk/stripe-webhook`, events
      `payment_intent.succeeded` and `checkout.session.completed`. Its signing
-     secret is `STRIPE_WEBHOOK_SECRET` on the worker (`npx wrangler secret put
-     STRIPE_WEBHOOK_SECRET` from `worker/` if it is ever rotated or gone).
-  3. The worker (`handleStripeWebhook`) matches the payer by email, records the
-     payment once (`stripe:<payment intent>` in KV; retries and duplicate
-     events change nothing), briefs the team and notes it in the tracker.
-     It names each payment by the client's order: the £100 downpayment is
-     "booking paid", the £650 is "completion paid", anything else "payment
-     received". Someone who pays with a different email from their sign-up
-     arrives as an UNMATCHED brief to match by hand. Payment never reaches the
-     platform repo. The questions page tells the client booking takes their
-     downpayment and the call is confirmed once it is paid.
-  4. **On completion** the team sends the client a Stripe payment link for the
-     £650. The same webhook records it. A payment link's payment event names
-     no payer, so the team may first get "payment received — no payer email
-     yet", followed by "completion paid" once the link's Checkout event
-     matches it (which is why the endpoint listens for both events).
+     secret is `STRIPE_WEBHOOK_SECRET` on the worker (still set on 22 Oct 2026;
+     `npx wrangler secret put STRIPE_WEBHOOK_SECRET` from `worker/` if the
+     endpoint is recreated or its secret rolled).
+  3. The worker (`handleStripeWebhook`) acts only on a payment of the booking
+     amount (the client's order downpayment, else `TERMS.downpayment`); every
+     other payment on the account is ignored, so the two must stay equal. It
+     matches the payer by email, records the payment once
+     (`stripe:<payment intent>` in KV; retries and duplicate events change
+     nothing), briefs the team and notes it in the tracker. A booking paid
+     from an email that matches no sign-up arrives as an UNMATCHED brief; one
+     whose event names no payer warns the team and stays open for the
+     Checkout event that names them. Payment never reaches the platform repo.
+     The questions page tells the client booking takes their downpayment and
+     the call is confirmed once it is paid.
 
 ## Team briefs (email)
 
@@ -249,11 +252,13 @@ booking invite.
   shows success only once the worker has the sign-up.
 - `questions.html` `WORKER_URL` — `https://api.iternal.co.uk`; an empty
   string falls back to FormSubmit (the pre-worker path, not in use).
-- `questions.html` `BOOKING_URL` — the website-build meeting: John's Google Calendar
-  schedule "Disco Meeting" (60 minutes), https://calendar.app.google/fNGuEjKBSpoPMhAL6
-  (since 21 Oct 2026; was Paul's "A chat with Paul"). It is strictly for website-build
-  meetings (Robbie): every other "Book a Call" / "Book a Discovery Call" goes to /contact,
-  and those discovery calls stay "30 minutes".
+- `questions.html` `BOOKING_URL` — the website-build meeting. From 22 Oct 2026 the
+  schedule lives in the hello@iternal.life Google account and requires the £100
+  booking payment (§Payment); until its link is in, this still holds John's
+  "Disco Meeting" (https://calendar.app.google/fNGuEjKBSpoPMhAL6), which has no
+  payment. It is strictly for website-build meetings (Robbie): every other
+  "Book a Call" / "Book a Discovery Call" goes to /contact, and those discovery
+  calls stay "30 minutes".
   Lives here only. It requires payment through Stripe: see §Payment.
 
 ## Go-live (dark launch)

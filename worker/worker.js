@@ -25,12 +25,14 @@
  *                         by the email they give in the first question. The
  *                         first answers queue the pre-call demo build
  *                         (demoRequested) in the pipeline repo.
- *   POST /stripe-webhook  Stripe calls this when a payment succeeds: the £100
- *                         downpayment at booking, or the completion payment by
- *                         the Stripe link the team sends. The payer is matched
- *                         to their sign-up by email, the payment is recorded in
- *                         KV, and the team and the tracker are told. Payment
- *                         never reaches the pipeline repo.
+ *   POST /stripe-webhook  Stripe calls this when a payment succeeds. Only the
+ *                         booking payment (the order's downpayment) concerns
+ *                         the funnel: the payer is matched to their sign-up by
+ *                         email, the payment is recorded in KV, and the team
+ *                         and the tracker are told. Every other payment on the
+ *                         account, the final payment included, is outside this
+ *                         project and ignored. Payment never reaches the
+ *                         pipeline repo.
  *   GET  /health          Liveness check.
  *
  * Clients get ONE email from us: on accepting, a copy of their order and the
@@ -503,13 +505,13 @@ async function handleAccept(request, env, ctx) {
 ${orderText(acc)}
 Accepted: ${ukTime(acc.acceptedAt)} (UK time)
 
-The £${acc.downpayment} downpayment (including VAT) is taken when they book their call: the booking page charges it through Stripe and the booking stands only once it is paid. A brief follows when the payment lands. £${acc.completion} (including VAT) is due on completion: send them a Stripe payment link then. They have been emailed a copy of the order and the terms.
+The £${acc.downpayment} downpayment (including VAT) is taken when they book their call: the booking page charges it through Stripe and the booking stands only once it is paid. A brief follows when the payment lands. £${acc.completion} (including VAT) follows on completion. They have been emailed a copy of the order and the terms.
 Their questions come next; a brief follows when they answer.`),
     postToLeadTracker(env, {
       org: acc.company, contact: acc.name, email, website: kv.website || '', reference: acc.reference,
       source: 'website funnel', event: 'accepted',
       message: `Accepted the ${TERMS.name}, version ${acc.termsVersion} (reference ${acc.reference}). `
-        + `Build fee £${acc.downpayment} downpayment + £${acc.completion} upon completion, including VAT: the downpayment is taken when they book their call; the completion payment goes by a Stripe link the team sends on completion. `
+        + `Build fee £${acc.downpayment} downpayment + £${acc.completion} upon completion, including VAT: the downpayment is taken when they book their call. `
         + `Care plan £${acc.carePlan} per month including VAT from the month after the site goes live.`,
     }),
     syncToPipeline(env, email, 'accepted the terms'),
@@ -639,48 +641,44 @@ async function handleStripeWebhook(request, env, ctx) {
   if (await env.CLIENTS.get(seen)) return json(200, { received: true, duplicate: true });
   const email = s(pay.email, 120).toLowerCase();
   const paid = money(pay.amount, pay.currency);
-
-  // A payment must never pass silently. One without an email is not marked as
-  // handled: a payment link reports the payer's email only on its Checkout
-  // event, which may follow and match it properly.
-  if (!email) {
-    ctx.waitUntil(sendTeamEmail(env, 'Website Pipeline: payment received — no payer email yet',
-      `A payment of ${paid} arrived (${pay.id}) without a payer email. If a "paid" brief for the same payment follows, it has been matched; otherwise match it by hand in Stripe and the Lead Tracker.`));
-    return json(200, { received: true, unmatched: true });
-  }
   const key = `lead:${email}`;
   const kv = EMAIL.test(email) ? await env.CLIENTS.get(key, 'json') : null;
+
+  // Only the booking payment concerns the funnel. Every other payment on the
+  // Stripe account (the final payment, other work) is outside this project.
+  const pence = n => Math.round((n || 0) * 100);
+  const booking = pence((kv && kv.acceptance && kv.acceptance.downpayment) || TERMS.downpayment);
+  if (pay.amount !== booking) return json(200, { received: true, ignored: 'not a booking payment' });
+
+  // A booking payment must never pass silently. One without an email is not
+  // marked as handled: a Checkout event naming the payer may follow it.
+  if (!email) {
+    ctx.waitUntil(sendTeamEmail(env, 'Website Pipeline: booking payment received — no payer email yet',
+      `A booking payment of ${paid} arrived (${pay.id}) without a payer email. If a "booking paid" brief for the same payment follows, it has been matched; otherwise match it by hand in Stripe and the Lead Tracker.`));
+    return json(200, { received: true, unmatched: true });
+  }
   await env.CLIENTS.put(seen, email);
   if (!kv) {
-    ctx.waitUntil(sendTeamEmail(env, 'Website Pipeline: payment received — UNMATCHED',
-      `A payment of ${paid} arrived (${pay.id}) from ${email}, which matches no sign-up. Match it by hand in Stripe and the Lead Tracker.`));
+    ctx.waitUntil(sendTeamEmail(env, 'Website Pipeline: booking payment received — UNMATCHED',
+      `A booking payment of ${paid} arrived (${pay.id}) from ${email}, which matches no sign-up. Match it by hand in Stripe and the Lead Tracker.`));
     return json(200, { received: true, unmatched: true });
   }
 
-  // The £100 downpayment comes with the booking (Google Calendar); the
-  // completion payment by a Stripe link the team sends when the site is done.
-  const acc = kv.acceptance || {};
-  const pence = n => Math.round((n || 0) * 100);
-  const kind = pay.amount === pence(acc.downpayment || TERMS.downpayment) ? 'booking'
-    : pay.amount === pence(acc.completion || TERMS.completion) ? 'completion' : 'payment';
-  const said = { booking: ['booking paid', 'so their call booking stands', 'Booking paid'],
-    completion: ['completion paid', 'the completion payment: the build fee is paid in full', 'Completion paid'],
-    payment: ['payment received', 'which matches neither the downpayment nor the completion payment on their order', 'Payment received'] }[kind];
-
-  kv.payments = [...(kv.payments || []), { id: pay.id, kind, amount: pay.amount, currency: s(pay.currency, 10), paidAt: new Date().toISOString() }];
+  kv.payments = [...(kv.payments || []), { id: pay.id, amount: pay.amount, currency: s(pay.currency, 10), paidAt: new Date().toISOString() }];
   await env.CLIENTS.put(key, JSON.stringify(kv));
+  const acc = kv.acceptance || {};
   const who = acc.company || kv.organisation || email;
 
   ctx.waitUntil(Promise.allSettled([
-    sendTeamEmail(env, `Website Pipeline: ${said[0]} — ${who}`,
-      `${acc.name || kv.name || email} (${who}${acc.reference ? `, reference ${acc.reference}` : ''}) paid ${paid}, ${said[1]}.
+    sendTeamEmail(env, `Website Pipeline: booking paid — ${who}`,
+      `${acc.name || kv.name || email} (${who}${acc.reference ? `, reference ${acc.reference}` : ''}) paid ${paid}, so their call booking stands.
 Payment: ${pay.id}${acc.acceptedAt ? '' : '\nThey have not accepted the terms yet.'}`),
     postToLeadTracker(env, {
       org: who, contact: acc.name || kv.name || '', email, reference: acc.reference || kv.reference || '',
-      source: 'website funnel', message: `${said[2]}: ${paid} via Stripe (payment ${pay.id}).`,
+      source: 'website funnel', message: `Booking paid: ${paid} via Stripe (payment ${pay.id}).`,
     }),
   ]));
-  return json(200, { received: true, kind });
+  return json(200, { received: true });
 }
 
 /* ── Archived clients ────────────────────────────────────────────────────
