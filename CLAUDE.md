@@ -74,8 +74,8 @@ answers.
 
 - **Dark launch**: no public page on main links to the funnel. The Websites
   entry on Services and the homepage row are in the pages but `hidden`, and
-  the contact form has no Websites option (HOUSEKEEPING.md §Go-live step 1);
-  branch `website-rework` keeps them visible for review. websites.html and
+  the contact form has no Websites option (HOUSEKEEPING.md §Go-live step 1).
+  websites.html and
   start.html are `noindex`; sitemap never lists them. Lighting up = the
   checklist in HOUSEKEEPING.md §Go-live, done on main on the day.
 - **Preview** (`preview.js`, on start.html and questions.html): every

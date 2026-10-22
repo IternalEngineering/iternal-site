@@ -267,7 +267,7 @@ when the answer is go. About ten minutes; one commit, then the deploy.
    questions.html already mark "Services" as the current section.
    On main the Websites entry and homepage row are already in place but
    carry `hidden`, and the contact option is left out (the rework release,
-   Oct 2026); branch `website-rework` keeps them visible for review.
+   Oct 2026).
    - services.html: delete `hidden` from `<div class="tier tier-wide"
      id="websites" hidden>` and the comment line above it. Also add
      ", and websites" back to the end of its three meta descriptions
