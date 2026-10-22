@@ -193,10 +193,17 @@ the token awaits org approval), so the worker can deploy regardless.
   3. The worker (`handleStripeWebhook`) matches the payer by email, records the
      payment once (`stripe:<payment intent>` in KV; retries and duplicate
      events change nothing), briefs the team and notes it in the tracker.
-     Someone who books with a different email from their sign-up arrives as
-     an UNMATCHED brief to match by hand. Payment never reaches the platform
-     repo. The questions page tells the client booking takes their
+     It names each payment by the client's order: the £100 downpayment is
+     "booking paid", the £650 is "completion paid", anything else "payment
+     received". Someone who pays with a different email from their sign-up
+     arrives as an UNMATCHED brief to match by hand. Payment never reaches the
+     platform repo. The questions page tells the client booking takes their
      downpayment and the call is confirmed once it is paid.
+  4. **On completion** the team sends the client a Stripe payment link for the
+     £650. The same webhook records it. A payment link's payment event names
+     no payer, so the team may first get "payment received — no payer email
+     yet", followed by "completion paid" once the link's Checkout event
+     matches it (which is why the endpoint listens for both events).
 
 ## Team briefs (email)
 

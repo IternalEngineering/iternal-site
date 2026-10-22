@@ -277,7 +277,7 @@ await drain();
   // the team is told the downpayment comes with the booking; the tracker gets a note, never answers
   const brief = teamMail.find(t => t.raw.includes('Subject: Website Pipeline: terms accepted — Kilnworks'));
   assert.ok(brief && brief.raw.includes('£100 downpayment (including VAT) is taken when they book their call'));
-  assert.ok(brief.raw.includes('£650 (including VAT) follows on completion'));
+  assert.ok(brief.raw.includes('£650 (including VAT) is due on completion: send them a Stripe payment link then'));
   assert.ok(!brief.raw.includes('send the invoice'));
   const note = outbound.find(o => o.url.includes('action=createLead'));
   assert.strictEqual(note.body.event, 'accepted');
@@ -298,7 +298,7 @@ teamMail.length = 0; clientMail.length = 0; outbound = [];
   await drain();
   const rec = JSON.parse(store.get('lead:omar@kilnworks.co.uk'));
   assert.strictEqual(rec.payments.length, 1);
-  assert.deepStrictEqual({ ...rec.payments[0], paidAt: 'x' }, { id: 'pi_omar', amount: 10000, currency: 'gbp', paidAt: 'x' });
+  assert.deepStrictEqual({ ...rec.payments[0], paidAt: 'x' }, { id: 'pi_omar', kind: 'booking', amount: 10000, currency: 'gbp', paidAt: 'x' });
   assert.strictEqual(teamMail.length, 1);
   assert.ok(teamMail[0].raw.includes('Subject: Website Pipeline: booking paid — Kilnworks'));
   assert.ok(teamMail[0].raw.includes(`Omar Haddad (Kilnworks, reference ${rec.acceptance.reference}) paid £100, so their call booking stands.`));
@@ -320,28 +320,46 @@ teamMail.length = 0; outbound = [];
   assert.strictEqual(store.get('lead:omar@kilnworks.co.uk'), before);
   assert.strictEqual(teamMail.length + outbound.length, 0);
 }
-// a Checkout payment arriving only as checkout.session.completed is matched by its customer email
+// the completion payment, by the Stripe link the team sends: its payment
+// event names no payer, which warns the team without closing the payment;
+// the link's Checkout event then matches it by the customer's email
+teamMail.length = 0; outbound = [];
 {
-  r = await stripe({ type: 'checkout.session.completed', data: { object: { id: 'cs_2', payment_intent: 'pi_omar_2', payment_status: 'paid', amount_total: 2550, currency: 'gbp', customer_details: { email: 'omar@kilnworks.co.uk' } } } });
-  assert.strictEqual(r.status, 200);
+  r = await stripe({ type: 'payment_intent.succeeded', data: { object: { id: 'pi_link', amount: 65000, amount_received: 65000, currency: 'gbp' } } });
+  assert.strictEqual((await r.json()).unmatched, true);
+  await drain();
+  assert.ok(teamMail[0].raw.includes('Subject: Website Pipeline: payment received — no payer email yet'));
+  assert.ok(!store.has('stripe:pi_link'));
+  teamMail.length = 0;
+  r = await stripe({ type: 'checkout.session.completed', data: { object: { id: 'cs_2', payment_intent: 'pi_link', payment_link: 'plink_1', payment_status: 'paid', amount_total: 65000, currency: 'gbp', customer_details: { email: 'omar@kilnworks.co.uk' } } } });
+  assert.strictEqual((await r.json()).kind, 'completion');
   await drain();
   const rec = JSON.parse(store.get('lead:omar@kilnworks.co.uk'));
-  assert.deepStrictEqual(rec.payments.map(p => [p.id, p.amount]), [['pi_omar', 10000], ['pi_omar_2', 2550]]);
-  assert.ok(teamMail[0].raw.includes('paid £25.50'));
+  assert.deepStrictEqual(rec.payments.map(p => [p.id, p.kind, p.amount]), [['pi_omar', 'booking', 10000], ['pi_link', 'completion', 65000]]);
+  assert.ok(teamMail[0].raw.includes('Subject: Website Pipeline: completion paid — Kilnworks'));
+  assert.ok(teamMail[0].raw.includes('paid £650, the completion payment: the build fee is paid in full.'));
+  assert.strictEqual(outbound[0].body.message, 'Completion paid: £650 via Stripe (payment pi_link).');
 }
-// a payment nobody can match still reaches the team, never the tracker; an
+// any other amount from a known client is recorded and called a payment, not a booking
+teamMail.length = 0; outbound = [];
+{
+  r = await stripe({ type: 'checkout.session.completed', data: { object: { id: 'cs_4', payment_intent: 'pi_other', payment_status: 'paid', amount_total: 2550, currency: 'gbp', customer_details: { email: 'omar@kilnworks.co.uk' } } } });
+  assert.strictEqual((await r.json()).kind, 'payment');
+  await drain();
+  assert.ok(teamMail[0].raw.includes('Subject: Website Pipeline: payment received — Kilnworks'));
+  assert.ok(teamMail[0].raw.includes('paid £25.50, which matches neither the downpayment nor the completion payment on their order.'));
+}
+// a payment from an email nobody signed up with still reaches the team, never the tracker; an
 // unpaid Checkout and other events are acknowledged and ignored
 teamMail.length = 0; outbound = [];
 {
   r = await stripe(paidIntent('pi_stranger', 'stranger@elsewhere.co.uk'));
   assert.strictEqual((await r.json()).unmatched, true);
-  r = await stripe({ type: 'payment_intent.succeeded', data: { object: { id: 'pi_noemail', amount: 10000, amount_received: 10000, currency: 'gbp' } } });
-  assert.strictEqual((await r.json()).unmatched, true);
+  assert.strictEqual((await (await stripe(paidIntent('pi_stranger', 'stranger@elsewhere.co.uk'))).json()).duplicate, true);
   await drain();
-  assert.strictEqual(teamMail.length, 2);
-  assert.ok(teamMail[0].raw.includes('Subject: Website Pipeline: booking payment received — UNMATCHED'));
+  assert.strictEqual(teamMail.length, 1);
+  assert.ok(teamMail[0].raw.includes('Subject: Website Pipeline: payment received — UNMATCHED'));
   assert.ok(teamMail[0].raw.includes('from stranger@elsewhere.co.uk, which matches no sign-up'));
-  assert.ok(teamMail[1].raw.includes('with no payer email'));
   assert.strictEqual(outbound.length, 0);
   assert.ok(!store.has('lead:stranger@elsewhere.co.uk'));
   teamMail.length = 0;
