@@ -11,7 +11,11 @@ Last deploy: **22 Oct 2026, the website rework** (pull request #6; pushing to ma
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-Nothing waiting.
+#### Website sign-up (still hidden)
+- **Booking the call takes the downpayment again**: the questions page says booking takes
+  your downpayment by card and the call is confirmed once the payment goes through (the
+  booking page itself takes it through Stripe). The team is briefed when a booking is paid,
+  instead of being told to invoice the downpayment on acceptance. (stripe-bookings)
 
 ---
 

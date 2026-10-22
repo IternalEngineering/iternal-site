@@ -102,7 +102,7 @@ the token awaits org approval), so the worker can deploy regardless.
   and a name. It stores `acceptance` (the order as shown, plus
   `acceptedAt`) on the lead record, then, independently: emails the client
   their copy with the terms PDF attached (fetched from the site), briefs the
-  team to invoice the first 50%, posts a note to the tracker and syncs the
+  team (the downpayment comes with the booking), posts a note to the tracker and syncs the
   platform. Accepting twice changes and sends nothing.
 - start.html keeps the token and the email in localStorage, questions.html prefills the email from it and sends the
   token with every answers post. `/answers` refuses (403) answers for a
@@ -135,10 +135,12 @@ the token awaits org approval), so the worker can deploy regardless.
   bad file), emails the team a "FAILED" brief naming the client. Worker logs
   are retained (`[observability]` in wrangler.toml).
 - Tracker posts carry `event` (`signed-up` or `accepted`); the tracker
-  words its Slack ping by it ("accepted the terms: invoice the first 50%").
-- After the first deploy of this code, delete the two secrets it no longer
-  uses: `npx wrangler secret delete MAGIC_SECRET` and
-  `npx wrangler secret delete STRIPE_WEBHOOK_SECRET`.
+  words its Slack ping by it. Its "accepted" ping still says to invoice the
+  downpayment: update `apps-script/LeadApi.gs` (and redeploy the tracker)
+  now that the downpayment comes with the booking.
+- After the first deploy of this code, delete the secret it no longer uses:
+  `npx wrangler secret delete MAGIC_SECRET`. Keep `STRIPE_WEBHOOK_SECRET`:
+  `/stripe-webhook` needs it.
 
 ## Payment and the terms (13 Oct 2026)
 
@@ -155,8 +157,8 @@ the token awaits org approval), so the worker can deploy regardless.
   Agent (our agentic studio). Invoices are payable within 14 days. Per-client
   pricing is planned: the order's figures are its own fields for that reason.
 - **Accepting is the last step of sign-up**, on start.html, and forms the
-  agreement. The worker briefs the team to invoice the downpayment. Nothing on
-  the site takes payment, and booking a call takes none.
+  agreement. The downpayment is taken when the client books their call (below);
+  the worker records it when Stripe confirms it.
 - **Changing a price, or a new version of the terms.** A new version is
   supplied wording, never ours. It means: a new pair of files in `terms/`
   (print the PDF with `node tools/terms-pdf.mjs terms/<page>.html`; keep the
@@ -174,10 +176,27 @@ the token awaits org approval), so the worker can deploy regardless.
     carries prices (20 Oct 2026).
   - The Lead Tracker (`../lead-tracker`, `apps-script/LeadApi.gs`): every
     website lead starts with `budget: 750`.
-- **No payment code anywhere (Robbie, 7 Oct 2026).** The Stripe webhook
-  and its payment records were removed from the worker; whether and when a
-  client has paid is kept by hand in the Lead Tracker. The old £375 Payment
-  Link was deactivated 15 Sep.
+- **Booking payment (restored 22 Oct 2026, at the team's request).** A booking
+  is confirmed only once its payment is. Three parts, two of them set up
+  outside the code:
+  1. The website-build booking schedule (`BOOKING_URL`, John's "Disco
+     Meeting") requires payment: in that Google account, Calendar → the
+     appointment schedule → Payments → Require payment, connect Iternal's
+     Stripe account, amount = the downpayment. Google then confirms a
+     booking only once Stripe has taken it. (Needs a Workspace plan that
+     offers payments; Stripe's brand name is "Iternal Ltd".)
+  2. Stripe dashboard → Developers → Webhooks: endpoint
+     `https://api.iternal.co.uk/stripe-webhook`, events
+     `payment_intent.succeeded` and `checkout.session.completed`. Its signing
+     secret is `STRIPE_WEBHOOK_SECRET` on the worker (`npx wrangler secret put
+     STRIPE_WEBHOOK_SECRET` from `worker/` if it is ever rotated or gone).
+  3. The worker (`handleStripeWebhook`) matches the payer by email, records the
+     payment once (`stripe:<payment intent>` in KV; retries and duplicate
+     events change nothing), briefs the team and notes it in the tracker.
+     Someone who books with a different email from their sign-up arrives as
+     an UNMATCHED brief to match by hand. Payment never reaches the platform
+     repo. The questions page tells the client booking takes their
+     downpayment and the call is confirmed once it is paid.
 
 ## Team briefs (email)
 
@@ -228,7 +247,7 @@ booking invite.
   (since 21 Oct 2026; was Paul's "A chat with Paul"). It is strictly for website-build
   meetings (Robbie): every other "Book a Call" / "Book a Discovery Call" goes to /contact,
   and those discovery calls stay "30 minutes".
-  Lives here only. A plain schedule: no payment step.
+  Lives here only. It requires payment through Stripe: see §Payment.
 
 ## Go-live (dark launch)
 

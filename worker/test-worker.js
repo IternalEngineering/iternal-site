@@ -23,6 +23,7 @@ const env = {
   TEAM_EMAIL: 'paul@iternal.life',
   LEAD_API_URL: 'https://script.example/exec',
   LEAD_API_SECRET: 'lead_test',
+  STRIPE_WEBHOOK_SECRET: 'whsec_test',
 };
 
 // Fake GitHub contents API: path -> { json, sha }. `conflictOnce` makes the
@@ -61,6 +62,14 @@ const pending = [];
 const ctx = { waitUntil(p) { pending.push(p); } };
 const call = (path, init) => worker.fetch(new Request('https://w.example' + path, init), env, ctx);
 const drain = () => Promise.allSettled(pending.splice(0));
+// A Stripe event signed the way Stripe signs it: v1 = HMAC-SHA256(secret, `${t}.${body}`).
+async function stripe(event, { t = Math.floor(Date.now() / 1000), secret = env.STRIPE_WEBHOOK_SECRET } = {}) {
+  const body = JSON.stringify(event);
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  const sig = Buffer.from(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(`${t}.${body}`))).toString('hex');
+  return call('/stripe-webhook', { method: 'POST', headers: { 'stripe-signature': `t=${t},v1=${sig}` }, body });
+}
+const paidIntent = (id, email, amount = 10000) => ({ type: 'payment_intent.succeeded', data: { object: { id, amount, amount_received: amount, currency: 'gbp', receipt_email: email } } });
 
 // health + 404 + CORS preflight
 assert.strictEqual((await call('/health')).status, 200);
@@ -69,9 +78,13 @@ const pre = await call('/answers', { method: 'OPTIONS' });
 assert.strictEqual(pre.status, 204);
 assert.strictEqual(pre.headers.get('access-control-allow-origin'), env.SITE_URL);
 
-// the old Stripe route is gone
+// the Stripe webhook refuses anything not signed with the endpoint's secret,
+// or signed too long ago, and stores nothing
 let r = await call('/stripe-webhook', { method: 'POST', body: '{}' });
-assert.strictEqual(r.status, 404);
+assert.strictEqual(r.status, 400);
+assert.strictEqual((await call('/stripe-webhook', { method: 'POST', headers: { 'stripe-signature': 't=1,v1=bad' }, body: '{}' })).status, 400);
+assert.strictEqual((await stripe(paidIntent('pi_forged', 'x@y.co.uk'), { secret: 'whsec_wrong' })).status, 400);
+assert.strictEqual((await stripe(paidIntent('pi_stale', 'x@y.co.uk'), { t: Math.floor(Date.now() / 1000) - 600 })).status, 400);
 assert.strictEqual(store.size, 0);
 
 // answers need a sign-up and an accepted order: anyone else's are refused,
@@ -261,14 +274,84 @@ await drain();
   assert.ok(m.text.includes('https://iternal.co.uk/terms/website-build-and-care-v1.0.html'));
   assert.strictEqual(m.attachments[0].type, 'application/pdf');
   assert.strictEqual(m.attachments[0].content.byteLength, 4);
-  // the team is told to invoice the downpayment; the tracker gets a note, never answers
+  // the team is told the downpayment comes with the booking; the tracker gets a note, never answers
   const brief = teamMail.find(t => t.raw.includes('Subject: Website Pipeline: terms accepted — Kilnworks'));
-  assert.ok(brief && brief.raw.includes('£100 downpayment (including VAT) is payable now: send the invoice. £650 (including VAT) follows on completion'));
+  assert.ok(brief && brief.raw.includes('£100 downpayment (including VAT) is taken when they book their call'));
+  assert.ok(brief.raw.includes('£650 (including VAT) follows on completion'));
+  assert.ok(!brief.raw.includes('send the invoice'));
   const note = outbound.find(o => o.url.includes('action=createLead'));
   assert.strictEqual(note.body.event, 'accepted');
   assert.ok(note.body.message.includes('Accepted the Website Build and Care Terms, version 1.0 (reference ' + acc.reference + ')'));
-  assert.ok(note.body.message.includes('£100 downpayment + £650 upon completion, including VAT: invoice the downpayment'));
+  assert.ok(note.body.message.includes('£100 downpayment + £650 upon completion, including VAT: the downpayment is taken when they book their call'));
   assert.ok(!('answers' in note.body));
+}
+
+// ── Booking payments (Stripe, through the Google Calendar booking page) ──
+// a paid booking is matched to the sign-up by email (any case), recorded once
+// in KV, briefed to the team with the reference, and noted in the tracker;
+// the pipeline repo never hears about payment
+teamMail.length = 0; clientMail.length = 0; outbound = [];
+{
+  const ghWrites = gh.calls.length;
+  r = await stripe(paidIntent('pi_omar', 'Omar@Kilnworks.co.uk'));
+  assert.strictEqual(r.status, 200);
+  await drain();
+  const rec = JSON.parse(store.get('lead:omar@kilnworks.co.uk'));
+  assert.strictEqual(rec.payments.length, 1);
+  assert.deepStrictEqual({ ...rec.payments[0], paidAt: 'x' }, { id: 'pi_omar', amount: 10000, currency: 'gbp', paidAt: 'x' });
+  assert.strictEqual(teamMail.length, 1);
+  assert.ok(teamMail[0].raw.includes('Subject: Website Pipeline: booking paid — Kilnworks'));
+  assert.ok(teamMail[0].raw.includes(`Omar Haddad (Kilnworks, reference ${rec.acceptance.reference}) paid £100, so their call booking stands.`));
+  assert.strictEqual(outbound.length, 1);
+  assert.strictEqual(outbound[0].body.reference, rec.acceptance.reference);
+  assert.strictEqual(outbound[0].body.message, 'Booking paid: £100 via Stripe (payment pi_omar).');
+  assert.strictEqual(clientMail.length, 0); // Stripe sends the receipt, not us
+  assert.strictEqual(gh.calls.length, ghWrites);
+  assert.ok(!('payments' in ghFile(slug)));
+}
+// Stripe's retry, and the same payment reported as a completed Checkout, change nothing
+teamMail.length = 0; outbound = [];
+{
+  const before = store.get('lead:omar@kilnworks.co.uk');
+  assert.strictEqual((await (await stripe(paidIntent('pi_omar', 'omar@kilnworks.co.uk'))).json()).duplicate, true);
+  r = await stripe({ type: 'checkout.session.completed', data: { object: { id: 'cs_1', payment_intent: 'pi_omar', payment_status: 'paid', amount_total: 10000, currency: 'gbp', customer_details: { email: 'omar@kilnworks.co.uk' } } } });
+  assert.strictEqual((await r.json()).duplicate, true);
+  await drain();
+  assert.strictEqual(store.get('lead:omar@kilnworks.co.uk'), before);
+  assert.strictEqual(teamMail.length + outbound.length, 0);
+}
+// a Checkout payment arriving only as checkout.session.completed is matched by its customer email
+{
+  r = await stripe({ type: 'checkout.session.completed', data: { object: { id: 'cs_2', payment_intent: 'pi_omar_2', payment_status: 'paid', amount_total: 2550, currency: 'gbp', customer_details: { email: 'omar@kilnworks.co.uk' } } } });
+  assert.strictEqual(r.status, 200);
+  await drain();
+  const rec = JSON.parse(store.get('lead:omar@kilnworks.co.uk'));
+  assert.deepStrictEqual(rec.payments.map(p => [p.id, p.amount]), [['pi_omar', 10000], ['pi_omar_2', 2550]]);
+  assert.ok(teamMail[0].raw.includes('paid £25.50'));
+}
+// a payment nobody can match still reaches the team, never the tracker; an
+// unpaid Checkout and other events are acknowledged and ignored
+teamMail.length = 0; outbound = [];
+{
+  r = await stripe(paidIntent('pi_stranger', 'stranger@elsewhere.co.uk'));
+  assert.strictEqual((await r.json()).unmatched, true);
+  r = await stripe({ type: 'payment_intent.succeeded', data: { object: { id: 'pi_noemail', amount: 10000, amount_received: 10000, currency: 'gbp' } } });
+  assert.strictEqual((await r.json()).unmatched, true);
+  await drain();
+  assert.strictEqual(teamMail.length, 2);
+  assert.ok(teamMail[0].raw.includes('Subject: Website Pipeline: booking payment received — UNMATCHED'));
+  assert.ok(teamMail[0].raw.includes('from stranger@elsewhere.co.uk, which matches no sign-up'));
+  assert.ok(teamMail[1].raw.includes('with no payer email'));
+  assert.strictEqual(outbound.length, 0);
+  assert.ok(!store.has('lead:stranger@elsewhere.co.uk'));
+  teamMail.length = 0;
+  r = await stripe({ type: 'checkout.session.completed', data: { object: { id: 'cs_3', payment_intent: 'pi_unpaid', payment_status: 'unpaid', customer_details: { email: 'omar@kilnworks.co.uk' } } } });
+  assert.strictEqual((await r.json()).ignored, 'checkout.session.completed');
+  r = await stripe({ type: 'charge.refunded', data: { object: {} } });
+  assert.strictEqual((await r.json()).ignored, 'charge.refunded');
+  await drain();
+  assert.strictEqual(teamMail.length + outbound.length, 0);
+  assert.ok(!store.has('stripe:pi_unpaid'));
 }
 // accepting again changes nothing and sends nothing
 teamMail.length = 0; clientMail.length = 0; outbound = [];

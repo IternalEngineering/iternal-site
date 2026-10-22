@@ -3,8 +3,9 @@
  *
  * Flow: the client signs up on start.html, reviews their order and accepts
  * the Website Build and Care Terms there, answers the questions, then books
- * their call on the Google Calendar appointment page. Nothing here takes
- * payment; the team invoices.
+ * their call on the Google Calendar appointment page. That page takes the
+ * downpayment through Iternal's Stripe account, so no booking stands until it
+ * is paid; Stripe tells this worker, which records the payment.
  *
  * Everything a client enters goes to TWO destinations, independently:
  *   1. the website-build pipeline repo (PIPELINE_REPO) — the full record,
@@ -24,19 +25,25 @@
  *                         by the email they give in the first question. The
  *                         first answers queue the pre-call demo build
  *                         (demoRequested) in the pipeline repo.
+ *   POST /stripe-webhook  Stripe calls this when a booking's payment
+ *                         succeeds: the payer is matched to their sign-up by
+ *                         email, the payment is recorded in KV, and the team
+ *                         and the tracker are told. Payment never reaches the
+ *                         pipeline repo.
  *   GET  /health          Liveness check.
  *
  * Clients get ONE email from us: on accepting, a copy of their order and the
- * terms, as the terms promise (CLIENT_MAIL, Cloudflare Email Service). Google
- * Calendar sends the booking invite. Team briefs go via Cloudflare's native
- * email (TEAM_MAIL) to verified destinations.
+ * terms, as the terms promise (CLIENT_MAIL, Cloudflare Email Service). Stripe
+ * sends the payment receipt and Google Calendar the booking invite. Team briefs
+ * go via Cloudflare's native email (TEAM_MAIL) to verified destinations.
  *
- * Explicitly NOT here: payment (the team handles it, outside this worker),
- * booking (Google Calendar's), and any READ of the Lead Tracker (write-only
- * by policy).
+ * Explicitly NOT here: card details and charging (Stripe's, through the booking
+ * page), booking (Google Calendar's), and any READ of the Lead Tracker
+ * (write-only by policy).
  *
- * Secrets (wrangler secret put): LEAD_API_SECRET, PIPELINE_TOKEN (GitHub
- * token with contents:write on PIPELINE_REPO only).
+ * Secrets (wrangler secret put): STRIPE_WEBHOOK_SECRET (the signing secret of
+ * the /stripe-webhook endpoint in Stripe's dashboard), LEAD_API_SECRET,
+ * PIPELINE_TOKEN (GitHub token with contents:write on PIPELINE_REPO only).
  */
 
 const enc = new TextEncoder();
@@ -495,13 +502,13 @@ async function handleAccept(request, env, ctx) {
 ${orderText(acc)}
 Accepted: ${ukTime(acc.acceptedAt)} (UK time)
 
-The £${acc.downpayment} downpayment (including VAT) is payable now: send the invoice. £${acc.completion} (including VAT) follows on completion. They have been emailed a copy of the order and the terms.
+The £${acc.downpayment} downpayment (including VAT) is taken when they book their call: the booking page charges it through Stripe and the booking stands only once it is paid. A brief follows when the payment lands. £${acc.completion} (including VAT) follows on completion. They have been emailed a copy of the order and the terms.
 Their questions come next; a brief follows when they answer.`),
     postToLeadTracker(env, {
       org: acc.company, contact: acc.name, email, website: kv.website || '', reference: acc.reference,
       source: 'website funnel', event: 'accepted',
       message: `Accepted the ${TERMS.name}, version ${acc.termsVersion} (reference ${acc.reference}). `
-        + `Build fee £${acc.downpayment} downpayment + £${acc.completion} upon completion, including VAT: invoice the downpayment. `
+        + `Build fee £${acc.downpayment} downpayment + £${acc.completion} upon completion, including VAT: the downpayment is taken when they book their call. `
         + `Care plan £${acc.carePlan} per month including VAT from the month after the site goes live.`,
     }),
     syncToPipeline(env, email, 'accepted the terms'),
@@ -571,6 +578,94 @@ async function handleAnswers(request, env, ctx) {
   return json(200, { ok: true }, cors);
 }
 
+/* ── Booking payments ────────────────────────────────────────────────────
+   The Google Calendar booking page requires payment through Iternal's Stripe
+   account: no payment, no booking. Stripe posts each successful payment here,
+   signed with STRIPE_WEBHOOK_SECRET. */
+
+async function hmacHex(secret, message) {
+  const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+  const sig = await crypto.subtle.sign('HMAC', key, enc.encode(message));
+  return [...new Uint8Array(sig)].map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+/* Stripe signature: header "t=...,v1=..."; v1 = HMAC-SHA256(secret, `${t}.${body}`). */
+async function verifyStripeSignature(rawBody, header, secret) {
+  if (!header || !secret) return false;
+  const parts = Object.create(null);
+  for (const kv of header.split(',')) {
+    const [k, v] = kv.split('=');
+    (parts[k] = parts[k] || []).push(v);
+  }
+  const t = parts.t && parts.t[0];
+  if (!t || Math.abs(Date.now() / 1000 - Number(t)) > 300) return false;
+  const expected = await hmacHex(secret, `${t}.${rawBody}`);
+  return (parts.v1 || []).some(v => v === expected);
+}
+
+const money = (amount, currency) => (currency || 'gbp').toLowerCase() === 'gbp'
+  ? `£${((amount || 0) / 100).toFixed(2).replace(/\.00$/, '')}`
+  : `${(amount || 0) / 100} ${String(currency).toUpperCase()}`;
+
+/** The payment an event reports, or null for events that carry none. A Checkout
+    payment can arrive as both events; both name the same payment intent. */
+function paymentOf(event) {
+  const o = (event.data && event.data.object) || {};
+  if (event.type === 'payment_intent.succeeded') {
+    const charge = o.charges && o.charges.data && o.charges.data[0];
+    return { id: s(o.id, 100), amount: o.amount_received || o.amount || 0, currency: o.currency,
+      email: o.receipt_email || (charge && charge.billing_details && charge.billing_details.email) || '' };
+  }
+  if (event.type === 'checkout.session.completed' && o.payment_status === 'paid') {
+    return { id: s(o.payment_intent || o.id, 100), amount: o.amount_total || 0, currency: o.currency,
+      email: (o.customer_details && o.customer_details.email) || o.customer_email || '' };
+  }
+  return null;
+}
+
+async function handleStripeWebhook(request, env, ctx) {
+  const rawBody = await request.text();
+  if (!await verifyStripeSignature(rawBody, request.headers.get('stripe-signature'), env.STRIPE_WEBHOOK_SECRET)) {
+    return json(400, { error: 'bad signature' });
+  }
+  let event;
+  try { event = JSON.parse(rawBody); } catch (e) { return json(400, { error: 'bad payload' }); }
+  const pay = paymentOf(event);
+  if (!pay) return json(200, { received: true, ignored: event.type });
+
+  // Stripe retries, and one payment can arrive twice: record it once.
+  const seen = `stripe:${pay.id}`;
+  if (await env.CLIENTS.get(seen)) return json(200, { received: true, duplicate: true });
+  const email = s(pay.email, 120).toLowerCase();
+  const paid = money(pay.amount, pay.currency);
+  const key = `lead:${email}`;
+  const kv = EMAIL.test(email) ? await env.CLIENTS.get(key, 'json') : null;
+  await env.CLIENTS.put(seen, email || '-');
+
+  // A payment must never pass silently: one nobody can match still reaches the team.
+  if (!kv) {
+    ctx.waitUntil(sendTeamEmail(env, 'Website Pipeline: booking payment received — UNMATCHED',
+      `A booking payment of ${paid} arrived (${pay.id}) ${email ? `from ${email}, which matches no sign-up` : 'with no payer email'}. Match it by hand in Stripe and the Lead Tracker.`));
+    return json(200, { received: true, unmatched: true });
+  }
+
+  kv.payments = [...(kv.payments || []), { id: pay.id, amount: pay.amount, currency: s(pay.currency, 10), paidAt: new Date().toISOString() }];
+  await env.CLIENTS.put(key, JSON.stringify(kv));
+  const acc = kv.acceptance || {};
+  const who = acc.company || kv.organisation || email;
+
+  ctx.waitUntil(Promise.allSettled([
+    sendTeamEmail(env, `Website Pipeline: booking paid — ${who}`,
+      `${acc.name || kv.name || email} (${who}${acc.reference ? `, reference ${acc.reference}` : ''}) paid ${paid}, so their call booking stands.
+Payment: ${pay.id}${acc.acceptedAt ? '' : '\nThey have not accepted the terms yet.'}`),
+    postToLeadTracker(env, {
+      org: who, contact: acc.name || kv.name || '', email, reference: acc.reference || kv.reference || '',
+      source: 'website funnel', message: `Booking paid: ${paid} via Stripe (payment ${pay.id}).`,
+    }),
+  ]));
+  return json(200, { received: true });
+}
+
 /* ── Archived clients ────────────────────────────────────────────────────
    The dashboard archives a client once their call is held or they declined:
    it deletes their files from the platform repo, appends a line to
@@ -604,6 +699,7 @@ export default {
     if (url.pathname === '/signup' && request.method === 'POST') return handleSignup(request, env, ctx);
     if (url.pathname === '/accept' && request.method === 'POST') return handleAccept(request, env, ctx);
     if (url.pathname === '/answers' && request.method === 'POST') return handleAnswers(request, env, ctx);
+    if (url.pathname === '/stripe-webhook' && request.method === 'POST') return handleStripeWebhook(request, env, ctx);
     return json(404, { error: 'not found' });
   },
 };

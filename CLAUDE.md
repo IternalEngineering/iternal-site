@@ -9,8 +9,10 @@ changing anything.
 
 Sign up → review and accept the Website Build and Care Terms → questions →
 book the call → call → design and build → live. **Accepting forms the
-agreement** (13 Oct 2026). **Nothing on the site takes payment**: the team
-invoices, starting with the first 50% of the build fee on acceptance. Before
+agreement** (13 Oct 2026). **Booking the call takes the downpayment**: the
+Google Calendar booking page charges it through Iternal's Stripe account, so a
+booking stands only once it is paid (restored 22 Oct 2026); the team invoices
+the rest on completion. Before
 the call, an agent session builds one concept homepage from the client's
 answers.
 
@@ -39,7 +41,8 @@ answers.
   https://api.iternal.co.uk): `/signup`, `/accept`, `/answers`, `/health`. Every
   sign-up goes to TWO destinations: the Website Build Platform repo (full
   record, answers included) and the Lead Tracker (a summary; never answers).
-  Nothing in it takes or records payment (Stripe removed 7 Oct 2026). Deploy from
+  It takes no card details; it records the booking payments Stripe reports to
+  `/stripe-webhook` (restored 22 Oct 2026). Deploy from
   `worker/`: `node test-worker.js` MUST pass, then `npx wrangler deploy`.
 - `../website-build-platform/` — a separate repo: the information & demo
   build dashboard. The worker commits `clients/<slug>.json` there; the
@@ -93,7 +96,8 @@ answers.
 | **Worker /signup, /answers** (ours) | sign-up fields and answers, from the pages | `{ok}` | The page shows success only once the worker has it |
 | **GitHub** (platform repo) | one `clients/<slug>.json` per client: identity and answers (never payment) | file sha, used for the next write | Personal data in a private repo. Token scoped to that one repo. Named as a processor in the privacy draft |
 | **Lead Tracker** (Apps Script, separate `lead-tracker` repo) | `createLead` POSTs on sign-up and on accepting the terms (with `event`), secret-gated (`LEAD_API_SECRET`) | `{ok, id}` and NOTHING else | **WRITE-ONLY. Never read tracker/Sheet data — it is private.** Dedupes by email: repeat posts become notes on the existing record. Never sent answers |
-| **Google Calendar** | the client (we just link to the appointment schedule URL) | nothing to our systems — the invite goes to the client | The schedule lives in Google's UI, not in code. No payment step |
+| **Google Calendar** | the client (we just link to the appointment schedule URL) | nothing to our systems — the invite goes to the client | The schedule lives in Google's UI, not in code. It requires payment through Iternal's Stripe account: no payment, no booking |
+| **Stripe** (through the booking page) | nothing: the client pays on Google's booking page | `payment_intent.succeeded` / `checkout.session.completed` to `/stripe-webhook`, signed with `STRIPE_WEBHOOK_SECRET` | Matched to the sign-up by email, recorded once in KV, briefed to the team and noted in the tracker; never sent to the platform repo. A payment that matches no sign-up still emails the team |
 | **Cloudflare Email Routing** | team briefs | — | Every recipient must be a verified destination |
 | **Cloudflare Email Service** | the client's copy of their order and terms | message id | Sends from iternal.co.uk once it is onboarded as a sending domain (Workers Paid). A failure emails the team the copy to forward |
 | **Slack** | nothing directly — pings come from the Lead Tracker | — | |
@@ -112,8 +116,9 @@ fallback constant in questions.html.
 3. Deploy the site (held: only on Robbie's word, named in that moment).
 4. `?team` walkthrough: one real sign-up should yield a client file, a
    tracker row and both briefs.
-5. ~~Decide how payment is requested~~ Settled by the terms (13 Oct 2026):
-   the team invoices 50% on acceptance and 50% on completion.
+5. Payment: the downpayment is taken when the client books their call
+   (Google Calendar + Stripe, restored 22 Oct 2026); the rest is invoiced on
+   completion. Setup steps: HOUSEKEEPING.md §Payment.
 6. Show the team the current front end — they have not seen the gallery,
    lightbox or question changes. They want the prospect experience to take
    its cue from the sleekness of existing sites; redesign after they have
