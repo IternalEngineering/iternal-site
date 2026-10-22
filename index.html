@@ -344,16 +344,19 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 
 .cl-track {
-  display:flex; flex-wrap:wrap; justify-content:center; row-gap:20px;
+  display:flex;
+  animation:marq 30s linear infinite;
+  width:max-content;
 }
+.cl-track:hover { animation-play-state:paused; }
+@keyframes marq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
 .cl-item {
-  padding:0 28px;
+  padding:0 56px;
   border-right:1px solid var(--border);
   display:flex; flex-direction:column; align-items:center;
-  white-space:nowrap;
+  min-width:190px; white-space:nowrap;
 }
-.cl-item:last-child { border-right:none; }
 .cl-name {
   font-size:16px; font-weight:900;
   color:var(--t2); display:block;
@@ -746,8 +749,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 }
 @media (max-width:900px) {
   :root { --px:20px; }
-  .cl-track { display:grid; grid-template-columns:repeat(3,1fr); }
-  .cl-item { border-right:none; padding:0 8px; white-space:normal; text-align:center; }
   .hero-actions { flex-direction:column; align-items:stretch; gap:16px; }
   .hero-actions a { justify-content:center; }
   .hero-p { font-size:17px; line-height:1.65; }
@@ -763,7 +764,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .blob-1,.blob-2,.blob-3,.blob-4 { }
+  .cl-track { animation:none; }
 }
 
 /* ============================================================
@@ -998,6 +999,13 @@ html { overflow-x:clip; }
   <p class="cl-label">Trusted by organisations who can't afford to get AI wrong</p>
   <div style="overflow:hidden">
     <div class="cl-track">
+      <div class="cl-item"><span class="cl-name">NHS</span><span class="cl-sec">Health &amp; MedTech</span></div>
+      <div class="cl-item"><span class="cl-name">Kew Gardens</span><span class="cl-sec">Science &amp; Research</span></div>
+      <div class="cl-item"><span class="cl-name">GLA</span><span class="cl-sec">Local Government</span></div>
+      <div class="cl-item"><span class="cl-name">CivicNetZero</span><span class="cl-sec">Civic Innovation</span></div>
+      <div class="cl-item"><span class="cl-name">bPlaced</span><span class="cl-sec">Social Care</span></div>
+      <div class="cl-item"><span class="cl-name">First Bank UK</span><span class="cl-sec">Financial Services</span></div>
+      <div class="cl-item"><span class="cl-name">Tech4Good</span><span class="cl-sec">Social Impact</span></div>
       <div class="cl-item"><span class="cl-name">NHS</span><span class="cl-sec">Health &amp; MedTech</span></div>
       <div class="cl-item"><span class="cl-name">Kew Gardens</span><span class="cl-sec">Science &amp; Research</span></div>
       <div class="cl-item"><span class="cl-name">GLA</span><span class="cl-sec">Local Government</span></div>

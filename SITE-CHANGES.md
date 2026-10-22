@@ -107,8 +107,8 @@ nothing new written).
   to that service on the Services page; AI Augmentation stays as a fifth row, linking to
   the contact page. Its "Learn More" buttons can now be clicked (the same hover glow
   covered them). (rebuild 3)
-- **The client names sit still**, each once, in a row (a grid on a phone), instead of
-  scrolling past; the closing glow no longer pulses. (rebuild 10)
+- **The closing glow no longer pulses.** (rebuild 10; the client names keep scrolling past,
+  as Robbie asked on 22 Oct, and stand still for visitors who ask for reduced motion)
 - **The Forge section ("Most agencies charge for headcount") moved to About**, and the
   "Ideas worth reading" teasers are gone. The work section loses its "View All"
   button. (rebuild 3)
