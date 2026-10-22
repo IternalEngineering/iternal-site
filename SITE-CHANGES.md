@@ -5,14 +5,22 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **20 Oct 2026, third deploy** (version f85a948c; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
+Last deploy: **22 Oct 2026, the website rework** (pull request #6; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-On branch `website-rework` (the overhaul, phase 1: existing content rearranged or removed,
-nothing new written).
+Nothing waiting.
+
+---
+
+## Live
+
+### 22 Oct 2026, the website rework (pull request #6)
+
+The website rework (pull request #6, merged from `website-rework`): phase 1 rearranged or
+removed existing content; the Site Agent and AEO audit sections are the only new copy.
 
 **For this release, Websites stays hidden**: the Services entry and the homepage row are
 in the pages but hidden, and the contact form has no Websites option, until the website
@@ -166,10 +174,6 @@ sign-up launches. The Websites lines below describe the launch-day state.
   loading. (rebuild 11)
 - **llms.txt names the co-founders**: Tom Ilube CBE, Tim Campbell MBE and Paul Wiseall FRSA.
   (rebuild 8)
-
----
-
-## Live
 
 ### 20 Oct 2026, third deploy (version f85a948c)
 
