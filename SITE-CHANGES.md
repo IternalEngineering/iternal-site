@@ -5,7 +5,7 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **20 Oct 2026, third deploy** (version f85a948c; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
+Last deploy: **22 Oct 2026, the website rework** (pull request #6; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
@@ -16,6 +16,164 @@ Nothing waiting.
 ---
 
 ## Live
+
+### 22 Oct 2026, the website rework (pull request #6)
+
+The website rework (pull request #6, merged from `website-rework`): phase 1 rearranged or
+removed existing content; the Site Agent and AEO audit sections are the only new copy.
+
+**For this release, Websites stays hidden**: the Services entry and the homepage row are
+in the pages but hidden, and the contact form has no Websites option, until the website
+sign-up launches. The Websites lines below describe the launch-day state.
+
+#### Whole site
+- **No "Built with Forge" line in the footer** (Forge is explained on About). (rebuild 24)
+- **Case studies lead somewhere**: each case's top link goes to its service (Agentic AI Builds,
+  or AI Strategy & Advisory for Tech4Good) instead of "Back to Work", and each closes with
+  "Next case: …" beside "See more work". (rebuild 24)
+- **Service buttons pre-fill the contact form**: arriving from a service page (or AI
+  Augmentation on the homepage) selects that service in "What kind of engagement?". (rebuild 24)
+- **The menu says "Services"** (was "What We Do"), and Insights is gone from the menu, the
+  mobile menu and the footer. The footer no longer links to iternal.app, and its
+  "Get in touch" goes to the contact page from every page. (rebuild 1)
+- **Calmer motion on every page.** Sections fade in rather than sliding in from the sides
+  or zooming; hero text no longer drifts and fades as you scroll; the soft colour shapes in
+  the background stand still. The particle network behind the hero stays. (rebuild 10)
+- **Nothing moves on its own except the particle network.** Sections no longer fade in as
+  you scroll (everything is simply there), hero text no longer animates in, the homepage
+  headline appears whole instead of word by word, and cards no longer tilt towards the
+  mouse (homepage work, Services). Hover colour changes stay. (rebuild 11)
+- **The footer gives the company number**: "Iternal Ltd · Company no. 10849262 · Bristol,
+  UK" (the search data already carried it; the site audit asked for it on the page). (rebuild 11)
+
+#### Services
+- **AI Augmentation is a service everywhere, not just on the homepage**: its own page
+  (/ai-augmentation, with the four points the homepage card first listed), a row on the Services
+  hub under the four AI services, an option on the contact form, and llms.txt and the sitemap.
+  On the homepage it now sits with the AI services and opens its page. (rebuild 26)
+- **Builds uses the homepage's case titles** (Good News London, CivicNetZero, bPlaced: Smarter
+  Care); the AEO box spells out "answer engine optimisation" and its button is the outline
+  style; /websites gets the "All services" link and clean /start links. (rebuild 24)
+- **Each case study sits with its service, not on the Services hub**: Agentic AI Builds
+  shows the GLA, CivicNetZero, bPlaced and Bristol Children's Hospital, two by two; AI
+  Strategy & Advisory shows Tech4Good, with room beside it for the First Bank and Covers
+  work. The hub no longer carries a hidden copy. (rebuild 21; hidden in rebuild 20)
+- **Site Agent is named as our agentic studio** on AI Automations and in the Tech4Good
+  gallery caption ("through Site Agent, our agentic studio"). (rebuild 21)
+- **The AEO audit is a single offer box** on AI Strategy & Advisory: the heading, one sentence
+  and "Ask about an AEO audit" (was a paragraph and six points). (rebuild 20)
+- **The workshop no longer shows a price**: "AI Discovery Workshop: fixed price" on its card
+  and page, and the £2,500 figure is gone from the booking box, search descriptions and
+  llms.txt. (rebuild 19)
+- **AI Automations features Site Agent**: an AI assistant that updates the text and images on
+  a client's own site from plain-English requests, with "Talk to us about Site Agent". New
+  copy, the first in the overhaul, at Robbie's request. (rebuild 19)
+- **AI Strategy & Advisory opens with "Start with an AEO audit"**: how AI assistants see
+  your organisation, what the audit checks and the scored report, with "Ask about an AEO
+  audit". New copy, at Robbie's request. (rebuild 19)
+- **Each service opens its own page**, and Services becomes the hub: five short cards (name,
+  one sentence, price), each opening its page when clicked anywhere. The pages carry the full
+  description, price and list of points that the cards had trimmed, all existing copy:
+  /workshops-training (with "Start with the AI Discovery Workshop" in full), /ai-automations,
+  /agentic-ai-builds (with the GLA, CivicNetZero and bPlaced case studies and "We're Claude
+  and OpenAI specialists", both moved off the hub), /ai-strategy-advisory; Websites opens
+  /websites. The hub keeps the process, every case study, sectors and the FAQ; its "Or book a
+  Workshop first" goes to the workshops page. The homepage rows open the pages directly; the
+  sitemap and llms.txt list them. (rebuild 18)
+- **The service cards are shorter and sit four across on a laptop** (two on a tablet, one on
+  a phone, where they had been squeezed into two thin columns): one sentence each, three
+  points each, and the "Core offer" and "Strategic" labels are gone ("Starting point" and
+  "Most requested" stay). The Websites entry keeps its first sentence and both buttons. (rebuild 14)
+- **Websites joins the four service cards as one block**, a full-width row under them
+  instead of a separate box below a gap. (rebuild 15)
+- **The Discovery Workshop section is half the height** (587px from 1,133px on a laptop):
+  the paragraph saying what it is (the "most organisations know…" lead-in is gone), what you
+  leave with as a plain list instead of four boxes, the four steps by name and timing
+  without their descriptions, and the price box without its repeated title. (rebuild 16)
+- **Websites is visible**: a wide entry under the four AI services, with "See the websites
+  we've made" (the gallery) and "Build a site with us" (sign-up, still in preview: banner
+  up, nothing sent). The process section now says "Every AI engagement". The homepage
+  gets a Websites row in "Ways to work", and the contact form a "Website" option. Links
+  that jump to a section (homepage and Services) now stop below the menu. (rebuild 13)
+- **One list of ways to work, cheapest first**: Workshops & Training, AI Automations &
+  Assistants, Agentic AI Builds, AI Strategy & Advisory, each with its typical price
+  (moved up from the FAQ, which now points to them). Advisory's two lists are merged
+  into one. (rebuild 2)
+- **The hero has one button, "Book a Discovery Call"**, and every booking button goes
+  to the contact page instead of jumping down the page. (rebuild 2)
+- **Sections run in one direction**: services, the workshop, the process, the work,
+  models, sectors, FAQ. (rebuild 2)
+- **Shorter.** The FAQ keeps the three questions the page doesn't already answer
+  (getting burned before, security and compliance, how soon we can start); Agentic AI
+  Builds and AI Strategy & Advisory list their five strongest points (were seven and
+  nine). The closing glow no longer pulses. (rebuild 10)
+- **The "Learn More" buttons on the service cards can be clicked**: a hover glow sat
+  on top of them. (rebuild 3)
+
+#### Homepage
+- **A line under the headline says what agentic AI is** ("systems that plan, reason and
+  execute across your real infrastructure, not just generate text", from the Builds page), and
+  Tech4Good joins the client strip. The first screen still ends with the strip on laptops,
+  short ones included. (rebuild 24)
+- **"Ways to work" is tighter**: each row is about 80px on a laptop (was 107–132px), with
+  less padding, a wider description so most fit on two lines, and a slightly smaller name;
+  the section is 774px from 988px. (rebuild 17)
+- **Runs hero, clients, "Ways to work with Iternal", the work, then the call to
+  action.** "Ways to work" (was "Three ways") is one short row per service, each linking
+  to that service on the Services page; AI Augmentation stays as a fifth row, linking to
+  the contact page. Its "Learn More" buttons can now be clicked (the same hover glow
+  covered them). (rebuild 3)
+- **The closing glow no longer pulses.** (rebuild 10; the client names keep scrolling past,
+  as Robbie asked on 22 Oct, and stand still for visitors who ask for reduced motion)
+- **The Forge section ("Most agencies charge for headcount") moved to About**, and the
+  "Ideas worth reading" teasers are gone. The work section loses its "View All"
+  button. (rebuild 3)
+
+#### About
+- **"See our services"** joins the closing buttons. (rebuild 24)
+- **Says "AI consultancy"** (was "AI agency") under the hero. (rebuild 3)
+- **The Forge section replaces "Our operating principles"**, and "From first
+  conversation to live system" is gone (the process is on Services). (rebuild 3)
+- **The Forge rings stand still.** (rebuild 10)
+- **"The people behind the work" is gone**, with its four named cards, until it returns
+  as Wiseall and the named board members. Its search description no longer says "Meet the
+  people", and llms.txt no longer lists the team. (rebuild 7)
+
+#### Contact
+- **The dropdown says "Websites"** and the thank-you message points to "our services". (rebuild 24)
+- **"Good reasons to reach out" sits beside the form** (above it on a phone) instead of
+  below it. (rebuild 4)
+- **"What kind of engagement?" lists the services by their names on the Services
+  page**: Workshops & Training, AI Automations & Assistants, Agentic AI Builds, AI
+  Strategy & Advisory, or not sure yet. (rebuild 4)
+
+- **The form has a second, stronger spam trap**: an off-screen field people never see. If a
+  bot fills it, nothing is sent and the bot sees the normal "Message sent" screen.
+  FormSubmit's own trap stays too. (rebuild 8)
+
+#### Large screens
+- **Everything is drawn at 95% on laptops and larger screens** (100% read as oversized,
+  90% as too small); phones and tablets are unchanged. The column keeps its width and the
+  homepage's first screen still ends with the client strip. (rebuild 9)
+- **Pages use more of a wide screen**: the content column grows with the window, from
+  1160px up to 1440px (no change on a laptop). Case-study and other long paragraphs keep
+  their reading width. On Services, the four service cards sit in one row from 1700px
+  wide, and the closing call to action on the homepage and Services takes three lines
+  instead of four. (rebuild 6)
+
+#### Behind the pages
+- **The four AI service pages carry Service structured data**; the go-live checklist adds
+  Websites to llms.txt on launch day. The website sign-up's "Book your call" now opens the
+  website-build calendar (John's, 60 minutes) instead of Paul's. (rebuild 24)
+- **Search and AI descriptions use the same four service names**: the Services page's
+  search description, and llms.txt (Enterprise Strategy and Consultancy & Advisory are
+  one entry, AI Strategy & Advisory). The sitemap no longer lists Insights, and its
+  unpublished article says "small consultancy" (was "small agency"). (rebuild 5)
+- **Insights stays out of search** (noindex) until it has articles; llms.txt gives the
+  Companies House number; the logos on the website pages reserve their space while
+  loading. (rebuild 11)
+- **llms.txt names the co-founders**: Tom Ilube CBE, Tim Campbell MBE and Paul Wiseall FRSA.
+  (rebuild 8)
 
 ### 20 Oct 2026, third deploy (version f85a948c)
 

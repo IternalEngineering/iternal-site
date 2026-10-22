@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Insights — Iternal, Bristol AI consultancy</title>
 <meta name="description" content="Thinking on agentic AI, delivery models and the gap between proof-of-concept and production — from the Iternal team.">
-<meta name="robots" content="index, follow">
+<meta name="robots" content="noindex, follow">
 <meta property="og:title" content="Insights — Iternal, Bristol AI consultancy">
 <meta property="og:description" content="Thinking on agentic AI, delivery models and the gap between proof-of-concept and production — from the Iternal team.">
 <meta property="og:type" content="website">
@@ -63,7 +63,7 @@
   --dawn:    linear-gradient(160deg, #0bafaa 0%, #1d6a91 50%, #0a2156 100%);
 
   --f:   'Maven Pro', sans-serif;
-  --max: 1160px;
+  --max: clamp(1220px, 80vw, 1520px);
   --px:  64px;
 }
 
@@ -80,14 +80,10 @@ a { text-decoration:none; }
 /* ── Mesh blobs ── */
 #mesh { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
 .blob { position:absolute; border-radius:50%; filter:blur(80px); }
-.blob-1 { width:600px; height:600px; top:-10%; right:-5%; background:radial-gradient(circle,rgba(226,103,19,0.18) 0%,transparent 70%); animation:blob1 18s linear infinite; opacity:.50; }
-.blob-2 { width:500px; height:500px; top:40%; left:-8%; background:radial-gradient(circle,rgba(224,166,20,0.11) 0%,transparent 70%); animation:blob2 24s linear infinite; opacity:.40; }
-.blob-3 { width:550px; height:550px; bottom:-5%; right:10%; background:radial-gradient(circle,rgba(11,175,170,0.1) 0%,transparent 70%); animation:blob3 28s linear infinite; opacity:.35; }
-@keyframes blob1 { 0%{transform:translate(0,0) scale(1)} 33%{transform:translate(-30px,50px) scale(1.07)} 66%{transform:translate(25px,-35px) scale(0.96)} 100%{transform:translate(0,0) scale(1)} }
-@keyframes blob2 { 0%{transform:translate(0,0)} 40%{transform:translate(50px,-40px) scale(1.08)} 100%{transform:translate(0,0)} }
-@keyframes blob3 { 0%{transform:translate(0,0)} 50%{transform:translate(-40px,-50px) scale(1.05)} 100%{transform:translate(0,0)} }
-.blob-4 { width:900px; height:900px; top:10%; left:20%; background:radial-gradient(circle,rgba(29,106,145,0.1) 0%,transparent 65%); animation:blob4 30s linear infinite; animation-delay:-5s; opacity:.30; }
-@keyframes blob4 { 0%{transform:translate(0,0) scale(1) rotate(0deg)} 50%{transform:translate(20px,20px) scale(1.04) rotate(3deg)} 100%{transform:translate(0,0) scale(1) rotate(0deg)} }
+.blob-1 { width:600px; height:600px; top:-10%; right:-5%; background:radial-gradient(circle,rgba(226,103,19,0.18) 0%,transparent 70%); opacity:.50; }
+.blob-2 { width:500px; height:500px; top:40%; left:-8%; background:radial-gradient(circle,rgba(224,166,20,0.11) 0%,transparent 70%); opacity:.40; }
+.blob-3 { width:550px; height:550px; bottom:-5%; right:10%; background:radial-gradient(circle,rgba(11,175,170,0.1) 0%,transparent 70%); opacity:.35; }
+.blob-4 { width:900px; height:900px; top:10%; left:20%; background:radial-gradient(circle,rgba(29,106,145,0.1) 0%,transparent 65%); opacity:.30; }
 
 #grain { position:fixed; inset:0; z-index:1; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"); opacity:.45; }
 
@@ -132,13 +128,6 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .btn-sun:hover svg { transform:translateX(4px); }
 
 /* ── Scroll reveal ── */
-.rv { opacity:0; transform:translateY(22px); transition:opacity .65s ease, transform .65s ease; }
-.rv-left { opacity:0; transform:translateX(-30px); transition:opacity .7s ease, transform .7s ease; }
-.rv-right { opacity:0; transform:translateX(30px); transition:opacity .7s ease, transform .7s ease; }
-.rv-scale { opacity:0; transform:scale(0.92); transition:opacity .7s ease, transform .7s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; transform:translate(0) scale(1); }
-.d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; } .d3 { transition-delay:.3s; }
-.d4 { transition-delay:.4s; } .d5 { transition-delay:.5s; }
 
 /* ── Mobile nav ── */
 .nav-hamburger {
@@ -243,7 +232,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 .f-links a:hover { color:var(--tan); }
 .f-bot { display:flex; justify-content:space-between; max-width:var(--max); margin:40px auto 0; padding-top:28px; border-top:1px solid var(--border); }
 .f-copy { font-size:13px; color:var(--t4); }
-.f-built { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--t5); }
 
 /* ============================================================
    RESPONSIVE
@@ -264,8 +252,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .blob-1,.blob-2,.blob-3,.blob-4 { animation:none !important; }
-  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
+  .blob-1,.blob-2,.blob-3,.blob-4 { }
 }
 
 /* ============================================================
@@ -351,6 +338,8 @@ html[data-theme="light"] .icon-moon { display:none; }
 }
 .mobile-nav .mob-cta, .mobile-nav .mob-cta:hover { color:#060f26; }
 html { overflow-x:clip; }
+/* Laptops and up render at 95% (100% read as oversized); --max is set in pre-zoom pixels, hence its larger figures */
+@media (min-width:1025px) { html { zoom:.95; } }
 </style>
 </head>
 <body>
@@ -372,9 +361,8 @@ html { overflow-x:clip; }
   </a>
   <ul class="nav-links">
     <li><a href="/#work">Work</a></li>
-    <li><a href="/services">What We Do</a></li>
+    <li><a href="/services">Services</a></li>
     <li><a href="/about">About</a></li>
-    <li><a href="/insights" class="active">Insights</a></li>
     <li><a href="/contact">Contact</a></li>
   </ul>
   <a href="/contact" class="nav-btn">Book a Call</a>
@@ -389,9 +377,8 @@ html { overflow-x:clip; }
 <div class="mobile-nav" id="mobileNav">
   <a href="/">Home</a>
   <a href="/#work">Work</a>
-  <a href="/services">What We Do</a>
+  <a href="/services">Services</a>
   <a href="/about">About</a>
-  <a href="/insights" class="active">Insights</a>
   <a href="/contact">Contact</a>
   <a href="/contact" class="mob-cta">Book a Call</a>
 </div>
@@ -402,11 +389,11 @@ html { overflow-x:clip; }
 <div class="page-hero" aria-label="Page introduction">
   <canvas id="hero-canvas"></canvas>
   <div class="page-hero-in">
-    <h1 class="page-hero-h rv d1">
+    <h1 class="page-hero-h">
       Ideas worth<br>
       <span class="grad">reading.</span>
     </h1>
-    <p class="page-hero-sub rv d2">Thinking on agentic AI, delivery models and the gap between proof-of-concept and production, from the team building it every day.</p>
+    <p class="page-hero-sub">Thinking on agentic AI, delivery models and the gap between proof-of-concept and production, from the team building it every day.</p>
   </div>
 </div>
 
@@ -414,14 +401,14 @@ html { overflow-x:clip; }
 <section id="insights-list" aria-label="Articles">
   <div class="w">
     <div class="insights-grid">
-      <div class="idea-card rv-left d1">
+      <div class="idea-card">
         <div class="idea-meta"><span class="idea-tag">Agentic AI</span><span class="idea-date">Coming soon</span></div>
         <h2 class="idea-h">Why "agentic" is not just a marketing word, and how to tell when it is</h2>
         <p class="idea-p">The word "agentic" is everywhere. Most of what's called agentic AI is still just generative AI with a longer prompt. Here's how to tell the difference, and why it matters for anyone commissioning AI work.</p>
       </div>
-      <div class="idea-card rv-right d2">
+      <div class="idea-card">
         <div class="idea-meta"><span class="idea-tag">Delivery Model</span><span class="idea-date">Coming soon</span></div>
-        <h2 class="idea-h">The 10x team: how AI augmentation is changing what a small agency can deliver</h2>
+        <h2 class="idea-h">The 10x team: how AI augmentation is changing what a small consultancy can deliver</h2>
         <p class="idea-p">We've built an internal delivery model called Forge that lets a small team operate at the capacity of an agency many times its size. This is how it works, and what it means for the economics of building with AI.</p>
       </div>
     </div>
@@ -444,9 +431,8 @@ html { overflow-x:clip; }
       <span class="f-col-lbl">Navigation</span>
       <ul class="f-links">
         <li><a href="/#work">Work</a></li>
-        <li><a href="/services">What We Do</a></li>
+        <li><a href="/services">Services</a></li>
         <li><a href="/about">About</a></li>
-        <li><a href="/insights">Insights</a></li>
         <li><a href="/contact">Contact</a></li>
       </ul>
     </div>
@@ -454,15 +440,13 @@ html { overflow-x:clip; }
       <span class="f-col-lbl">Get In Touch</span>
       <ul class="f-links">
         <li><a href="mailto:hello@iternal.life">hello@iternal.life</a></li>
-        <li><a href="https://iternal.app" target="_blank" rel="noopener noreferrer">iternal.app</a></li>
         <li><a href="https://linkedin.com/company/iternal" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
         <li><a href="/contact">Book a Call</a></li>
       </ul>
     </div>
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">© 2026 Iternal Ltd · Bristol, UK</span>
-    <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
+    <span class="f-copy">© 2026 Iternal Ltd · Company no. 10849262 · Bristol, UK</span>
   </div>
 </footer>
 
@@ -490,11 +474,6 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-/* ── Scroll reveal ── */
-const rvObs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('on');rvObs.unobserve(e.target);} });
-},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale').forEach(el=>rvObs.observe(el));
 
 /* ── Theme toggle ── */
 (function(){
@@ -560,31 +539,6 @@ document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale').forEach(el=>rvO
   window.addEventListener('load',()=>{init();draw();});
 })();
 
-/* ── Hero parallax ── */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const mesh = document.getElementById('mesh');
-  const heroContent = document.querySelector('.hero-in, .page-hero-in');
-  const heroSection = document.querySelector('#hero, .page-hero');
-  if(!mesh || !heroSection) return;
-  const limit = heroSection.offsetHeight || window.innerHeight;
-  let ticking = false;
-  window.addEventListener('scroll', function(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(function(){
-      const sy = window.scrollY;
-      if(sy <= limit){
-        mesh.style.transform = 'translateY(' + (sy * -0.08) + 'px)';
-        if(heroContent){
-          heroContent.style.transform = 'translateY(' + (sy * 0.35) + 'px)';
-          heroContent.style.opacity = 1 - (sy / limit) * 0.6;
-        }
-      }
-      ticking = false;
-    });
-  }, {passive: true});
-})();
 </script>
 </body>
 </html>

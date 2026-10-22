@@ -4,17 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About — Iternal, Bristol AI consultancy</title>
-<meta name="description" content="A small Bristol-based team delivering outsized AI impact. Meet the people behind live agentic systems in healthcare, government and civic infrastructure.">
+<meta name="description" content="A small Bristol-based team delivering outsized AI impact, behind live agentic systems in healthcare, government and civic infrastructure.">
 <meta name="robots" content="index, follow">
 <meta property="og:title" content="About — Iternal, Bristol AI consultancy">
-<meta property="og:description" content="A small Bristol-based team delivering outsized AI impact. Meet the people behind live agentic systems in healthcare, government and civic infrastructure.">
+<meta property="og:description" content="A small Bristol-based team delivering outsized AI impact, behind live agentic systems in healthcare, government and civic infrastructure.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://iternal.co.uk/about">
 <meta property="og:image" content="https://iternal.co.uk/og-image.png">
 <meta property="og:site_name" content="Iternal">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="About — Iternal, Bristol AI consultancy">
-<meta name="twitter:description" content="A small Bristol-based team delivering outsized AI impact. Meet the people behind live agentic systems in healthcare, government and civic infrastructure.">
+<meta name="twitter:description" content="A small Bristol-based team delivering outsized AI impact, behind live agentic systems in healthcare, government and civic infrastructure.">
 <meta name="twitter:image" content="https://iternal.co.uk/og-image.png">
 <link rel="canonical" href="https://iternal.co.uk/about">
 <!-- The Organization node is the same as index.html's: change both together. -->
@@ -105,7 +105,7 @@
   --dawn:    linear-gradient(160deg, #0bafaa 0%, #1d6a91 50%, #0a2156 100%);
 
   --f:   'Maven Pro', sans-serif;
-  --max: 1160px;
+  --max: clamp(1220px, 80vw, 1520px);
   --px:  64px;
 }
 
@@ -135,58 +135,26 @@ a { text-decoration: none; }
   position: absolute; border-radius: 50%;
   filter: blur(80px);
   opacity: 0;
-  animation: blobFloat linear infinite;
 }
 .blob-1 {
   width:700px; height:700px;
   top:-15%; right:-10%;
-  background: radial-gradient(circle, rgba(226,103,19,0.22) 0%, transparent 70%);
-  animation-duration: 18s; animation-delay: 0s; opacity:.50;
-  animation-name: blob1;
+  background: radial-gradient(circle, rgba(226,103,19,0.22) 0%, transparent 70%); opacity:.50;
 }
 .blob-2 {
   width:500px; height:500px;
   top:30%; left:-8%;
-  background: radial-gradient(circle, rgba(224,166,20,0.14) 0%, transparent 70%);
-  animation-duration: 22s; animation-delay: -8s; opacity:.40;
-  animation-name: blob2;
+  background: radial-gradient(circle, rgba(224,166,20,0.14) 0%, transparent 70%); opacity:.40;
 }
 .blob-3 {
   width:600px; height:600px;
   bottom:-10%; right:5%;
-  background: radial-gradient(circle, rgba(11,175,170,0.12) 0%, transparent 70%);
-  animation-duration: 26s; animation-delay: -14s; opacity:.35;
-  animation-name: blob3;
+  background: radial-gradient(circle, rgba(11,175,170,0.12) 0%, transparent 70%); opacity:.35;
 }
 .blob-4 {
   width:900px; height:900px;
   top:10%; left:20%;
-  background: radial-gradient(circle, rgba(29,106,145,0.1) 0%, transparent 65%);
-  animation-duration: 30s; animation-delay: -5s; opacity:.30;
-  animation-name: blob4;
-}
-@keyframes blob1 {
-  0%   { transform: translate(0,0) scale(1); }
-  33%  { transform: translate(-40px, 60px) scale(1.08); }
-  66%  { transform: translate(30px, -40px) scale(0.95); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes blob2 {
-  0%   { transform: translate(0,0) scale(1); }
-  25%  { transform: translate(60px, -30px) scale(1.1); }
-  75%  { transform: translate(-20px, 50px) scale(0.93); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes blob3 {
-  0%   { transform: translate(0,0) scale(1); }
-  40%  { transform: translate(-50px, -60px) scale(1.06); }
-  80%  { transform: translate(40px, 30px) scale(0.97); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes blob4 {
-  0%   { transform: translate(0,0) scale(1) rotate(0deg); }
-  50%  { transform: translate(20px, 20px) scale(1.04) rotate(3deg); }
-  100% { transform: translate(0,0) scale(1) rotate(0deg); }
+  background: radial-gradient(circle, rgba(29,106,145,0.1) 0%, transparent 65%); opacity:.30;
 }
 
 /* Grain overlay */
@@ -302,13 +270,13 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   position:relative; z-index:2;
   max-width:calc(var(--max) - 2 * var(--px)); margin:0 auto; width:100%;
 }
-.hero-ey { margin-bottom:44px; opacity:0; animation:up .8s ease .3s forwards; }
+.hero-ey { margin-bottom:44px; }
 
 .hero-h1 {
   font-size:clamp(40px, min(5.4vw, 9vh), 72px);
   font-weight:900; line-height:.96; letter-spacing:-.04em;
   color:var(--t1); margin-bottom:24px;
-  opacity:0; animation:up .8s ease .5s forwards;
+
 }
 .hero-h1 em {
   font-style:normal;
@@ -319,9 +287,8 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .hero-sub {
   font-size:clamp(17px, 1.8vw, 21px); font-weight:400;
   color:var(--t2); max-width:540px; line-height:1.7;
-  opacity:0; animation:up .8s ease .7s forwards;
+
 }
-@keyframes up { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
 
 /* ============================================================
    ORIGIN
@@ -336,36 +303,121 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .origin-body strong { color:var(--white); font-weight:700; }
 
 /* ============================================================
-   BELIEFS
+   FORGE
    ============================================================ */
-.beliefs { padding:min(64px, 7vh) 0; background:rgba(7,19,58,.5); }
-.beliefs-header { margin-bottom:72px; }
-.beliefs-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:2px; }
+/* Sized to fit one laptop screen below the nav: the orbital takes a fixed column, the
+   copy the rest, and the three points run as a row under both. */
+#diff {
+  padding:min(64px, 7vh) 0;
+  border-bottom:1px solid var(--border);
+}
 
-.belief-card {
-  padding:48px 40px; background:var(--deep);
-  border:1px solid var(--border);
-  transition: border-color .3s, background .3s;
-  position:relative; overflow:hidden;
+.diff-grid {
+  display:grid; grid-template-columns:380px 1fr;
+  gap:min(44px, 5vh) 72px; align-items:center;
 }
-.belief-card::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background:var(--sunrise); transform:scaleX(0);
-  transform-origin:left; transition:transform .4s ease;
-}
-.belief-card:hover::before { transform:scaleX(1); }
-.belief-card:hover { background:var(--surf); border-color:var(--border2); }
 
-.belief-number {
-  font-size:13px; font-weight:700;
-  color:var(--tan);
-  line-height:1; margin-bottom:16px; letter-spacing:.14em;
+/* Orbital SVG animation (Composio style) */
+.diff-visual {
+  position:relative; display:flex;
+  align-items:center; justify-content:center;
+  height:380px;
 }
-.belief-title {
-  font-size:22px; font-weight:700; color:var(--t1);
-  margin-bottom:14px; line-height:1.2;
+
+.orbital-wrap {
+  position:relative; width:360px; height:360px;
 }
-.belief-text { font-size:15px; font-weight:400; color:var(--t3); line-height:1.72; }
+
+/* Centre glyph */
+.orb-centre {
+  position:absolute; top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  width:80px; height:80px;
+  display:flex; align-items:center; justify-content:center;
+}
+.orb-logo { width:64px; height:64px; filter:brightness(0) invert(1); transition:filter .3s; }
+html[data-theme="light"] .orb-logo { filter:none; }
+
+/* Rings */
+.ring {
+  position:absolute; top:50%; left:50%;
+  border-radius:50%;
+  border:1px solid;
+  transform:translate(-50%,-50%);
+}
+.ring-1 {
+  width:160px; height:160px;
+  border-color:rgba(226,103,19,.25);
+}
+.ring-2 {
+  width:260px; height:260px;
+  border-color:rgba(224,166,20,.15);
+}
+.ring-3 {
+  width:360px; height:360px;
+  border-color:rgba(11,175,170,.1);
+}
+
+
+/* Dot nodes on rings */
+.ring-dot {
+  position:absolute;
+  width:8px; height:8px;
+  border-radius:50%;
+  margin:-4px;
+}
+.ring-1 .ring-dot { background:var(--tan); top:0; left:50%; box-shadow:0 0 12px rgba(226,103,19,.6); }
+.ring-2 .ring-dot { background:var(--gold); top:0; left:50%; box-shadow:0 0 12px rgba(224,166,20,.5); }
+.ring-3 .ring-dot { background:var(--aqua); top:0; left:50%; box-shadow:0 0 12px rgba(11,175,170,.5); }
+
+/* Floating labels around orbital */
+.orb-label {
+  position:absolute;
+  font-size:12px; font-weight:700;
+  letter-spacing:.1em; text-transform:uppercase;
+  color:var(--t4); white-space:nowrap;
+  background:rgba(6,15,38,.85);
+  border:1px solid var(--border2);
+  padding:7px 16px; border-radius:2px;
+  backdrop-filter:blur(8px);
+}
+.orb-label.top   { top:0;   left:50%; transform:translateX(-50%); }
+.orb-label.right { right:0; top:50%; transform:translateY(-50%); }
+.orb-label.bot   { bottom:0; left:50%; transform:translateX(-50%); }
+.orb-label.left  { left:0; top:50%; transform:translateY(-50%); }
+
+.diff-copy-side { position:relative; }
+
+.diff-h2 {
+  position:relative;
+  font-size:clamp(30px, 3.3vw, 46px);
+  font-weight:900; color:var(--white);
+  line-height:1.06; margin-bottom:22px;
+}
+.diff-h2 .warm {
+  background:var(--sunrise);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.diff-p {
+  font-size:17px; line-height:1.75;
+  color:var(--t3); max-width:36em;
+}
+
+/* Points: one row of three under both columns */
+.pts { grid-column:1 / -1; display:grid; grid-template-columns:repeat(3, 1fr); gap:0 40px; }
+.pt {
+  display:grid; grid-template-columns:32px 1fr;
+  gap:14px; padding:22px 0 0;
+  border-top:1px solid var(--border);
+}
+.pt-n {
+  font-size:12px; font-weight:700;
+  color:var(--tan); letter-spacing:.12em; padding-top:3px;
+}
+.pt-h { font-size:15px; color:var(--white); margin-bottom:7px; font-weight:700; }
+.pt-p { font-size:14px; color:var(--t3); line-height:1.7; }
 
 /* ============================================================
    TEAM
@@ -444,38 +496,6 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   transition: color .2s, border-color .2s;
 }
 .client-chip:hover { color:var(--white); border-color:rgba(226,103,19,0.3); }
-
-/* ============================================================
-   HOW WE WORK
-   ============================================================ */
-.howwework { padding:min(64px, 7vh) 0; }
-.hww-header { max-width:620px; margin-bottom:72px; }
-.hww-steps { display:grid; grid-template-columns:repeat(4, 1fr); border:1px solid var(--border); }
-.hww-step {
-  padding:48px 36px; background:var(--deep);
-  position:relative; border-right:1px solid var(--border);
-  transition: background .3s;
-}
-.hww-step:last-child { border-right:none; }
-.hww-step:hover { background:var(--surf); }
-.hww-step::before {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background:var(--sunrise); transform:scaleX(0);
-  transform-origin:left; transition:transform .4s ease;
-}
-.hww-step:hover::before { transform:scaleX(1); }
-
-.hww-step-num {
-  font-size:11px; font-weight:700; color:var(--tan);
-  letter-spacing:.15em; text-transform:uppercase;
-  margin-bottom:30px; display:flex; align-items:center; gap:8px;
-}
-.hww-step-num::before { content:''; display:block; width:22px; height:1px; background:var(--tan); }
-.hww-step-title {
-  font-size:22px; font-weight:700; color:var(--t1);
-  margin-bottom:14px; line-height:1.2;
-}
-.hww-step-text { font-size:14px; font-weight:400; color:var(--t3); line-height:1.72; }
 
 /* ============================================================
    CLOSING CTA
@@ -566,18 +586,10 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   display:flex; justify-content:space-between; align-items:center;
 }
 .f-copy { font-size:13px; color:var(--t4); }
-.f-built { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--t5); }
 
 /* ============================================================
    SCROLL REVEAL
    ============================================================ */
-.rv { opacity:0; transform:translateY(22px); transition:opacity .65s ease, transform .65s ease; }
-.rv-left { opacity:0; transform:translateX(-30px); transition:opacity .7s ease, transform .7s ease; }
-.rv-right { opacity:0; transform:translateX(30px); transition:opacity .7s ease, transform .7s ease; }
-.rv-scale { opacity:0; transform:scale(0.92); transition:opacity .7s ease, transform .7s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; transform:translate(0) scale(1); }
-.d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; }
-.d3 { transition-delay:.3s; } .d4 { transition-delay:.4s; }
 
 
 /* ── Hamburger button ── */
@@ -621,9 +633,10 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   :root { --px:32px; }
   .origin-grid, .team-header, .team-grid-founders { grid-template-columns:1fr; gap:40px; }
   .team-grid { grid-template-columns:1fr 1fr; }
-  .beliefs-grid { grid-template-columns:1fr; }
-  .hww-steps { grid-template-columns:1fr 1fr; }
-  .hww-step { border-right:none; border-bottom:1px solid var(--border); }
+  .diff-grid { grid-template-columns:1fr; gap:36px; }
+  .diff-visual { display:none; }
+  .pts { grid-template-columns:1fr; }
+  .pt { padding:14px 0; }
   .footer-in { grid-template-columns:1fr 1fr; }
 }
 /* Six nav items need more room: switch to the menu earlier than 900px */
@@ -638,15 +651,13 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   .nav-links { display:none; }
   .nav-btn { display:none; }
   .nav-hamburger { display:flex; }
-  .team-grid, .hww-steps { grid-template-columns:1fr; }
+  .team-grid { grid-template-columns:1fr; }
   .footer-in { grid-template-columns:1fr; gap:36px; }
   .f-bot { flex-direction:column; gap:10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .blob-1,.blob-2,.blob-3,.blob-4 { animation:none !important; }
-  .hero-ey,.hero-h1,.hero-sub,.hero-body { animation:none !important; opacity:1 !important; transform:none !important; }
-  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
+  .blob-1,.blob-2,.blob-3,.blob-4 { }
 }
 
 /* ============================================================
@@ -687,12 +698,6 @@ html[data-theme="light"] .btn-sun { color:#060f26; }
 html[data-theme="light"] .mobile-nav { background:rgba(244,241,236,0.97); }
 html[data-theme="light"] footer { background:rgba(244,241,236,0.6); }
 
-/* Beliefs */
-html[data-theme="light"] .beliefs { background:rgba(10,33,86,0.03); }
-html[data-theme="light"] .belief-card { background:rgba(255,255,255,0.6); }
-html[data-theme="light"] .belief-card:hover { background:rgba(255,255,255,0.8); }
-html[data-theme="light"] .belief-number { color:#b9530f; }
-
 /* Team */
 html[data-theme="light"] .team-card { background:rgba(255,255,255,0.6); }
 html[data-theme="light"] .team-card:hover { border-color:rgba(226,103,19,0.25); }
@@ -704,9 +709,8 @@ html[data-theme="light"] .team-avatar-glow { background:radial-gradient(ellipse 
 html[data-theme="light"] .clients { background:rgba(10,33,86,0.03); }
 html[data-theme="light"] .client-chip { background:rgba(255,255,255,0.6); }
 
-/* How we work */
-html[data-theme="light"] .hww-step { background:rgba(255,255,255,0.6); }
-html[data-theme="light"] .hww-step:hover { background:rgba(255,255,255,0.8); }
+/* Orbital labels */
+html[data-theme="light"] .orb-label { background:rgba(255,255,255,0.85); }
 
 /* Closing CTA */
 html[data-theme="light"] .closing { background:rgba(10,33,86,0.03); }
@@ -726,6 +730,8 @@ html[data-theme="light"] .icon-moon { display:none; }
 }
 .mobile-nav .mob-cta, .mobile-nav .mob-cta:hover { color:#060f26; }
 html { overflow-x:clip; }
+/* Laptops and up render at 95% (100% read as oversized); --max is set in pre-zoom pixels, hence its larger figures */
+@media (min-width:1025px) { html { zoom:.95; } }
 </style>
 </head>
 <body>
@@ -748,9 +754,8 @@ html { overflow-x:clip; }
   </a>
   <ul class="nav-links">
     <li><a href="/#work">Work</a></li>
-    <li><a href="/services">What We Do</a></li>
+    <li><a href="/services">Services</a></li>
     <li><a href="/about" class="active">About</a></li>
-    <li><a href="/insights">Insights</a></li>
     <li><a href="/contact">Contact</a></li>
   </ul>
   <a href="/contact" class="nav-btn">Book a Call</a>
@@ -765,9 +770,8 @@ html { overflow-x:clip; }
 <div class="mobile-nav" id="mobileNav">
   <a href="/">Home</a>
   <a href="/#work">Work</a>
-  <a href="/services">What We Do</a>
+  <a href="/services">Services</a>
   <a href="/about" class="active">About</a>
-  <a href="/insights">Insights</a>
   <a href="/contact">Contact</a>
   <a href="/contact" class="mob-cta">Book a Call</a>
 </div>
@@ -782,7 +786,7 @@ html { overflow-x:clip; }
       Small team.<br><em>Outsized</em><br>impact.
     </h1>
     <p class="hero-sub">
-      We're a Bristol-based AI agency that builds agentic systems for organisations ready to operate at a level they couldn't reach before.
+      We're a Bristol-based AI consultancy that builds agentic systems for organisations ready to operate at a level they couldn't reach before.
     </p>
   </div>
 </section>
@@ -791,10 +795,10 @@ html { overflow-x:clip; }
 <section class="origin" aria-label="Our story">
   <div class="w">
     <div class="origin-grid">
-      <div class="rv-left">
+      <div>
         <h2 class="sec-h">Built on a<br>simple <em>premise</em></h2>
       </div>
-      <div class="origin-body rv-right d1">
+      <div class="origin-body">
         <p>Iternal was founded with a straightforward belief: <strong>AI doesn't level the playing field by itself, but the right AI strategy does.</strong> Organisations that understand how to deploy intelligent systems don't just save time. They operate at a fundamentally different scale.</p>
         <p>We started as a small team in Bristol. We still are. But through deep expertise in agentic AI and a ruthless focus on what actually moves the needle, we build and deploy systems that let our clients punch well above their weight. The same way we do.</p>
         <p>Every project we take on is informed by the same question: <strong>what would this look like if it ran itself?</strong></p>
@@ -803,74 +807,44 @@ html { overflow-x:clip; }
   </div>
 </section>
 
-<!-- ===== BELIEFS ===== -->
-<section class="beliefs" aria-label="Operating principles">
+<!-- ===== FORGE ===== -->
+<section id="diff" aria-label="What makes us different">
   <div class="w">
-    <div class="beliefs-header rv">
-      <h2 class="sec-h">Our operating<br>principles</h2>
-    </div>
-    <div class="beliefs-grid">
-      <div class="belief-card rv-left">
-        <div class="belief-number">01</div>
-        <h3 class="belief-title">AI should do the heavy lifting</h3>
-        <p class="belief-text">We don't believe in AI as a novelty. We build systems that take on real workloads (research, coordination, generation, decision support) so your team can focus on what only humans can do.</p>
+    <div class="diff-grid">
+      <!-- Orbital visual -->
+      <div class="diff-visual">
+        <div class="orbital-wrap">
+          <!-- Rings -->
+          <div class="ring ring-1"><div class="ring-dot"></div></div>
+          <div class="ring ring-2"><div class="ring-dot"></div></div>
+          <div class="ring ring-3"><div class="ring-dot"></div></div>
+          <!-- Centre mark -->
+          <div class="orb-centre">
+            <img width="373" height="357" src="assets/icon-navy.png" alt="Iternal" class="orb-logo">
+          </div>
+          <!-- Labels -->
+          <div class="orb-label top">Agentic AI</div>
+          <div class="orb-label right">Live Systems</div>
+          <div class="orb-label bot">Senior Team</div>
+          <div class="orb-label left">Strategy</div>
+        </div>
       </div>
-      <div class="belief-card rv-right d1">
-        <div class="belief-number">02</div>
-        <h3 class="belief-title">Speed is a strategic advantage</h3>
-        <p class="belief-text">The organisations that move fastest with AI will define the next decade of their industries. We build with urgency, and we bring that same pace to every engagement we take on.</p>
-      </div>
-      <div class="belief-card rv-left d2">
-        <div class="belief-number">03</div>
-        <h3 class="belief-title">Practical over theoretical</h3>
-        <p class="belief-text">We're not a research lab. We're builders. Every solution we design has to work in the real world, integrate with existing tools, and deliver measurable value, not just look good in a demo.</p>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ===== TEAM ===== -->
-<section class="team" aria-label="Our team">
-  <div class="w">
-    <div class="team-header">
-      <div class="rv">
-        <h2 class="sec-h">The people<br>behind the work</h2>
+      <!-- Copy -->
+      <div class="diff-copy-side">
+        <h2 class="diff-h2">
+          Most agencies charge for headcount.<br>
+          <span class="warm">We're built differently.</span>
+        </h2>
+        <p class="diff-p">
+          Iternal runs a unique AI-augmented delivery model called Forge. A small core team, amplified by an internal suite of agentic tools, delivers at a capacity most agencies many times our size would struggle to match.
+        </p>
       </div>
-      <p class="team-intro rv d1">We're a tight-knit group of builders, strategists and AI specialists united by a single belief: <strong>the best technology disappears into the work.</strong> You don't notice the system. You just notice that things run better.</p>
-    </div>
 
-    <div class="team-grid">
-      <div class="team-card rv-left">
-        <div class="team-avatar"><span class="team-avatar-initials">W</span><div class="team-avatar-glow"></div></div>
-        <div class="team-info">
-          <h3 class="team-name">Wiseall</h3>
-          <p class="team-role">Managing Director</p>
-          <p class="team-bio">Leads strategy and delivery. Architect of Iternal's agentic AI approach and the person responsible for turning ambitious ideas into running systems.</p>
-        </div>
-      </div>
-      <div class="team-card rv-right d1">
-        <div class="team-avatar"><span class="team-avatar-initials">B</span><div class="team-avatar-glow"></div></div>
-        <div class="team-info">
-          <h3 class="team-name">Barnaby</h3>
-          <p class="team-role">Lead Developer</p>
-          <p class="team-bio">The engineering backbone. Barnaby builds the systems that underpin client work. Fast, scalable and built for the real world.</p>
-        </div>
-      </div>
-      <div class="team-card rv-left d2">
-        <div class="team-avatar"><span class="team-avatar-initials">C</span><div class="team-avatar-glow"></div></div>
-        <div class="team-info">
-          <h3 class="team-name">Christian</h3>
-          <p class="team-role">AI Specialist</p>
-          <p class="team-bio">Deep in the models. Christian's expertise spans prompt engineering, RAG architectures and agentic workflow design. The engine room of our AI delivery.</p>
-        </div>
-      </div>
-      <div class="team-card rv-right d3">
-        <div class="team-avatar"><span class="team-avatar-initials">Z</span><div class="team-avatar-glow"></div></div>
-        <div class="team-info">
-          <h3 class="team-name">Zain</h3>
-          <p class="team-role">Operations</p>
-          <p class="team-bio">Keeps everything moving. The connective tissue between client work, internal processes and the team, ensuring nothing falls through the cracks.</p>
-        </div>
+      <div class="pts">
+          <div class="pt"><span class="pt-n">01</span><div><div class="pt-h">Agentic, not just generative</div><p class="pt-p">Systems that plan, orchestrate, and deliver outcomes inside real-world infrastructure.</p></div></div>
+          <div class="pt"><span class="pt-n">02</span><div><div class="pt-h">Live systems, not pilots</div><p class="pt-p">Good News London is live with the GLA on london.gov.uk. CivicNetZero runs across three continents.</p></div></div>
+          <div class="pt"><span class="pt-n">03</span><div><div class="pt-h">Senior team on every project</div><p class="pt-p">The people who scoped it build it. No account management layer, no junior bench.</p></div></div>
       </div>
     </div>
   </div>
@@ -879,10 +853,10 @@ html { overflow-x:clip; }
 <!-- ===== CLIENTS ===== -->
 <section class="clients">
   <div class="w">
-    <div class="clients-header rv">
+    <div class="clients-header">
       <h2 class="sec-h" style="text-align:center;">Organisations we've<br>built alongside</h2>
     </div>
-    <div class="clients-logos rv d1">
+    <div class="clients-logos">
       <div class="client-chip">Greater London Authority</div>
       <div class="client-chip">CivicNetZero</div>
       <div class="client-chip">NHS</div>
@@ -894,48 +868,18 @@ html { overflow-x:clip; }
   </div>
 </section>
 
-<!-- ===== HOW WE WORK ===== -->
-<section class="howwework">
-  <div class="w">
-    <div class="hww-header rv">
-      <h2 class="sec-h">From first conversation<br>to live system</h2>
-    </div>
-    <div class="hww-steps">
-      <div class="hww-step rv-left">
-        <div class="hww-step-num">01</div>
-        <h3 class="hww-step-title">Discover</h3>
-        <p class="hww-step-text">We start by understanding your world. Your processes, your bottlenecks and where intelligent automation will actually make a difference.</p>
-      </div>
-      <div class="hww-step rv-right d1">
-        <div class="hww-step-num">02</div>
-        <h3 class="hww-step-title">Design</h3>
-        <p class="hww-step-text">We map out the architecture: what agents are needed, how they connect, and how they integrate with your existing stack.</p>
-      </div>
-      <div class="hww-step rv-left d2">
-        <div class="hww-step-num">03</div>
-        <h3 class="hww-step-title">Build</h3>
-        <p class="hww-step-text">We build fast and in the open. You see working systems early, not decks and prototypes. Iteration happens in real time.</p>
-      </div>
-      <div class="hww-step rv-right d3">
-        <div class="hww-step-num">04</div>
-        <h3 class="hww-step-title">Support</h3>
-        <p class="hww-step-text">We don't disappear at launch. We stay involved, monitor performance, and evolve the system as your needs grow.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- ===== CLOSING CTA ===== -->
 <section class="closing" aria-label="Get started">
   <div class="w">
-    <h2 class="closing-h rv">Ready to operate at a<br><em>different scale?</em></h2>
-    <p class="closing-sub rv d1">Let's talk about where AI can genuinely move the needle for your organisation.</p>
-    <div class="rv-scale d2">
+    <h2 class="closing-h">Ready to operate at a<br><em>different scale?</em></h2>
+    <p class="closing-sub">Let's talk about where AI can genuinely move the needle for your organisation.</p>
+    <div>
       <a href="/contact" class="btn-sun">
         Get in Touch
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
       <a href="/#work" class="btn-line">See our work</a>
+      <a href="/services" class="btn-line">See our services</a>
     </div>
   </div>
 </section>
@@ -956,9 +900,8 @@ html { overflow-x:clip; }
       <span class="f-col-lbl">Navigation</span>
       <ul class="f-links">
         <li><a href="/#work">Work</a></li>
-        <li><a href="/services">What We Do</a></li>
+        <li><a href="/services">Services</a></li>
         <li><a href="/about">About</a></li>
-        <li><a href="/insights">Insights</a></li>
         <li><a href="/contact">Contact</a></li>
       </ul>
     </div>
@@ -966,15 +909,13 @@ html { overflow-x:clip; }
       <span class="f-col-lbl">Get In Touch</span>
       <ul class="f-links">
         <li><a href="mailto:hello@iternal.life">hello@iternal.life</a></li>
-        <li><a href="https://iternal.app" target="_blank" rel="noopener noreferrer">iternal.app</a></li>
         <li><a href="https://linkedin.com/company/iternal" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
         <li><a href="/contact">Book a Call</a></li>
       </ul>
     </div>
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Bristol, UK</span>
-    <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
+    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Company no. 10849262 &middot; Bristol, UK</span>
   </div>
 </footer>
 
@@ -1003,14 +944,6 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-/* ── Scroll reveal ── */
-const rvEls = document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale');
-const rvObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('on'); rvObs.unobserve(e.target); }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-rvEls.forEach(el => rvObs.observe(el));
 
 /* ── Theme toggle ── */
 (function(){
@@ -1067,31 +1000,6 @@ rvEls.forEach(el => rvObs.observe(el));
   window.addEventListener('load',()=>{ init(); draw(); });
 })();
 
-/* ── Hero parallax ── */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const mesh = document.getElementById('mesh');
-  const heroContent = document.querySelector('.hero-in, .page-hero-in');
-  const heroSection = document.querySelector('#hero, .page-hero');
-  if(!mesh || !heroSection) return;
-  const limit = heroSection.offsetHeight || window.innerHeight;
-  let ticking = false;
-  window.addEventListener('scroll', function(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(function(){
-      const sy = window.scrollY;
-      if(sy <= limit){
-        mesh.style.transform = 'translateY(' + (sy * -0.08) + 'px)';
-        if(heroContent){
-          heroContent.style.transform = 'translateY(' + (sy * 0.35) + 'px)';
-          heroContent.style.opacity = 1 - (sy / limit) * 0.6;
-        }
-      }
-      ticking = false;
-    });
-  }, {passive: true});
-})();
 </script>
 </body>
 </html>

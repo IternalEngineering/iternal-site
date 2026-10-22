@@ -76,7 +76,7 @@
   --dawn:    linear-gradient(160deg, #0bafaa 0%, #1d6a91 50%, #0a2156 100%);
 
   --f:   'Maven Pro', sans-serif;
-  --max: 1160px;
+  --max: clamp(1220px, 80vw, 1520px);
   --px:  64px;
 }
 
@@ -104,58 +104,26 @@ a { text-decoration: none; }
   position: absolute; border-radius: 50%;
   filter: blur(80px);
   opacity: 0;
-  animation: blobFloat linear infinite;
 }
 .blob-1 {
   width:700px; height:700px;
   top:-15%; right:-10%;
-  background: radial-gradient(circle, rgba(226,103,19,0.22) 0%, transparent 70%);
-  animation-duration: 18s; animation-delay: 0s; opacity:.50;
-  animation-name: blob1;
+  background: radial-gradient(circle, rgba(226,103,19,0.22) 0%, transparent 70%); opacity:.50;
 }
 .blob-2 {
   width:500px; height:500px;
   top:30%; left:-8%;
-  background: radial-gradient(circle, rgba(224,166,20,0.14) 0%, transparent 70%);
-  animation-duration: 22s; animation-delay: -8s; opacity:.40;
-  animation-name: blob2;
+  background: radial-gradient(circle, rgba(224,166,20,0.14) 0%, transparent 70%); opacity:.40;
 }
 .blob-3 {
   width:600px; height:600px;
   bottom:-10%; right:5%;
-  background: radial-gradient(circle, rgba(11,175,170,0.12) 0%, transparent 70%);
-  animation-duration: 26s; animation-delay: -14s; opacity:.35;
-  animation-name: blob3;
+  background: radial-gradient(circle, rgba(11,175,170,0.12) 0%, transparent 70%); opacity:.35;
 }
 .blob-4 {
   width:900px; height:900px;
   top:10%; left:20%;
-  background: radial-gradient(circle, rgba(29,106,145,0.1) 0%, transparent 65%);
-  animation-duration: 30s; animation-delay: -5s; opacity:.30;
-  animation-name: blob4;
-}
-@keyframes blob1 {
-  0%   { transform: translate(0,0) scale(1); }
-  33%  { transform: translate(-40px, 60px) scale(1.08); }
-  66%  { transform: translate(30px, -40px) scale(0.95); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes blob2 {
-  0%   { transform: translate(0,0) scale(1); }
-  25%  { transform: translate(60px, -30px) scale(1.1); }
-  75%  { transform: translate(-20px, 50px) scale(0.93); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes blob3 {
-  0%   { transform: translate(0,0) scale(1); }
-  40%  { transform: translate(-50px, -60px) scale(1.06); }
-  80%  { transform: translate(40px, 30px) scale(0.97); }
-  100% { transform: translate(0,0) scale(1); }
-}
-@keyframes blob4 {
-  0%   { transform: translate(0,0) scale(1) rotate(0deg); }
-  50%  { transform: translate(20px, 20px) scale(1.04) rotate(3deg); }
-  100% { transform: translate(0,0) scale(1) rotate(0deg); }
+  background: radial-gradient(circle, rgba(29,106,145,0.1) 0%, transparent 65%); opacity:.30;
 }
 
 #grain {
@@ -330,7 +298,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 .cs-body p {
   font-size:17px; font-weight:400; line-height:1.78;
-  color:var(--t2); margin-bottom:22px;
+  color:var(--t2); margin-bottom:22px; max-width:40em;
 }
 .cs-body p:last-child { margin-bottom:0; }
 .cs-body strong { color:var(--white); font-weight:700; }
@@ -437,18 +405,10 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   display:flex; justify-content:space-between; align-items:center;
 }
 .f-copy { font-size:13px; color:var(--t4); }
-.f-built { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--t5); }
 
 /* ============================================================
    SCROLL REVEAL
    ============================================================ */
-.rv { opacity:0; transform:translateY(22px); transition:opacity .65s ease, transform .65s ease; }
-.rv-left { opacity:0; transform:translateX(-30px); transition:opacity .7s ease, transform .7s ease; }
-.rv-right { opacity:0; transform:translateX(30px); transition:opacity .7s ease, transform .7s ease; }
-.rv-scale { opacity:0; transform:scale(0.92); transition:opacity .7s ease, transform .7s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; transform:translate(0) scale(1); }
-.d1 { transition-delay:.1s; } .d2 { transition-delay:.2s; }
-.d3 { transition-delay:.3s; } .d4 { transition-delay:.4s; }
 
 /* ── Hamburger button ── */
 .nav-hamburger {
@@ -511,8 +471,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .blob-1,.blob-2,.blob-3,.blob-4 { animation:none !important; }
-  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
+  .blob-1,.blob-2,.blob-3,.blob-4 { }
 }
 
 /* ============================================================
@@ -569,6 +528,8 @@ html[data-theme="light"] .icon-moon { display:none; }
 }
 .mobile-nav .mob-cta, .mobile-nav .mob-cta:hover { color:#060f26; }
 html { overflow-x:clip; }
+/* Laptops and up render at 95% (100% read as oversized); --max is set in pre-zoom pixels, hence its larger figures */
+@media (min-width:1025px) { html { zoom:.95; } }
 </style>
 </head>
 <body>
@@ -591,9 +552,8 @@ html { overflow-x:clip; }
   </a>
   <ul class="nav-links">
     <li><a href="/#work">Work</a></li>
-    <li><a href="/services">What We Do</a></li>
+    <li><a href="/services">Services</a></li>
     <li><a href="/about">About</a></li>
-    <li><a href="/insights">Insights</a></li>
     <li><a href="/contact">Contact</a></li>
   </ul>
   <a href="/contact" class="nav-btn">Book a Call</a>
@@ -608,9 +568,8 @@ html { overflow-x:clip; }
 <div class="mobile-nav" id="mobileNav">
   <a href="/">Home</a>
   <a href="/#work">Work</a>
-  <a href="/services">What We Do</a>
+  <a href="/services">Services</a>
   <a href="/about">About</a>
-  <a href="/insights">Insights</a>
   <a href="/contact">Contact</a>
   <a href="/contact" class="mob-cta">Book a Call</a>
 </div>
@@ -620,20 +579,20 @@ html { overflow-x:clip; }
 <!-- ===== HERO ===== -->
 <section class="cs-hero">
   <div class="w">
-    <a href="/#work" class="cs-back rv">
+    <a href="/agentic-ai-builds" class="cs-back">
       <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M2.5 7h9M8 3.5l3.5 3.5L8 10.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Back to Work
+      Agentic AI Builds
     </a>
-    <div class="cs-sector rv d1">Health &middot; Bristol Children's Hospital</div>
-    <h1 class="cs-h1 rv d2">Bristol Children's Hospital:<br><em>The Grand Appeal</em></h1>
-    <p class="cs-intro rv d3">Supporting parents of sick children with an intelligent digital diary. Co-designed with clinicians, with full NHS security compliance and clinical governance.</p>
+    <div class="cs-sector">Health &middot; Bristol Children's Hospital</div>
+    <h1 class="cs-h1">Bristol Children's Hospital:<br><em>The Grand Appeal</em></h1>
+    <p class="cs-intro">Supporting parents of sick children with an intelligent digital diary. Co-designed with clinicians, with full NHS security compliance and clinical governance.</p>
   </div>
 </section>
 
 <!-- ===== IMAGE ===== -->
 <section class="cs-img-section">
   <div class="w">
-    <div class="rv-scale">
+    <div>
       <img width="1440" height="814" src="assets/screenshot-nhs.webp" alt="Bristol Children's Hospital Digital Diary interface" style="width:100%; display:block; border:1px solid var(--border); border-radius:4px; height:auto;">
     </div>
   </div>
@@ -643,7 +602,7 @@ html { overflow-x:clip; }
 <section class="cs-details">
   <div class="w">
     <div class="cs-grid">
-      <div class="rv-left">
+      <div>
         <div class="cs-meta-group">
           <div class="cs-meta-label">Client</div>
           <div class="cs-meta-value">NHS</div>
@@ -665,7 +624,7 @@ html { overflow-x:clip; }
           <div class="cs-meta-value">Agentic AI &middot; Clinical Systems Integration &middot; NHS Compliance</div>
         </div>
       </div>
-      <div class="cs-body rv-right d1">
+      <div class="cs-body">
         <h2>The Challenge</h2>
         <p>Patient pathways across the NHS are complex, multi-step journeys that span departments, specialisms and care settings. Delays and inefficiencies in these pathways don't just cost the system money. They directly affect patient outcomes. The challenge was to build AI that could identify bottlenecks, predict delays and recommend interventions, all while operating within the NHS's rigorous clinical governance framework.</p>
 
@@ -678,7 +637,7 @@ html { overflow-x:clip; }
       </div>
     </div>
 
-    <div class="cs-highlights rv d2">
+    <div class="cs-highlights">
       <div class="cs-hl">
         <div class="cs-hl-val">NHS-grade</div>
         <div class="cs-hl-lbl">Full clinical governance compliance</div>
@@ -698,13 +657,14 @@ html { overflow-x:clip; }
 <!-- ===== CTA ===== -->
 <section class="closing" aria-label="Get started">
   <div class="w">
-    <h2 class="closing-h rv">Interested in what AI could do for <em>your organisation?</em></h2>
-    <p class="closing-sub rv d1">Discovery calls are 30 minutes, focused and free.</p>
-    <div class="rv-scale d2">
+    <h2 class="closing-h">Interested in what AI could do for <em>your organisation?</em></h2>
+    <p class="closing-sub">Discovery calls are 30 minutes, focused and free.</p>
+    <div>
       <a href="/contact" class="btn-sun">
         Book a Discovery Call
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
+      <a href="/case-tech4good" class="btn-line">Next case: Tech4Good South West</a>
       <a href="/#work" class="btn-line">See more work</a>
     </div>
   </div>
@@ -726,9 +686,8 @@ html { overflow-x:clip; }
       <span class="f-col-lbl">Navigation</span>
       <ul class="f-links">
         <li><a href="/#work">Work</a></li>
-        <li><a href="/services">What We Do</a></li>
+        <li><a href="/services">Services</a></li>
         <li><a href="/about">About</a></li>
-        <li><a href="/insights">Insights</a></li>
         <li><a href="/contact">Contact</a></li>
       </ul>
     </div>
@@ -736,15 +695,13 @@ html { overflow-x:clip; }
       <span class="f-col-lbl">Get In Touch</span>
       <ul class="f-links">
         <li><a href="mailto:hello@iternal.life">hello@iternal.life</a></li>
-        <li><a href="https://iternal.app" target="_blank" rel="noopener noreferrer">iternal.app</a></li>
         <li><a href="https://linkedin.com/company/iternal" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
         <li><a href="/contact">Book a Call</a></li>
       </ul>
     </div>
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Bristol, UK</span>
-    <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
+    <span class="f-copy">&copy; 2026 Iternal Ltd &middot; Company no. 10849262 &middot; Bristol, UK</span>
   </div>
 </footer>
 
@@ -788,33 +745,7 @@ document.addEventListener('keydown', function(e){
   });
 })();
 
-/* ── Scroll reveal ── */
-const rvEls = document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale');
-const rvObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('on'); rvObs.unobserve(e.target); }
-  });
-}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-rvEls.forEach(el => rvObs.observe(el));
 
-/* ── Hero parallax ── */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const mesh = document.getElementById('mesh');
-  if(!mesh) return;
-  let ticking = false;
-  window.addEventListener('scroll', function(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(function(){
-      const sy = window.scrollY;
-      if(sy <= window.innerHeight){
-        mesh.style.transform = 'translateY(' + (sy * -0.08) + 'px)';
-      }
-      ticking = false;
-    });
-  }, {passive: true});
-})();
 </script>
 </body>
 </html>

@@ -27,7 +27,7 @@ no promise that new sites are coming. Once the call is made, four places move
 together:
 
 1. `websites.html` — the gallery entry (label, description, screenshot img,
-   and the "Start yours" button whose `start.html?from=<slug>` link tags the
+   and the "Start yours" button whose `/start?from=<slug>` link tags the
    sign-up with the example that hooked them). The screenshot is wrapped in
    an `<a class="g-view">` to the live site with `data-embed`, which opens
    the click in the lightbox instead of a new tab. That needs the site's
@@ -151,8 +151,8 @@ the token awaits org approval), so the worker can deploy regardless.
   including VAT** (`TERMS.downpayment` and `TERMS.completion` in the worker; the
   order also carries the £750 total as `buildFee`). The care plan is **£50 a
   month including VAT**. Every figure in the order includes VAT, the order
-  again overriding the terms' "all fees exclude VAT"; from the month after the site goes live, which includes the web
-  agent (our studio). Invoices are payable within 14 days. Per-client
+  again overriding the terms' "all fees exclude VAT"; from the month after the site goes live, which includes Site
+  Agent (our agentic studio). Invoices are payable within 14 days. Per-client
   pricing is planned: the order's figures are its own fields for that reason.
 - **Accepting is the last step of sign-up**, on start.html, and forms the
   agreement. The worker briefs the team to invoice the downpayment. Nothing on
@@ -223,7 +223,11 @@ booking invite.
   shows success only once the worker has the sign-up.
 - `questions.html` `WORKER_URL` — `https://api.iternal.co.uk`; an empty
   string falls back to FormSubmit (the pre-worker path, not in use).
-- `questions.html` `BOOKING_URL` — the Google Calendar appointment schedule.
+- `questions.html` `BOOKING_URL` — the website-build meeting: John's Google Calendar
+  schedule "Disco Meeting" (60 minutes), https://calendar.app.google/fNGuEjKBSpoPMhAL6
+  (since 21 Oct 2026; was Paul's "A chat with Paul"). It is strictly for website-build
+  meetings (Robbie): every other "Book a Call" / "Book a Discovery Call" goes to /contact,
+  and those discovery calls stay "30 minutes".
   Lives here only. A plain schedule: no payment step.
 
 ## Go-live (dark launch)
@@ -233,7 +237,7 @@ worker from GitHub about a minute after every push to main (confirmed
 20 Oct 2026: pushed 10:51, live 10:52), the weekly screenshot commit
 included. A manual `npx wrangler deploy` from the repo root still works and
 ships the local working tree. The funnel is live but DARK: no public page links to it
-(the "Websites" nav item is removed everywhere, websites.html/start.html are
+(no menu item or Services entry leads to it, websites.html/start.html are
 noindex, the sitemap omits them), and without `?team` the sign-up and
 questions pages are a preview: every screen can be stepped through, but
 nothing is sent and no call is booked (`preview.js`).
@@ -259,21 +263,30 @@ LIGHTING UP (when the team says go). Made directly on main on the day,
 never prepared ahead: a deploy ships main, so these edits can only land
 when the answer is go. About ten minutes; one commit, then the deploy.
 
-1. **The menu.** Add "Websites" straight after "Work", in both the desktop
-   menu (`<ul class="nav-links">`: `<li><a href="websites.html">Websites</a></li>`)
-   and the phone menu (`<div class="mobile-nav">`:
-   `<a href="websites.html">Websites</a>`), on all eleven pages without it:
-   index, services, about, insights, contact, privacy, and the five
-   `case-*.html` pages. websites.html, start.html and questions.html have it
-   already. Check: `grep -c 'href="websites.html">Websites' *.html` gives 2
-   on every page except websites.html, which gives 1 (its desktop link
-   carries `class="active"`).
+1. **The way in is Services, not the menu.** websites.html, start.html and
+   questions.html already mark "Services" as the current section.
+   On main the Websites entry and homepage row are already in place but
+   carry `hidden`, and the contact option is left out (the rework release,
+   Oct 2026).
+   - services.html: delete `hidden` from `<div class="tier tier-wide"
+     id="websites" hidden>` and the comment line above it. Also add
+     ", and websites" back to the end of its three meta descriptions
+     ("…strategy and advisory, AI augmentation, and websites.").
+   - index.html: delete `hidden` from the Websites row in "Ways to work"
+     (`<div class="svc" hidden>`) and the comment line above it.
+   - contact.html: add `<option>Websites</option>` to "What kind of
+     engagement?", before "Not sure yet" (the `?service=websites`
+     pre-select already maps to it).
+   - Check: `grep -c 'hidden' services.html index.html` no longer counts
+     the Websites lines, and `grep -c '<option>Websites' contact.html` gives 1.
 2. **Indexing.** websites.html and start.html: `<meta name="robots"
    content="noindex, follow">` becomes `index, follow`. questions.html stays
    `noindex` (a step page, reached only after sign-up).
 3. **The sitemap.** In `sitemap.xml`, after contact:
    `<url><loc>https://iternal.co.uk/websites</loc><lastmod>YYYY-MM-DD</lastmod><priority>0.8</priority></url>`,
-   with that day's date.
+   with that day's date. In `llms.txt`, add a Websites entry under "## Services", after AI
+   Strategy & Advisory: `- [Websites](https://iternal.co.uk/websites): Not every project needs a
+   platform. Sometimes you need a really good website, designed, built and live in weeks.`
 4. **The preview gate**, in start.html's script: delete the "Dark-launch
    preview gate" block (the `PREVIEW` constant, the disabled button, the
    "Preview" notes and the gold "In testing" banner), the

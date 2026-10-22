@@ -63,7 +63,7 @@
   --dawn:    linear-gradient(160deg, #0bafaa 0%, #1d6a91 50%, #0a2156 100%);
 
   --f:   'Maven Pro', sans-serif;
-  --max: 1160px;
+  --max: clamp(1220px, 80vw, 1520px);
   --px:  64px;
 }
 
@@ -80,14 +80,10 @@ a { text-decoration:none; }
 /* ── Mesh blobs ── */
 #mesh { position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
 .blob { position:absolute; border-radius:50%; filter:blur(80px); }
-.blob-1 { width:600px; height:600px; top:-10%; right:-5%; background:radial-gradient(circle,rgba(226,103,19,0.16) 0%,transparent 70%); animation:blob1 18s linear infinite; opacity:.50; }
-.blob-2 { width:500px; height:500px; top:40%; left:-8%; background:radial-gradient(circle,rgba(224,166,20,0.10) 0%,transparent 70%); animation:blob2 24s linear infinite; opacity:.40; }
-.blob-3 { width:550px; height:550px; bottom:-5%; right:10%; background:radial-gradient(circle,rgba(11,175,170,0.09) 0%,transparent 70%); animation:blob3 28s linear infinite; opacity:.35; }
-@keyframes blob1 { 0%{transform:translate(0,0) scale(1)} 33%{transform:translate(-30px,50px) scale(1.07)} 66%{transform:translate(25px,-35px) scale(0.96)} 100%{transform:translate(0,0) scale(1)} }
-@keyframes blob2 { 0%{transform:translate(0,0)} 40%{transform:translate(50px,-40px) scale(1.08)} 100%{transform:translate(0,0)} }
-@keyframes blob3 { 0%{transform:translate(0,0)} 50%{transform:translate(-40px,-50px) scale(1.05)} 100%{transform:translate(0,0)} }
-.blob-4 { width:900px; height:900px; top:10%; left:20%; background:radial-gradient(circle,rgba(29,106,145,0.1) 0%,transparent 65%); animation:blob4 30s linear infinite; animation-delay:-5s; opacity:.30; }
-@keyframes blob4 { 0%{transform:translate(0,0) scale(1) rotate(0deg)} 50%{transform:translate(20px,20px) scale(1.04) rotate(3deg)} 100%{transform:translate(0,0) scale(1) rotate(0deg)} }
+.blob-1 { width:600px; height:600px; top:-10%; right:-5%; background:radial-gradient(circle,rgba(226,103,19,0.16) 0%,transparent 70%); opacity:.50; }
+.blob-2 { width:500px; height:500px; top:40%; left:-8%; background:radial-gradient(circle,rgba(224,166,20,0.10) 0%,transparent 70%); opacity:.40; }
+.blob-3 { width:550px; height:550px; bottom:-5%; right:10%; background:radial-gradient(circle,rgba(11,175,170,0.09) 0%,transparent 70%); opacity:.35; }
+.blob-4 { width:900px; height:900px; top:10%; left:20%; background:radial-gradient(circle,rgba(29,106,145,0.1) 0%,transparent 65%); opacity:.30; }
 
 #grain { position:fixed; inset:0; z-index:1; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E"); opacity:.45; }
 
@@ -127,12 +123,6 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .nav-btn { background:var(--sunrise); color:#060f26; font-family:var(--f); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:10px 22px; border-radius:3px; border:none; transition:opacity .2s, transform .15s, box-shadow .2s; }
 .nav-btn:hover { opacity:.88; transform:translateY(-1px); box-shadow:0 8px 28px rgba(226,103,19,.3); }
 /* ── Scroll reveal ── */
-.rv { opacity:0; transform:translateY(22px); transition:opacity .65s ease, transform .65s ease; }
-.rv-left { opacity:0; transform:translateX(-30px); transition:opacity .7s ease, transform .7s ease; }
-.rv-right { opacity:0; transform:translateX(30px); transition:opacity .7s ease, transform .7s ease; }
-.rv-scale { opacity:0; transform:scale(0.92); transition:opacity .7s ease, transform .7s ease; }
-.rv.on, .rv-left.on, .rv-right.on, .rv-scale.on { opacity:1; transform:translate(0) scale(1); }
-.d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s} .d4{transition-delay:.4s} .d5{transition-delay:.5s}
 
 
 /* ── Buttons ── */
@@ -392,7 +382,6 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 .f-links a:hover { color:var(--tan); }
 .f-bot { max-width:var(--max); margin:40px auto 0; padding-top:28px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
 .f-copy { font-size:13px; color:var(--t4); }
-.f-built { font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--t5); }
 
 /* ── Hamburger button ── */
 .nav-hamburger {
@@ -455,8 +444,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 
 
 @media (prefers-reduced-motion: reduce) {
-  .blob-1,.blob-2,.blob-3,.blob-4 { animation:none !important; }
-  .rv,.rv-left,.rv-right,.rv-scale { opacity:1 !important; transform:none !important; transition:none !important; }
+  .blob-1,.blob-2,.blob-3,.blob-4 { }
 }
 
 /* ============================================================
@@ -596,6 +584,8 @@ html[data-theme="light"] .icon-moon { display:none; }
 }
 .mobile-nav .mob-cta, .mobile-nav .mob-cta:hover { color:#060f26; }
 html { overflow-x:clip; }
+/* Laptops and up render at 95% (100% read as oversized); --max is set in pre-zoom pixels, hence its larger figures */
+@media (min-width:1025px) { html { zoom:.95; } }
 </style>
 </head>
 <body>
@@ -605,15 +595,13 @@ html { overflow-x:clip; }
 <!-- ===== NAV ===== -->
 <nav id="nav">
   <a href="/" class="nav-logo" aria-label="Iternal — home">
-    <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
-    <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
+    <img width="1200" height="357" src="assets/logo-white.png" alt="Iternal" class="logo-dark">
+    <img width="1200" height="357" src="assets/logo-navy.png" alt="Iternal" class="logo-light">
   </a>
   <ul class="nav-links">
     <li><a href="/#work">Work</a></li>
-    <li><a href="websites.html">Websites</a></li>
-    <li><a href="/services">What We Do</a></li>
+    <li><a href="/services" class="active">Services</a></li>
     <li><a href="/about">About</a></li>
-    <li><a href="/insights">Insights</a></li>
     <li><a href="/contact">Contact</a></li>
   </ul>
   <a href="/contact" class="nav-btn">Book a Call</a>
@@ -628,10 +616,8 @@ html { overflow-x:clip; }
 <div class="mobile-nav" id="mobileNav">
   <a href="/">Home</a>
   <a href="/#work">Work</a>
-  <a href="websites.html">Websites</a>
-  <a href="/services">What We Do</a>
+  <a href="/services">Services</a>
   <a href="/about">About</a>
-  <a href="/insights">Insights</a>
   <a href="/contact">Contact</a>
   <a href="/contact" class="mob-cta">Book a Call</a>
 </div>
@@ -645,15 +631,15 @@ html { overflow-x:clip; }
     <!-- Left: heading, subtitle, contact details -->
     <div class="hero-left">
       <div>
-        <h1 class="page-hero-h rv d1">
+        <h1 class="page-hero-h">
           Build<br>
           <span class="dim">your</span><br>
           site.
         </h1>
-        <p class="page-hero-sub rv d2">
+        <p class="page-hero-sub">
           Sign up below and we'll take it from there: you answer some questions about what you need, we talk it through on a call, then we design and build your site with you and launch it.
         </p>
-        <div class="rv d3" style="display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin-top:26px; font-size:14px; color:var(--t2)">
+        <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin-top:26px; font-size:14px; color:var(--t2)">
           <span><span style="color:var(--tan); font-weight:700">1</span>&nbsp; Sign up</span>
           <span><span style="color:var(--tan); font-weight:700">2</span>&nbsp; Review and accept</span>
           <span><span style="color:var(--tan); font-weight:700">3</span>&nbsp; Your questions</span>
@@ -661,13 +647,13 @@ html { overflow-x:clip; }
         </div>
       </div>
 
-      <div class="response-note rv d4">
+      <div class="response-note">
             <p><strong>Signing up commits you to nothing.</strong> Next you review your order and our <a href="terms/website-build-and-care-v1.0.html" target="_blank" rel="noopener" style="color:var(--tan)">Website Build and Care Terms</a>, cost included. Nothing is agreed until you accept them.</p>
       </div>
     </div>
 
     <!-- Right: form -->
-    <div class="rv-right d1" id="form">
+    <div id="form">
       <div class="form-wrap" id="formWrap">
 
         <form class="form-inner" id="contactForm" method="POST" action="https://api.iternal.co.uk/signup">
@@ -783,8 +769,8 @@ html { overflow-x:clip; }
   <div class="footer-in">
     <div>
       <div class="f-logo">
-        <img src="assets/logo-white.png" alt="Iternal" class="logo-dark">
-        <img src="assets/logo-navy.png" alt="Iternal" class="logo-light">
+        <img width="1200" height="357" src="assets/logo-white.png" alt="Iternal" class="logo-dark">
+        <img width="1200" height="357" src="assets/logo-navy.png" alt="Iternal" class="logo-light">
       </div>
       <p class="f-desc">Specialist agentic AI consultancy and product studio. Building the systems that run tomorrow's organisations. Today.</p>
     </div>
@@ -792,9 +778,8 @@ html { overflow-x:clip; }
       <span class="f-col-lbl">Navigation</span>
       <ul class="f-links">
         <li><a href="/#work">Work</a></li>
-        <li><a href="/services">What We Do</a></li>
+        <li><a href="/services">Services</a></li>
         <li><a href="/about">About</a></li>
-        <li><a href="/insights">Insights</a></li>
         <li><a href="/contact">Contact</a></li>
       </ul>
     </div>
@@ -802,15 +787,13 @@ html { overflow-x:clip; }
       <span class="f-col-lbl">Get In Touch</span>
       <ul class="f-links">
         <li><a href="mailto:hello@iternal.life">hello@iternal.life</a></li>
-        <li><a href="https://iternal.app" target="_blank" rel="noopener noreferrer">iternal.app</a></li>
         <li><a href="https://linkedin.com/company/iternal" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
         <li><a href="/contact">Book a Call</a></li>
       </ul>
     </div>
   </div>
   <div class="f-bot" style="padding:28px var(--px) 0">
-    <span class="f-copy">© 2026 Iternal Ltd · Bristol, UK</span>
-    <span class="f-built">Built with Forge, Iternal's AI-augmented delivery model</span>
+    <span class="f-copy">© 2026 Iternal Ltd · Company no. 10849262 · Bristol, UK</span>
   </div>
 </footer>
 
@@ -840,11 +823,6 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-/* ── Scroll reveal ── */
-const rvObs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting){e.target.classList.add('on');rvObs.unobserve(e.target);} });
-},{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv, .rv-left, .rv-right, .rv-scale').forEach(el=>rvObs.observe(el));
 
 /* ── Budget chip toggle ── */
 document.querySelectorAll('.budget-chip').forEach(chip=>{
@@ -1076,26 +1054,6 @@ document.head.appendChild(style);
   window.addEventListener('load',()=>{init();draw();});
 })();
 
-/* ── Hero parallax ── */
-(function(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const mesh = document.getElementById('mesh');
-  const heroSection = document.querySelector('#hero, .page-hero');
-  if(!mesh || !heroSection) return;
-  const limit = heroSection.offsetHeight || window.innerHeight;
-  let ticking = false;
-  window.addEventListener('scroll', function(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(function(){
-      const sy = window.scrollY;
-      if(sy <= limit){
-        mesh.style.transform = 'translateY(' + (sy * -0.08) + 'px)';
-      }
-      ticking = false;
-    });
-  }, {passive: true});
-})();
 </script>
 </body>
 </html>
