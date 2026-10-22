@@ -642,8 +642,9 @@ html { overflow-x:clip; }
         <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin-top:26px; font-size:14px; color:var(--t2)">
           <span><span style="color:var(--tan); font-weight:700">1</span>&nbsp; Sign up</span>
           <span><span style="color:var(--tan); font-weight:700">2</span>&nbsp; Review and accept</span>
-          <span><span style="color:var(--tan); font-weight:700">3</span>&nbsp; Your questions</span>
-          <span><span style="color:var(--tan); font-weight:700">4</span>&nbsp; Book your call</span>
+          <span><span style="color:var(--tan); font-weight:700">3</span>&nbsp; Pay your downpayment</span>
+          <span><span style="color:var(--tan); font-weight:700">4</span>&nbsp; Your questions</span>
+          <span><span style="color:var(--tan); font-weight:700">5</span>&nbsp; Book your call</span>
         </div>
       </div>
 
@@ -720,8 +721,9 @@ html { overflow-x:clip; }
 
 <!-- ===== REVIEW AND ACCEPT =====
      The wording is supplied with the Website Build and Care Terms; keep it
-     word for word. Shown once the worker has the sign-up, filled from the
-     order it sends back. -->
+     word for word ("Accept and pay" is from the team's sign-up example of 22
+     Oct 2026). Shown once the worker has the sign-up, filled from the order it
+     sends back. -->
 <section id="terms" hidden style="position:relative; z-index:2; max-width:988px; margin:0 auto; padding:min(64px, 7vh) var(--px) min(88px, 10vh)">
   <div class="form-wrap">
     <div class="form-inner">
@@ -753,10 +755,10 @@ html { overflow-x:clip; }
           <span>I confirm I am authorised to accept these terms on behalf of <span data-o="company"></span>, which is acting in the course of its business.</span>
         </label>
         <button type="button" class="submit-btn" id="acceptBtn" disabled>
-          Accept and continue
+          Accept and pay £<span data-o="downpayment"></span>
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <p class="form-privacy">Next: your project questions, then booking your call.</p>
+        <p class="form-privacy">Next: payment through Stripe, then your project questions and booking your call.</p>
       </div>
     </div>
   </div>
@@ -907,6 +909,10 @@ acceptBtn.addEventListener('click', async () => {
       return;
     }
     if (!res.ok) throw new Error('Accept failed');
+    // Accepted: on to their Stripe payment page. The order is kept until they
+    // have paid, so coming back from Stripe unpaid shows this screen again.
+    const data = await res.json();
+    if (data.pay) { location.href = data.pay; return; }
     try { localStorage.removeItem('iternal_signup_order'); } catch (e) {}
     location.href = 'questions.html';
   } catch (e) {

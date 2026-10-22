@@ -2,10 +2,10 @@
  * Iternal funnel worker — the funnel's only backend.
  *
  * Flow: the client signs up on start.html, reviews their order and accepts
- * the Website Build and Care Terms there, answers the questions, then books
- * their call on the Google Calendar appointment page. That page takes the
- * downpayment through Iternal's Stripe account, so no booking stands until it
- * is paid; Stripe tells this worker, which records the payment.
+ * the Website Build and Care Terms there, pays the downpayment on a Stripe
+ * Checkout page made for their order, answers the questions, then books their
+ * call on the Google Calendar appointment page. Stripe tells this worker when
+ * they have paid, and the worker sends their confirmation.
  *
  * Everything a client enters goes to TWO destinations, independently:
  *   1. the website-build pipeline repo (PIPELINE_REPO) — the full record,
@@ -19,33 +19,35 @@
  *                         destinations (fire-and-forget, never blocking).
  *                         Answers with the order to review.
  *   POST /accept          The client accepts the terms: records what they
- *                         accepted, emails them a copy, tells the team to
- *                         invoice, and updates both destinations.
+ *                         accepted, tells the team, updates both destinations
+ *                         and answers with their Stripe payment page.
+ *                         Accepting again (back from Stripe unpaid) answers
+ *                         with a fresh payment page and nothing else.
  *   POST /answers        The questions page posts drafts/finals here, keyed
  *                         by the email they give in the first question. The
  *                         first answers queue the pre-call demo build
  *                         (demoRequested) in the pipeline repo.
- *   POST /stripe-webhook  Stripe calls this when a payment succeeds. Only the
- *                         booking payment (the order's downpayment) concerns
- *                         the funnel: the payer is matched to their sign-up by
- *                         email, the payment is recorded in KV, and the team
- *                         and the tracker are told. Every other payment on the
- *                         account, the final payment included, is outside this
- *                         project and ignored. Payment never reaches the
- *                         pipeline repo.
+ *   POST /stripe-webhook  Stripe calls this when a Checkout payment completes.
+ *                         Only the payment pages this worker made concern the
+ *                         funnel: matched to the sign-up by reference, the
+ *                         payment is recorded in KV, the client is sent their
+ *                         confirmation, and the team and the tracker are told.
+ *                         Every other payment on the account, the final payment
+ *                         included, is outside this project and ignored.
+ *                         Payment never reaches the pipeline repo.
  *   GET  /health          Liveness check.
  *
- * Clients get ONE email from us: on accepting, a copy of their order and the
- * terms, as the terms promise (CLIENT_MAIL, Cloudflare Email Service). Stripe
- * sends the payment receipt and Google Calendar the booking invite. Team briefs
- * go via Cloudflare's native email (TEAM_MAIL) to verified destinations.
+ * Clients get ONE email from us: once they have paid, the confirmation of their
+ * order with the terms attached (CLIENT_MAIL, Cloudflare Email Service). Stripe
+ * sends the receipt and VAT invoice, Google Calendar the booking invite. Team
+ * briefs go via Cloudflare's native email (TEAM_MAIL) to verified destinations.
  *
- * Explicitly NOT here: card details and charging (Stripe's, through the booking
- * page), booking (Google Calendar's), and any READ of the Lead Tracker
- * (write-only by policy).
+ * Explicitly NOT here: card details (Stripe's own page takes them), booking
+ * (Google Calendar's), and any READ of the Lead Tracker (write-only by policy).
  *
- * Secrets (wrangler secret put): STRIPE_WEBHOOK_SECRET (the signing secret of
- * the /stripe-webhook endpoint in Stripe's dashboard), LEAD_API_SECRET,
+ * Secrets (wrangler secret put): STRIPE_API_KEY (a restricted key that can only
+ * create Checkout Sessions), STRIPE_WEBHOOK_SECRET (the signing secret of the
+ * /stripe-webhook endpoint in Stripe's dashboard), LEAD_API_SECRET,
  * PIPELINE_TOKEN (GitHub token with contents:write on PIPELINE_REPO only).
  */
 
@@ -169,19 +171,29 @@ const orderText = o => [
 
 const ukTime = iso => new Date(iso).toLocaleString('en-GB', { timeZone: 'Europe/London', dateStyle: 'long', timeStyle: 'short' });
 
-/** The copy the terms promise the client. If it cannot go, the team gets it to forward. */
-async function sendClientCopy(env, acc) {
+/** The confirmation the client gets once they have paid, worded as the team's
+    sign-up example (22 Oct 2026) words it. If it cannot go, the team gets it to forward. */
+async function sendConfirmation(env, acc) {
   const pdfUrl = termsUrl(env, acc.termsVersion, 'pdf');
-  const text = `Hello ${acc.name.split(' ')[0]},
+  const at = { timeZone: 'Europe/London' };
+  const text = `Hi ${acc.name.split(' ')[0]},
 
-Thank you for accepting our terms. As promised, here are your order details. The ${TERMS.name}, version ${acc.termsVersion}, are attached, and are also at ${termsUrl(env, acc.termsVersion, 'html')}
+Thank you for choosing Iternal to build and look after your website. This email confirms your order, and a copy of our ${TERMS.name} (version ${acc.termsVersion}) is attached for your records.
 
-${orderText(acc)}
-Accepted: ${ukTime(acc.acceptedAt)} (UK time)
+Your order
+Name or business name: ${acc.company}
+Reference: ${acc.reference}
+Build fee: £${acc.buildFee}, with £${acc.downpayment} paid today and £${acc.completion} payable on completion
+Care plan: £${acc.carePlan} per month, starting from the month after your site goes live
+Accepted by: ${acc.name} on ${new Date(acc.acceptedAt).toLocaleDateString('en-GB', { ...at, dateStyle: 'long' })} at ${new Date(acc.acceptedAt).toLocaleTimeString('en-GB', { ...at, timeStyle: 'short' })}
 
-If anything above is wrong, reply to this email and let us know.
+What happens next
+Thank you for your upfront payment; your VAT invoice will arrive separately from Stripe. If you have not already booked your initial conversation with one of our team, you can do so here: ${env.BOOKING_URL}. If you would like to pay your care plan quarterly, half-yearly or annually rather than monthly, just reply to this email and let us know.
 
-Iternal Ltd
+If anything in your order details looks wrong, please reply within 7 days so we can put it right.
+
+We look forward to working with you.
+The Iternal team
 `;
   try {
     if (!env.CLIENT_MAIL) throw new Error('no CLIENT_MAIL binding');
@@ -190,16 +202,16 @@ Iternal Ltd
     const [, fromName, fromEmail] = /^(.*?)\s*<([^>]+)>$/.exec(env.CLIENT_FROM) || [, '', env.CLIENT_FROM];
     await env.CLIENT_MAIL.send({
       to: acc.email, from: { name: fromName, email: fromEmail }, replyTo: env.CLIENT_REPLY_TO,
-      subject: `Your order with Iternal, ${acc.reference}`,
+      subject: `Welcome to Iternal: your website order is confirmed (${acc.reference})`,
       text,
       attachments: [{ content: await pdf.arrayBuffer(), filename: `Iternal ${TERMS.name} v${acc.termsVersion}.pdf`, type: 'application/pdf', disposition: 'attachment' }],
     });
-    console.log('client copy sent:', acc.reference);
+    console.log('confirmation sent:', acc.reference);
   } catch (e) {
     const why = e && e.message ? e.message : String(e);
-    console.error('client copy FAILED:', why, acc.email);
-    await sendTeamEmail(env, `Website Pipeline: client copy FAILED — ${acc.company}`,
-      `${acc.name} accepted the terms, but the copy the terms promise them did not send (${why}).
+    console.error('confirmation FAILED:', why, acc.email);
+    await sendTeamEmail(env, `Website Pipeline: confirmation FAILED — ${acc.company}`,
+      `${acc.name} paid, but their confirmation email did not send (${why}).
 Forward the text below to ${acc.email}, with the terms PDF attached (${pdfUrl}).
 
 ----
@@ -483,8 +495,9 @@ async function handleAccept(request, env, ctx) {
   const kv = EMAIL.test(email) ? await env.CLIENTS.get(key, 'json') : null;
   if (!kv || !kv.token) return json(404, { error: 'sign up first' }, cors);
   if (s(body.token, 100) !== kv.token) return json(403, { error: 'not the browser that signed up' }, cors);
-  // Accepting twice changes nothing and sends nothing again.
-  if (kv.acceptance) return json(200, { ok: true }, cors);
+  // Accepting twice changes nothing and sends nothing again: someone back from
+  // Stripe without paying just gets a fresh payment page.
+  if (kv.acceptance) return kv.payment ? json(200, { ok: true, paid: true }, cors) : payPage(env, kv, cors);
   const order = orderOf(kv);
   // The page shows the version it was given at sign-up; if that has since
   // changed, they review the new one rather than accept one they never saw.
@@ -497,7 +510,6 @@ async function handleAccept(request, env, ctx) {
   const acc = kv.acceptance;
 
   ctx.waitUntil(Promise.allSettled([
-    sendClientCopy(env, acc),
     sendTeamEmail(env,
       `Website Pipeline: terms accepted — ${acc.company}`,
       `${acc.name} accepted the ${TERMS.name}, version ${acc.termsVersion}, for ${acc.company}.
@@ -505,19 +517,19 @@ async function handleAccept(request, env, ctx) {
 ${orderText(acc)}
 Accepted: ${ukTime(acc.acceptedAt)} (UK time)
 
-The £${acc.downpayment} downpayment (including VAT) is taken when they book their call: the booking page charges it through Stripe and the booking stands only once it is paid. A brief follows when the payment lands. £${acc.completion} (including VAT) follows on completion. They have been emailed a copy of the order and the terms.
-Their questions come next; a brief follows when they answer.`),
+They pay the £${acc.downpayment} downpayment (including VAT) next, on Stripe's payment page. A brief follows when it lands, and their confirmation email goes then. £${acc.completion} (including VAT) follows on completion.
+Their questions come after paying; a brief follows when they answer.`),
     postToLeadTracker(env, {
       org: acc.company, contact: acc.name, email, website: kv.website || '', reference: acc.reference,
       source: 'website funnel', event: 'accepted',
       message: `Accepted the ${TERMS.name}, version ${acc.termsVersion} (reference ${acc.reference}). `
-        + `Build fee £${acc.downpayment} downpayment + £${acc.completion} upon completion, including VAT: the downpayment is taken when they book their call. `
+        + `Build fee £${acc.downpayment} downpayment + £${acc.completion} upon completion, including VAT: the downpayment is paid next, through Stripe. `
         + `Care plan £${acc.carePlan} per month including VAT from the month after the site goes live.`,
     }),
     syncToPipeline(env, email, 'accepted the terms'),
   ]));
 
-  return json(200, { ok: true }, cors);
+  return payPage(env, kv, cors);
 }
 
 async function handleAnswers(request, env, ctx) {
@@ -581,10 +593,53 @@ async function handleAnswers(request, env, ctx) {
   return json(200, { ok: true }, cors);
 }
 
-/* ── Booking payments ────────────────────────────────────────────────────
-   The Google Calendar booking page requires payment through Iternal's Stripe
-   account: no payment, no booking. Stripe posts each successful payment here,
-   signed with STRIPE_WEBHOOK_SECRET. */
+/* ── The downpayment ─────────────────────────────────────────────────────
+   Accepting answers with a Stripe Checkout page made for the order, so the
+   client's reference rides along. Stripe posts each completed Checkout here,
+   signed with STRIPE_WEBHOOK_SECRET; only pages marked with FUNNEL are ours. */
+
+const FUNNEL = 'website-build';
+
+/** The client's payment page. The price (the downpayment) and its VAT rate are
+    set up once in Stripe's dashboard; this only points at them, which is why the
+    restricted key needs nothing beyond creating Checkout Sessions. */
+async function checkoutUrl(env, kv) {
+  const acc = kv.acceptance;
+  const p = {
+    mode: 'payment',
+    'line_items[0][price]': env.STRIPE_PRICE,
+    'line_items[0][quantity]': '1',
+    customer_email: kv.email,
+    client_reference_id: acc.reference,
+    'metadata[funnel]': FUNNEL,
+    'custom_text[submit][message]': `${acc.company}: upfront payment towards your website build fee (${acc.reference}).`,
+    billing_address_collection: 'required',
+    'tax_id_collection[enabled]': 'true',
+    'invoice_creation[enabled]': 'true',
+    'invoice_creation[invoice_data][custom_fields][0][name]': 'Reference',
+    'invoice_creation[invoice_data][custom_fields][0][value]': acc.reference,
+    success_url: `${env.SITE_URL}/questions?paid=1`,
+    cancel_url: `${env.SITE_URL}/start`,
+  };
+  if (env.STRIPE_TAX_RATE) p['line_items[0][tax_rates][0]'] = env.STRIPE_TAX_RATE;
+  const res = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${env.STRIPE_API_KEY}`, 'content-type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams(p).toString(),
+  });
+  const body = await res.json().catch(() => ({}));
+  if (!res.ok || !body.url) throw new Error(`Stripe ${res.status}${body.error ? ' — ' + body.error.message : ''}`);
+  return body.url;
+}
+
+/** The acceptance stands either way; a page Stripe would not make is retried by the client. */
+async function payPage(env, kv, cors) {
+  try { return json(200, { ok: true, pay: await checkoutUrl(env, kv) }, cors); }
+  catch (e) {
+    console.error('payment page FAILED:', e && e.message ? e.message : e, kv.email);
+    return json(502, { error: 'payment page unavailable' }, cors);
+  }
+}
 
 async function hmacHex(secret, message) {
   const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
@@ -610,22 +665,6 @@ const money = (amount, currency) => (currency || 'gbp').toLowerCase() === 'gbp'
   ? `£${((amount || 0) / 100).toFixed(2).replace(/\.00$/, '')}`
   : `${(amount || 0) / 100} ${String(currency).toUpperCase()}`;
 
-/** The payment an event reports, or null for events that carry none. A Checkout
-    payment can arrive as both events; both name the same payment intent. */
-function paymentOf(event) {
-  const o = (event.data && event.data.object) || {};
-  if (event.type === 'payment_intent.succeeded') {
-    const charge = o.charges && o.charges.data && o.charges.data[0];
-    return { id: s(o.id, 100), amount: o.amount_received || o.amount || 0, currency: o.currency,
-      email: o.receipt_email || (charge && charge.billing_details && charge.billing_details.email) || '' };
-  }
-  if (event.type === 'checkout.session.completed' && o.payment_status === 'paid') {
-    return { id: s(o.payment_intent || o.id, 100), amount: o.amount_total || 0, currency: o.currency,
-      email: (o.customer_details && o.customer_details.email) || o.customer_email || '' };
-  }
-  return null;
-}
-
 async function handleStripeWebhook(request, env, ctx) {
   const rawBody = await request.text();
   if (!await verifyStripeSignature(rawBody, request.headers.get('stripe-signature'), env.STRIPE_WEBHOOK_SECRET)) {
@@ -633,49 +672,44 @@ async function handleStripeWebhook(request, env, ctx) {
   }
   let event;
   try { event = JSON.parse(rawBody); } catch (e) { return json(400, { error: 'bad payload' }); }
-  const pay = paymentOf(event);
-  if (!pay) return json(200, { received: true, ignored: event.type });
+  // Only a paid Checkout from a page this worker made concerns the funnel. Every
+  // other payment on the account (the final payment, other work) is outside this
+  // project; payment_intent.succeeded for our own pages repeats what this says.
+  const o = (event.data && event.data.object) || {};
+  if (event.type !== 'checkout.session.completed' || o.payment_status !== 'paid' || !o.metadata || o.metadata.funnel !== FUNNEL) {
+    return json(200, { received: true, ignored: event.type });
+  }
 
-  // Stripe retries, and one payment can arrive twice: record it once.
-  const seen = `stripe:${pay.id}`;
+  // Stripe retries: record each payment once.
+  const seen = `stripe:${s(o.id, 100)}`;
   if (await env.CLIENTS.get(seen)) return json(200, { received: true, duplicate: true });
-  const email = s(pay.email, 120).toLowerCase();
-  const paid = money(pay.amount, pay.currency);
+  const ref = s(o.client_reference_id, 40);
+  await env.CLIENTS.put(seen, ref);
+  const paid = money(o.amount_total, o.currency);
+  const email = await env.CLIENTS.get(`ref:${ref}`);
   const key = `lead:${email}`;
-  const kv = EMAIL.test(email) ? await env.CLIENTS.get(key, 'json') : null;
+  const kv = email ? await env.CLIENTS.get(key, 'json') : null;
 
-  // Only the booking payment concerns the funnel. Every other payment on the
-  // Stripe account (the final payment, other work) is outside this project.
-  const pence = n => Math.round((n || 0) * 100);
-  const booking = pence((kv && kv.acceptance && kv.acceptance.downpayment) || TERMS.downpayment);
-  if (pay.amount !== booking) return json(200, { received: true, ignored: 'not a booking payment' });
-
-  // A booking payment must never pass silently. One without an email is not
-  // marked as handled: a Checkout event naming the payer may follow it.
-  if (!email) {
-    ctx.waitUntil(sendTeamEmail(env, 'Website Pipeline: booking payment received — no payer email yet',
-      `A booking payment of ${paid} arrived (${pay.id}) without a payer email. If a "booking paid" brief for the same payment follows, it has been matched; otherwise match it by hand in Stripe and the Lead Tracker.`));
-    return json(200, { received: true, unmatched: true });
-  }
-  await env.CLIENTS.put(seen, email);
-  if (!kv) {
-    ctx.waitUntil(sendTeamEmail(env, 'Website Pipeline: booking payment received — UNMATCHED',
-      `A booking payment of ${paid} arrived (${pay.id}) from ${email}, which matches no sign-up. Match it by hand in Stripe and the Lead Tracker.`));
+  // Money in must never pass silently, even when the record has gone (archived)
+  // or the client paid on two pages at once.
+  if (!kv || !kv.acceptance || kv.payment) {
+    ctx.waitUntil(sendTeamEmail(env, `Website Pipeline: payment needs a look — ${ref || 'no reference'}`,
+      `${paid} arrived for ${ref || 'no reference'} (Stripe ${o.id}), ${kv && kv.payment ? `but that order was already paid (Stripe ${kv.payment.id}): refund one of them in Stripe` : 'but it matches no order waiting for payment: match it by hand in Stripe and the Lead Tracker'}.`));
     return json(200, { received: true, unmatched: true });
   }
 
-  kv.payments = [...(kv.payments || []), { id: pay.id, amount: pay.amount, currency: s(pay.currency, 10), paidAt: new Date().toISOString() }];
+  kv.payment = { id: s(o.id, 100), amount: o.amount_total, currency: s(o.currency, 10), paidAt: new Date().toISOString() };
   await env.CLIENTS.put(key, JSON.stringify(kv));
-  const acc = kv.acceptance || {};
-  const who = acc.company || kv.organisation || email;
+  const acc = kv.acceptance;
 
   ctx.waitUntil(Promise.allSettled([
-    sendTeamEmail(env, `Website Pipeline: booking paid — ${who}`,
-      `${acc.name || kv.name || email} (${who}${acc.reference ? `, reference ${acc.reference}` : ''}) paid ${paid}, so their call booking stands.
-Payment: ${pay.id}${acc.acceptedAt ? '' : '\nThey have not accepted the terms yet.'}`),
+    sendConfirmation(env, acc),
+    sendTeamEmail(env, `Website Pipeline: paid — ${acc.company}`,
+      `${acc.name} (${acc.company}, reference ${acc.reference}) paid ${paid}. Their confirmation email has gone, with the terms attached. Next they answer the questions and book their call.
+Stripe: ${o.id}`),
     postToLeadTracker(env, {
-      org: who, contact: acc.name || kv.name || '', email, reference: acc.reference || kv.reference || '',
-      source: 'website funnel', message: `Booking paid: ${paid} via Stripe (payment ${pay.id}).`,
+      org: acc.company, contact: acc.name, email, reference: acc.reference,
+      source: 'website funnel', message: `Paid ${paid} via Stripe (${o.id}).`,
     }),
   ]));
   return json(200, { received: true });

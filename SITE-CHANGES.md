@@ -12,10 +12,16 @@ Last deploy: **22 Oct 2026, the website rework** (pull request #6; pushing to ma
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
 #### Website sign-up (still hidden)
-- **Booking the call takes the downpayment again**: the questions page says booking takes
-  your downpayment by card and the call is confirmed once the payment goes through (the
-  booking page itself takes it through Stripe). The team is briefed when a booking is paid,
-  instead of being told to invoice the downpayment on acceptance. (stripe-bookings)
+- **The downpayment is paid straight after accepting**, as in the team's client journey:
+  "Review and accept" ends with "Accept and pay £100", which opens a Stripe payment page
+  made for the order (their reference shown, billing address, optional VAT number, a VAT
+  invoice from Stripe). Paid, they land on the questions page with "Thank you, your payment
+  has been received."; back without paying, their order is still there to accept and pay.
+  The sign-up's steps read Sign up, Review and accept, Pay your downpayment, Your
+  questions, Book your call. Booking the call takes no payment. (stripe-bookings)
+- **The client's one email moves to after payment**: "Welcome to Iternal: your website order
+  is confirmed", worded as the team's sign-up example, with the booking link and the terms
+  attached (it was sent on accepting). (stripe-bookings)
 
 ---
 

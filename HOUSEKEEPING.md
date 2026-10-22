@@ -80,7 +80,7 @@ the token awaits org approval), so the worker can deploy regardless.
   then `npx wrangler deploy`. Serves https://api.iternal.co.uk.
 - Secrets (set with `npx wrangler secret put <NAME>`): `LEAD_API_SECRET`,
   `PIPELINE_TOKEN` (fine-grained GitHub token, Contents read+write on the
-  pipeline repo only).
+  pipeline repo only), `STRIPE_API_KEY` and `STRIPE_WEBHOOK_SECRET` (§Payment).
 - KV namespace CLIENTS holds one `lead:<email>` record per client (empty as
   of 7 Oct 2026). Sweep any test records after manual testing:
   `npx wrangler kv key delete "lead:<email>" --namespace-id bf744fdf07b945719b644e314b69b780 --remote`
@@ -100,10 +100,12 @@ the token awaits org approval), so the worker can deploy regardless.
   accepted, authorised}` and refuses anything short of both ticks, the
   current version (409 hands back the current order to review), a company
   and a name. It stores `acceptance` (the order as shown, plus
-  `acceptedAt`) on the lead record, then, independently: emails the client
-  their copy with the terms PDF attached (fetched from the site), briefs the
-  team (the downpayment comes with the booking), posts a note to the tracker and syncs the
-  platform. Accepting twice changes and sends nothing.
+  `acceptedAt`) on the lead record, then, independently: briefs the team
+  (payment comes next), posts a note to the tracker and syncs the platform.
+  It answers `{ok, pay}`: the client's Stripe payment page (§Payment), where
+  start.html sends them. Accepting again changes and sends nothing: unpaid,
+  it answers a fresh payment page; paid, `{ok, paid: true}`. If Stripe will
+  not make the page (502), the acceptance stands and the client retries.
 - start.html keeps the token and the email in localStorage, questions.html prefills the email from it and sends the
   token with every answers post. `/answers` refuses (403) answers for a
   record whose token does not match — knowing an email is not enough to
@@ -137,7 +139,7 @@ the token awaits org approval), so the worker can deploy regardless.
 - Tracker posts carry `event` (`signed-up` or `accepted`); the tracker
   words its Slack ping by it. Its "accepted" ping still says to invoice the
   downpayment: update `apps-script/LeadApi.gs` (and redeploy the tracker)
-  now that the downpayment comes with the booking.
+  now that the client pays it on accepting.
 - After the first deploy of this code, delete the secret it no longer uses:
   `npx wrangler secret delete MAGIC_SECRET`. Keep `STRIPE_WEBHOOK_SECRET`:
   `/stripe-webhook` needs it.
@@ -156,9 +158,9 @@ the token awaits org approval), so the worker can deploy regardless.
   again overriding the terms' "all fees exclude VAT"; from the month after the site goes live, which includes Site
   Agent (our agentic studio). Invoices are payable within 14 days. Per-client
   pricing is planned: the order's figures are its own fields for that reason.
-- **Accepting is the last step of sign-up**, on start.html, and forms the
-  agreement. The downpayment is taken when the client books their call (below);
-  the worker records it when Stripe confirms it.
+- **Accepting forms the agreement**, on start.html, and takes the client
+  straight to the downpayment on Stripe (below); the worker records it when
+  Stripe confirms it, then the questions and the booking follow.
 - **Changing a price, or a new version of the terms.** A new version is
   supplied wording, never ours. It means: a new pair of files in `terms/`
   (print the PDF with `node tools/terms-pdf.mjs terms/<page>.html`; keep the
@@ -174,39 +176,57 @@ the token awaits org approval), so the worker can deploy regardless.
     is removed at light-up). The real order table on "Review and accept"
     takes its figures from the worker. The meta description no longer
     carries prices (20 Oct 2026).
-  - The booking page's payment amount (Google Calendar, hello@iternal.life):
-    it must equal the downpayment, or the worker ignores the payment as not
-    a booking.
+  - The Stripe Price behind `STRIPE_PRICE` (worker/wrangler.toml): its
+    amount must equal `TERMS.downpayment`. A new amount is a new Price in
+    Stripe and its id in `STRIPE_PRICE`.
+  - start.html's "Accept and pay £…" button takes the figure from the order.
   - The Lead Tracker (`../lead-tracker`, `apps-script/LeadApi.gs`): every
     website lead starts with `budget: 750`.
-- **Booking payment (restored 22 Oct 2026, at the team's request).** A booking
-  is confirmed only once its £100 payment is. The final payment is completely
-  separate and outside this project. Three parts, two of them set up outside
-  the code:
-  1. The website-build booking schedule lives in the **hello@iternal.life**
-     Google account (Robbie, 22 Oct 2026; not John's). It requires payment:
-     Calendar → the appointment schedule → Payments → Require payment, connect
-     Iternal's Stripe account, amount £100 = `TERMS.downpayment`. Google then
-     confirms a booking only once Stripe has taken it. (Needs a Workspace plan
-     that offers payments; Stripe's brand name is "Iternal Ltd".) Its booking
-     link goes in `questions.html` `BOOKING_URL` (Page-side switches).
-  2. Stripe dashboard → Developers → Webhooks: endpoint
-     `https://api.iternal.co.uk/stripe-webhook`, events
-     `payment_intent.succeeded` and `checkout.session.completed`. Its signing
-     secret is `STRIPE_WEBHOOK_SECRET` on the worker (still set on 22 Oct 2026;
-     `npx wrangler secret put STRIPE_WEBHOOK_SECRET` from `worker/` if the
-     endpoint is recreated or its secret rolled).
-  3. The worker (`handleStripeWebhook`) acts only on a payment of the booking
-     amount (the client's order downpayment, else `TERMS.downpayment`); every
-     other payment on the account is ignored, so the two must stay equal. It
-     matches the payer by email, records the payment once
-     (`stripe:<payment intent>` in KV; retries and duplicate events change
-     nothing), briefs the team and notes it in the tracker. A booking paid
-     from an email that matches no sign-up arrives as an UNMATCHED brief; one
-     whose event names no payer warns the team and stays open for the
-     Checkout event that names them. Payment never reaches the platform repo.
-     The questions page tells the client booking takes their downpayment and
-     the call is confirmed once it is paid.
+- **The downpayment: Stripe Checkout on accepting (team journey, 22 Oct
+  2026).** Sign up, review and "Accept and pay £100", pay on Stripe's page,
+  then the questions and the booking. The booking itself takes no payment.
+  The final payment is completely separate and outside this project. Set up
+  once, outside the code:
+  1. Stripe → Product catalogue: one Price for the downpayment (£100, one-off,
+     described as the upfront payment towards the website build fee) →
+     `STRIPE_PRICE`; Tax rates: 20% VAT, **inclusive** → `STRIPE_TAX_RATE`
+     (both in `worker/wrangler.toml` `[vars]`). Branding (Settings → Branding)
+     carries the Iternal logo and colours; the statement descriptor reads
+     ITERNAL.
+  2. Stripe → Developers → API keys → Create restricted key: **Checkout
+     Sessions: Write**, nothing else → `npx wrangler secret put STRIPE_API_KEY`
+     from `worker/` (Robbie puts secrets in himself). Try it in test mode first
+     (a test key, Price and tax rate, locally); if Stripe refuses a parameter,
+     its error names the permission to add.
+  3. Stripe → Developers → Webhooks: endpoint
+     `https://api.iternal.co.uk/stripe-webhook` ("site-client-funnel", active),
+     event `checkout.session.completed` (its `payment_intent.succeeded` events
+     are ignored). Its signing secret is `STRIPE_WEBHOOK_SECRET` on the worker
+     (still set on 22 Oct 2026).
+  4. The booking schedule (hello@iternal.life's Google Calendar) must NOT
+     require payment: the client has paid already.
+
+  The worker makes one Checkout Session per visit to the payment step
+  (`checkoutUrl`): the Price and tax rate, the client's email, their
+  reference as `client_reference_id` and on the VAT invoice Stripe sends
+  (`invoice_creation`), "<company>: upfront payment towards your website
+  build fee (<reference>)." above the pay button, billing address and an
+  optional VAT number, `metadata.funnel = website-build`. Paid, Stripe sends
+  them to `/questions?paid=1` ("Thank you, your payment has been received.");
+  back without paying, to `/start`, which still shows their order to accept
+  and pay again. `handleStripeWebhook` acts only on a paid
+  `checkout.session.completed` marked `website-build`; every other payment on
+  the account is ignored. It matches the order by reference (`ref:` index),
+  records `payment` once (`stripe:<session>` in KV; retries change nothing),
+  sends the client's confirmation, briefs the team and notes the tracker. A
+  payment for an order already paid, or one whose record has gone, briefs
+  the team ("payment needs a look") and nobody else. Payment never reaches
+  the platform repo.
+
+  Not built yet (in the team's journey, waiting on Robbie): the reminder on
+  day 3 and cancelling the order on day 7 when the £100 is not paid; the
+  team's `ITL-…` reference format (we issue `WB-yymm-XXXX`); the nine key
+  points and terms pop-up on the review screen (with the new terms).
 
 ## Team briefs (email)
 
@@ -226,10 +246,13 @@ not one:
 The From (`funnel@iternal.co.uk`) is a label only — no mailbox behind it, and
 clients never see it.
 
-## The client's copy (email)
+## The client's confirmation (email)
 
-The terms promise each client "a copy of both" (the terms and their order)
-when they accept. The worker sends it through a second binding,
+Once a client has paid, the worker sends their confirmation, worded as the
+team's sign-up example (22 Oct 2026) words it: "Welcome to Iternal: your
+website order is confirmed (<reference>)", their order, the booking link
+(`BOOKING_URL` in `worker/wrangler.toml`) and the terms PDF attached. It goes
+through a second binding,
 `CLIENT_MAIL`, which is Cloudflare **Email Service** (outbound, in beta), not
 Email Routing: it can reach any address. Setting it up, once:
 
@@ -240,11 +263,11 @@ Email Routing: it can reach any address. Setting it up, once:
    binding's `allowed_sender_addresses` in `worker/wrangler.toml`. Replies
    go to `CLIENT_REPLY_TO` (john@iternal.life).
 3. Deploy the worker. Until all of this is in place every send fails, and
-   each failure emails the team "client copy FAILED" with the text to
-   forward by hand, so nobody goes without their copy.
+   each failure emails the team "confirmation FAILED" with the text to
+   forward by hand, so nobody goes without it.
 
-That is the only email a client gets from us: Google Calendar sends the
-booking invite.
+That is the only email a client gets from us: Stripe sends the receipt and
+VAT invoice, Google Calendar the booking invite.
 
 ## Page-side switches
 
@@ -253,13 +276,13 @@ booking invite.
 - `questions.html` `WORKER_URL` — `https://api.iternal.co.uk`; an empty
   string falls back to FormSubmit (the pre-worker path, not in use).
 - `questions.html` `BOOKING_URL` — the website-build meeting. From 22 Oct 2026 the
-  schedule lives in the hello@iternal.life Google account and requires the £100
-  booking payment (§Payment); until its link is in, this still holds John's
-  "Disco Meeting" (https://calendar.app.google/fNGuEjKBSpoPMhAL6), which has no
-  payment. It is strictly for website-build meetings (Robbie): every other
-  "Book a Call" / "Book a Discovery Call" goes to /contact, and those discovery
-  calls stay "30 minutes".
-  Lives here only. It requires payment through Stripe: see §Payment.
+  schedule lives in the hello@iternal.life Google account and takes no payment
+  (the client paid on accepting, §Payment); until its link is in, this still holds
+  John's "Disco Meeting" (https://calendar.app.google/fNGuEjKBSpoPMhAL6). It is
+  strictly for website-build meetings (Robbie): every other "Book a Call" / "Book
+  a Discovery Call" goes to /contact, and those discovery calls stay "30 minutes".
+  The confirmation email links the same schedule: `BOOKING_URL` in
+  `worker/wrangler.toml`. Change both together.
 
 ## Go-live (dark launch)
 
