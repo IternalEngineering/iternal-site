@@ -707,6 +707,7 @@ html { overflow-x:clip; }
               <option>AI Automations &amp; Assistants</option>
               <option>Agentic AI Builds</option>
               <option>AI Strategy &amp; Advisory</option>
+              <option>AI Augmentation</option>
               <option>Websites</option>
               <option>Not sure yet? Let's talk</option>
             </select>
@@ -827,7 +828,7 @@ document.querySelectorAll('.budget-chip').forEach(chip=>{
 /* ── Pre-select the service the visitor came from (/contact?service=…) ── */
 (function(){
   var labels = { workshops:'Workshops & Training', automations:'AI Automations & Assistants', builds:'Agentic AI Builds',
-                 advisory:'AI Strategy & Advisory', websites:'Websites', unsure:"Not sure yet? Let's talk" };
+                 advisory:'AI Strategy & Advisory', augmentation:'AI Augmentation', websites:'Websites', unsure:"Not sure yet? Let's talk" };
   var want = labels[new URLSearchParams(location.search).get('service')];
   var sel = document.getElementById('engagement');
   if (!want || !sel) return;

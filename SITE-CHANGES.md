@@ -35,6 +35,10 @@ nothing new written).
   UK" (the search data already carried it; the site audit asked for it on the page). (rebuild 11)
 
 #### Services
+- **AI Augmentation is a service everywhere, not just on the homepage**: its own page
+  (/ai-augmentation, with the four points the homepage card first listed), a row on the Services
+  hub under the four AI services, an option on the contact form, and llms.txt and the sitemap.
+  On the homepage it now sits with the AI services and opens its page. (rebuild 26)
 - **Builds uses the homepage's case titles** (Good News London, CivicNetZero, bPlaced: Smarter
   Care); the AEO box spells out "answer engine optimisation" and its button is the outline
   style; /websites gets the "All services" link and clean /start links. (rebuild 24)

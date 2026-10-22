@@ -24,6 +24,7 @@ Key facts:
 - [AI Automations & Assistants](https://iternal.co.uk/ai-automations): Chatbots, knowledge bases, document processing, and Slack, email and CRM automation, built in days rather than months. Includes Site Agent, Iternal's agentic studio: an AI assistant that updates the text and images on a client's own website from plain-English requests.
 - [Agentic AI Builds](https://iternal.co.uk/agentic-ai-builds): End-to-end design and delivery of production agentic systems, including multi-step autonomous workflows, retrieval (RAG) systems on proprietary knowledge, and public-sector and regulated deployments. This is Iternal's most requested service.
 - [AI Strategy & Advisory](https://iternal.co.uk/ai-strategy-advisory): Starts with an AEO (answer engine optimisation) audit of how AI assistants and AI search see the organisation, with a scored report and ranked fixes. Then board-level AI strategy and due diligence, AI governance and compliance frameworks, architecture reviews, vendor and model selection, organisation-wide capability building, and fractional Chief AI Officer engagements or ongoing retainers.
+- [AI Augmentation](https://iternal.co.uk/ai-augmentation): Embeds Iternal's augmented delivery model inside a client's team: internal agent deployment, team workflow automation, AI toolchain setup and ongoing support.
 
 ## Work
 
