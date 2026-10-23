@@ -41,7 +41,7 @@ PIPELINE_REPO = "IternalEngineering/website-build-platform"
 # The downpayment's Price (price_…) and its 20% VAT tax rate, inclusive
 # (txr_…), both made once in Stripe's dashboard. The price's amount must equal
 # TERMS.downpayment in worker.js (HOUSEKEEPING.md §Payment).
-STRIPE_PRICE = ""
+STRIPE_PRICE = "price_1UTLN4JaKTbTS7qBd2deRD6J"
 STRIPE_TAX_RATE = ""
 # The booking page linked from the confirmation email. Same schedule as
 # BOOKING_URL in questions.html: change both together.
