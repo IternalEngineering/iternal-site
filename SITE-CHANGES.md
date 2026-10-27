@@ -11,7 +11,13 @@ Last deploy: **27 Oct 2026, the website sign-up's final terms and payment step**
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-Nothing waiting.
+#### Website sign-up (still hidden)
+- **A bot check on the sign-up** (Cloudflare Turnstile): invisible to visitors unless
+  Cloudflare is unsure, when it asks for one click. Off until the widget's site key is in
+  `turnstile.js` and its secret is on the worker. The contact form is unchanged.
+  (bot-protection)
+- **No team email at sign-up**: John is emailed when the client accepts the terms (now with
+  their website and gallery example), not twice in a minute. (bot-protection)
 
 ---
 

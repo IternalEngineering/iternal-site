@@ -17,8 +17,8 @@
  *   POST /signup          The start.html form posts here after sign-up:
  *                         seeds their lead record in KV, then both
  *                         destinations (fire-and-forget, never blocking).
- *                         Answers with the order to review.
- *   POST /accept          The client accepts the terms: records what they
+ *                         Answers with the order to review. Turnstile-checked.
+ *   POST /accept         The client accepts the terms: records what they
  *                         accepted, tells the team, updates both destinations
  *                         and answers with their Stripe payment page.
  *                         Accepting again (back from Stripe unpaid) answers
@@ -410,6 +410,24 @@ async function syncToPipelineOnce(env, email, what) {
   return 'still conflicting after a retry';
 }
 
+/** Cloudflare Turnstile, the sign-up's bot check: the page's widget hands over
+    a one-use token and Cloudflare says whether a person earned it. Off until
+    TURNSTILE_SECRET is set; closed (no) if Cloudflare cannot be asked. */
+async function humanCheck(env, request, token) {
+  if (!env.TURNSTILE_SECRET) return true;
+  if (!token) return false;
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token, remoteip: request.headers.get('cf-connecting-ip') || '' }),
+    });
+    return (await res.json()).success === true;
+  } catch (e) {
+    console.error('bot check FAILED:', e && e.message ? e.message : e);
+    return false;
+  }
+}
+
 /** Sign-up from start.html: seed the lead record, then both destinations. */
 async function handleSignup(request, env, ctx) {
   const cors = corsHeaders(env);
@@ -422,9 +440,9 @@ async function handleSignup(request, env, ctx) {
 
   // Honeypot: the form's hidden field. A bot that fills it gets the same OK a
   // person would, and nothing is stored or sent.
-  // ponytail: honeypot only. Add Turnstile or a rate-limit rule if this
-  // endpoint ever draws real abuse — each accepted call writes to four places.
   if (s(body._honey, 200)) return json(200, { ok: true }, cors);
+  // Each accepted call writes to three places, so a bot must not get past here.
+  if (!await humanCheck(env, request, s(body.turnstile, 4096))) return json(403, { error: 'bot check failed' }, cors);
 
   const email = s(body.email, 120).toLowerCase();
   if (!EMAIL.test(email)) return json(400, { error: 'email required' }, cors);

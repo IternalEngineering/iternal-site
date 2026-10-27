@@ -114,7 +114,14 @@ homepage is outside the automation: the team decides whether to build one
 | **GitHub Action** (`.github/workflows/screenshots.yml`) | weekly gallery screenshot refresh commits | — | Gallery additions touch FOUR places — see HOUSEKEEPING.md |
 
 FormSubmit is no longer in the sign-up path. It remains only as an unused
-fallback constant in questions.html.
+fallback constant in questions.html (and still carries the contact page's
+enquiries, which are left as they are: Robbie, 27 Oct 2026).
+
+**Bot check (Cloudflare Turnstile)** on the sign-up only: `turnstile.js` adds
+the widget to forms marked `data-turnstile` (site key in that file, public);
+the worker's `/signup` verifies the token once `TURNSTILE_SECRET` is set.
+Order matters: site key in and the site deployed BEFORE the secret is set, or
+every sign-up is refused.
 
 ## Current to-do (30 Sep 2026)
 

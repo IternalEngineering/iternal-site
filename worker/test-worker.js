@@ -812,4 +812,43 @@ assert.strictEqual(ghFile(slug).stage, 'signed-up');
 assert.strictEqual(answered(ghFile(slug)).length, 0);
 assert.strictEqual(gh.files.get('history/clients.jsonl').json.trim().split('\n').length, 2);
 
+// ── The sign-up's bot check (Turnstile) ────────────────────────────────
+// Fake Turnstile: only 'human-token' under 'ts_secret' passes; `down` throws.
+const turnstile = { calls: [], down: false };
+{
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = async (url, opts) => {
+    if (String(url) !== 'https://challenges.cloudflare.com/turnstile/v0/siteverify') return realFetch(url, opts);
+    if (turnstile.down) throw new Error('network down');
+    const p = Object.fromEntries(new URLSearchParams(opts.body));
+    turnstile.calls.push(p);
+    return new Response(JSON.stringify({ success: p.secret === 'ts_secret' && p.response === 'human-token' }), { status: 200 });
+  };
+}
+const signupAs = (email, extra = {}, headers = {}) => call('/signup', { method: 'POST', headers, body: JSON.stringify({ firstName: 'Bo', email, organisation: 'Bot Check Ltd', ...extra }) });
+// with no secret set the check is off (everything above ran that way) and Cloudflare is never asked
+assert.strictEqual(turnstile.calls.length, 0);
+// with the secret set, a sign-up needs Cloudflare's word that a person sent it
+env.TURNSTILE_SECRET = 'ts_secret';
+outbound = [];
+assert.strictEqual((await signupAs('bot@check.co.uk')).status, 403);
+assert.strictEqual((await signupAs('bot@check.co.uk', { turnstile: 'bot-token' })).status, 403);
+await drain();
+assert.strictEqual(store.get('lead:bot@check.co.uk'), undefined); // nothing stored, nothing sent
+assert.strictEqual(outbound.length, 0);
+r = await signupAs('bo@check.co.uk', { turnstile: 'human-token' }, { 'cf-connecting-ip': '198.51.100.4' });
+assert.strictEqual(r.status, 200);
+assert.ok((await r.json()).order);
+assert.strictEqual(turnstile.calls.at(-1).remoteip, '198.51.100.4');
+await drain();
+// the honeypot still answers first, without asking Cloudflare
+const asked = turnstile.calls.length;
+assert.strictEqual((await signupAs('pot@check.co.uk', { _honey: 'x' })).status, 200);
+assert.strictEqual(turnstile.calls.length, asked);
+// Cloudflare unreachable: closed, not open
+turnstile.down = true;
+assert.strictEqual((await signupAs('down@check.co.uk', { turnstile: 'human-token' })).status, 403);
+turnstile.down = false;
+delete env.TURNSTILE_SECRET;
+
 console.log('All worker checks passed.');
