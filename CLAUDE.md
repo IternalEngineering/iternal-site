@@ -57,8 +57,8 @@ homepage is outside the automation: the team decides whether to build one
   client's own updates. **The terms are the Iternal Website Build and Care
   Terms, version 1.0**, supplied 22 Oct 2026 and confirmed final by Robbie
   on 27 Oct 2026 (the first public version; it replaced an earlier, invalid
-  draft of the same number that was never public). Their effective date is
-  still "[date]" until Robbie gives it. Pages never add a figure, promise
+  draft of the same number that was never public), effective 27 October
+  2026 (Robbie). Pages never add a figure, promise
   or refund the team has not set. Every place a figure is printed is listed
   in HOUSEKEEPING.md §Payment.
 - Do not promise a number of concepts ("two or three") anywhere on these
@@ -130,8 +130,8 @@ fallback constant in questions.html.
    its cue from the sleekness of existing sites; redesign after they have
    seen what exists.
 7. Legal: the Iternal Website Build and Care Terms, version 1.0 (final
-   27 Oct 2026), accepted online at the end of sign-up. The effective date
-   is still to come from Robbie. Agents never draft, edit or decide terms,
+   27 Oct 2026, effective 27 October 2026), accepted online at the end of
+   sign-up. Agents never draft, edit or decide terms,
    and place supplied wording word for word. The one change from the
    supplied text is Robbie's (27 Oct 2026): "web agent" reads "Site Agent"
    (clauses 3 and 10, and the key points).

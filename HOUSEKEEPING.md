@@ -152,8 +152,8 @@ the token awaits org approval), so the worker can deploy regardless.
   they are placed word for word (checked word by word against the supplied
   PDF), except "web agent", which reads "Site Agent" on Robbie's word (27 Oct
   2026), and replaced an earlier draft of the same number that was never
-  public. Their effective date is "[date]" until Robbie gives it: one place
-  in the page, then reprint the PDF. They fix the £100 upfront payment and
+  public. They are effective 27 October 2026 (Robbie: "today's date"). They
+  fix the £100 upfront payment and
   leave the rest of the build fee and the care plan fee to the order
   details, which take priority over the terms except for clause 17. The
   order states **£750: £100 now, £650 on completion**, and **£50 a month**
