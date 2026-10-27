@@ -5,11 +5,22 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **22 Oct 2026, the website rework** (pull request #6; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
+Last deploy: **27 Oct 2026, the website sign-up's final terms and payment step** (pull request #7; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
+
+Nothing waiting.
+
+---
+
+## Live
+
+### 27 Oct 2026, the website sign-up's final terms and payment step (pull request #7)
+
+Merged from `stripe-bookings`. Websites stays hidden and the sign-up stays in preview, so
+visitors see no change; these describe the sign-up as `?team` (and launch day) shows it.
 
 #### Website sign-up (still hidden)
 - **The steps run in order**: the questions page opens only once the payment has gone
@@ -39,10 +50,6 @@ Last deploy: **22 Oct 2026, the website rework** (pull request #6; pushing to ma
 - **The client's one email moves to after payment**: "Welcome to Iternal: your website order
   is confirmed", worded as the team's sign-up example, with the booking link and the terms
   attached (it was sent on accepting). (stripe-bookings)
-
----
-
-## Live
 
 ### 22 Oct 2026, the website rework (pull request #6)
 
