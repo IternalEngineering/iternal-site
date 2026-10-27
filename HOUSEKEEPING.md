@@ -221,7 +221,14 @@ the token awaits org approval), so the worker can deploy regardless.
      Sessions: Write**, nothing else → `npx wrangler secret put STRIPE_API_KEY`
      from `worker/` (Robbie puts secrets in himself). Try it in test mode first
      (a test key, Price and tax rate, locally); if Stripe refuses a parameter,
-     its error names the permission to add.
+     its error names the permission to add. The local run: the test key in
+     `worker/.dev.vars` as `STRIPE_API_KEY=rk_test_…` (git ignores it), the
+     test Price and tax rate as `--var`s on the "funnel-test-worker" launch
+     config (`wrangler dev`, port 8787; KV and email stay on the computer, the
+     tracker and dashboard are skipped without their secrets), and
+     `node funnel-test/_build.mjs` (outside this repo) for copies of the pages
+     that call it, served by "funnel-test-pages" on port 8738. Pay with
+     4242 4242 4242 4242.
   3. Stripe → Developers → Webhooks: endpoint
      `https://api.iternal.co.uk/stripe-webhook` ("site-client-funnel", active),
      event `checkout.session.completed` (its `payment_intent.succeeded` events
