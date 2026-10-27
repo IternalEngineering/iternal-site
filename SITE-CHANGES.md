@@ -5,11 +5,22 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **27 Oct 2026, the website sign-up's final terms and payment step** (pull request #7; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
+Last deploy: **27 Oct 2026, the sign-up's bot check and one team email per paid client** (pull request #8; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
+
+Nothing waiting.
+
+---
+
+## Live
+
+### 27 Oct 2026, the sign-up's bot check and one team email per paid client (pull request #8)
+
+Merged from `bot-protection`. Websites stays hidden and the sign-up stays in preview, so visitors
+see no change.
 
 #### Website sign-up (still hidden)
 - **A bot check on the sign-up** (Cloudflare Turnstile): invisible to visitors unless
@@ -20,10 +31,6 @@ Last deploy: **27 Oct 2026, the website sign-up's final terms and payment step**
   accepting the terms. The payment email carries their order, website and gallery example,
   and, while client confirmations can't send, the confirmation to forward (no separate
   "confirmation FAILED" email). (bot-protection)
-
----
-
-## Live
 
 ### 27 Oct 2026, the website sign-up's final terms and payment step (pull request #7)
 
