@@ -89,7 +89,7 @@ the token awaits org approval), so the worker can deploy regardless.
 - `/signup` is the sign-up form's only destination (FormSubmit is gone from
   that page). Its spam check is the form's hidden honeypot field. One
   sign-up per email: a second one is refused (409; the page asks them to
-  carry on in the browser they signed up in, or email hello@iternal.life)
+  carry on in the browser they signed up in, or email john@iternal.life)
   unless it comes from that browser, which gets the same order back.
   Nothing changes either way, so knowing someone's email is not enough to
   take over their sign-up or accept for them.
@@ -110,7 +110,7 @@ the token awaits org approval), so the worker can deploy regardless.
   token with every answers post. `/answers` refuses (403) answers for a
   record whose token does not match — knowing an email is not enough to
   rewrite someone's brief. A client on a different browser gets a message
-  pointing them to hello@iternal.life.
+  pointing them to john@iternal.life.
 - The steps run in order (Robbie, 27 Oct 2026): sign up, accept, pay, then
   the questions and the booking. `/status` (`{email, token}`) answers
   `{accepted, paid}`, plus `booking` (the `BOOKING_URL` link) once paid; the
@@ -223,7 +223,7 @@ the token awaits org approval), so the worker can deploy regardless.
      event `checkout.session.completed` (its `payment_intent.succeeded` events
      are ignored). Its signing secret is `STRIPE_WEBHOOK_SECRET` on the worker
      (still set on 22 Oct 2026).
-  4. The booking schedule (hello@iternal.life's Google Calendar) must NOT
+  4. The booking schedule (John's Google Calendar) must NOT
      require payment: the client has paid already.
 
   The worker makes one Checkout Session per visit to the payment step
@@ -251,8 +251,10 @@ the token awaits org approval), so the worker can deploy regardless.
 ## Team briefs (email)
 
 Briefs go to every address in `TEAM_EMAIL` (comma-separated), one copy each.
-Since 27 Oct 2026 that is hello@iternal.life alone (Robbie; John before),
-which also receives clients' replies (`CLIENT_REPLY_TO`) and is the terms' notices address; websites@iternal.life
+For launch that is john@iternal.life alone (Robbie, 27 Oct 2026: his schedule
+takes the calls), which also receives clients' replies (`CLIENT_REPLY_TO`).
+The terms name hello@iternal.life for notices, so that inbox must be watched
+too; websites@iternal.life
 can join once it exists. Changing who receives them is a three-step change,
 not one:
 
@@ -281,7 +283,7 @@ Email Routing: it can reach any address. Setting it up, once:
    Workers Paid plan.
 2. `CLIENT_FROM` (`Iternal <websites@iternal.co.uk>`) must match the
    binding's `allowed_sender_addresses` in `worker/wrangler.toml`. Replies
-   go to `CLIENT_REPLY_TO` (hello@iternal.life).
+   go to `CLIENT_REPLY_TO` (john@iternal.life).
 3. Deploy the worker. Until all of this is in place every send fails, and
    each failure emails the team "confirmation FAILED" with the text to
    forward by hand, so nobody goes without it.
@@ -298,10 +300,9 @@ VAT invoice, Google Calendar the booking invite.
 - The booking link — the website-build meeting — lives only in
   `worker/wrangler.toml` `BOOKING_URL` (27 Oct 2026): the questions page gets
   it from `/status` once the client has paid, and the confirmation email
-  carries it. From 22 Oct 2026 the schedule lives in the hello@iternal.life
-  Google account and takes no payment (the client paid on accepting,
-  §Payment); until its link is in, this still holds John's "Disco Meeting"
-  (https://calendar.app.google/fNGuEjKBSpoPMhAL6). It is strictly for
+  carries it. For launch it is John's "Disco Meeting"
+  (https://calendar.app.google/fNGuEjKBSpoPMhAL6, Robbie 27 Oct 2026), which
+  takes no payment (the client paid on accepting, §Payment). It is strictly for
   website-build meetings (Robbie): every other "Book a Call" / "Book a
   Discovery Call" goes to /contact, and those discovery calls stay
   "30 minutes".
@@ -322,7 +323,7 @@ Before lighting up (Robbie, 20 Oct 2026: anything quick to update once
 live is not a blocker):
 
 - The pipeline repo exists on GitHub and `PIPELINE_TOKEN` is set.
-- hello@iternal.life is a verified Email Routing destination, and the worker
+- john@iternal.life is a verified Email Routing destination, and the worker
   is deployed.
 - The team has stepped through every screen in the preview (gallery,
   sign-up, review and accept, questions, booking) and is happy with it.

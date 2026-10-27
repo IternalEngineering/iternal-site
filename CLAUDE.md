@@ -74,11 +74,13 @@ homepage is outside the automation: the team decides whether to build one
 - Clients get one email from us: once they have paid, their confirmation
   (the order, the booking link, the terms PDF attached), worded as the
   team's sign-up example, from
-  "Iternal <websites@iternal.co.uk>" with replies to hello@iternal.life
+  "Iternal <websites@iternal.co.uk>" with replies to john@iternal.life
   (`CLIENT_MAIL`, Cloudflare Email Service). If it cannot send, the team
   gets it to forward. Stripe sends the receipt and VAT invoice, Google
   Calendar the invite. Team briefs go to
-  hello@iternal.life (the one address since 27 Oct 2026; John before) as
+  john@iternal.life (Robbie, 27 Oct 2026: John's schedule takes the calls, so
+  the launch uses his address; the terms still name hello@iternal.life for
+  notices) as
   "Website Pipeline <funnel@iternal.co.uk>" (`TEAM_MAIL`).
 
 ## Currently DISABLED / dark (deliberate — do not "fix")
@@ -118,9 +120,8 @@ fallback constant in questions.html.
 
 1. Create the private GitHub repo for `../website-build-platform`, push it,
    and set the worker's `PIPELINE_TOKEN`.
-2. Verify hello@iternal.life as an Email Routing destination (since 27 Oct
-   2026 it receives the briefs and clients' replies, as the terms name it for notices),
-   then deploy the worker.
+2. Deploy the worker (john@iternal.life, a verified Email Routing
+   destination, receives the briefs and clients' replies).
 3. Deploy the site (held: only on Robbie's word, named in that moment).
 4. `?team` walkthrough: one real sign-up should yield a client file, a
    tracker row and both briefs.

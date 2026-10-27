@@ -17,9 +17,9 @@ Last deploy: **22 Oct 2026, the website rework** (pull request #6; pushing to ma
   "Your payment hasn't come through yet") with a link back; straight back from Stripe it
   shows "Confirming your payment" for the few seconds that takes. The booking link is no
   longer in the page: it arrives once the client has paid. (stripe-bookings)
-- **hello@iternal.life is the sign-up's address**: the "email us" messages on the sign-up and
-  questions pages, replies to the client's confirmation, and the team's briefs (was
-  john@iternal.life). (stripe-bookings)
+- **john@iternal.life stays the sign-up's address** for launch: the "email us" messages on the
+  sign-up and questions pages, replies to the client's confirmation, and the team's briefs
+  (a switch to hello@iternal.life was undone the same day). (stripe-bookings)
 - **The final terms are in**: the Iternal Website Build and Care Terms, version 1.0 (23
   clauses, word for word as supplied, page and PDF, with "Site Agent" where the supplied text
   said "web agent"; effective 27 October 2026), replace the earlier draft. "Review and
