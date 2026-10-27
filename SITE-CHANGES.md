@@ -16,6 +16,15 @@ Last deploy: **27 Oct 2026, the sign-up's bot check and one team email per paid 
   the contact form offers "Websites", and the sign-up runs for real for everyone: no gold
   "aren't live yet" banner, and the gallery and sign-up pages can be found by search engines
   (sitemap and llms.txt list Websites). (lighting up)
+- **Front-end audit fixes** (27 Oct): the sign-up's website box takes an address as people
+  type it ("mysite.co.uk", no "https://" needed); its fields autofill on phones; the sign-up
+  and its "you're signed up" note mention the downpayment; "Accept and pay" says "Tick both
+  boxes above to accept." while it is dimmed; the questions page no longer promises a first
+  version built for the call, and says answers are saved as you go; screen readers hear each
+  question with its answer box and whether an option is selected; the header's "Book a Call"
+  is gone from the sign-up and questions pages (the client's own booking is there). The
+  sign-up's data line now reads "We use your details only to work with you on your site."
+  (lighting up)
 
 ---
 

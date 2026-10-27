@@ -553,7 +553,6 @@ html { overflow-x:clip; }
     <li><a href="/about">About</a></li>
     <li><a href="/contact">Contact</a></li>
   </ul>
-  <a href="/contact" class="nav-btn">Book a Call</a>
   <button class="theme-toggle" aria-label="Toggle light/dark mode">
     <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
     <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -568,7 +567,6 @@ html { overflow-x:clip; }
   <a href="/services">Services</a>
   <a href="/about">About</a>
   <a href="/contact">Contact</a>
-  <a href="/contact" class="mob-cta">Book a Call</a>
 </div>
 
 <main id="main">
@@ -619,7 +617,7 @@ html { overflow-x:clip; }
 
           <div id="unlockPanel" hidden aria-live="polite" style="margin-top:26px; padding:18px 20px; border:1px solid var(--tan); border-radius:6px">
             <div style="font-weight:700; color:var(--tan); margin-bottom:6px">Your call is unlocked</div>
-            <p style="font-size:14px; color:var(--t2); margin:0 0 12px; line-height:1.6">You can book now. The questions below shape the first version we build for your call, so a few more answers make a real difference.</p>
+            <p style="font-size:14px; color:var(--t2); margin:0 0 12px; line-height:1.6">You can book now. The questions below help us prepare for your call, so a few more answers make a real difference.</p>
             <a id="bookBtn" href="/contact" class="submit-btn" style="margin-top:2px; text-decoration:none">Book your call →</a>
           </div>
 
@@ -638,7 +636,7 @@ html { overflow-x:clip; }
             <span id="sendNote" style="font-size:13px; color:var(--t3)"></span>
           </div>
 
-          <p class="form-privacy" style="margin-top:22px">Your answers reach us when you book or press send, and go nowhere else.</p>
+          <p class="form-privacy" style="margin-top:22px">Your answers are saved as you go, for our team to prepare your call.</p>
         </div>
 
         <!-- Success state -->
@@ -909,20 +907,24 @@ document.head.appendChild(style);
 
   function fieldHTML(q, omitLabel){
     var h = '<div class="form-field">';
-    if (!omitLabel) h += '<label for="qi-' + q.id + '">' + esc(q.label) + (q.core ? ' <span>*</span>' : '') + '</label>';
+    // The question names its field: a <label> here, or the row's <summary> (ql-<id>) when omitted.
+    var named = omitLabel ? ' aria-labelledby="ql-' + q.id + '"' : '';
+    if (!omitLabel) h += '<label id="ql-' + q.id + '" for="qi-' + q.id + '">' + esc(q.label) + (q.core ? ' <span>*</span>' : '') + '</label>';
     if (q.hint) h += '<p style="font-size:13px; color:var(--t3); margin:0 0 10px">' + esc(q.hint) + '</p>';
     if (q.type === 'textarea') {
-      h += '<textarea id="qi-' + q.id + '" placeholder="' + esc(q.ph || '') + '"></textarea>';
+      h += '<textarea id="qi-' + q.id + '"' + named + ' placeholder="' + esc(q.ph || '') + '"></textarea>';
     } else if (q.type === 'choice' || q.type === 'multi') {
-      h += '<div class="budget-chips" data-q="' + q.id + '">' + q.options.map(function(o){
-        return '<button type="button" class="budget-chip" data-val="' + esc(o) + '">' + esc(o) + '</button>';
+      h += '<div class="budget-chips" data-q="' + q.id + '" role="group" aria-labelledby="ql-' + q.id + '">' + q.options.map(function(o){
+        return '<button type="button" class="budget-chip" aria-pressed="false" data-val="' + esc(o) + '">' + esc(o) + '</button>';
       }).join('') + '</div>';
     } else {
-      h += '<input type="' + (q.type === 'email' ? 'email' : 'text') + '" id="qi-' + q.id + '" placeholder="' + esc(q.ph || '') + '">';
+      h += '<input type="' + (q.type === 'email' ? 'email' : 'text') + '" id="qi-' + q.id + '"' + named + (q.type === 'email' ? ' autocomplete="email"' : '') + ' placeholder="' + esc(q.ph || '') + '">';
     }
-    if (q.optOut) h += '<div class="budget-chips" style="margin-top:10px"><button type="button" class="budget-chip" data-optout="' + q.id + '">' + esc(q.optOut) + '</button></div>';
+    if (q.optOut) h += '<div class="budget-chips" style="margin-top:10px"><button type="button" class="budget-chip" aria-pressed="false" data-optout="' + q.id + '">' + esc(q.optOut) + '</button></div>';
     return h + '</div>';
   }
+
+  function mark(chip, on){ chip.classList.toggle('selected', on); chip.setAttribute('aria-pressed', on ? 'true' : 'false'); }
 
   function wire(q, root){
     var input = root.querySelector('#qi-' + q.id);
@@ -931,14 +933,15 @@ document.head.appendChild(style);
       input.value = answers[q.id] === q.optOut ? '' : (answers[q.id] || '');
       input.addEventListener('input', function(){
         answers[q.id] = input.value;
-        if (optChip) optChip.classList.remove('selected');
+        if (optChip) mark(optChip, false);
         save(); refresh();
       });
     }
     if (optChip) {
-      if (answers[q.id] === q.optOut) optChip.classList.add('selected');
+      if (answers[q.id] === q.optOut) mark(optChip, true);
       optChip.addEventListener('click', function(){
-        var on = optChip.classList.toggle('selected');
+        var on = !optChip.classList.contains('selected');
+        mark(optChip, on);
         answers[q.id] = on ? q.optOut : '';
         if (input) input.value = '';
         save(); refresh();
@@ -949,18 +952,18 @@ document.head.appendChild(style);
       var current = answers[q.id] || (q.type === 'multi' ? [] : '');
       chips.querySelectorAll('.budget-chip').forEach(function(chip){
         var val = chip.dataset.val;
-        if (q.type === 'multi' ? current.indexOf(val) > -1 : current === val) chip.classList.add('selected');
+        if (q.type === 'multi' ? current.indexOf(val) > -1 : current === val) mark(chip, true);
         chip.addEventListener('click', function(){
           if (q.type === 'multi') {
             var list = answers[q.id] || [];
             var i = list.indexOf(val);
             if (i > -1) list.splice(i, 1); else list.push(val);
             answers[q.id] = list;
-            chip.classList.toggle('selected');
+            mark(chip, i === -1);
           } else {
             answers[q.id] = val;
-            chips.querySelectorAll('.budget-chip').forEach(function(c){ c.classList.remove('selected'); });
-            chip.classList.add('selected');
+            chips.querySelectorAll('.budget-chip').forEach(function(c){ mark(c, false); });
+            mark(chip, true);
           }
           save(); refresh();
         });
@@ -983,7 +986,7 @@ document.head.appendChild(style);
     d.dataset.q = q.id;
     d.style.cssText = 'border-bottom:1px solid rgba(128,128,128,.22)';
     d.innerHTML =
-      '<summary style="cursor:pointer; padding:14px 4px; font-size:15px; font-weight:700; color:var(--t2)">' + esc(q.label) +
+      '<summary id="ql-' + q.id + '" style="cursor:pointer; padding:14px 4px; font-size:15px; font-weight:700; color:var(--t2)">' + esc(q.label) +
       ' <span data-done style="color:var(--tan); font-weight:400; font-size:12px; margin-left:6px"></span></summary>' +
       '<div style="padding:2px 4px 18px">' + fieldHTML(q, true) + '</div>';
     optBody.appendChild(d);
@@ -1082,7 +1085,7 @@ document.head.appendChild(style);
         if (a === bookBtn) {
           unlockPanel.innerHTML =
             '<div style="font-weight:700; color:var(--tan); margin-bottom:6px">Call requested</div>' +
-            '<p style="font-size:14px; color:var(--t2); margin:0; line-height:1.6">Your answers are with us — we aim to email you times for your call within one working day. Keep answering below if you like; every extra answer sharpens the concepts.</p>';
+            '<p style="font-size:14px; color:var(--t2); margin:0; line-height:1.6">Your answers are with us — we aim to email you times for your call within one working day. Keep answering below if you like; every extra answer helps us prepare.</p>';
         } else {
           var p = document.createElement('p');
           p.style.cssText = 'color:var(--tan); font-weight:700; font-size:14px; margin:0';

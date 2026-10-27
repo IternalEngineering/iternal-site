@@ -629,7 +629,6 @@ html { overflow-x:clip; }
     <li><a href="/about">About</a></li>
     <li><a href="/contact">Contact</a></li>
   </ul>
-  <a href="/contact" class="nav-btn">Book a Call</a>
   <button class="theme-toggle" aria-label="Toggle light/dark mode">
     <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
     <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -644,7 +643,6 @@ html { overflow-x:clip; }
   <a href="/services">Services</a>
   <a href="/about">About</a>
   <a href="/contact">Contact</a>
-  <a href="/contact" class="mob-cta">Book a Call</a>
 </div>
 
 <main id="main">
@@ -687,33 +685,33 @@ html { overflow-x:clip; }
           <input type="text" id="honey" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="form-head">
             <h2>Sign up</h2>
-            <p>Four fields. The detailed questions come later, once you've accepted our terms.</p>
+            <p>Four fields. The detailed questions come later, once you've accepted our terms and paid your downpayment.</p>
           </div>
 
           <div class="form-row">
             <div class="form-field">
               <label for="fname">First name <span>*</span></label>
-              <input type="text" id="fname" name="firstName" placeholder="Jane" required aria-required="true">
+              <input type="text" id="fname" name="firstName" placeholder="Jane" autocomplete="given-name" required aria-required="true">
             </div>
             <div class="form-field">
               <label for="lname">Last name <span>*</span></label>
-              <input type="text" id="lname" name="lastName" placeholder="Smith" required aria-required="true">
+              <input type="text" id="lname" name="lastName" placeholder="Smith" autocomplete="family-name" required aria-required="true">
             </div>
           </div>
 
           <div class="form-field">
             <label for="email">Work email <span>*</span></label>
-            <input type="email" id="email" name="email" placeholder="jane@company.com" required aria-required="true">
+            <input type="email" id="email" name="email" placeholder="jane@company.com" autocomplete="email" required aria-required="true">
           </div>
 
           <div class="form-field">
             <label for="org">Name or business name <span>*</span></label>
-            <input type="text" id="org" name="organisation" placeholder="Your business, or your own name" required aria-required="true">
+            <input type="text" id="org" name="organisation" placeholder="Your business, or your own name" autocomplete="organization" required aria-required="true">
           </div>
 
           <div class="form-field">
             <label for="website">Existing website, if you have one</label>
-            <input type="url" id="website" name="existingWebsite" placeholder="https://yoursite.com">
+            <input type="text" inputmode="url" id="website" name="existingWebsite" placeholder="yoursite.com" autocomplete="url" spellcheck="false" autocapitalize="off">
           </div>
 
           <div class="form-submit">
@@ -721,7 +719,7 @@ html { overflow-x:clip; }
               Sign Up
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <p class="form-privacy">We don't share your information with third parties. No newsletters, no noise. Next step: review and accept.</p>
+            <p class="form-privacy">We use your details only to work with you on your site. No newsletters, no noise. Next step: review and accept.</p>
           </div>
         </form>
 
@@ -731,7 +729,7 @@ html { overflow-x:clip; }
             <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
           <h3 class="success-h">You're signed up.</h3>
-          <p class="success-p">Next, check your order details and our terms. Once you accept them, your questions follow.</p>
+          <p class="success-p">Next, check your order details and our terms. Once you accept them, you pay your downpayment, then your questions follow.</p>
           <a href="#terms" class="submit-btn" style="margin-top:22px; text-decoration:none">
             Review and Accept
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -804,10 +802,11 @@ html { overflow-x:clip; }
           <input type="checkbox" id="acceptAuthority">
           <span>I confirm I am buying this website mainly for my work, such as speaking, writing, consulting or other professional activity, and, if I am accepting for a business, that I am authorised to do so.</span>
         </label>
-        <button type="button" class="submit-btn" id="acceptBtn" disabled>
+        <button type="button" class="submit-btn" id="acceptBtn" disabled aria-describedby="acceptHint">
           <span>Accept and pay £<span data-o="downpayment"></span></span>
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
+        <p class="form-privacy" id="acceptHint" style="color:var(--tan)">Tick both boxes above to accept.</p>
         <p class="form-privacy">Next: payment through Stripe, then your project questions and booking your call.</p>
       </div>
     </div>
@@ -932,7 +931,10 @@ function showReview(o) {
   document.getElementById('formWrap').classList.add('submitted');
   review.hidden = false;
 }
-function syncAccept() { acceptBtn.disabled = !(acceptTerms.checked && acceptAuthority.checked); }
+function syncAccept() {
+  acceptBtn.disabled = !(acceptTerms.checked && acceptAuthority.checked);
+  document.getElementById('acceptHint').hidden = !acceptBtn.disabled;
+}
 acceptTerms.addEventListener('change', syncAccept);
 acceptAuthority.addEventListener('change', syncAccept);
 
