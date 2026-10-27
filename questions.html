@@ -1114,16 +1114,22 @@ document.head.appendChild(style);
     }
   }
   var SIGN_UP_FIRST = ['Sign up first', 'Your questions come after you sign up, accept our terms and pay your downpayment. If you signed up in another browser, please carry on there.', 'Sign up →'];
-  // Straight back from Stripe, the payment can take a few seconds to reach us.
+  // Straight back from Stripe, the page names the payment (session_id) and the
+  // worker asks Stripe about it, so it opens at once; failing that, it waits
+  // a few seconds for Stripe's notice to reach us.
+  var SESSION = (location.search.match(/[?&]session_id=([^&]+)/) || [])[1] || '';
   function check(tries){
     fetch(WORKER_URL + '/status', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ email: SIGNUP_EMAIL, token: SIGNUP_TOKEN })
+      body: JSON.stringify({ email: SIGNUP_EMAIL, token: SIGNUP_TOKEN, session: SESSION })
     }).then(function(res){ return res.ok ? res.json() : Promise.reject(res.status); }).then(function(st){
       if (st.paid) return openSteps(st.booking);
       if (!st.accepted) return shut('Accept our terms first', 'Your questions come after you have reviewed your order, accepted our terms and paid your downpayment.', 'Back to your order →');
-      if (tries > 0) return setTimeout(function(){ check(tries - 1); }, 2000);
+      if (tries > 0) {
+        shut('Confirming your payment', 'This takes a few seconds.');
+        return setTimeout(function(){ check(tries - 1); }, 2000);
+      }
       shut('Your payment hasn’t come through yet', 'Your questions and call booking open once it has. If you left the payment page before paying, you can pay now.', 'Pay your downpayment →');
     }, function(status){
       if (status === 404 || status === 403) return shut.apply(null, SIGN_UP_FIRST);
@@ -1132,7 +1138,7 @@ document.head.appendChild(style);
   }
   if (PREVIEW) openSteps();
   else if (!SIGNUP_EMAIL || !SIGNUP_TOKEN) shut.apply(null, SIGN_UP_FIRST);
-  else { shut('Confirming your payment', 'This takes a few seconds.'); check(/[?&]paid=1\b/.test(location.search) ? 8 : 0); }
+  else { quiz.hidden = true; check(/[?&]paid=1\b/.test(location.search) ? 8 : 0); }
 
   // Save whatever is new when they switch away or close: before booking so the
   // team can follow up someone who stops, after booking because the page

@@ -53,8 +53,9 @@ const ghFile = slug => JSON.parse(gh.files.get(`clients/${slug}.json`).json);
 const answered = f => f.answers.filter(a => a.answer !== null);
 const answerOf = (f, id) => f.answers.find(a => a.id === id);
 
-// Fake Stripe: each Checkout Session created is kept; `fail` makes it refuse.
-const stripeApi = { sessions: [], fail: false };
+// Fake Stripe: each Checkout Session created is kept; `fail` makes it refuse;
+// `paid` holds the ids a client has paid; `down` makes looking one up fail.
+const stripeApi = { sessions: [], fail: false, paid: new Set(), down: false };
 let outbound = [];
 globalThis.fetch = async (url, opts = {}) => {
   if (String(url).startsWith('https://api.github.com/')) return fakeGitHub(String(url), opts);
@@ -63,6 +64,14 @@ globalThis.fetch = async (url, opts = {}) => {
     const id = 'cs_test_' + (stripeApi.sessions.length + 1);
     stripeApi.sessions.push({ id, auth: opts.headers.authorization, p: Object.fromEntries(new URLSearchParams(opts.body)) });
     return new Response(JSON.stringify({ id, url: 'https://checkout.stripe.com/c/pay/' + id }), { status: 200 });
+  }
+  if (String(url).startsWith('https://api.stripe.com/v1/checkout/sessions/')) {
+    if (stripeApi.down) return new Response('{"error":{"message":"server error"}}', { status: 500 });
+    const id = String(url).split('/').pop();
+    const sess = stripeApi.sessions.find(x => x.id === id);
+    if (!sess || opts.headers.authorization !== 'Bearer rk_test_x') return new Response('{"error":{"message":"No such checkout.session"}}', { status: 404 });
+    return new Response(JSON.stringify({ id, client_reference_id: sess.p.client_reference_id, metadata: { funnel: sess.p['metadata[funnel]'] },
+      payment_status: stripeApi.paid.has(id) ? 'paid' : 'unpaid', amount_total: 10000, currency: 'gbp' }), { status: 200 });
   }
   if (String(url).endsWith('.pdf')) return new Response(new Uint8Array([37, 80, 68, 70]), { status: 200 }); // the published terms
   outbound.push({ url: String(url), body: opts.body ? JSON.parse(opts.body) : null });
@@ -297,7 +306,7 @@ await drain();
   assert.strictEqual(p['custom_text[submit][message]'], `Kilnworks: upfront payment towards your website build fee (${acc.reference}).`);
   assert.strictEqual(p['invoice_creation[enabled]'], 'true');
   assert.strictEqual(p['invoice_creation[invoice_data][custom_fields][0][value]'], acc.reference);
-  assert.strictEqual(p.success_url, 'https://iternal.co.uk/questions?paid=1');
+  assert.strictEqual(p.success_url, 'https://iternal.co.uk/questions?paid=1&session_id={CHECKOUT_SESSION_ID}');
   assert.strictEqual(p.cancel_url, 'https://iternal.co.uk/start');
   // nothing to the client until they have paid
   assert.strictEqual(clientMail.length, 0);
@@ -638,6 +647,38 @@ outbound = []; teamMail.length = 0;
   await call('/accept', { method: 'POST', body: JSON.stringify({ email: 'una@unpaid.co.uk', token: una.token, termsVersion: '1.0', accepted: true, authorised: true }) });
   r = await status({ email: 'Una@Unpaid.co.uk', token: una.token });
   assert.deepStrictEqual(await r.json(), { ok: true, accepted: true, paid: false }); // no booking link
+  // Back from Stripe: the page sends the session id and Stripe's word opens it at once
+  const unaSession = stripeApi.sessions.find(x => x.p.client_reference_id === una.order.reference).id;
+  const unpaid = { ok: true, accepted: true, paid: false };
+  r = await status({ email: 'una@unpaid.co.uk', token: una.token, session: unaSession });
+  assert.deepStrictEqual(await r.json(), unpaid); // left the page without paying
+  stripeApi.paid.add(unaSession);
+  stripeApi.down = true;
+  r = await status({ email: 'una@unpaid.co.uk', token: una.token, session: unaSession });
+  assert.deepStrictEqual(await r.json(), unpaid); // Stripe unreachable: the page waits for the webhook
+  stripeApi.down = false;
+  const omarSession = stripeApi.sessions.find(x => x.p.client_reference_id === omarRef).id;
+  stripeApi.paid.add(omarSession);
+  r = await status({ email: 'una@unpaid.co.uk', token: una.token, session: omarSession });
+  assert.deepStrictEqual(await r.json(), unpaid); // someone else's payment opens nothing
+  r = await status({ email: 'una@unpaid.co.uk', token: una.token, session: '../../customers' });
+  assert.deepStrictEqual(await r.json(), unpaid);
+  assert.ok(!JSON.parse(store.get('lead:una@unpaid.co.uk')).payment);
+  teamMail.length = 0; clientMail.length = 0; outbound = [];
+  r = await status({ email: 'una@unpaid.co.uk', token: una.token, session: unaSession });
+  assert.deepStrictEqual(await r.json(), { ok: true, accepted: true, paid: true, booking: 'https://calendar.example/book' });
+  assert.strictEqual(JSON.parse(store.get('lead:una@unpaid.co.uk')).payment.id, unaSession);
+  await drain();
+  assert.strictEqual(teamMail.length + outbound.length + clientMail.length, 0); // the emails are the webhook's
+  // ...which then arrives for the same payment: no "needs a look", everything sent once
+  r = await stripe(paidSession(unaSession, una.order.reference));
+  assert.deepStrictEqual(await r.json(), { received: true });
+  await drain();
+  assert.ok(teamMail.some(m => m.raw.includes('Subject: Website Pipeline: paid — Unpaid Ltd')));
+  assert.ok(!teamMail.some(m => m.raw.includes('needs a look')));
+  assert.strictEqual(clientMail.filter(m => m.to === 'una@unpaid.co.uk').length, 1);
+  assert.strictEqual(outbound.filter(o => o.body && o.body.event === 'paid').length, 1);
+  teamMail.length = 0; outbound = [];
   r = await status({ email: 'omar@kilnworks.co.uk', token: omarToken });
   assert.deepStrictEqual(await r.json(), { ok: true, accepted: true, paid: true, booking: 'https://calendar.example/book' });
   await drain();

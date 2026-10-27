@@ -600,7 +600,10 @@ async function handleAnswers(request, env, ctx) {
 
 /** Where a client is in the steps, for the questions page: it opens the
     questions and the booking only once they have paid, and the booking link
-    comes from here, so it reaches nobody who has not paid. */
+    comes from here, so it reaches nobody who has not paid. Straight back from
+    Stripe the page sends the Checkout Session's id, and Stripe's own answer
+    records the payment there and then, so the client never waits for the
+    webhook; the webhook still sends the emails and the tracker note. */
 async function handleStatus(request, env) {
   const cors = corsHeaders(env);
   let body;
@@ -613,6 +616,13 @@ async function handleStatus(request, env) {
   const kv = EMAIL.test(email) ? await env.CLIENTS.get(`lead:${email}`, 'json') : null;
   if (!kv || !kv.token) return json(404, { error: 'sign up first' }, cors);
   if (s(body.token, 100) !== kv.token) return json(403, { error: 'not the browser that signed up' }, cors);
+  if (!kv.payment && kv.acceptance && body.session) {
+    const o = await fetchPaidSession(env, s(body.session, 100));
+    if (o && o.client_reference_id === kv.acceptance.reference) {
+      kv.payment = paymentOf(o);
+      await env.CLIENTS.put(`lead:${email}`, JSON.stringify(kv));
+    }
+  }
   const paid = !!kv.payment;
   return json(200, { ok: true, accepted: !!kv.acceptance, paid, ...(paid ? { booking: env.BOOKING_URL } : {}) }, cors);
 }
@@ -640,7 +650,8 @@ async function checkoutUrl(env, kv) {
     'invoice_creation[enabled]': 'true',
     'invoice_creation[invoice_data][custom_fields][0][name]': 'Reference',
     'invoice_creation[invoice_data][custom_fields][0][value]': acc.reference,
-    success_url: `${env.SITE_URL}/questions?paid=1`,
+    // Stripe fills in the session id, which the questions page hands to /status.
+    success_url: `${env.SITE_URL}/questions?paid=1&session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${env.SITE_URL}/start`,
   };
   if (env.STRIPE_TAX_RATE) p['line_items[0][tax_rates][0]'] = env.STRIPE_TAX_RATE;
@@ -662,6 +673,24 @@ async function payPage(env, kv, cors) {
     return json(502, { error: 'payment page unavailable' }, cors);
   }
 }
+
+/** One of our Checkout Sessions, if Stripe says it is paid; null otherwise or
+    if Stripe cannot be asked (the page then waits for the webhook instead). */
+async function fetchPaidSession(env, id) {
+  if (!/^cs_(test|live)_[A-Za-z0-9]+$/.test(id)) return null;
+  try {
+    const res = await fetch(`https://api.stripe.com/v1/checkout/sessions/${id}`, {
+      headers: { authorization: `Bearer ${env.STRIPE_API_KEY}` },
+    });
+    const o = await res.json();
+    return res.ok && o.payment_status === 'paid' && o.metadata && o.metadata.funnel === FUNNEL ? o : null;
+  } catch (e) {
+    console.error('payment check FAILED:', e && e.message ? e.message : e, id);
+    return null;
+  }
+}
+
+const paymentOf = o => ({ id: s(o.id, 100), amount: o.amount_total, currency: s(o.currency, 10), paidAt: new Date().toISOString() });
 
 async function hmacHex(secret, message) {
   const key = await crypto.subtle.importKey('raw', enc.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
@@ -713,15 +742,18 @@ async function handleStripeWebhook(request, env, ctx) {
   const kv = email ? await env.CLIENTS.get(key, 'json') : null;
 
   // Money in must never pass silently, even when the record has gone (archived)
-  // or the client paid on two pages at once.
-  if (!kv || !kv.acceptance || kv.payment) {
+  // or the client paid on two pages at once. The same payment, already recorded
+  // by the questions page (/status), is not a second one.
+  if (!kv || !kv.acceptance || (kv.payment && kv.payment.id !== o.id)) {
     ctx.waitUntil(sendTeamEmail(env, `Website Pipeline: payment needs a look — ${ref || 'no reference'}`,
       `${paid} arrived for ${ref || 'no reference'} (Stripe ${o.id}), ${kv && kv.payment ? `but that order was already paid (Stripe ${kv.payment.id}): refund one of them in Stripe` : 'but it matches no order waiting for payment: match it by hand in Stripe and the Lead Tracker'}.`));
     return json(200, { received: true, unmatched: true });
   }
 
-  kv.payment = { id: s(o.id, 100), amount: o.amount_total, currency: s(o.currency, 10), paidAt: new Date().toISOString() };
-  await env.CLIENTS.put(key, JSON.stringify(kv));
+  if (!kv.payment) {
+    kv.payment = paymentOf(o);
+    await env.CLIENTS.put(key, JSON.stringify(kv));
+  }
   const acc = kv.acceptance;
 
   ctx.waitUntil(Promise.allSettled([

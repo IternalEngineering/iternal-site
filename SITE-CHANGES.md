@@ -14,8 +14,9 @@ Last deploy: **22 Oct 2026, the website rework** (pull request #6; pushing to ma
 #### Website sign-up (still hidden)
 - **The steps run in order**: the questions page opens only once the payment has gone
   through. Until then it says what is missing ("Sign up first", "Accept our terms first",
-  "Your payment hasn't come through yet") with a link back; straight back from Stripe it
-  shows "Confirming your payment" for the few seconds that takes. The booking link is no
+  "Your payment hasn't come through yet") with a link back; straight back from Stripe the
+  questions open at once, the payment checked with Stripe there and then ("Confirming your
+  payment" shows only if Stripe can't be reached). The booking link is no
   longer in the page: it arrives once the client has paid. (stripe-bookings)
 - **john@iternal.life stays the sign-up's address** for launch: the "email us" messages on the
   sign-up and questions pages, replies to the client's confirmation, and the team's briefs

@@ -112,14 +112,18 @@ the token awaits org approval), so the worker can deploy regardless.
   rewrite someone's brief. A client on a different browser gets a message
   pointing them to john@iternal.life.
 - The steps run in order (Robbie, 27 Oct 2026): sign up, accept, pay, then
-  the questions and the booking. `/status` (`{email, token}`) answers
+  the questions and the booking. `/status` (`{email, token, session}`) answers
   `{accepted, paid}`, plus `booking` (the `BOOKING_URL` link) once paid; the
   questions page shows the questions and the booking only then, and
   otherwise says what is missing ("Sign up first", "Accept our terms
   first", "Your payment hasn't come through yet", each linking back to
-  start.html). Straight back from Stripe (`?paid=1`) it asks every 2
-  seconds for up to 16 seconds, since the webhook can land after the
-  client does. The booking link is in no page, so only paid clients get
+  start.html). Straight back from Stripe (`?paid=1&session_id=cs_…`) the
+  page sends the session id; the worker asks Stripe for that Checkout
+  Session and, if it is paid, ours and this client's, records the payment
+  there and then, so the questions open at once (Robbie, 27 Oct 2026: no
+  waiting screen). The emails and the tracker note still come from the
+  webhook, once. Only if Stripe can't be asked does the page show
+  "Confirming your payment" and ask again every 2 seconds for up to 16. The booking link is in no page, so only paid clients get
   it (the confirmation email carries it too).
 - Answers count only from a client who has signed up, accepted the terms
   and paid: a booking or send from anyone else is refused (409; the page
@@ -232,12 +236,13 @@ the token awaits org approval), so the worker can deploy regardless.
   (`invoice_creation`), "<company>: upfront payment towards your website
   build fee (<reference>)." above the pay button, and asks for nothing but the
   card (no name or billing address: Robbie, 27 Oct 2026), `metadata.funnel = website-build`. Paid, Stripe sends
-  them to `/questions?paid=1` ("Thank you, your payment has been received.");
+  them to `/questions?paid=1&session_id=…` ("Thank you, your payment has been received.");
   back without paying, to `/start`, which still shows their order to accept
   and pay again. `handleStripeWebhook` acts only on a paid
   `checkout.session.completed` marked `website-build`; every other payment on
   the account is ignored. It matches the order by reference (`ref:` index),
-  records `payment` once (`stripe:<session>` in KV; retries change nothing),
+  records `payment` once (`stripe:<session>` in KV; retries change nothing;
+  the same payment already recorded by `/status` is not a second one),
   sends the client's confirmation, briefs the team and notes the tracker. A
   payment for an order already paid, or one whose record has gone, briefs
   the team ("payment needs a look") and nobody else. Payment never reaches
