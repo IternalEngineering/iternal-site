@@ -144,20 +144,27 @@ the token awaits org approval), so the worker can deploy regardless.
   `npx wrangler secret delete MAGIC_SECRET`. Keep `STRIPE_WEBHOOK_SECRET`:
   `/stripe-webhook` needs it.
 
-## Payment and the terms (13 Oct 2026)
+## Payment and the terms (27 Oct 2026)
 
-- **The terms and the order set the money.** The Website Build and Care
-  Terms, version 1.0 (`terms/website-build-and-care-v1.0.html` + `.pdf`,
-  supplied 13 Oct 2026 and placed word for word), set a £750 + VAT build fee
-  paid 50/50 "unless your order details state a different amount", and say
-  the order details take priority where they differ. Since 20 Oct 2026
-  (Robbie) the order states a **£100 downpayment + £650 upon completion,
-  including VAT** (`TERMS.downpayment` and `TERMS.completion` in the worker; the
-  order also carries the £750 total as `buildFee`). The care plan is **£50 a
-  month including VAT**. Every figure in the order includes VAT, the order
-  again overriding the terms' "all fees exclude VAT"; from the month after the site goes live, which includes Site
-  Agent (our agentic studio). Invoices are payable within 14 days. Per-client
-  pricing is planned: the order's figures are its own fields for that reason.
+- **The terms and the order set the money.** The Iternal Website Build and
+  Care Terms, version 1.0 (`terms/website-build-and-care-v1.0.html` +
+  `.pdf`), were supplied 22 Oct 2026 and confirmed final on 27 Oct 2026;
+  they are placed word for word (checked word by word against the supplied
+  PDF) and replaced an earlier draft of the same number that was never
+  public. Their effective date is "[date]" until Robbie gives it: one place
+  in the page, then reprint the PDF. They fix the £100 upfront payment and
+  leave the rest of the build fee and the care plan fee to the order
+  details, which take priority over the terms except for clause 17. The
+  order states **£750: £100 now, £650 on completion**, and **£50 a month**
+  for the care plan, all including VAT (`TERMS` in the worker; `buildFee`
+  is the total). Per-client pricing is planned: the order's figures are its
+  own fields for that reason.
+- **The review screen** is the team's sign-up walkthrough (step 2), word for
+  word: order summary, the nine key points (their figures are static text:
+  £100, 14 days, 30 days, £2,500), "Read the full terms" (a `<dialog>`
+  showing the terms page, with the PDF), the two ticks, "Accept and pay
+  £100". The worker records the IP address the acceptance came from
+  (`acceptanceIp`, kept off the dashboard record).
 - **Accepting forms the agreement**, on start.html, and takes the client
   straight to the downpayment on Stripe (below); the worker records it when
   Stripe confirms it, then the questions and the booking follow.
@@ -179,7 +186,8 @@ the token awaits org approval), so the worker can deploy regardless.
   - The Stripe Price behind `STRIPE_PRICE` (worker/wrangler.toml): its
     amount must equal `TERMS.downpayment`. A new amount is a new Price in
     Stripe and its id in `STRIPE_PRICE`.
-  - start.html's "Accept and pay £…" button takes the figure from the order.
+  - start.html's "Accept and pay £…" button takes the figure from the order;
+    the key points above it restate £100 and £2,500 from the terms.
   - The Lead Tracker (`../lead-tracker`, `apps-script/LeadApi.gs`): every
     website lead starts with `budget: 750`.
 - **The downpayment: Stripe Checkout on accepting (team journey, 22 Oct

@@ -12,6 +12,13 @@ Last deploy: **22 Oct 2026, the website rework** (pull request #6; pushing to ma
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
 #### Website sign-up (still hidden)
+- **The final terms are in**: the Iternal Website Build and Care Terms, version 1.0 (23
+  clauses, word for word as supplied, page and PDF), replace the earlier draft. "Review and
+  accept" now follows the team's walkthrough: "Order summary" (Name or business name, the
+  £750 build fee as £100 now and £650 on completion), "Key points of our terms" (nine
+  points), "Read the full terms" in a pop-up with the PDF, and the new second tick ("buying
+  this website mainly for my work"). The sign-up's Organisation field is now "Name or
+  business name". (stripe-bookings)
 - **The downpayment is paid straight after accepting**, as in the team's client journey:
   "Review and accept" ends with "Accept and pay £100", which opens a Stripe payment page
   made for the order (their reference shown, billing address, optional VAT number, a VAT

@@ -129,12 +129,10 @@ const EMAIL = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
    The current version and the fees its order details print. Each version is
    published as terms/website-build-and-care-v<version>.html and .pdf on the
    site and never edited: a new version is new files plus a change here. */
-// The standard order. The terms set a £750 build fee paid 50/50 "unless your order
-// details state a different amount", and order details take priority over the terms,
-// so the order's downpayment + completion split is what the client agrees to. Every
-// figure in the order includes VAT (Robbie, 20 Oct 2026), the order again taking
-// priority over the terms' "all fees exclude VAT".
-const TERMS = { name: 'Website Build and Care Terms', version: '1.0', downpayment: 100, completion: 650, carePlan: 50 };
+// The standard order. The terms (supplied 22 Oct 2026, final 27 Oct 2026) fix the
+// £100 upfront payment and leave the rest of the build fee and the care plan fee to
+// the order details; every price includes VAT.
+const TERMS = { name: 'Iternal Website Build and Care Terms', version: '1.0', downpayment: 100, completion: 650, carePlan: 50 };
 const termsUrl = (env, version, ext) => `${env.SITE_URL}/terms/website-build-and-care-v${version}.${ext}`;
 
 /** A reference no client has had before: drawn at random, checked against the
@@ -163,9 +161,9 @@ const orderOf = kv => ({
 
 /** The order as plain-text lines, worded as on the acceptance screen. */
 const orderText = o => [
-  ['Company', o.company], ['Your name', o.name], ['Email', o.email], ['Reference', o.reference],
-  ['Build fee', `£${o.downpayment} downpayment + £${o.completion} upon completion, including VAT`],
-  ['Care plan', `£${o.carePlan} per month including VAT, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance`],
+  ['Name or business name', o.company], ['Your name', o.name], ['Email', o.email], ['Reference', o.reference],
+  ['Build fee', `£${o.buildFee}. £${o.downpayment} payable now, before your initial conversation; £${o.completion} on completion. Prices include VAT`],
+  ['Care plan', `£${o.carePlan} per month, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance`],
   ['Terms', `${TERMS.name}, version ${o.termsVersion}`],
 ].map(([k, v]) => `${k}: ${v}`).join('\n');
 
@@ -204,7 +202,7 @@ The Iternal team
       to: acc.email, from: { name: fromName, email: fromEmail }, replyTo: env.CLIENT_REPLY_TO,
       subject: `Welcome to Iternal: your website order is confirmed (${acc.reference})`,
       text,
-      attachments: [{ content: await pdf.arrayBuffer(), filename: `Iternal ${TERMS.name} v${acc.termsVersion}.pdf`, type: 'application/pdf', disposition: 'attachment' }],
+      attachments: [{ content: await pdf.arrayBuffer(), filename: `${TERMS.name} v${acc.termsVersion}.pdf`, type: 'application/pdf', disposition: 'attachment' }],
     });
     console.log('confirmation sent:', acc.reference);
   } catch (e) {
@@ -506,6 +504,9 @@ async function handleAccept(request, env, ctx) {
   if (!order.company || !order.name) return json(400, { error: 'company and name required' }, cors);
 
   kv.acceptance = { ...order, acceptedAt: new Date().toISOString() };
+  // Evidence of acceptance with the rest; kept off the acceptance itself, which the
+  // dashboard copies, so the address never leaves the worker.
+  kv.acceptanceIp = s(request.headers.get('cf-connecting-ip'), 64);
   await env.CLIENTS.put(key, JSON.stringify(kv));
   const acc = kv.acceptance;
 

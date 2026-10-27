@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Website Build and Care Terms, version 1.0 — Iternal</title>
+<title>Iternal Website Build and Care Terms, version 1.0 — Iternal</title>
 <meta name="robots" content="noindex">
 <link rel="icon" href="../assets/icon-navy.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,8 +12,8 @@
 <style>
 /* A legal document, kept deliberately plain and printable: one light theme, the
    same in the browser and in the PDF made from it (tools/terms-pdf.mjs). The
-   wording is the contract as supplied; never edit it here. A new version is a
-   new pair of files. */
+   wording is the contract as supplied (22 Oct 2026, final 27 Oct 2026); never
+   edit it here. A new version is a new pair of files. */
 :root { --ink:#0a2156; --ink2:#3b4a6b; --rule:#d9dce4; --accent:#e26713; --ground:#ffffff; }
 * { box-sizing:border-box; }
 html { background:var(--ground); }
@@ -25,18 +25,15 @@ main { max-width:740px; margin:0 auto; padding:48px 16px 72px; }
 .download:hover, .download:focus-visible { color:var(--accent); }
 h1 { font-size:clamp(28px, 5vw, 36px); line-height:1.15; font-weight:900; margin:0 0 6px; text-wrap:balance; }
 .version { margin:0 0 32px; color:var(--ink2); font-weight:500; }
-h2 { font-size:20px; font-weight:900; margin:40px 0 10px; }
 p { margin:0 0 14px; }
-ul, ol { margin:0 0 14px; padding-left:24px; }
+ul { margin:0 0 14px; padding-left:24px; }
 li { margin-bottom:8px; }
-li > ul { margin-top:8px; }
-ol.clauses > li::marker { font-weight:700; }
+.co { margin-top:40px; padding-top:16px; border-top:1px solid var(--rule); color:var(--ink2); font-size:13px; }
 a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
 @media print {
   main { padding:0; max-width:none; }
-  .download { display:none; }
-  h2 { break-after:avoid; }
-  li { break-inside:avoid; }
+  .download, .co { display:none; } /* the PDF's page footer carries the company line */
+  li, p { break-inside:avoid; }
 }
 </style>
 </head>
@@ -47,76 +44,77 @@ a:focus-visible { outline:2px solid var(--accent); outline-offset:2px; }
     <a class="download" href="website-build-and-care-v1.0.pdf" download>Download as PDF</a>
   </div>
 
-  <h1>Website Build and Care Terms</h1>
-  <p class="version">Version 1.0 · Iternal Ltd</p>
+  <h1>Iternal Website Build and Care Terms</h1>
+  <p class="version">Version 1.0 · effective [date]</p>
 
-  <p>These terms set out how Iternal Ltd ("we", "us") will design, build and launch a website for your business ("you"), and look after it once it is live.</p>
-  <p>You accept these terms online, by ticking the acceptance box at the end of our sign-up process. When you do, these terms and the order details shown on that screen (your company name, the fees and the payment schedule) together form a binding agreement between us. We will email you a copy of both for your records.</p>
+  <p>These terms apply to the website build and care services provided by Iternal Ltd (“we”, “us”) to you. Please read them before you accept them during our online sign-up process.</p>
+  <p>Your “order details” are the details you confirm when you sign up: your name or business name, the service you are buying, the fees and the payment schedule.</p>
 
-  <h2>1. The process</h2>
+  <p><strong>1. About these terms.</strong> Our agreement is formed when you accept these terms online. It consists of your order details and these terms. If the two conflict, your order details take priority, except for clause 17 (Our liability), which always applies. Our electronic record of your acceptance, including the date and time, the name of the person accepting and the version of these terms, is evidence that you accepted them.</p>
+
+  <p><strong>2. Who this agreement is for.</strong> You confirm you are buying the service wholly or mainly for your work, such as speaking, writing, consulting or other professional or business activity, and not as a consumer. If you accept these terms on behalf of a business, you confirm you are authorised to do so. If you want a website mainly for personal, non-professional use, please contact us rather than using our online sign-up.</p>
+
+  <p><strong>3. The service.</strong> We will design, build and launch your website, and then look after it under our monthly care plan, as described in your order details. The build includes one round of revisions before launch, meaning one consolidated set of feedback on the whole site. The care plan includes hosting, software, security and maintenance updates, access to our web agent (see clause 10) and a point of contact should any issues arise. Larger pieces of work, such as new pages, a redesign or new functionality, sit outside the care plan and will be quoted separately. We will provide the service with reasonable skill and care. Apart from what this agreement says, we make no other promises about the service, so far as the law allows.</p>
+
+  <p><strong>4. Fees and payment.</strong></p>
   <ul>
-    <li>We begin with an in-depth conversation. One of our team, John, sits down with you to understand your business, your audience and what you want the site to do.</li>
-    <li>We design and build the site using our toolset, keeping you updated as it develops.</li>
-    <li>We handle the technical switchover, moving your domain and DNS across so everything points to the right place.</li>
-    <li>We launch. Once you have approved the site, we take it live.</li>
-  </ul>
-
-  <h2>2. What you get</h2>
-  <ul>
-    <li>A clean, succinct website, typically up to five pages, built around your conversation with John.</li>
-    <li>A modern, responsive design that works across desktop, tablet and mobile.</li>
-    <li>Your content written up and laid out clearly.</li>
-    <li>Domain and DNS switchover handled for you.</li>
-    <li>One round of revisions before launch.</li>
-    <li>A live website that you own.</li>
-  </ul>
-
-  <h2>3. Looking after your site</h2>
-  <p>The monthly care plan keeps your site secure, up to date and running smoothly. It includes:</p>
-  <ul>
-    <li>Hosting and the day-to-day running of your website.</li>
-    <li>Software, security and maintenance updates.</li>
-    <li>Access to our web agent, which lets you make some updates to your site yourself, such as changing images or text.</li>
-    <li>A point of contact should any issues arise.</li>
-  </ul>
-  <p>Larger pieces of work, such as new pages, a redesign or new functionality, sit outside the care plan and will be quoted separately.</p>
-
-  <h2>4. Fees and payment</h2>
-  <ul>
-    <li>Build fee: £750, unless your order details state a different amount. 50% is payable on acceptance of these terms, and 50% on completion.</li>
-    <li>Care plan: £50 per month, unless your order details state a different amount, starting from the month after your site goes live.</li>
-    <li>All fees exclude VAT.</li>
+    <li><strong>Upfront payment:</strong> £100, payable when you sign up and before your initial conversation with one of our team. It forms part of the build fee. We will refund it in full if you cancel within 14 days of accepting these terms, or before your initial conversation if that is later (see clause 5). After that, it is non-refundable. If we do not receive it within 7 days of your acceptance, your order will be cancelled and this agreement will end.</li>
+    <li><strong>Rest of the build fee:</strong> the balance of the build fee shown in your order details is payable on completion. “Completion” means the earlier of your site going live and the date we tell you it is ready to launch.</li>
+    <li><strong>Care plan:</strong> the monthly fee shown in your order details, starting from the 1st of the month after your site goes live. If we are holding a finished site under clause 8, it starts from the 1st of the month after we invoice the rest of the build fee. See clause 14 for how you can pay.</li>
+    <li>All prices include VAT.</li>
     <li>Invoices are payable within 14 days of receipt.</li>
     <li>You own your domain. Any third-party domain registration or renewal fees are billed separately at cost.</li>
   </ul>
 
-  <h2>5. Terms</h2>
-  <p>If your order details conflict with these terms, the order details take priority, except for clause 11 (Our liability), which always applies.</p>
-  <ol class="clauses">
-    <li><strong>Business client.</strong> You confirm you are entering this agreement for the purposes of your business, trade or profession, and not as a consumer. The person who accepts these terms online confirms they are authorised to do so on behalf of the business named in the order details.</li>
-    <li><strong>Ownership.</strong> Once the build fee is paid, the website and its content are yours. Iternal retains ownership of its own underlying tools, templates and methods, which you are free to benefit from while we run your site.</li>
-    <li><strong>Your content.</strong> You confirm that you own, or have permission to use, all text, images, logos and other material you give us. You are responsible for its accuracy and for making sure it is lawful. If someone makes a claim against us because of material you supplied, you will cover our reasonable costs of dealing with it.</li>
-    <li><strong>Your responsibilities.</strong> We will need your content, feedback and approvals in good time, as these directly affect how quickly we can deliver. If we are waiting on any of these for more than 30 days, we may invoice the completion payment. We will then launch the site with what we have, or hold it ready to launch, whichever you prefer.</li>
-    <li><strong>Changes and extra work.</strong> The build includes one round of revisions before launch. Further changes, or work outside the scope in section 2, will be quoted before we start. We will not charge for extra work you have not agreed in writing; email is fine.</li>
-    <li><strong>What is not included.</strong> This agreement covers the website and its care. It does not include e-commerce, complex integrations, paid advertising, or ongoing SEO and marketing campaigns. We are happy to quote for these separately.</li>
-    <li><strong>Late payment.</strong> If an invoice is more than 14 days overdue, we may suspend the care plan, including hosting, after giving you 7 days' written notice. We may also charge interest and costs under the Late Payment of Commercial Debts (Interest) Act 1998.</li>
-    <li><strong>Care plan fee.</strong> The care plan fee covers things such as hosting, maintenance, and access to our web agent, which lets you make some updates to your site yourself, such as changing images or text. You can pay the fee monthly, quarterly, half-yearly or annually, in advance. Billing starts on the 1st of the month after your site goes live. If you have paid in advance and cancel, we will refund any whole months you have paid for that fall after your 30-day notice period ends, within 14 days of the care plan ending. We may change the fee by giving you at least 60 days' written notice, and not more than once in any 12 months. You can cancel under clause 9 if you do not want to continue.</li>
-    <li><strong>Term and cancellation.</strong> The care plan runs month to month. You can cancel at any time with 30 days' notice, and we will help you move your site elsewhere if you need to. We may end the care plan with 60 days' written notice. Either of us may end this agreement straight away if the other seriously breaches it and does not put things right within 14 days of being asked, or becomes insolvent. When the care plan ends for any reason, and once all invoices are paid, we will give you within 14 days an export of your site's content, images and files, free of charge. Our own tools, templates and methods are not included, so the site may need some rebuilding to run elsewhere.</li>
-    <li><strong>Hosting and availability.</strong> We will take reasonable care to keep your site online, secure and backed up. We cannot guarantee it will always be available or error-free, and we are not responsible for outages caused by third-party providers or events outside our reasonable control.</li>
-    <li><strong>Our liability.</strong> Our total liability to you under or in connection with this agreement is limited to the fees you paid us in the 12 months before the claim arose. We are not liable for loss of profits, revenue, business, data or goodwill, or for any indirect or consequential loss. Nothing in this agreement limits liability for death or personal injury caused by negligence, for fraud, or for anything else that cannot be limited by law.</li>
-    <li><strong>Personal data.</strong> If your site collects personal data, such as through a contact form, you are the controller and we are your processor under UK data protection law. We will:
-      <ul>
-        <li>process the data only on your documented instructions and keep it confidential;</li>
-        <li>protect it with appropriate security measures;</li>
-        <li>use other processors, such as hosting providers, only where they are bound by equivalent terms, and remain responsible for them;</li>
-        <li>help you respond to requests from individuals and to any data breach, and tell you without undue delay if we become aware of a breach;</li>
-        <li>delete or return the data when the care plan ends, unless the law requires us to keep it;</li>
-        <li>give you the information you reasonably need to show compliance.</li>
-      </ul>
-    </li>
-    <li><strong>Mentioning our work.</strong> We may name you as a client and show your site in our portfolio, unless you tell us in writing that you would rather we did not.</li>
-    <li><strong>General.</strong> This agreement is formed when you accept these terms online. It consists of these terms and the order details confirmed at acceptance, and is the whole agreement between us, replacing anything discussed before. If we later update these terms, the version you accepted continues to apply to you unless we both agree otherwise in writing. Changes must be agreed in writing; email is fine. Notices may be sent by email to the addresses we normally use. If any part of this agreement is found to be unenforceable, the rest still applies. No one else has any right to enforce it. This agreement is governed by the law of England and Wales, and the courts of England and Wales have exclusive jurisdiction.</li>
-  </ol>
+  <p><strong>5. Cancelling the build.</strong> You can cancel the build at any time by telling us in writing. If you cancel within 14 days of accepting these terms, or before your initial conversation if that is later, we will refund the £100 in full within 14 days, whatever your reason. If you cancel after that, you will pay a fair proportion of the build fee for the work we have done up to that point, less the £100 already paid. After the initial conversation, we may decide not to go ahead if we do not think we are the right fit for your project, in which case we will refund the £100 in full.</p>
+
+  <p><strong>6. Ownership.</strong> Once the build fee is paid in full, the website and its content are yours. Iternal retains ownership of its own underlying tools, templates and methods, which you are free to benefit from while we run your site. Some parts of your site, such as fonts, stock images and plugins, are supplied by third parties under their own licences. You may use them on your site as those licences allow, but you do not own them, and some may need a separate licence if you move your site elsewhere.</p>
+
+  <p><strong>7. Your content.</strong> You confirm that you own, or have permission to use, all text, images, logos and other material you give us. You are responsible for its accuracy and for making sure it is lawful. If someone makes a claim against us because of material you supplied, you will cover our reasonable costs of dealing with it.</p>
+
+  <p><strong>8. Your responsibilities.</strong> We will need your content, feedback and approvals in good time, as these directly affect how quickly we can deliver. You will also give us the access we need to your domain and any existing website or hosting accounts. If we are waiting on any of these for more than 30 days, we may treat the build as complete and invoice the rest of the build fee. We will then launch the site with what we have, or hold it ready to launch, whichever you prefer.</p>
+
+  <p><strong>9. Legal information on your site.</strong> We will add a cookie consent banner and a basic privacy notice to your site as standard. You are responsible for checking that they accurately reflect how you use your site, and for any other legal information your site needs. If you give us different or additional wording, we will add it to your site. We build to good accessibility practice, but we cannot guarantee your site meets every accessibility standard.</p>
+
+  <p><strong>10. Using the web agent.</strong> The web agent lets you make some changes to your site yourself. You are responsible for the changes you make with it and for the content you publish. If a change you make causes a problem, we will help put it right, and may charge for anything beyond a minor fix. You must not use your site or the web agent for anything unlawful or harmful, or that infringes someone else's rights. If you do, we may remove the content or suspend your access. Access to the web agent ends when the care plan ends.</p>
+
+  <p><strong>11. Changes and extra work.</strong> Further changes beyond the one round of revisions, or work outside the service described in your order details, will be quoted before we start. We will not charge for extra work you have not agreed in writing; email is fine.</p>
+
+  <p><strong>12. What is not included.</strong> This agreement covers the website and its care. It does not include e-commerce, complex integrations, paid advertising, or ongoing SEO and marketing campaigns. We are happy to quote for these separately.</p>
+
+  <p><strong>13. Late payment.</strong> If an invoice is more than 14 days overdue, we may suspend the care plan, including hosting, after giving you 7 days' written notice. Where the Late Payment of Commercial Debts (Interest) Act 1998 applies, we may also charge interest and costs under it.</p>
+
+  <p><strong>14. Care plan fee.</strong> You can pay the care plan fee monthly, quarterly, half-yearly or annually, in advance. If you have paid in advance and cancel, we will refund any whole months you have paid for that fall after your 30-day notice period ends, within 14 days of the care plan ending. We may change the fee by giving you at least 60 days' written notice, and not more than once in any 12 months. You can cancel under clause 15 if you do not want to continue.</p>
+
+  <p><strong>15. Term and cancellation.</strong> The care plan runs month to month. You can cancel at any time with 30 days' notice, and we will help you move your site elsewhere if you need to. We may end the care plan with 60 days' written notice. Either of us may end this agreement straight away if the other seriously breaches it and does not put things right within 14 days of being asked, or becomes insolvent. When the care plan ends for any reason, and once all invoices are paid, we will give you within 14 days an export of your site's content, images and files, free of charge. Our own tools, templates and methods are not included, so the site may need some rebuilding to run elsewhere.</p>
+
+  <p><strong>16. Hosting and availability.</strong> We will take reasonable care to keep your site online and secure, and will keep regular backups of it. We cannot guarantee it will always be available or error-free, and we are not responsible for outages caused by third-party providers.</p>
+
+  <p><strong>17. Our liability.</strong> Our total liability to you under or in connection with this agreement is limited to the greater of £2,500 and the fees you paid us in the 12 months before the claim arose. We are not liable for loss of profits, revenue, business or goodwill, or for any indirect or consequential loss. We are not liable for loss of data, except where it results from our failure to keep backups under clause 16; in that case, our liability is limited to the reasonable cost of restoring your site from our most recent backup. Nothing in this agreement limits liability for death or personal injury caused by negligence, for fraud, or for anything else that cannot be limited by law.</p>
+
+  <p><strong>18. Personal data.</strong> If your site collects personal data, such as through a contact form, you are the controller and we are your processor under UK data protection law. We process it only to host, run and maintain your site, for as long as the care plan lasts. It will usually be the names, contact details and messages of people who use your site. We will:</p>
+  <ul>
+    <li>process the data only on your documented instructions, unless the law requires otherwise;</li>
+    <li>make sure anyone we allow to access it is bound to keep it confidential;</li>
+    <li>protect it with appropriate security measures;</li>
+    <li>use other processors, such as hosting providers, only where they are bound by equivalent terms, and remain responsible for them. You give us general permission to use other processors; we will tell you before adding or replacing one, and you may object;</li>
+    <li>not transfer it outside the UK unless the law's safeguards for international transfers are in place;</li>
+    <li>help you respond to requests from individuals and with any data protection impact assessment, and tell you without undue delay if we become aware of a data breach;</li>
+    <li>delete or return the data when the care plan ends, unless the law requires us to keep it;</li>
+    <li>give you the information you reasonably need to show compliance, and allow reasonable audits on reasonable notice, at your cost.</li>
+  </ul>
+
+  <p><strong>19. Confidentiality.</strong> Each of us will keep the other's confidential information confidential, and use it only for the purposes of this agreement. This does not apply to information that is already public, or that the law requires us to share.</p>
+
+  <p><strong>20. Events outside our control.</strong> Neither of us is responsible for delays or failures caused by events outside our reasonable control, such as a failure of a third-party provider, a cyber attack, or extreme weather. The affected party will let the other know and resume as soon as it reasonably can. This clause does not excuse late payment. If the event lasts more than 60 days, either of us may end the care plan by written notice.</p>
+
+  <p><strong>21. Subcontracting and transfer.</strong> We may use subcontractors to help deliver the service, and remain responsible for their work. We may transfer this agreement to another business that takes over our website services, and will tell you if we do. You may not transfer it without our written agreement.</p>
+
+  <p><strong>22. Mentioning our work.</strong> We may name you as a client and show your site in our portfolio, unless you tell us in writing that you would rather we did not.</p>
+
+  <p><strong>23. General.</strong> This agreement is the whole agreement between us and replaces anything discussed before you accepted it. Neither of us has relied on anything said before then that is not in this agreement, although this does not limit liability for fraud. We may update these terms by giving you at least 60 days' written notice. The update applies from the date in the notice, unless you cancel the care plan under clause 15 before then. Apart from such updates, the version you accepted continues to apply. Any other changes must be agreed in writing; email is fine. Notices may be sent by email: to you at the address in your order details, and to us at hello@iternal.life. If any part of this agreement is found to be unenforceable, the rest still applies. Clauses 4, 6, 13, 17, 18, 19 and 23 continue to apply after this agreement ends. No one else has any right to enforce this agreement. It is governed by the law of England and Wales, and the courts of England and Wales have exclusive jurisdiction.</p>
+
+  <p class="co">Iternal Ltd · Company No. 10849262 · 6th Floor, 60 Gracechurch Street, London, EC3V 0HR · iternal.life</p>
 </main>
 </body>
 </html>

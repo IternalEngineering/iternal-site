@@ -313,6 +313,31 @@ label.tick {
 }
 label.tick span { color:inherit; margin-left:0; }
 label.tick input { width:18px; height:18px; margin:2px 0 0; flex-shrink:0; accent-color:var(--tan); cursor:pointer; }
+.review-h { font-size:16px; font-weight:900; color:var(--white); margin:32px 0 12px; }
+.form-head + .review-h { margin-top:0; }
+.keypoints-note { font-size:14px; color:var(--t3); line-height:1.6; margin-bottom:12px; }
+.keypoints { display:grid; gap:8px; margin:0 0 18px; padding-left:20px; font-size:14px; line-height:1.6; color:var(--t2); }
+.keypoints li::marker { color:var(--tan); }
+.read-terms {
+  margin-bottom:30px; padding:0; background:none; border:none; cursor:pointer;
+  font:inherit; font-size:14px; font-weight:700; color:var(--tan);
+  text-decoration:underline; text-underline-offset:3px;
+}
+#termsDialog {
+  width:min(820px, calc(100vw - 32px)); height:min(88vh, 1000px); margin:auto; padding:0;
+  border:1px solid var(--border2); border-radius:6px; background:var(--dark); color:var(--t2);
+}
+#termsDialog[open] { display:flex; flex-direction:column; }
+#termsDialog::backdrop { background:rgba(6,15,38,.72); }
+.terms-bar { display:flex; align-items:center; flex-wrap:wrap; gap:10px 18px; padding:12px 16px; border-bottom:1px solid var(--border2); }
+.terms-bar strong { flex:1 1 220px; font-size:15px; color:var(--white); }
+.terms-bar a { font-size:14px; font-weight:700; color:var(--tan); text-decoration:underline; text-underline-offset:3px; }
+.terms-bar button {
+  padding:6px 14px; border:1px solid var(--border2); border-radius:2px; background:none; cursor:pointer;
+  font:inherit; font-size:14px; font-weight:700; color:var(--white);
+}
+#termsDialog iframe { flex:1; width:100%; border:0; background:#fff; }
+.read-terms:focus-visible, .terms-bar a:focus-visible, .terms-bar button:focus-visible { outline:2px solid var(--tan); outline-offset:2px; }
 /* Phones: each item's name above its detail, one bordered block per item. */
 @media (max-width:560px) {
   .order, .order tbody, .order tr, .order th, .order td { display:block; width:auto; }
@@ -682,8 +707,8 @@ html { overflow-x:clip; }
           </div>
 
           <div class="form-field">
-            <label for="org">Organisation <span>*</span></label>
-            <input type="text" id="org" name="organisation" placeholder="Your company or organisation" required aria-required="true">
+            <label for="org">Name or business name <span>*</span></label>
+            <input type="text" id="org" name="organisation" placeholder="Your business, or your own name" required aria-required="true">
           </div>
 
           <div class="form-field">
@@ -720,42 +745,67 @@ html { overflow-x:clip; }
 </div>
 
 <!-- ===== REVIEW AND ACCEPT =====
-     The wording is supplied with the Website Build and Care Terms; keep it
-     word for word ("Accept and pay" is from the team's sign-up example of 22
-     Oct 2026). Shown once the worker has the sign-up, filled from the order it
+     The wording is the team's sign-up walkthrough (step 2), supplied with the
+     Iternal Website Build and Care Terms on 22 Oct 2026; keep it word for
+     word. Shown once the worker has the sign-up, filled from the order it
      sends back. -->
 <section id="terms" hidden style="position:relative; z-index:2; max-width:988px; margin:0 auto; padding:min(64px, 7vh) var(--px) min(88px, 10vh)">
   <div class="form-wrap">
     <div class="form-inner">
       <div class="form-head">
         <h2>Review and accept</h2>
-        <p>Please check your order details and if correct, tick to say you have read and accept our terms. Once you accept, we will email you a copy of both.</p>
+        <p>Please check your order details and read our terms before accepting. Once you accept, we will email you a copy of both.</p>
       </div>
 
+      <h3 class="review-h">Order summary</h3>
       <table class="order">
         <thead><tr><th scope="col">Item</th><td></td></tr></thead>
         <tbody>
-          <tr><th scope="row">Company</th><td data-o="company"></td></tr>
+          <tr><th scope="row">Name or business name</th><td data-o="company"></td></tr>
           <tr><th scope="row">Your name</th><td data-o="name"></td></tr>
           <tr><th scope="row">Email</th><td data-o="email"></td></tr>
           <tr><th scope="row">Reference</th><td data-o="reference"></td></tr>
-          <tr><th scope="row">Build fee</th><td>£<span data-o="downpayment"></span> downpayment + £<span data-o="completion"></span> upon completion, including VAT</td></tr>
-          <tr><th scope="row">Care plan</th><td>£<span data-o="carePlan"></span> per month including VAT, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance</td></tr>
-          <tr><th scope="row">Terms</th><td>Website Build and Care Terms, version <span data-o="termsVersion"></span> (<a data-terms="html" target="_blank" rel="noopener">view</a> or <a data-terms="pdf" download>download</a>)</td></tr>
+          <tr><th scope="row">Build fee</th><td>£<span data-o="buildFee"></span>. £<span data-o="downpayment"></span> payable now, before your initial conversation; £<span data-o="completion"></span> on completion. Prices include VAT</td></tr>
+          <tr><th scope="row">Care plan</th><td>£<span data-o="carePlan"></span> per month, from the month after your site goes live. Payable monthly, quarterly, half-yearly or annually in advance</td></tr>
+          <tr><th scope="row">Terms</th><td>Iternal Website Build and Care Terms, version <span data-o="termsVersion"></span></td></tr>
         </tbody>
       </table>
+
+      <h3 class="review-h">Key points of our terms</h3>
+      <p class="keypoints-note">This is a summary only. The full terms apply, and they take priority over this summary.</p>
+      <ul class="keypoints">
+        <li>You pay £100 when you sign up, before your initial conversation with one of our team. It counts towards the build fee. We will refund it in full if you cancel within 14 days, or before that conversation if later, but not after that.</li>
+        <li>If you cancel the build after that, you pay a fair share of the build fee for the work done so far.</li>
+        <li>The rest of the build fee is due when your site goes live, or when we tell you it is ready to launch, whichever comes first.</li>
+        <li>If we are waiting on your content, feedback or approvals for more than 30 days, we may invoice the rest of the build fee.</li>
+        <li>Once the build fee is paid, the website is yours. Our own tools and templates stay ours.</li>
+        <li>The care plan starts the month after your site goes live and runs month to month. You can cancel with 30 days' notice.</li>
+        <li>We add a cookie consent banner and a basic privacy notice to your site. You are responsible for checking they suit how you use your site, and for the content you give us and the changes you make with our web agent.</li>
+        <li>Invoices are due within 14 days. If one is more than 14 days overdue, we may suspend your care plan after giving you notice.</li>
+        <li>Our liability is limited to £2,500 or the fees you have paid us in the last 12 months, whichever is greater.</li>
+      </ul>
+      <button type="button" class="read-terms" id="readTerms">Read the full terms</button>
+
+      <dialog id="termsDialog" aria-labelledby="termsDialogTitle">
+        <div class="terms-bar">
+          <strong id="termsDialogTitle">Iternal Website Build and Care Terms</strong>
+          <a data-terms="pdf" download>Download PDF</a>
+          <button type="button" id="closeTerms">Close</button>
+        </div>
+        <iframe data-terms="html" title="Iternal Website Build and Care Terms"></iframe>
+      </dialog>
 
       <div class="form-submit">
         <label class="tick">
           <input type="checkbox" id="acceptTerms">
-          <span>I have read and accept the Website Build and Care Terms (version <span data-o="termsVersion"></span>) and the order details above.</span>
+          <span>I have read and accept the Iternal Website Build and Care Terms (version <span data-o="termsVersion"></span>) and the order details above.</span>
         </label>
         <label class="tick">
           <input type="checkbox" id="acceptAuthority">
-          <span>I confirm I am authorised to accept these terms on behalf of <span data-o="company"></span>, which is acting in the course of its business.</span>
+          <span>I confirm I am buying this website mainly for my work, such as speaking, writing, consulting or other professional activity, and, if I am accepting for a business, that I am authorised to do so.</span>
         </label>
         <button type="button" class="submit-btn" id="acceptBtn" disabled>
-          Accept and pay £<span data-o="downpayment"></span>
+          <span>Accept and pay £<span data-o="downpayment"></span></span>
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
         <p class="form-privacy">Next: payment through Stripe, then your project questions and booking your call.</p>
@@ -875,7 +925,6 @@ let order = null;
 function showReview(o) {
   order = o;
   review.querySelectorAll('[data-o]').forEach((el) => { el.textContent = o[el.dataset.o]; });
-  review.querySelector('[data-terms="html"]').href = `terms/website-build-and-care-v${o.termsVersion}.html`;
   review.querySelector('[data-terms="pdf"]').href = `terms/website-build-and-care-v${o.termsVersion}.pdf`;
   acceptTerms.checked = acceptAuthority.checked = false;
   syncAccept();
@@ -885,6 +934,17 @@ function showReview(o) {
 function syncAccept() { acceptBtn.disabled = !(acceptTerms.checked && acceptAuthority.checked); }
 acceptTerms.addEventListener('change', syncAccept);
 acceptAuthority.addEventListener('change', syncAccept);
+
+// The full terms open over the review in a pop-up; closing it leaves the
+// ticks and everything else as they were.
+const termsDialog = document.getElementById('termsDialog');
+document.getElementById('readTerms').addEventListener('click', () => {
+  const frame = termsDialog.querySelector('iframe');
+  const url = `terms/website-build-and-care-v${order.termsVersion}.html`;
+  if (frame.getAttribute('src') !== url) frame.src = url;
+  termsDialog.showModal();
+});
+document.getElementById('closeTerms').addEventListener('click', () => termsDialog.close());
 
 acceptBtn.addEventListener('click', async () => {
   if (PREVIEW) { location.href = 'questions.html'; return; }

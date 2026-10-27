@@ -248,7 +248,7 @@ await drain();
 
 // ── Accepting the terms ─────────────────────────────────────────────────
 assert.deepStrictEqual(ghFile(slug).progress.step, 'signed-up');
-const accept = (extra = {}) => call('/accept', { method: 'POST', body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, termsVersion: '1.0', accepted: true, authorised: true, ...extra }) });
+const accept = (extra = {}) => call('/accept', { method: 'POST', headers: { 'cf-connecting-ip': '203.0.113.7' }, body: JSON.stringify({ email: 'omar@kilnworks.co.uk', token: omarToken, termsVersion: '1.0', accepted: true, authorised: true, ...extra }) });
 teamMail.length = 0; outbound = []; stripeApi.sessions.length = 0;
 // refused: not their browser, no sign-up, a box left unticked, a version
 // they were never shown (which hands back the current order to review)
@@ -275,6 +275,9 @@ await drain();
   assert.ok(Date.parse(acc.acceptedAt));
   const f = ghFile(slug);
   assert.deepStrictEqual(f.acceptance, acc); // on the dashboard too
+  // the IP address they accepted from is kept as evidence, but never leaves the worker
+  assert.strictEqual(JSON.parse(store.get('lead:omar@kilnworks.co.uk')).acceptanceIp, '203.0.113.7');
+  assert.ok(!JSON.stringify(f).includes('203.0.113.7'));
   assert.strictEqual(f.progress.step, 'terms-agreed');
   // the payment page: the dashboard's price and VAT rate, their email, their
   // reference (to match the payment, and on the invoice), marked as ours
@@ -300,7 +303,7 @@ await drain();
   assert.ok(!brief.raw.includes('book their call:'));
   const note = outbound.find(o => o.url.includes('action=createLead'));
   assert.strictEqual(note.body.event, 'accepted');
-  assert.ok(note.body.message.includes('Accepted the Website Build and Care Terms, version 1.0 (reference ' + acc.reference + ')'));
+  assert.ok(note.body.message.includes('Accepted the Iternal Website Build and Care Terms, version 1.0 (reference ' + acc.reference + ')'));
   assert.ok(note.body.message.includes('£100 downpayment + £650 upon completion, including VAT: the downpayment is paid next, through Stripe'));
   assert.ok(!('answers' in note.body));
 }
@@ -341,11 +344,12 @@ const omarRef = omarOrder.reference;
   assert.strictEqual(m.replyTo, 'john@iternal.life');
   assert.strictEqual(m.subject, `Welcome to Iternal: your website order is confirmed (${omarRef})`);
   assert.ok(m.text.startsWith('Hi Omar,\n\nThank you for choosing Iternal to build and look after your website.'));
-  assert.ok(m.text.includes('a copy of our Website Build and Care Terms (version 1.0) is attached for your records.'));
+  assert.ok(m.text.includes('a copy of our Iternal Website Build and Care Terms (version 1.0) is attached for your records.'));
   assert.ok(m.text.includes(`Your order\nName or business name: Kilnworks\nReference: ${omarRef}\nBuild fee: £750, with £100 paid today and £650 payable on completion\nCare plan: £50 per month, starting from the month after your site goes live\nAccepted by: Omar Haddad on `));
   assert.match(m.text, /Accepted by: Omar Haddad on \d{1,2} [A-Z][a-z]+ \d{4} at \d{2}:\d{2}\n/);
   assert.ok(m.text.includes('you can do so here: https://calendar.example/book.'));
   assert.ok(m.text.endsWith('We look forward to working with you.\nThe Iternal team\n'));
+  assert.strictEqual(m.attachments[0].filename, 'Iternal Website Build and Care Terms v1.0.pdf');
   assert.strictEqual(m.attachments[0].type, 'application/pdf');
   assert.strictEqual(m.attachments[0].content.byteLength, 4);
   assert.strictEqual(teamMail.length, 1);

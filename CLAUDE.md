@@ -21,12 +21,12 @@ homepage is outside the automation: the team decides whether to build one
   carries a "Start yours" button that tags the sign-up with that site.
 - `start.html` — sign-up (4 fields, posted straight to the worker), then
   "Review and accept", filled from the order the worker sends back: the
-  order details table, the terms (view or download), two required ticks
-  and "Accept and pay £100", which posts to `/accept` and, once the worker
-  has recorded it, goes to the client's Stripe payment page; paid, Stripe
-  returns them to the questions. That screen's wording was supplied with
-  the terms (the button with the team's sign-up example): keep it word for
-  word.
+  order summary, the nine key points of the terms, "Read the full terms"
+  (a pop-up with the PDF), two required ticks and "Accept and pay £100",
+  which posts to `/accept` and, once the worker has recorded it (with the
+  IP address it came from), goes to the client's Stripe payment page; paid,
+  Stripe returns them to the questions. That screen's wording is the team's
+  sign-up walkthrough, supplied with the terms: keep it word for word.
 - `terms/website-build-and-care-v<version>.html` + `.pdf` — the terms the
   client accepts, as supplied, never edited. A new version is a new pair
   of files (the PDF is printed from the page by `tools/terms-pdf.mjs`),
@@ -54,12 +54,13 @@ homepage is outside the automation: the team decides whether to build one
   Oct 2026 the order states a £100 downpayment + £650 upon completion,
   including VAT; care plan £50 a month including VAT from the month after the
   site goes live, which includes Site Agent (our agentic studio) for the
-  client's own updates. **The terms file (version 1.0, 13 Oct 2026) is
-  invalid** (Robbie, 20-21 Oct 2026): it stays in the preview sign-up only
-  until the real terms are supplied, and no fact, figure, name or promise is
-  ever taken from it, in copy or in reviews. Pages never add a figure,
-  promise or refund the team has not set. Every place a figure is printed is
-  listed in HOUSEKEEPING.md §Payment.
+  client's own updates. **The terms are the Iternal Website Build and Care
+  Terms, version 1.0**, supplied 22 Oct 2026 and confirmed final by Robbie
+  on 27 Oct 2026 (the first public version; it replaced an earlier, invalid
+  draft of the same number that was never public). Their effective date is
+  still "[date]" until Robbie gives it. Pages never add a figure, promise
+  or refund the team has not set. Every place a figure is printed is listed
+  in HOUSEKEEPING.md §Payment.
 - Do not promise a number of concepts ("two or three") anywhere on these
   pages. We show them; we do not announce them.
 - `SITE-CHANGES.md` is the running log of what a visitor would notice, in
@@ -128,11 +129,12 @@ fallback constant in questions.html.
    lightbox or question changes. They want the prospect experience to take
    its cue from the sleekness of existing sites; redesign after they have
    seen what exists.
-7. Legal: the Website Build and Care Terms, supplied 13 Oct 2026 and
-   accepted online at the end of sign-up (they replace the earlier plan of
-   a contract signed after the call). No separate privacy and legal
-   review; agents never draft, edit or decide terms, and place supplied
-   wording word for word.
+7. Legal: the Iternal Website Build and Care Terms, version 1.0 (final
+   27 Oct 2026), accepted online at the end of sign-up. The effective date
+   is still to come from Robbie. Agents never draft, edit or decide terms,
+   and place supplied wording word for word. They say "web agent" (clauses
+   3 and 10, and the key points) where the site says Site Agent: that is
+   the team's wording to change, not ours.
 8. bplaced-site production deploy (`npx wrangler pages deploy --branch
    main` from that repo) so its gallery card opens in the lightbox.
 9. Stale artefacts: the StateCraft diagram
