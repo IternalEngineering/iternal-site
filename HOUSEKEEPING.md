@@ -89,7 +89,7 @@ the token awaits org approval), so the worker can deploy regardless.
 - `/signup` is the sign-up form's only destination (FormSubmit is gone from
   that page). Its spam check is the form's hidden honeypot field. One
   sign-up per email: a second one is refused (409; the page asks them to
-  carry on in the browser they signed up in, or email john@iternal.life)
+  carry on in the browser they signed up in, or email hello@iternal.life)
   unless it comes from that browser, which gets the same order back.
   Nothing changes either way, so knowing someone's email is not enough to
   take over their sign-up or accept for them.
@@ -110,7 +110,7 @@ the token awaits org approval), so the worker can deploy regardless.
   token with every answers post. `/answers` refuses (403) answers for a
   record whose token does not match — knowing an email is not enough to
   rewrite someone's brief. A client on a different browser gets a message
-  pointing them to john@iternal.life.
+  pointing them to hello@iternal.life.
 - Answers count only from a client who has signed up and accepted the
   terms: a booking or send from anyone else is refused (409; the page asks
   them to finish signing up first), and a page saving by itself is ignored.
@@ -240,8 +240,8 @@ the token awaits org approval), so the worker can deploy regardless.
 ## Team briefs (email)
 
 Briefs go to every address in `TEAM_EMAIL` (comma-separated), one copy each.
-Since 20 Oct 2026 that is john@iternal.life alone (Robbie: default to John),
-who also receives clients' replies (`CLIENT_REPLY_TO`); websites@iternal.life
+Since 27 Oct 2026 that is hello@iternal.life alone (Robbie; John before),
+which also receives clients' replies (`CLIENT_REPLY_TO`) and is the terms' notices address; websites@iternal.life
 can join once it exists. Changing who receives them is a three-step change,
 not one:
 
@@ -270,7 +270,7 @@ Email Routing: it can reach any address. Setting it up, once:
    Workers Paid plan.
 2. `CLIENT_FROM` (`Iternal <websites@iternal.co.uk>`) must match the
    binding's `allowed_sender_addresses` in `worker/wrangler.toml`. Replies
-   go to `CLIENT_REPLY_TO` (john@iternal.life).
+   go to `CLIENT_REPLY_TO` (hello@iternal.life).
 3. Deploy the worker. Until all of this is in place every send fails, and
    each failure emails the team "confirmation FAILED" with the text to
    forward by hand, so nobody goes without it.
@@ -309,7 +309,7 @@ Before lighting up (Robbie, 20 Oct 2026: anything quick to update once
 live is not a blocker):
 
 - The pipeline repo exists on GitHub and `PIPELINE_TOKEN` is set.
-- john@iternal.life is a verified Email Routing destination, and the worker
+- hello@iternal.life is a verified Email Routing destination, and the worker
   is deployed.
 - The team has stepped through every screen in the preview (gallery,
   sign-up, review and accept, questions, booking) and is happy with it.

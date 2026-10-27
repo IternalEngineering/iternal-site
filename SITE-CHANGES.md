@@ -12,6 +12,9 @@ Last deploy: **22 Oct 2026, the website rework** (pull request #6; pushing to ma
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
 #### Website sign-up (still hidden)
+- **hello@iternal.life is the sign-up's address**: the "email us" messages on the sign-up and
+  questions pages, replies to the client's confirmation, and the team's briefs (was
+  john@iternal.life). (stripe-bookings)
 - **The final terms are in**: the Iternal Website Build and Care Terms, version 1.0 (23
   clauses, word for word as supplied, page and PDF, with "Site Agent" where the supplied text
   said "web agent"; effective 27 October 2026), replace the earlier draft. "Review and

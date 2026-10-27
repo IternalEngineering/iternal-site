@@ -755,7 +755,7 @@ if (form) form.addEventListener('submit', (e)=>{
       Send Message
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     `;
-    alert('Something went wrong. Please try again or email us directly at john@iternal.life');
+    alert('Something went wrong. Please try again or email us directly at hello@iternal.life');
   });
 });
 
@@ -834,7 +834,7 @@ document.head.appendChild(style);
 (function(){
   var BOOKING_URL = 'https://calendar.app.google/fNGuEjKBSpoPMhAL6'; // Google Calendar appointment schedule
   var WORKER_URL = 'https://api.iternal.co.uk'; // answers go to the funnel worker (KV + team brief)
-  var SEND_TO = 'https://formsubmit.co/ajax/john@iternal.life'; // only used if WORKER_URL is ever emptied
+  var SEND_TO = 'https://formsubmit.co/ajax/hello@iternal.life'; // only used if WORKER_URL is ever emptied
   var STORE = 'iternal_call_prep';
   // PREVIEW (preview.js, dark launch only): nothing is sent and no call is booked.
 
@@ -1033,8 +1033,8 @@ document.head.appendChild(style);
   // What a refused send means, in words the client can act on.
   function refusal(status){
     return status === 409 ? 'Please finish signing up first: <a href="start.html" style="color:var(--tan)">sign up and accept our terms</a>, then come back here.'
-      : status === 403 ? 'These answers don’t match the sign-up for that email. Please use the browser you signed up in, or email your answers to john@iternal.life.'
-      : 'Sending failed — please try again, or email your answers to john@iternal.life.';
+      : status === 403 ? 'These answers don’t match the sign-up for that email. Please use the browser you signed up in, or email your answers to hello@iternal.life.'
+      : 'Sending failed — please try again, or email your answers to hello@iternal.life.';
   }
 
   var external = BOOKING_URL.indexOf('http') === 0; // true once the Calendly URL is in

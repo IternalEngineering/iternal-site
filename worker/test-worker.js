@@ -17,7 +17,7 @@ const env = {
   TEAM_MAIL: { async send(msg) { teamMail.push(msg); } },
   CLIENT_MAIL: { async send(msg) { clientMail.push(msg); } },
   CLIENT_FROM: 'Iternal <websites@iternal.co.uk>',
-  CLIENT_REPLY_TO: 'john@iternal.life',
+  CLIENT_REPLY_TO: 'hello@iternal.life',
   SITE_URL: 'https://iternal.co.uk',
   FROM_EMAIL: 'Website Pipeline <funnel@iternal.co.uk>',
   TEAM_EMAIL: 'paul@iternal.life',
@@ -341,7 +341,7 @@ const omarRef = omarOrder.reference;
   const m = clientMail[0];
   assert.strictEqual(m.to, 'omar@kilnworks.co.uk');
   assert.deepStrictEqual(m.from, { name: 'Iternal', email: 'websites@iternal.co.uk' });
-  assert.strictEqual(m.replyTo, 'john@iternal.life');
+  assert.strictEqual(m.replyTo, 'hello@iternal.life');
   assert.strictEqual(m.subject, `Welcome to Iternal: your website order is confirmed (${omarRef})`);
   assert.ok(m.text.startsWith('Hi Omar,\n\nThank you for choosing Iternal to build and look after your website.'));
   assert.ok(m.text.includes('a copy of our Iternal Website Build and Care Terms (version 1.0) is attached for your records.'));
