@@ -308,13 +308,8 @@ await drain();
   assert.strictEqual(p.cancel_url, 'https://iternal.co.uk/start');
   // nothing to the client until they have paid
   assert.strictEqual(clientMail.length, 0);
-  // the team is told payment comes next; the tracker gets a note, never answers
-  const brief = teamMail.find(t => t.raw.includes('Subject: Website Pipeline: terms accepted — Kilnworks'));
-  assert.ok(brief && brief.raw.includes('They pay the £100 downpayment (including VAT) next, on Stripe\'s payment page.'));
-  assert.ok(brief.raw.includes('£650 (including VAT) follows on completion'));
-  assert.ok(!brief.raw.includes('book their call:'));
-  // what the dropped sign-up email used to carry
-  assert.ok(brief.raw.includes('Website: kilnworks.co.uk\nCame in from the bPlaced example in the gallery.'));
+  // no team email until they have paid; the tracker gets a note, never answers
+  assert.ok(!teamMail.some(t => t.raw.includes('Kilnworks')));
   const note = outbound.find(o => o.url.includes('action=createLead'));
   assert.strictEqual(note.body.event, 'accepted');
   assert.ok(note.body.message.includes('Accepted the Iternal Website Build and Care Terms, version 1.0 (reference ' + acc.reference + ')'));
@@ -369,6 +364,10 @@ const omarRef = omarOrder.reference;
   assert.strictEqual(teamMail.length, 1);
   assert.ok(teamMail[0].raw.includes('Subject: Website Pipeline: paid — Kilnworks'));
   assert.ok(teamMail[0].raw.includes(`Omar Haddad (Kilnworks, reference ${omarRef}) paid £100. Their confirmation email has gone`));
+  // the team's one email carries what the sign-up and acceptance emails did
+  assert.ok(teamMail[0].raw.includes(`Name or business name: Kilnworks\nYour name: Omar Haddad\nEmail: omar@kilnworks.co.uk\nReference: ${omarRef}`));
+  assert.ok(/\nAccepted: .+ \(UK time\)\nWebsite: kilnworks\.co\.uk\nCame in from the bPlaced example in the gallery\.\nStripe: cs_test_2\n/.test(teamMail[0].raw));
+  assert.ok(!teamMail[0].raw.includes('forward their confirmation'));
   assert.strictEqual(outbound.length, 1);
   assert.strictEqual(outbound[0].body.reference, omarRef);
   assert.strictEqual(outbound[0].body.message, 'Paid £100 via Stripe (cs_test_2).');
@@ -473,8 +472,12 @@ r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'L
   assert.strictEqual(r.status, 200); // she has paid; the failure is ours to handle
   await drain();
   env.CLIENT_MAIL.send = sendBefore;
-  const failMail = teamMail.find(t => t.raw.includes('confirmation FAILED — Tidewater'));
-  assert.ok(failMail && failMail.raw.includes('Domain not onboarded') && failMail.raw.includes('Forward the text below to ana@tidewater.co.uk'));
+  // still one email: the payment brief, flagged, with the text to forward inside it
+  assert.strictEqual(teamMail.length, 1);
+  const failMail = teamMail[0];
+  assert.ok(failMail.raw.includes('Subject: Website Pipeline: paid — Tidewater (forward their confirmation)'));
+  assert.ok(failMail.raw.includes('Their confirmation email did not send: forward it to them, below.'));
+  assert.ok(failMail.raw.includes('Domain not onboarded') && failMail.raw.includes('Forward the text below to ana@tidewater.co.uk'));
   assert.ok(failMail.raw.includes('Build fee: £750, with £100 paid today and £650 payable on completion'));
 }
 
@@ -760,8 +763,11 @@ r = await call('/signup', { method: 'POST', body: JSON.stringify({ email: 'crlf@
 assert.strictEqual(r.status, 200);
 const crlf = await r.json();
 await drain();
-teamMail.length = 0;
 r = await call('/accept', { method: 'POST', body: JSON.stringify({ email: 'crlf@test.co.uk', token: crlf.token, termsVersion: '1.0', accepted: true, authorised: true }) });
+assert.strictEqual(r.status, 200);
+await drain();
+teamMail.length = 0;
+r = await stripe(paidSession('cs_crlf', crlf.order.reference)); // the payment brief names the company
 assert.strictEqual(r.status, 200);
 await drain();
 {

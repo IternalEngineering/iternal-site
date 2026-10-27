@@ -75,8 +75,8 @@ homepage is outside the automation: the team decides whether to build one
   (the order, the booking link, the terms PDF attached), worded as the
   team's sign-up example, from
   "Iternal <websites@iternal.co.uk>" with replies to john@iternal.life
-  (`CLIENT_MAIL`, Cloudflare Email Service). If it cannot send, the team
-  gets it to forward. Stripe sends the receipt and VAT invoice, Google
+  (`CLIENT_MAIL`, Cloudflare Email Service). If it cannot send, the team's
+  payment email carries it to forward. Stripe sends the receipt and VAT invoice, Google
   Calendar the invite. Team briefs go to
   john@iternal.life (Robbie, 27 Oct 2026: John's schedule takes the calls, so
   the launch uses his address; the terms still name hello@iternal.life for
@@ -131,7 +131,7 @@ every sign-up is refused.
    destination, receives the briefs and clients' replies).
 3. Deploy the site (held: only on Robbie's word, named in that moment).
 4. `?team` walkthrough: one real sign-up and acceptance should yield a
-   client file, a tracker row and the acceptance brief.
+   client file and a tracker row; with payment, the team's one email.
 5. Payment: the £100 downpayment is paid on Stripe Checkout straight after
    accepting (the team's client journey, 22 Oct 2026); the final payment is
    separate, outside this project. Setup steps (Price, VAT rate, restricted

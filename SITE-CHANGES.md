@@ -16,8 +16,10 @@ Last deploy: **27 Oct 2026, the website sign-up's final terms and payment step**
   Cloudflare is unsure, when it asks for one click. Off until the widget's site key is in
   `turnstile.js` and its secret is on the worker. The contact form is unchanged.
   (bot-protection)
-- **No team email at sign-up**: John is emailed when the client accepts the terms (now with
-  their website and gallery example), not twice in a minute. (bot-protection)
+- **One email to John per new client, once they have paid**: no email at sign-up or on
+  accepting the terms. The payment email carries their order, website and gallery example,
+  and, while client confirmations can't send, the confirmation to forward (no separate
+  "confirmation FAILED" email). (bot-protection)
 
 ---
 
