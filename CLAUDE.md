@@ -75,8 +75,8 @@ homepage is outside the automation: the team decides whether to build one
   (the order, the booking link, the terms PDF attached), worded as the
   team's sign-up example, from
   "Iternal <websites@iternal.co.uk>" with replies to john@iternal.life
-  (`CLIENT_MAIL`, Cloudflare Email Service). If it cannot send, the team
-  gets it to forward. Stripe sends the receipt and VAT invoice, Google
+  (`CLIENT_MAIL`, Cloudflare Email Service). If it cannot send, the team's
+  payment email carries it to forward. Stripe sends the receipt and VAT invoice, Google
   Calendar the invite. Team briefs go to
   john@iternal.life (Robbie, 27 Oct 2026: John's schedule takes the calls, so
   the launch uses his address; the terms still name hello@iternal.life for
@@ -114,7 +114,16 @@ homepage is outside the automation: the team decides whether to build one
 | **GitHub Action** (`.github/workflows/screenshots.yml`) | weekly gallery screenshot refresh commits | — | Gallery additions touch FOUR places — see HOUSEKEEPING.md |
 
 FormSubmit is no longer in the sign-up path. It remains only as an unused
-fallback constant in questions.html.
+fallback constant in questions.html (and still carries the contact page's
+enquiries, which are left as they are: Robbie, 27 Oct 2026).
+
+**Bot check (Cloudflare Turnstile)** on the sign-up only: `turnstile.js` adds
+the widget to forms marked `data-turnstile` (site key in that file, public;
+widget "iternal.co.uk website sign-up", Managed, iternal.co.uk + www, made
+with `wrangler turnstile widget create` on 27 Oct 2026);
+the worker's `/signup` verifies the token once `TURNSTILE_SECRET` is set.
+Order matters: site key in and the site deployed BEFORE the secret is set, or
+every sign-up is refused.
 
 ## Current to-do (30 Sep 2026)
 
@@ -123,8 +132,8 @@ fallback constant in questions.html.
 2. Deploy the worker (john@iternal.life, a verified Email Routing
    destination, receives the briefs and clients' replies).
 3. Deploy the site (held: only on Robbie's word, named in that moment).
-4. `?team` walkthrough: one real sign-up should yield a client file, a
-   tracker row and both briefs.
+4. `?team` walkthrough: one real sign-up and acceptance should yield a
+   client file and a tracker row; with payment, the team's one email.
 5. Payment: the £100 downpayment is paid on Stripe Checkout straight after
    accepting (the team's client journey, 22 Oct 2026); the final payment is
    separate, outside this project. Setup steps (Price, VAT rate, restricted

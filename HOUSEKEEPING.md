@@ -262,6 +262,13 @@ the token awaits org approval), so the worker can deploy regardless.
 
 ## Team briefs (email)
 
+The team gets ONE email about a new client, once they have paid (Robbie,
+27 Oct 2026): "Website Pipeline: paid — <company>", with their order, when they
+accepted, their website and gallery example, and the Stripe payment. If their
+confirmation could not send, that same email says so in its subject and carries
+the text to forward. Signing up and accepting send no email; the tracker and
+its Slack pings follow those. Later emails: their answers when they send them,
+and the failure alerts (a payment needing a look, a dashboard or tracker sync).
 Briefs go to every address in `TEAM_EMAIL` (comma-separated), one copy each.
 For launch that is john@iternal.life alone (Robbie, 27 Oct 2026: his schedule
 takes the calls), which also receives clients' replies (`CLIENT_REPLY_TO`).
@@ -297,8 +304,8 @@ Email Routing: it can reach any address. Setting it up, once:
    binding's `allowed_sender_addresses` in `worker/wrangler.toml`. Replies
    go to `CLIENT_REPLY_TO` (john@iternal.life).
 3. Deploy the worker. Until all of this is in place every send fails, and
-   each failure emails the team "confirmation FAILED" with the text to
-   forward by hand, so nobody goes without it.
+   the team's payment email ("… (forward their confirmation)") carries the
+   text to forward by hand, so nobody goes without it.
 
 That is the only email a client gets from us: Stripe sends the receipt and
 VAT invoice, Google Calendar the booking invite.

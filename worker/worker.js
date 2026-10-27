@@ -17,8 +17,8 @@
  *   POST /signup          The start.html form posts here after sign-up:
  *                         seeds their lead record in KV, then both
  *                         destinations (fire-and-forget, never blocking).
- *                         Answers with the order to review.
- *   POST /accept          The client accepts the terms: records what they
+ *                         Answers with the order to review. Turnstile-checked.
+ *   POST /accept         The client accepts the terms: records what they
  *                         accepted, tells the team, updates both destinations
  *                         and answers with their Stripe payment page.
  *                         Accepting again (back from Stripe unpaid) answers
@@ -176,7 +176,8 @@ const orderText = o => [
 const ukTime = iso => new Date(iso).toLocaleString('en-GB', { timeZone: 'Europe/London', dateStyle: 'long', timeStyle: 'short' });
 
 /** The confirmation the client gets once they have paid, worded as the team's
-    sign-up example (22 Oct 2026) words it. If it cannot go, the team gets it to forward. */
+    sign-up example (22 Oct 2026) words it. Returns '' once sent; if it cannot
+    go, the note for the team's payment brief, with the text to forward. */
 async function sendConfirmation(env, acc) {
   const pdfUrl = termsUrl(env, acc.termsVersion, 'pdf');
   const at = { timeZone: 'Europe/London' };
@@ -211,16 +212,16 @@ The Iternal team
       attachments: [{ content: await pdf.arrayBuffer(), filename: `${TERMS.name} v${acc.termsVersion}.pdf`, type: 'application/pdf', disposition: 'attachment' }],
     });
     console.log('confirmation sent:', acc.reference);
+    return '';
   } catch (e) {
     const why = e && e.message ? e.message : String(e);
     console.error('confirmation FAILED:', why, acc.email);
-    await sendTeamEmail(env, `Website Pipeline: confirmation FAILED — ${acc.company}`,
-      `${acc.name} paid, but their confirmation email did not send (${why}).
+    return `Their confirmation email did not send (${why}).
 Forward the text below to ${acc.email}, with the terms PDF attached (${pdfUrl}).
 
 ----
 
-${text}`);
+${text}`;
   }
 }
 
@@ -410,6 +411,24 @@ async function syncToPipelineOnce(env, email, what) {
   return 'still conflicting after a retry';
 }
 
+/** Cloudflare Turnstile, the sign-up's bot check: the page's widget hands over
+    a one-use token and Cloudflare says whether a person earned it. Off until
+    TURNSTILE_SECRET is set; closed (no) if Cloudflare cannot be asked. */
+async function humanCheck(env, request, token) {
+  if (!env.TURNSTILE_SECRET) return true;
+  if (!token) return false;
+  try {
+    const res = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token, remoteip: request.headers.get('cf-connecting-ip') || '' }),
+    });
+    return (await res.json()).success === true;
+  } catch (e) {
+    console.error('bot check FAILED:', e && e.message ? e.message : e);
+    return false;
+  }
+}
+
 /** Sign-up from start.html: seed the lead record, then both destinations. */
 async function handleSignup(request, env, ctx) {
   const cors = corsHeaders(env);
@@ -422,9 +441,9 @@ async function handleSignup(request, env, ctx) {
 
   // Honeypot: the form's hidden field. A bot that fills it gets the same OK a
   // person would, and nothing is stored or sent.
-  // ponytail: honeypot only. Add Turnstile or a rate-limit rule if this
-  // endpoint ever draws real abuse — each accepted call writes to four places.
   if (s(body._honey, 200)) return json(200, { ok: true }, cors);
+  // Each accepted call writes to three places, so a bot must not get past here.
+  if (!await humanCheck(env, request, s(body.turnstile, 4096))) return json(403, { error: 'bot check failed' }, cors);
 
   const email = s(body.email, 120).toLowerCase();
   if (!EMAIL.test(email)) return json(400, { error: 'email required' }, cors);
@@ -457,19 +476,10 @@ async function handleSignup(request, env, ctx) {
   existing.reference = existing.reference || await newReference(env, email);
   await env.CLIENTS.put(key, JSON.stringify(existing));
 
-  // Two destinations plus the team brief, all independent: one failing must
-  // not stop the others.
+  // Both destinations, independent: one failing must not stop the other. No
+  // team email: the team's one email comes once they have paid (Robbie, 27 Oct
+  // 2026), and the tracker pings Slack.
   ctx.waitUntil(Promise.allSettled([
-    sendTeamEmail(env,
-      `Website Pipeline: new sign-up — ${org}`,
-      `${name || email} signed up for a website build.
-
-Email: ${email}
-Organisation: ${org}
-Website: ${website || 'none given'}
-Reference: ${existing.reference}${inspiration ? '\nCame in from the ' + inspiration + ' example in the gallery.' : ''}
-
-Next they review their order and accept the terms; a brief follows when they do.`),
     postToLeadTracker(env, {
       org, contact: name || email, email, website, reference: existing.reference,
       source: 'website funnel', event: 'signed-up',
@@ -516,16 +526,9 @@ async function handleAccept(request, env, ctx) {
   await env.CLIENTS.put(key, JSON.stringify(kv));
   const acc = kv.acceptance;
 
+  // No team email until they have paid (Robbie, 27 Oct 2026: one email, after
+  // payment); the tracker records the acceptance.
   ctx.waitUntil(Promise.allSettled([
-    sendTeamEmail(env,
-      `Website Pipeline: terms accepted — ${acc.company}`,
-      `${acc.name} accepted the ${TERMS.name}, version ${acc.termsVersion}, for ${acc.company}.
-
-${orderText(acc)}
-Accepted: ${ukTime(acc.acceptedAt)} (UK time)
-
-They pay the £${acc.downpayment} downpayment (including VAT) next, on Stripe's payment page. A brief follows when it lands, and their confirmation email goes then. £${acc.completion} (including VAT) follows on completion.
-Their questions come after paying; a brief follows when they answer.`),
     postToLeadTracker(env, {
       org: acc.company, contact: acc.name, email, website: kv.website || '', reference: acc.reference,
       source: 'website funnel', event: 'accepted',
@@ -759,11 +762,23 @@ async function handleStripeWebhook(request, env, ctx) {
   }
   const acc = kv.acceptance;
 
+  // The team's one email about a new client (Robbie, 27 Oct 2026): sent once
+  // they have paid, after their confirmation, which it carries to forward if
+  // that could not go.
+  const brief = async () => {
+    const forward = await sendConfirmation(env, acc);
+    await sendTeamEmail(env, `Website Pipeline: paid — ${acc.company}${forward ? ' (forward their confirmation)' : ''}`,
+      `${acc.name} (${acc.company}, reference ${acc.reference}) paid ${paid}. ${forward ? 'Their confirmation email did not send: forward it to them, below.' : 'Their confirmation email has gone, with the terms attached.'} Next they answer the questions and book their call.
+
+${orderText(acc)}
+Accepted: ${ukTime(acc.acceptedAt)} (UK time)
+Website: ${kv.website || 'none given'}${kv.inspiration ? '\nCame in from the ' + kv.inspiration + ' example in the gallery.' : ''}
+Stripe: ${o.id}
+
+£${acc.completion} (including VAT) follows on completion.${forward ? '\n\n' + forward : ''}`);
+  };
   ctx.waitUntil(Promise.allSettled([
-    sendConfirmation(env, acc),
-    sendTeamEmail(env, `Website Pipeline: paid — ${acc.company}`,
-      `${acc.name} (${acc.company}, reference ${acc.reference}) paid ${paid}. Their confirmation email has gone, with the terms attached. Next they answer the questions and book their call.
-Stripe: ${o.id}`),
+    brief(),
     postToLeadTracker(env, {
       org: acc.company, contact: acc.name, email, reference: acc.reference,
       source: 'website funnel', event: 'paid', message: `Paid ${paid} via Stripe (${o.id}).`,

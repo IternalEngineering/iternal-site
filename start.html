@@ -682,7 +682,7 @@ html { overflow-x:clip; }
     <div id="form">
       <div class="form-wrap" id="formWrap">
 
-        <form class="form-inner" id="contactForm" method="POST" action="https://api.iternal.co.uk/signup">
+        <form class="form-inner" id="contactForm" method="POST" action="https://api.iternal.co.uk/signup" data-turnstile>
           <!-- Honeypot: people never see it, bots fill it, the worker drops those -->
           <input type="text" id="honey" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true">
           <div class="form-head">
@@ -850,6 +850,7 @@ html { overflow-x:clip; }
 </footer>
 
 <script src="preview.js"></script>
+<script src="turnstile.js"></script>
 <script>
 /* ── Nav scroll ── */
 const nav = document.getElementById('nav');
@@ -1016,6 +1017,7 @@ form.addEventListener('submit', (e)=>{
       // a steer for the concepts, whitelisted worker-side.
       inspiration: (location.search.match(/[?&]from=([\w-]{1,40})/)||[])[1] || '',
       _honey: document.getElementById('honey').value,
+      turnstile: turnstileToken(form),
       // Signing up again from the same browser gets the same order back; the
       // worker refuses a second sign-up for that email from anywhere else.
       token: (() => { try { return localStorage.getItem('iternal_signup_token') || ''; } catch (e) { return ''; } })(),
@@ -1023,6 +1025,7 @@ form.addEventListener('submit', (e)=>{
   })
   .then(res=>{
     if (res.status === 409) throw new Error('already signed up');
+    if (res.status === 403) throw new Error('bot check');
     if (!res.ok) throw new Error('Sign-up failed');
     return res.json().catch(()=>({}));
   })
@@ -1046,8 +1049,11 @@ form.addEventListener('submit', (e)=>{
       Sign Up
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
     `;
+    turnstileReset();
     alert(err && err.message === 'already signed up'
       ? 'You have already signed up with this email. Please carry on in the browser you signed up in, or email us at john@iternal.life.'
+      : err && err.message === 'bot check'
+      ? 'We couldn’t confirm the form was sent by a person. Please try again, or email us at john@iternal.life.'
       : 'Something went wrong. Please try again or email us directly at john@iternal.life');
   });
 });

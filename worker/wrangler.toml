@@ -52,6 +52,8 @@ BOOKING_URL = "https://calendar.app.google/fNGuEjKBSpoPMhAL6"
 #   STRIPE_WEBHOOK_SECRET  signing secret of the /stripe-webhook endpoint in Stripe's dashboard
 #   LEAD_API_SECRET        from Lead Tracker Admin -> Website leads
 #   PIPELINE_TOKEN         fine-grained GitHub token: Contents read+write on PIPELINE_REPO only
+#   TURNSTILE_SECRET       the Turnstile widget's secret key: the sign-up's bot check is off
+#                          until it is set (the site key is in turnstile.js)
 
 # Keep worker logs so a failed sync or send can be found afterwards.
 [observability]
