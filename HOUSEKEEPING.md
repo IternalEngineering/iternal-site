@@ -338,26 +338,65 @@ noindex, the sitemap omits them), and without `?team` the sign-up and
 questions pages are a preview: every screen can be stepped through, but
 nothing is sent and no call is booked (`preview.js`).
 
-Before lighting up (Robbie, 20 Oct 2026: anything quick to update once
-live is not a blocker):
+Everything for the switch-on, as of 27 Oct 2026 (Robbie: anything quick to
+update once live is not a blocker).
 
-- The pipeline repo exists on GitHub and `PIPELINE_TOKEN` is set.
-- john@iternal.life is a verified Email Routing destination, and the worker
-  is deployed.
-- The team has stepped through every screen in the preview (gallery,
-  sign-up, review and accept, questions, booking) and is happy with it.
-- A `?team` test run has produced, from one real sign-up and acceptance, a
-  client file with its acceptance, a tracker row and the team brief; then
-  sweep the test records (§Worker).
+**Already done:** the platform repo and `PIPELINE_TOKEN`; the worker deployed
+(briefs to john@iternal.life, a verified Email Routing destination; John's
+"Disco Meeting" booking schedule, which takes no payment); the live Stripe key,
+£100 Price and inclusive 20% VAT rate (proved by the free check, 27 Oct); the
+live webhook endpoint listening for `checkout.session.completed`; the sandbox
+run end to end; the Turnstile widget "iternal.co.uk website sign-up", its site
+key live in `turnstile.js` and its secret on the worker (27 Oct: the bot
+check is ON; a sign-up without a pass gets 403, and Cloudflare confirmed the
+secret).
+
+**Still to do before switching on:**
+
+1. **Robbie, on the worker** (from `worker/`; secrets are his to set):
+   `npx wrangler secret delete MAGIC_SECRET` (unused since 13 Oct). The
+   Turnstile secret is set (piped from
+   `~/.iternal-secrets/turnstile-signup-secret.txt` on his word, 27 Oct).
+2. **One `?team` test run on iternal.co.uk**, ideally with a real £100
+   payment refunded in Stripe afterwards (Stripe keeps about £1.70): sign up
+   at `https://iternal.co.uk/start?team` with a test address, accept, pay.
+   It proves together: the bot check (the sign-up goes through), Stripe's
+   live notice (the webhook secret), John's one payment email (with the
+   client's confirmation to forward, until Email Service is set up), the
+   tracker turning "Awaiting downpayment" into Active, and the questions page
+   opening with the booking link. Without paying it proves all but the
+   notice, the payment email and the tracker change. Then sweep the test
+   records: the worker's `lead:<email>` (`npx wrangler kv key delete
+   "lead:<email>" --binding CLIENTS --remote`; the `ref:` entry stays, by
+   design), the platform repo's `clients/<slug>.json`, and the tracker record
+   (Robbie, as Admin, in the app).
+3. **The team's run-through** of the preview: gallery, sign-up, review and
+   accept, the payment page, questions, booking.
+
+**Robbie's decisions and tidy-ups** (not blockers):
+- Delete the tracker record "Iternal free check (test)" (Admin, in the app).
+- Stripe: the Product's description still reads "Call booking pending
+  payment confirmation."; keep or drop Klarna and Revolut Pay.
+- John's schedule is titled "Disco Meeting"; a client-facing title reads better.
+- Whether John keeps the "call prep answers" email when a client sends
+  their answers (on for now).
+- `privacy.html` is unlinked pending legal review: whether a public sign-up
+  launches before it is a legal call (never ours).
 
 After lighting up (follow-ups, not blockers): onboard iternal.co.uk as an
-Email Service sending domain (until then each client's copy reaches John to
-forward); create websites@iternal.life and add it to the briefs; refresh the
-gallery's Jay's Transport card if their site changes.
+Email Service sending domain on Workers Paid (until then John forwards each
+client's confirmation from the payment email); the day-3 reminder and day-7
+cancellation for unpaid orders (by hand meanwhile: the tracker shows them as
+"Awaiting downpayment"); the accounts person's calls on the £100's VAT invoice
+and the `ITL-` reference format; someone watching hello@iternal.life (the
+terms' notices address); websites@iternal.life for the briefs if wanted;
+remove the dead `PREVIEW` code (below, step 4); refresh the gallery's Jay's
+Transport card if their site changes.
 
 LIGHTING UP (when the team says go). Made directly on main on the day,
 never prepared ahead: a deploy ships main, so these edits can only land
-when the answer is go. About ten minutes; one commit, then the deploy.
+when the answer is go. About ten minutes; one commit, then the deploy on
+Robbie's word "deploy the site".
 
 1. **The way in is Services, not the menu.** websites.html, start.html and
    questions.html already mark "Services" as the current section.
@@ -365,14 +404,16 @@ when the answer is go. About ten minutes; one commit, then the deploy.
    carry `hidden`, and the contact option is left out (the rework release,
    Oct 2026).
    - services.html: delete `hidden` from `<div class="tier tier-wide"
-     id="websites" hidden>` and the comment line above it. Also add
-     ", and websites" back to the end of its three meta descriptions
-     ("…strategy and advisory, AI augmentation, and websites.").
+     id="websites" hidden>` and the comment line above it. In its three meta
+     descriptions (`description`, `og:description`, `twitter:description`),
+     "…strategy and advisory, and AI augmentation." becomes "…strategy and
+     advisory, AI augmentation, and websites."
    - index.html: delete `hidden` from the Websites row in "Ways to work"
      (`<div class="svc" hidden>`) and the comment line above it.
    - contact.html: add `<option>Websites</option>` to "What kind of
-     engagement?", before "Not sure yet" (the `?service=websites`
-     pre-select already maps to it).
+     engagement?", before "Not sure yet? Let's talk" (the
+     `?service=websites` pre-select already maps to it). Nothing else on the
+     contact form changes.
    - Check: `grep -c 'hidden' services.html index.html` no longer counts
      the Websites lines, and `grep -c '<option>Websites' contact.html` gives 1.
 2. **Indexing.** websites.html and start.html: `<meta name="robots"
@@ -383,20 +424,23 @@ when the answer is go. About ten minutes; one commit, then the deploy.
    with that day's date. In `llms.txt`, add a Websites entry under "## Services", after AI
    Strategy & Advisory: `- [Websites](https://iternal.co.uk/websites): Not every project needs a
    platform. Sometimes you need a really good website, designed, built and live in weeks.`
-4. **The preview gate**, in start.html's script: delete the "Dark-launch
-   preview gate" block (the `PREVIEW` constant, the disabled button, the
-   "Preview" notes and the gold "In testing" banner), the
-   `if (PREVIEW) return;` line in the form's submit handler, and the
-   `if (!PREVIEW) { … }` wrapper round restoring the kept order (keep the
-   line inside it). Also delete `preview.js`, its `<script
-   src="preview.js">` tag on start and questions, and every `PREVIEW` line
-   in both pages (`sampleOrder()` included). Check: `grep -n PREVIEW
-   *.html` finds nothing.
+4. **The preview gate**: replace all of `preview.js` with the one line
+   `var PREVIEW = false;`. Every `PREVIEW` branch in start.html and
+   questions.html then goes quiet, the gold "Sign-ups and call bookings
+   aren't live yet" banner (made by preview.js) is gone, and `?team` no
+   longer matters. Removing the dead `PREVIEW` code and the file is a later
+   tidy-up, not a launch-day edit.
 5. **The docs.** CLAUDE.md "Currently DISABLED / dark": replace the dark
    launch and preview gate items with one saying the section is public.
    This section: mark it lit, with the date. SITE-CHANGES.md: one line
    under "Waiting to deploy".
-6. **Check, then deploy.** Serve the repo (`iternal-site` launch config),
-   open start.html without `?team`: no banner, and a real test sign-up
-   gets as far as "Review and accept". Then, on the word "deploy the
-   site", push main: that deploys it within about a minute.
+6. **Check, then deploy, then check live.** Serve the repo
+   (`iternal-site-pipeline` launch config, wrangler dev on 8735, for clean
+   URLs) and look: Websites shows on Services and the homepage, Websites is
+   an option on the contact form, start has no banner. A local sign-up can't
+   reach the worker (it answers only iternal.co.uk, and the bot check's key
+   works only there), so the real check is live: on "deploy the site", push
+   main (live in about a minute), then sign up once at
+   `https://iternal.co.uk/start` without `?team` with a test address: the
+   bot check passes and "Review and accept" appears. Sweep that record as in
+   step 2 above. To undo: revert the lighting-up commit and push main.
