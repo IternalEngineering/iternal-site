@@ -347,16 +347,16 @@ update once live is not a blocker).
 £100 Price and inclusive 20% VAT rate (proved by the free check, 27 Oct); the
 live webhook endpoint listening for `checkout.session.completed`; the sandbox
 run end to end; the Turnstile widget "iternal.co.uk website sign-up", its site
-key live in `turnstile.js`.
+key live in `turnstile.js` and its secret on the worker (27 Oct: the bot
+check is ON; a sign-up without a pass gets 403, and Cloudflare confirmed the
+secret).
 
 **Still to do before switching on:**
 
 1. **Robbie, on the worker** (from `worker/`; secrets are his to set):
-   - `npx wrangler secret put TURNSTILE_SECRET`, pasting the secret from
-     `~/.iternal-secrets/turnstile-signup-secret.txt`. This switches the
-     sign-up's bot check on (the site key is already live, so the order is
-     right).
-   - `npx wrangler secret delete MAGIC_SECRET` (unused since 13 Oct).
+   `npx wrangler secret delete MAGIC_SECRET` (unused since 13 Oct). The
+   Turnstile secret is set (piped from
+   `~/.iternal-secrets/turnstile-signup-secret.txt` on his word, 27 Oct).
 2. **One `?team` test run on iternal.co.uk**, ideally with a real £100
    payment refunded in Stripe afterwards (Stripe keeps about £1.70): sign up
    at `https://iternal.co.uk/start?team` with a test address, accept, pay.

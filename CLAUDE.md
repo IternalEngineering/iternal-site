@@ -132,8 +132,8 @@ edits and the live check) is HOUSEKEEPING.md §Go-live; keep it there.
 
 1-5. Done: platform repo and token, worker deployed (john@), site merged
    (pull requests #7 and #8, still dark), Stripe Checkout set up and proved.
-   Left before switching on: Robbie sets `TURNSTILE_SECRET` (and deletes
-   `MAGIC_SECRET`), one `?team` test run (ideally paid and refunded), the
+   Left before switching on: Robbie deletes `MAGIC_SECRET` (the
+   Turnstile secret is set, bot check on), one `?team` test run (ideally paid and refunded), the
    team's run-through. Then LIGHTING UP on Robbie's word.
 6. Show the team the current front end — they have not seen the gallery,
    lightbox or question changes. They want the prospect experience to take
