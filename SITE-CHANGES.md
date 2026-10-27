@@ -5,7 +5,7 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **22 Oct 2026, the website rework** (pull request #6; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
+Last deploy: **27 Oct 2026, the website sign-up's final terms and payment step** (pull request #7; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
@@ -16,6 +16,40 @@ Nothing waiting.
 ---
 
 ## Live
+
+### 27 Oct 2026, the website sign-up's final terms and payment step (pull request #7)
+
+Merged from `stripe-bookings`. Websites stays hidden and the sign-up stays in preview, so
+visitors see no change; these describe the sign-up as `?team` (and launch day) shows it.
+
+#### Website sign-up (still hidden)
+- **The steps run in order**: the questions page opens only once the payment has gone
+  through. Until then it says what is missing ("Sign up first", "Accept our terms first",
+  "Your payment hasn't come through yet") with a link back; straight back from Stripe the
+  questions open at once, the payment checked with Stripe there and then ("Confirming your
+  payment" shows only if Stripe can't be reached). The booking link is no
+  longer in the page: it arrives once the client has paid. (stripe-bookings)
+- **john@iternal.life stays the sign-up's address** for launch: the "email us" messages on the
+  sign-up and questions pages, replies to the client's confirmation, and the team's briefs
+  (a switch to hello@iternal.life was undone the same day). (stripe-bookings)
+- **The final terms are in**: the Iternal Website Build and Care Terms, version 1.0 (23
+  clauses, word for word as supplied, page and PDF, with "Site Agent" where the supplied text
+  said "web agent"; effective 27 October 2026), replace the earlier draft. "Review and
+  accept" now follows the team's walkthrough: "Order summary" (Name or business name, the
+  £750 build fee as £100 now and £650 on completion), "Key points of our terms" (nine
+  points), "Read the full terms" in a pop-up with the PDF, and the new second tick ("buying
+  this website mainly for my work"). The sign-up's Organisation field is now "Name or
+  business name". (stripe-bookings)
+- **The downpayment is paid straight after accepting**, as in the team's client journey:
+  "Review and accept" ends with "Accept and pay £100", which opens a Stripe payment page
+  made for the order (their reference shown, their email filled in, nothing else to type but the card, a VAT
+  invoice from Stripe). Paid, they land on the questions page with "Thank you, your payment
+  has been received."; back without paying, their order is still there to accept and pay.
+  The sign-up's steps read Sign up, Review and accept, Pay your downpayment, Your
+  questions, Book your call. Booking the call takes no payment. (stripe-bookings)
+- **The client's one email moves to after payment**: "Welcome to Iternal: your website order
+  is confirmed", worded as the team's sign-up example, with the booking link and the terms
+  attached (it was sent on accepting). (stripe-bookings)
 
 ### 22 Oct 2026, the website rework (pull request #6)
 

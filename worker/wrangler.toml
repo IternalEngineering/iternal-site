@@ -9,8 +9,8 @@ routes = [{ pattern = "api.iternal.co.uk", custom_domain = true }]
 # before deploying, and must match TEAM_EMAIL below.
 # NB: must sit up here, above every [section] header — anywhere lower, TOML
 # swallows it into the preceding table and the binding silently never exists.
-# CLIENT_MAIL sends each client the copy of their order and terms that the
-# terms promise. It is Cloudflare Email Service, not Email Routing: it reaches
+# CLIENT_MAIL sends each client their confirmation, with the terms attached,
+# once they have paid. It is Cloudflare Email Service, not Email Routing: it reaches
 # any address once iternal.co.uk is onboarded as a sending domain (Workers
 # Paid plan). It may only send from CLIENT_FROM's address.
 send_email = [
@@ -38,8 +38,18 @@ LEAD_API_URL = "https://script.google.com/macros/s/AKfycbzwkFrrOZ_VqMP0CJnAjtCsU
 # clients/<slug>.json per client here. Skipped silently until PIPELINE_TOKEN
 # is set, so the worker can deploy before the repo exists.
 PIPELINE_REPO = "IternalEngineering/website-build-platform"
+# The downpayment's Price (price_…) and its 20% VAT tax rate, inclusive
+# (txr_…), both made once in Stripe's dashboard. The price's amount must equal
+# TERMS.downpayment in worker.js (HOUSEKEEPING.md §Payment).
+STRIPE_PRICE = "price_1UTLN4JaKTbTS7qBd2deRD6J"
+STRIPE_TAX_RATE = "txr_1UTkLLJaKTbTS7qB9pZbYNzp"
+# The booking page (John's schedule, for launch). Its only home: paid
+# clients get it from /status on the questions page and in the confirmation email.
+BOOKING_URL = "https://calendar.app.google/fNGuEjKBSpoPMhAL6"
 
 # Secrets — set each with: wrangler secret put <NAME>
+#   STRIPE_API_KEY         restricted key, Checkout Sessions: Write and nothing else
+#   STRIPE_WEBHOOK_SECRET  signing secret of the /stripe-webhook endpoint in Stripe's dashboard
 #   LEAD_API_SECRET        from Lead Tracker Admin -> Website leads
 #   PIPELINE_TOKEN         fine-grained GitHub token: Contents read+write on PIPELINE_REPO only
 

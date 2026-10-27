@@ -302,6 +302,7 @@ textarea { resize:vertical; min-height:130px; line-height:1.65; }
 }
 .form-success.show { display:block; }
 .form-wrap.submitted .form-inner { display:none; }
+#gate[hidden], #gateLink[hidden], #quiz[hidden] { display:none; }
 .form-wrap.submitted .form-success { display:block; }
 
 .success-icon {
@@ -584,6 +585,7 @@ html { overflow-x:clip; }
           <span class="dim">you book</span><br>
           your call.
         </h1>
+        <p id="paidNote" class="page-hero-sub" hidden style="color:var(--tan); font-weight:700">Thank you, your payment has been received.</p>
         <p class="page-hero-sub">
           A few questions about your organisation and what the site has to do. The first <span data-core-count>five</span> unlock your call booking. The rest are optional; each one sharpens what we build. Your answers are saved as you go.
         </p>
@@ -597,6 +599,15 @@ html { overflow-x:clip; }
     <!-- Right: form -->
     <div id="form">
       <div class="form-wrap" id="formWrap">
+
+        <!-- Shown instead of the questions until the client has paid -->
+        <div class="form-inner" id="gate" hidden aria-live="polite">
+          <div class="form-head">
+            <h2 id="gateH"></h2>
+            <p id="gateP"></p>
+          </div>
+          <a id="gateLink" href="start.html" class="submit-btn" hidden style="text-decoration:none"></a>
+        </div>
 
         <div class="form-inner" id="quiz">
           <div class="form-head">
@@ -831,7 +842,10 @@ document.head.appendChild(style);
 <script>
 /* ── Call-prep question wizard ── */
 (function(){
-  var BOOKING_URL = 'https://calendar.app.google/fNGuEjKBSpoPMhAL6'; // Google Calendar appointment schedule
+  // The steps run in order: the questions and the booking open once the worker
+  // has the client's payment from Stripe (/status), and the booking link comes
+  // from the worker then, so it reaches nobody who has not paid.
+  var BOOKING_URL = '';
   var WORKER_URL = 'https://api.iternal.co.uk'; // answers go to the funnel worker (KV + team brief)
   var SEND_TO = 'https://formsubmit.co/ajax/john@iternal.life'; // only used if WORKER_URL is ever emptied
   var STORE = 'iternal_call_prep';
@@ -1029,12 +1043,13 @@ document.head.appendChild(style);
 
   // What a refused send means, in words the client can act on.
   function refusal(status){
-    return status === 409 ? 'Please finish signing up first: <a href="start.html" style="color:var(--tan)">sign up and accept our terms</a>, then come back here.'
+    return status === 409 ? 'Please finish signing up first: <a href="start.html" style="color:var(--tan)">sign up, accept our terms and pay your downpayment</a>, then come back here.'
       : status === 403 ? 'These answers don’t match the sign-up for that email. Please use the browser you signed up in, or email your answers to john@iternal.life.'
       : 'Sending failed — please try again, or email your answers to john@iternal.life.';
   }
 
-  var external = BOOKING_URL.indexOf('http') === 0; // true once the Calendly URL is in
+  function wireBooking(){
+  var external = BOOKING_URL.indexOf('http') === 0; // the worker's booking link
   var bookBtnSuccess = document.getElementById('bookBtnSuccess');
   [bookBtn, bookBtnSuccess].forEach(function(a){
     if (!a) return;
@@ -1077,6 +1092,53 @@ document.head.appendChild(style);
       });
     }
   });
+  }
+
+  var quiz = document.getElementById('quiz'), gate = document.getElementById('gate');
+  function shut(h, p, link){
+    document.getElementById('gateH').textContent = h;
+    document.getElementById('gateP').textContent = p;
+    var a = document.getElementById('gateLink');
+    a.hidden = !link;
+    if (link) a.textContent = link;
+    quiz.hidden = true; gate.hidden = false;
+  }
+  function openSteps(url){
+    BOOKING_URL = url || BOOKING_URL;
+    wireBooking();
+    gate.hidden = true; quiz.hidden = false;
+    // Back from Stripe and paid: sign-up no longer needs to show their order.
+    if (/[?&]paid=1\b/.test(location.search)) {
+      document.getElementById('paidNote').hidden = false;
+      try { localStorage.removeItem('iternal_signup_order'); } catch(e) {}
+    }
+  }
+  var SIGN_UP_FIRST = ['Sign up first', 'Your questions come after you sign up, accept our terms and pay your downpayment. If you signed up in another browser, please carry on there.', 'Sign up →'];
+  // Straight back from Stripe, the page names the payment (session_id) and the
+  // worker asks Stripe about it, so it opens at once; failing that, it waits
+  // a few seconds for Stripe's notice to reach us.
+  var SESSION = (location.search.match(/[?&]session_id=([^&]+)/) || [])[1] || '';
+  function check(tries){
+    fetch(WORKER_URL + '/status', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ email: SIGNUP_EMAIL, token: SIGNUP_TOKEN, session: SESSION })
+    }).then(function(res){ return res.ok ? res.json() : Promise.reject(res.status); }).then(function(st){
+      if (st.paid) return openSteps(st.booking);
+      if (!st.accepted) return shut('Accept our terms first', 'Your questions come after you have reviewed your order, accepted our terms and paid your downpayment.', 'Back to your order →');
+      if (tries > 0) {
+        shut('Confirming your payment', 'This takes a few seconds.');
+        return setTimeout(function(){ check(tries - 1); }, 2000);
+      }
+      shut('Your payment hasn’t come through yet', 'Your questions and call booking open once it has. If you left the payment page before paying, you can pay now.', 'Pay your downpayment →');
+    }, function(status){
+      if (status === 404 || status === 403) return shut.apply(null, SIGN_UP_FIRST);
+      shut('We couldn’t check your payment', 'Please refresh the page in a moment, or email us at john@iternal.life.');
+    });
+  }
+  if (PREVIEW) openSteps();
+  else if (!SIGNUP_EMAIL || !SIGNUP_TOKEN) shut.apply(null, SIGN_UP_FIRST);
+  else { quiz.hidden = true; check(/[?&]paid=1\b/.test(location.search) ? 8 : 0); }
 
   // Save whatever is new when they switch away or close: before booking so the
   // team can follow up someone who stops, after booking because the page

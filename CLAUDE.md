@@ -7,22 +7,26 @@ changing anything.
 
 ## The pipeline, as built (30 Sep 2026)
 
-Sign up → review and accept the Website Build and Care Terms → questions →
-book the call → call → design and build → live. **Accepting forms the
-agreement** (13 Oct 2026). **Nothing on the site takes payment**: the team
-invoices, starting with the first 50% of the build fee on acceptance. Before
-the call, an agent session builds one concept homepage from the client's
-answers.
+Sign up → review and accept the Website Build and Care Terms → pay the
+downpayment on Stripe → questions → book the call → call → design and build →
+live. **Accepting forms the agreement** (13 Oct 2026) and **goes straight to
+the downpayment** on a Stripe Checkout page made for the order (the team's
+client journey, 22 Oct 2026); the booking takes no payment. The final payment
+is completely separate and outside this project. The pre-call concept
+homepage is outside the automation: the team decides whether to build one
+(the worker only flags the client on the dashboard).
 
 - `websites.html` — the gallery, sole funnel entrance (curated; consent
   required per HOUSEKEEPING.md). Eight sites; each opens in a lightbox and
   carries a "Start yours" button that tags the sign-up with that site.
 - `start.html` — sign-up (4 fields, posted straight to the worker), then
   "Review and accept", filled from the order the worker sends back: the
-  order details table, the terms (view or download), two required ticks
-  and "Accept and continue", which posts to `/accept` and goes on to the
-  questions only once the worker has recorded it. That screen's wording
-  was supplied with the terms: keep it word for word.
+  order summary, the nine key points of the terms, "Read the full terms"
+  (a pop-up with the PDF), two required ticks and "Accept and pay £100",
+  which posts to `/accept` and, once the worker has recorded it (with the
+  IP address it came from), goes to the client's Stripe payment page; paid,
+  Stripe returns them to the questions. That screen's wording is the team's
+  sign-up walkthrough, supplied with the terms: keep it word for word.
 - `terms/website-build-and-care-v<version>.html` + `.pdf` — the terms the
   client accepts, as supplied, never edited. A new version is a new pair
   of files (the PDF is printed from the page by `tools/terms-pdf.mjs`),
@@ -33,13 +37,17 @@ answers.
   answers), so most clients see three or four essentials. Answers are saved to the worker as they go (when
   the page is hidden or closed), so the team can follow up anyone who stops;
   the page says so.
-  Identity = the email they type. Booking button → a plain Google Calendar
-  appointment schedule.
+  Identity = the email they type. The page opens only once the worker has
+  the client's payment (`/status`); until then it says which step is
+  missing. Booking button → a plain Google Calendar appointment schedule,
+  whose link comes from the worker then (never in the page). The steps run
+  in order (Robbie, 27 Oct 2026).
 - `worker/` — the only backend (`client-site-funnel` at
-  https://api.iternal.co.uk): `/signup`, `/accept`, `/answers`, `/health`. Every
+  https://api.iternal.co.uk): `/signup`, `/accept`, `/status`, `/answers`, `/health`. Every
   sign-up goes to TWO destinations: the Website Build Platform repo (full
   record, answers included) and the Lead Tracker (a summary; never answers).
-  Nothing in it takes or records payment (Stripe removed 7 Oct 2026). Deploy from
+  It takes no card details: it asks Stripe for each client's payment page
+  and records the payments Stripe reports to `/stripe-webhook`. Deploy from
   `worker/`: `node test-worker.js` MUST pass, then `npx wrangler deploy`.
 - `../website-build-platform/` — a separate repo: the information & demo
   build dashboard. The worker commits `clients/<slug>.json` there; the
@@ -49,12 +57,13 @@ answers.
   Oct 2026 the order states a £100 downpayment + £650 upon completion,
   including VAT; care plan £50 a month including VAT from the month after the
   site goes live, which includes Site Agent (our agentic studio) for the
-  client's own updates. **The terms file (version 1.0, 13 Oct 2026) is
-  invalid** (Robbie, 20-21 Oct 2026): it stays in the preview sign-up only
-  until the real terms are supplied, and no fact, figure, name or promise is
-  ever taken from it, in copy or in reviews. Pages never add a figure,
-  promise or refund the team has not set. Every place a figure is printed is
-  listed in HOUSEKEEPING.md §Payment.
+  client's own updates. **The terms are the Iternal Website Build and Care
+  Terms, version 1.0**, supplied 22 Oct 2026 and confirmed final by Robbie
+  on 27 Oct 2026 (the first public version; it replaced an earlier, invalid
+  draft of the same number that was never public), effective 27 October
+  2026 (Robbie). Pages never add a figure, promise
+  or refund the team has not set. Every place a figure is printed is listed
+  in HOUSEKEEPING.md §Payment.
 - Do not promise a number of concepts ("two or three") anywhere on these
   pages. We show them; we do not announce them.
 - `SITE-CHANGES.md` is the running log of what a visitor would notice, in
@@ -62,12 +71,16 @@ answers.
   same commit, under "Waiting to deploy"; after a deploy, move those lines to
   "Live" under the date and update the version line at the top. It is in
   `.assetsignore`, so it is never published.
-- Clients get one email from us: on accepting, a copy of their order and
-  the terms (PDF attached), as the terms promise, from
+- Clients get one email from us: once they have paid, their confirmation
+  (the order, the booking link, the terms PDF attached), worded as the
+  team's sign-up example, from
   "Iternal <websites@iternal.co.uk>" with replies to john@iternal.life
   (`CLIENT_MAIL`, Cloudflare Email Service). If it cannot send, the team
-  gets it to forward. Google Calendar sends the invite. Team briefs go to
-  john@iternal.life (the one address since 20 Oct 2026) as
+  gets it to forward. Stripe sends the receipt and VAT invoice, Google
+  Calendar the invite. Team briefs go to
+  john@iternal.life (Robbie, 27 Oct 2026: John's schedule takes the calls, so
+  the launch uses his address; the terms still name hello@iternal.life for
+  notices) as
   "Website Pipeline <funnel@iternal.co.uk>" (`TEAM_MAIL`).
 
 ## Currently DISABLED / dark (deliberate — do not "fix")
@@ -92,10 +105,11 @@ answers.
 |---|---|---|---|
 | **Worker /signup, /answers** (ours) | sign-up fields and answers, from the pages | `{ok}` | The page shows success only once the worker has it |
 | **GitHub** (platform repo) | one `clients/<slug>.json` per client: identity and answers (never payment) | file sha, used for the next write | Personal data in a private repo. Token scoped to that one repo. Named as a processor in the privacy draft |
-| **Lead Tracker** (Apps Script, separate `lead-tracker` repo) | `createLead` POSTs on sign-up and on accepting the terms (with `event`), secret-gated (`LEAD_API_SECRET`) | `{ok, id}` and NOTHING else | **WRITE-ONLY. Never read tracker/Sheet data — it is private.** Dedupes by email: repeat posts become notes on the existing record. Never sent answers |
-| **Google Calendar** | the client (we just link to the appointment schedule URL) | nothing to our systems — the invite goes to the client | The schedule lives in Google's UI, not in code. No payment step |
+| **Lead Tracker** (Apps Script, separate `lead-tracker` repo) | `createLead` POSTs on sign-up, on accepting the terms and on payment (with `event`; the record is "Awaiting downpayment" until `paid`), secret-gated (`LEAD_API_SECRET`) | `{ok, id}` and NOTHING else | **WRITE-ONLY. Never read tracker/Sheet data — it is private.** Dedupes by email: repeat posts become notes on the existing record. Never sent answers |
+| **Google Calendar** | the client (we just link to the appointment schedule URL) | nothing to our systems — the invite goes to the client | The schedule lives in Google's UI, not in code. It takes no payment: the client has paid already |
+| **Stripe** (Checkout) | on accepting, a Checkout Session per visit: the dashboard's Price and VAT rate, the client's email and reference, `metadata.funnel = website-build` (restricted `STRIPE_API_KEY`: Checkout Sessions write only) | the payment page's URL; then `checkout.session.completed` to `/stripe-webhook`, signed with `STRIPE_WEBHOOK_SECRET` | Only our own paid pages concern the funnel; every other payment on the account is ignored. Matched to the order by reference, recorded once in KV, confirmed to the client, briefed to the team and noted in the tracker; never sent to the platform repo. A payment for an order already paid, or with no record, still emails the team |
 | **Cloudflare Email Routing** | team briefs | — | Every recipient must be a verified destination |
-| **Cloudflare Email Service** | the client's copy of their order and terms | message id | Sends from iternal.co.uk once it is onboarded as a sending domain (Workers Paid). A failure emails the team the copy to forward |
+| **Cloudflare Email Service** | the client's confirmation once they have paid, with the terms attached | message id | Sends from iternal.co.uk once it is onboarded as a sending domain (Workers Paid). A failure emails the team the text to forward |
 | **Slack** | nothing directly — pings come from the Lead Tracker | — | |
 | **GitHub Action** (`.github/workflows/screenshots.yml`) | weekly gallery screenshot refresh commits | — | Gallery additions touch FOUR places — see HOUSEKEEPING.md |
 
@@ -106,23 +120,25 @@ fallback constant in questions.html.
 
 1. Create the private GitHub repo for `../website-build-platform`, push it,
    and set the worker's `PIPELINE_TOKEN`.
-2. Verify john@iternal.life as an Email Routing destination (since 20 Oct
-   2026 it receives the briefs and clients' replies; websites@iternal.life
-   can follow), then deploy the worker.
+2. Deploy the worker (john@iternal.life, a verified Email Routing
+   destination, receives the briefs and clients' replies).
 3. Deploy the site (held: only on Robbie's word, named in that moment).
 4. `?team` walkthrough: one real sign-up should yield a client file, a
    tracker row and both briefs.
-5. ~~Decide how payment is requested~~ Settled by the terms (13 Oct 2026):
-   the team invoices 50% on acceptance and 50% on completion.
+5. Payment: the £100 downpayment is paid on Stripe Checkout straight after
+   accepting (the team's client journey, 22 Oct 2026); the final payment is
+   separate, outside this project. Setup steps (Price, VAT rate, restricted
+   key, webhook event): HOUSEKEEPING.md §Payment.
 6. Show the team the current front end — they have not seen the gallery,
    lightbox or question changes. They want the prospect experience to take
    its cue from the sleekness of existing sites; redesign after they have
    seen what exists.
-7. Legal: the Website Build and Care Terms, supplied 13 Oct 2026 and
-   accepted online at the end of sign-up (they replace the earlier plan of
-   a contract signed after the call). No separate privacy and legal
-   review; agents never draft, edit or decide terms, and place supplied
-   wording word for word.
+7. Legal: the Iternal Website Build and Care Terms, version 1.0 (final
+   27 Oct 2026, effective 27 October 2026), accepted online at the end of
+   sign-up. Agents never draft, edit or decide terms,
+   and place supplied wording word for word. The one change from the
+   supplied text is Robbie's (27 Oct 2026): "web agent" reads "Site Agent"
+   (clauses 3 and 10, and the key points).
 8. bplaced-site production deploy (`npx wrangler pages deploy --branch
    main` from that repo) so its gallery card opens in the lightbox.
 9. Stale artefacts: the StateCraft diagram
