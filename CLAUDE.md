@@ -125,19 +125,16 @@ the worker's `/signup` verifies the token once `TURNSTILE_SECRET` is set.
 Order matters: site key in and the site deployed BEFORE the secret is set, or
 every sign-up is refused.
 
-## Current to-do (30 Sep 2026)
+## Current to-do (27 Oct 2026)
 
-1. Create the private GitHub repo for `../website-build-platform`, push it,
-   and set the worker's `PIPELINE_TOKEN`.
-2. Deploy the worker (john@iternal.life, a verified Email Routing
-   destination, receives the briefs and clients' replies).
-3. Deploy the site (held: only on Robbie's word, named in that moment).
-4. `?team` walkthrough: one real sign-up and acceptance should yield a
-   client file and a tracker row; with payment, the team's one email.
-5. Payment: the £100 downpayment is paid on Stripe Checkout straight after
-   accepting (the team's client journey, 22 Oct 2026); the final payment is
-   separate, outside this project. Setup steps (Price, VAT rate, restricted
-   key, webhook event): HOUSEKEEPING.md §Payment.
+Everything for the switch-on (what is done, what is left, the lighting-up
+edits and the live check) is HOUSEKEEPING.md §Go-live; keep it there.
+
+1-5. Done: platform repo and token, worker deployed (john@), site merged
+   (pull requests #7 and #8, still dark), Stripe Checkout set up and proved.
+   Left before switching on: Robbie sets `TURNSTILE_SECRET` (and deletes
+   `MAGIC_SECRET`), one `?team` test run (ideally paid and refunded), the
+   team's run-through. Then LIGHTING UP on Robbie's word.
 6. Show the team the current front end — they have not seen the gallery,
    lightbox or question changes. They want the prospect experience to take
    its cue from the sleekness of existing sites; redesign after they have
