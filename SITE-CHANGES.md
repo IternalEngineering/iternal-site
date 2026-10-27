@@ -12,6 +12,11 @@ Last deploy: **22 Oct 2026, the website rework** (pull request #6; pushing to ma
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
 #### Website sign-up (still hidden)
+- **The steps run in order**: the questions page opens only once the payment has gone
+  through. Until then it says what is missing ("Sign up first", "Accept our terms first",
+  "Your payment hasn't come through yet") with a link back; straight back from Stripe it
+  shows "Confirming your payment" for the few seconds that takes. The booking link is no
+  longer in the page: it arrives once the client has paid. (stripe-bookings)
 - **hello@iternal.life is the sign-up's address**: the "email us" messages on the sign-up and
   questions pages, replies to the client's confirmation, and the team's briefs (was
   john@iternal.life). (stripe-bookings)

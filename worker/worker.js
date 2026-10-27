@@ -23,6 +23,10 @@
  *                         and answers with their Stripe payment page.
  *                         Accepting again (back from Stripe unpaid) answers
  *                         with a fresh payment page and nothing else.
+ *   POST /status          The questions page asks where the client is: the
+ *                         questions and the booking open only once they have
+ *                         paid, and only then does it answer with the
+ *                         booking link.
  *   POST /answers        The questions page posts drafts/finals here, keyed
  *                         by the email they give in the first question. The
  *                         first answers queue the pre-call demo build
@@ -565,10 +569,10 @@ async function handleAnswers(request, env, ctx) {
   // An archived client may still have the questions page open; a late answer
   // must not bring their record back.
   if (!stored && await leftThePlatform(env, email)) return json(200, { ok: true }, cors);
-  // Answers belong to a client who signed up and accepted the terms (the page
-  // only leads to the questions after both). A page saving by itself is
+  // Answers belong to a client who signed up, accepted the terms and paid (the
+  // page only opens the questions after all three). A page saving by itself is
   // ignored; a booking or a send is told to finish signing up.
-  if (!stored || !stored.acceptance) return quiet ? json(200, { ok: true }, cors) : json(409, { error: 'finish signing up first' }, cors);
+  if (!stored || !stored.acceptance || !stored.payment) return quiet ? json(200, { ok: true }, cors) : json(409, { error: 'finish signing up first' }, cors);
   const existing = stored;
   if (s(body.token, 100) !== existing.token) {
     return json(403, { error: 'not the browser that signed up' }, cors);
@@ -592,6 +596,25 @@ async function handleAnswers(request, env, ctx) {
   ]));
 
   return json(200, { ok: true }, cors);
+}
+
+/** Where a client is in the steps, for the questions page: it opens the
+    questions and the booking only once they have paid, and the booking link
+    comes from here, so it reaches nobody who has not paid. */
+async function handleStatus(request, env) {
+  const cors = corsHeaders(env);
+  let body;
+  try {
+    const raw = await request.text();
+    if (raw.length > 2048) return json(400, { error: 'too large' }, cors);
+    body = JSON.parse(raw);
+  } catch (e) { return json(400, { error: 'bad json' }, cors); }
+  const email = s(body.email, 120).toLowerCase();
+  const kv = EMAIL.test(email) ? await env.CLIENTS.get(`lead:${email}`, 'json') : null;
+  if (!kv || !kv.token) return json(404, { error: 'sign up first' }, cors);
+  if (s(body.token, 100) !== kv.token) return json(403, { error: 'not the browser that signed up' }, cors);
+  const paid = !!kv.payment;
+  return json(200, { ok: true, accepted: !!kv.acceptance, paid, ...(paid ? { booking: env.BOOKING_URL } : {}) }, cors);
 }
 
 /* ── The downpayment ─────────────────────────────────────────────────────
@@ -749,6 +772,7 @@ export default {
     if (url.pathname === '/signup' && request.method === 'POST') return handleSignup(request, env, ctx);
     if (url.pathname === '/accept' && request.method === 'POST') return handleAccept(request, env, ctx);
     if (url.pathname === '/answers' && request.method === 'POST') return handleAnswers(request, env, ctx);
+    if (url.pathname === '/status' && request.method === 'POST') return handleStatus(request, env);
     if (url.pathname === '/stripe-webhook' && request.method === 'POST') return handleStripeWebhook(request, env, ctx);
     return json(404, { error: 'not found' });
   },

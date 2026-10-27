@@ -111,10 +111,21 @@ the token awaits org approval), so the worker can deploy regardless.
   record whose token does not match — knowing an email is not enough to
   rewrite someone's brief. A client on a different browser gets a message
   pointing them to hello@iternal.life.
-- Answers count only from a client who has signed up and accepted the
-  terms: a booking or send from anyone else is refused (409; the page asks
-  them to finish signing up first), and a page saving by itself is ignored.
-  So nothing reaches the dashboard's demo queue without an agreement.
+- The steps run in order (Robbie, 27 Oct 2026): sign up, accept, pay, then
+  the questions and the booking. `/status` (`{email, token}`) answers
+  `{accepted, paid}`, plus `booking` (the `BOOKING_URL` link) once paid; the
+  questions page shows the questions and the booking only then, and
+  otherwise says what is missing ("Sign up first", "Accept our terms
+  first", "Your payment hasn't come through yet", each linking back to
+  start.html). Straight back from Stripe (`?paid=1`) it asks every 2
+  seconds for up to 16 seconds, since the webhook can land after the
+  client does. The booking link is in no page, so only paid clients get
+  it (the confirmation email carries it too).
+- Answers count only from a client who has signed up, accepted the terms
+  and paid: a booking or send from anyone else is refused (409; the page
+  asks them to finish signing up first), and a page saving by itself is
+  ignored. So nothing reaches the dashboard's demo queue without an
+  agreement and the downpayment.
 - Answers reach the platform as the prospect goes: whenever they switch
   away from or close the questions page with answers newer than the last
   send (`update`), on "Book your call" (`partial`, which records `bookedAt`)
@@ -284,14 +295,16 @@ VAT invoice, Google Calendar the booking invite.
   shows success only once the worker has the sign-up.
 - `questions.html` `WORKER_URL` — `https://api.iternal.co.uk`; an empty
   string falls back to FormSubmit (the pre-worker path, not in use).
-- `questions.html` `BOOKING_URL` — the website-build meeting. From 22 Oct 2026 the
-  schedule lives in the hello@iternal.life Google account and takes no payment
-  (the client paid on accepting, §Payment); until its link is in, this still holds
-  John's "Disco Meeting" (https://calendar.app.google/fNGuEjKBSpoPMhAL6). It is
-  strictly for website-build meetings (Robbie): every other "Book a Call" / "Book
-  a Discovery Call" goes to /contact, and those discovery calls stay "30 minutes".
-  The confirmation email links the same schedule: `BOOKING_URL` in
-  `worker/wrangler.toml`. Change both together.
+- The booking link — the website-build meeting — lives only in
+  `worker/wrangler.toml` `BOOKING_URL` (27 Oct 2026): the questions page gets
+  it from `/status` once the client has paid, and the confirmation email
+  carries it. From 22 Oct 2026 the schedule lives in the hello@iternal.life
+  Google account and takes no payment (the client paid on accepting,
+  §Payment); until its link is in, this still holds John's "Disco Meeting"
+  (https://calendar.app.google/fNGuEjKBSpoPMhAL6). It is strictly for
+  website-build meetings (Robbie): every other "Book a Call" / "Book a
+  Discovery Call" goes to /contact, and those discovery calls stay
+  "30 minutes".
 
 ## Go-live (dark launch)
 

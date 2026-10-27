@@ -108,12 +108,17 @@ await drain();
 assert.ok(!store.get('lead:sam@brightpaws.co.uk'));
 assert.strictEqual(outbound.length + teamMail.length + clientMail.length, 0);
 
-// signed up and accepted: answers are stored on the lead record and briefed
-// to the team; the tracker never receives answers
+// signed up, accepted and paid: answers are stored on the lead record and
+// briefed to the team; the tracker never receives answers
 r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'Sam', lastName: 'Okafor', email: 'Sam@BrightPaws.co.uk', organisation: 'Bright Paws' }) });
-const { token: samToken } = await r.json();
+const { token: samToken, order: samOrder } = await r.json();
 r = await call('/accept', { method: 'POST', body: JSON.stringify({ email: 'sam@brightpaws.co.uk', token: samToken, termsVersion: '1.0', accepted: true, authorised: true }) });
 assert.strictEqual(r.status, 200);
+await drain();
+// accepted but not paid yet: the questions stay shut, answers refused
+assert.strictEqual((await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'sam@brightpaws.co.uk', token: samToken, kind: 'complete', answers: { mainJob: 'x' } }) })).status, 409);
+assert.ok(!JSON.parse(store.get('lead:sam@brightpaws.co.uk')).answers);
+assert.strictEqual((await stripe(paidSession('cs_sam', samOrder.reference))).status, 200);
 await drain();
 outbound = []; teamMail.length = 0; clientMail.length = 0;
 r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'Sam@BrightPaws.co.uk', token: samToken, kind: 'complete', answers: { mainJob: 'Take bookings', audience: 'gift buyers', pages: ['Home', 'Contact'] } }) });
@@ -617,6 +622,24 @@ outbound = []; teamMail.length = 0;
   await drain();
   assert.ok(!JSON.parse(store.get('lead:lee@solo.co.uk')).answers);
   assert.strictEqual(teamMail.length, 0);
+}
+// where a client is: the booking link only once they have paid, and only to
+// the browser that signed up
+{
+  const status = body => call('/status', { method: 'POST', body: JSON.stringify(body) });
+  assert.strictEqual((await status({ email: 'nobody@x.co.uk', token: 't' })).status, 404);
+  assert.strictEqual((await status({ email: 'omar@kilnworks.co.uk', token: 'guess' })).status, 403);
+  const lee = JSON.parse(store.get('lead:lee@solo.co.uk'));
+  r = await status({ email: 'lee@solo.co.uk', token: lee.token });
+  assert.deepStrictEqual(await r.json(), { ok: true, accepted: false, paid: false });
+  r = await call('/signup', { method: 'POST', body: JSON.stringify({ firstName: 'Una', email: 'una@unpaid.co.uk', organisation: 'Unpaid Ltd' }) });
+  const una = await r.json();
+  await call('/accept', { method: 'POST', body: JSON.stringify({ email: 'una@unpaid.co.uk', token: una.token, termsVersion: '1.0', accepted: true, authorised: true }) });
+  r = await status({ email: 'Una@Unpaid.co.uk', token: una.token });
+  assert.deepStrictEqual(await r.json(), { ok: true, accepted: true, paid: false }); // no booking link
+  r = await status({ email: 'omar@kilnworks.co.uk', token: omarToken });
+  assert.deepStrictEqual(await r.json(), { ok: true, accepted: true, paid: true, booking: 'https://calendar.example/book' });
+  await drain();
 }
 // Sam's answers reach the dashboard too, now the feed is on
 r = await call('/answers', { method: 'POST', body: JSON.stringify({ email: 'sam@brightpaws.co.uk', token: samToken, kind: 'partial', answers: { pages: ['Home'] } }) });

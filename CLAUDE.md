@@ -37,10 +37,13 @@ homepage is outside the automation: the team decides whether to build one
   answers), so most clients see three or four essentials. Answers are saved to the worker as they go (when
   the page is hidden or closed), so the team can follow up anyone who stops;
   the page says so.
-  Identity = the email they type. Booking button → a plain Google Calendar
-  appointment schedule.
+  Identity = the email they type. The page opens only once the worker has
+  the client's payment (`/status`); until then it says which step is
+  missing. Booking button → a plain Google Calendar appointment schedule,
+  whose link comes from the worker then (never in the page). The steps run
+  in order (Robbie, 27 Oct 2026).
 - `worker/` — the only backend (`client-site-funnel` at
-  https://api.iternal.co.uk): `/signup`, `/accept`, `/answers`, `/health`. Every
+  https://api.iternal.co.uk): `/signup`, `/accept`, `/status`, `/answers`, `/health`. Every
   sign-up goes to TWO destinations: the Website Build Platform repo (full
   record, answers included) and the Lead Tracker (a summary; never answers).
   It takes no card details: it asks Stripe for each client's payment page

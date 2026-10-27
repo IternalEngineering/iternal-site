@@ -43,8 +43,8 @@ PIPELINE_REPO = "IternalEngineering/website-build-platform"
 # TERMS.downpayment in worker.js (HOUSEKEEPING.md §Payment).
 STRIPE_PRICE = "price_1UTLN4JaKTbTS7qBd2deRD6J"
 STRIPE_TAX_RATE = "txr_1UTkLLJaKTbTS7qB9pZbYNzp"
-# The booking page linked from the confirmation email. Same schedule as
-# BOOKING_URL in questions.html: change both together.
+# The booking page (hello@iternal.life's schedule). Its only home: paid
+# clients get it from /status on the questions page and in the confirmation email.
 BOOKING_URL = "https://calendar.app.google/fNGuEjKBSpoPMhAL6"
 
 # Secrets — set each with: wrangler secret put <NAME>
