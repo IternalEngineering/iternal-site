@@ -244,9 +244,9 @@ the token awaits org approval), so the worker can deploy regardless.
   the platform repo.
 
   Not built yet (in the team's journey, waiting on Robbie): the reminder on
-  day 3 and cancelling the order on day 7 when the £100 is not paid; the
-  team's `ITL-…` reference format (we issue `WB-yymm-XXXX`); the nine key
-  points and terms pop-up on the review screen (with the new terms).
+  day 3 and cancelling the order on day 7 when the £100 is not paid (the
+  tracker shows these records as "Awaiting downpayment"); the team's `ITL-…`
+  reference format (we issue `WB-yymm-XXXX`).
 
 ## Team briefs (email)
 
