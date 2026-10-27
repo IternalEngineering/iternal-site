@@ -5,11 +5,22 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **27 Oct 2026, the sign-up's bot check and one team email per paid client** (pull request #8; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
+Last deploy: **27 Oct 2026, Websites goes public** (main 046a9d6 and the bPlaced gallery fix after it; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
+
+Nothing waiting.
+
+---
+
+## Live
+
+### 27 Oct 2026, Websites goes public
+
+The website sign-up is switched on (Robbie's "deploy the site"), with the front-end audit's
+fixes, and bPlaced's gallery card moved to a new tab straight after.
 
 #### Website sign-up goes public
 - **Websites is open**: the Websites entry on Services and the row on the homepage are shown,
@@ -26,9 +37,9 @@ Last deploy: **27 Oct 2026, the sign-up's bot check and one team email per paid 
   sign-up's data line now reads "We use your details only to work with you on your site."
   (lighting up)
 
----
-
-## Live
+#### Websites gallery
+- **bPlaced opens in a new tab**: its site refuses to be shown inside ours, so its preview
+  was blank; the other seven still open in the gallery's viewer.
 
 ### 27 Oct 2026, the sign-up's bot check and one team email per paid client (pull request #8)
 

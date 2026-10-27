@@ -36,7 +36,10 @@ together:
    file (AGF, pawlett-pavilion and bplaced-site got this Sept 2026 — copy
    that pattern, and never ship a plain `X-Frame-Options` on a gallery
    site). A site that blocks framing gets no `data-embed` and falls back to
-   a new tab.
+   a new tab. bPlaced is one for now: its live site still sends
+   `frame-ancestors 'self'` and `X-Frame-Options: SAMEORIGIN` (checked 27 Oct
+   2026; its framing change in bplaced-site was never deployed), so its card
+   opens a new tab. Put `data-embed` back once that deploy is out.
 2. `worker/worker.js` — the `GALLERY_SITES` slug→name map (the whitelist
    that turns `?from=` into the client record's `inspiration` and the
    tracker note "Came in from the … example"); redeploy the worker after
