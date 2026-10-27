@@ -230,8 +230,8 @@ the token awaits org approval), so the worker can deploy regardless.
   (`checkoutUrl`): the Price and tax rate, the client's email, their
   reference as `client_reference_id` and on the VAT invoice Stripe sends
   (`invoice_creation`), "<company>: upfront payment towards your website
-  build fee (<reference>)." above the pay button, billing address and an
-  optional VAT number, `metadata.funnel = website-build`. Paid, Stripe sends
+  build fee (<reference>)." above the pay button, and asks for nothing but the
+  card (no name or billing address: Robbie, 27 Oct 2026), `metadata.funnel = website-build`. Paid, Stripe sends
   them to `/questions?paid=1` ("Thank you, your payment has been received.");
   back without paying, to `/start`, which still shows their order to accept
   and pay again. `handleStripeWebhook` acts only on a paid

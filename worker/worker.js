@@ -637,8 +637,6 @@ async function checkoutUrl(env, kv) {
     client_reference_id: acc.reference,
     'metadata[funnel]': FUNNEL,
     'custom_text[submit][message]': `${acc.company}: upfront payment towards your website build fee (${acc.reference}).`,
-    billing_address_collection: 'required',
-    'tax_id_collection[enabled]': 'true',
     'invoice_creation[enabled]': 'true',
     'invoice_creation[invoice_data][custom_fields][0][name]': 'Reference',
     'invoice_creation[invoice_data][custom_fields][0][value]': acc.reference,

@@ -30,7 +30,7 @@ Last deploy: **22 Oct 2026, the website rework** (pull request #6; pushing to ma
   business name". (stripe-bookings)
 - **The downpayment is paid straight after accepting**, as in the team's client journey:
   "Review and accept" ends with "Accept and pay £100", which opens a Stripe payment page
-  made for the order (their reference shown, billing address, optional VAT number, a VAT
+  made for the order (their reference shown, their email filled in, nothing else to type but the card, a VAT
   invoice from Stripe). Paid, they land on the questions page with "Thank you, your payment
   has been received."; back without paying, their order is still there to accept and pay.
   The sign-up's steps read Sign up, Review and accept, Pay your downpayment, Your
