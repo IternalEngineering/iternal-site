@@ -118,7 +118,9 @@ fallback constant in questions.html (and still carries the contact page's
 enquiries, which are left as they are: Robbie, 27 Oct 2026).
 
 **Bot check (Cloudflare Turnstile)** on the sign-up only: `turnstile.js` adds
-the widget to forms marked `data-turnstile` (site key in that file, public);
+the widget to forms marked `data-turnstile` (site key in that file, public;
+widget "iternal.co.uk website sign-up", Managed, iternal.co.uk + www, made
+with `wrangler turnstile widget create` on 27 Oct 2026);
 the worker's `/signup` verifies the token once `TURNSTILE_SECRET` is set.
 Order matters: site key in and the site deployed BEFORE the secret is set, or
 every sign-up is refused.

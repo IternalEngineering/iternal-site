@@ -4,7 +4,7 @@
    SITE_KEY is public. While it is empty no widget loads and the forms send no
    token, so set it here (and deploy) before setting the secret, never after. */
 (function () {
-  var SITE_KEY = '';
+  var SITE_KEY = '0x4AAAAAAFoRXVvuLsqvURGh'; // widget "iternal.co.uk website sign-up"
   window.turnstileToken = function (form) {
     var input = form.querySelector('[name="cf-turnstile-response"]');
     return input ? input.value : '';
