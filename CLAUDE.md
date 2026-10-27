@@ -85,19 +85,16 @@ homepage is outside the automation: the team decides whether to build one
 
 ## Currently DISABLED / dark (deliberate — do not "fix")
 
-- **Dark launch**: no public page on main links to the funnel. The Websites
-  entry on Services and the homepage row are in the pages but `hidden`, and
-  the contact form has no Websites option (HOUSEKEEPING.md §Go-live step 1).
-  websites.html and
-  start.html are `noindex`; sitemap never lists them. Lighting up = the
-  checklist in HOUSEKEEPING.md §Go-live, done on main on the day.
-- **Preview** (`preview.js`, on start.html and questions.html): every
-  screen can be stepped through, empty fields included, but nothing is
-  sent and no call is booked; a gold banner says "Sign-ups and call
-  bookings aren't live yet." `?team` switches to the real sign-up for the
-  browser tab (`?team=off` switches back). Removed at light-up.
-- **The pipeline feed** is off until `PIPELINE_TOKEN` is set on the worker.
-- `privacy.html` exists but is deliberately unlinked pending legal review.
+- **The website sign-up is PUBLIC since 27 Oct 2026** (lit on Robbie's
+  word): Websites shows on Services and the homepage, the contact form offers
+  Websites, websites.html and start.html are indexed and in the sitemap and
+  llms.txt. `preview.js` is now just `var PREVIEW = false;`: the `PREVIEW`
+  branches left in start.html and questions.html (and `?team`) are dead code,
+  a later tidy-up.
+- `privacy.html` exists but is deliberately unlinked: the sign-up launched
+  without a privacy page (Robbie, 27 Oct 2026: "the terms should cover all
+  that"; the terms' clause 18 covers clients' own sites' data, not the
+  sign-up's, which he was told). His call, not ours.
 
 ## Third parties — what we feed them, what comes back
 

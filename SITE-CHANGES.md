@@ -11,7 +11,11 @@ Last deploy: **27 Oct 2026, the sign-up's bot check and one team email per paid 
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-Nothing waiting.
+#### Website sign-up goes public
+- **Websites is open**: the Websites entry on Services and the row on the homepage are shown,
+  the contact form offers "Websites", and the sign-up runs for real for everyone: no gold
+  "aren't live yet" banner, and the gallery and sign-up pages can be found by search engines
+  (sitemap and llms.txt list Websites). (lighting up)
 
 ---
 

@@ -393,6 +393,13 @@ terms' notices address); websites@iternal.life for the briefs if wanted;
 remove the dead `PREVIEW` code (below, step 4); refresh the gallery's Jay's
 Transport card if their site changes.
 
+**LIT on 27 Oct 2026** (Robbie, on the day: "Can we switch it on?"), in
+one commit on main, steps 1 to 5 below. Launched without the paid `?team`
+test (the first real payment proves Stripe's notice) and without a privacy
+page (Robbie: the terms should cover it). Left from the lists above: the
+`MAGIC_SECRET` delete, the team's run-through, Robbie's decisions and the
+follow-ups.
+
 LIGHTING UP (when the team says go). Made directly on main on the day,
 never prepared ahead: a deploy ships main, so these edits can only land
 when the answer is go. About ten minutes; one commit, then the deploy on
