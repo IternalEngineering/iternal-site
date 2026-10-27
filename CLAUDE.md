@@ -132,9 +132,9 @@ fallback constant in questions.html.
 7. Legal: the Iternal Website Build and Care Terms, version 1.0 (final
    27 Oct 2026), accepted online at the end of sign-up. The effective date
    is still to come from Robbie. Agents never draft, edit or decide terms,
-   and place supplied wording word for word. They say "web agent" (clauses
-   3 and 10, and the key points) where the site says Site Agent: that is
-   the team's wording to change, not ours.
+   and place supplied wording word for word. The one change from the
+   supplied text is Robbie's (27 Oct 2026): "web agent" reads "Site Agent"
+   (clauses 3 and 10, and the key points).
 8. bplaced-site production deploy (`npx wrangler pages deploy --branch
    main` from that repo) so its gallery card opens in the lightbox.
 9. Stale artefacts: the StateCraft diagram

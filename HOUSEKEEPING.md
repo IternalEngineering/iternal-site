@@ -150,7 +150,8 @@ the token awaits org approval), so the worker can deploy regardless.
   Care Terms, version 1.0 (`terms/website-build-and-care-v1.0.html` +
   `.pdf`), were supplied 22 Oct 2026 and confirmed final on 27 Oct 2026;
   they are placed word for word (checked word by word against the supplied
-  PDF) and replaced an earlier draft of the same number that was never
+  PDF), except "web agent", which reads "Site Agent" on Robbie's word (27 Oct
+  2026), and replaced an earlier draft of the same number that was never
   public. Their effective date is "[date]" until Robbie gives it: one place
   in the page, then reprint the PDF. They fix the £100 upfront payment and
   leave the rest of the build fee and the care plan fee to the order
