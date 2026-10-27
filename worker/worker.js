@@ -731,7 +731,7 @@ async function handleStripeWebhook(request, env, ctx) {
 Stripe: ${o.id}`),
     postToLeadTracker(env, {
       org: acc.company, contact: acc.name, email, reference: acc.reference,
-      source: 'website funnel', message: `Paid ${paid} via Stripe (${o.id}).`,
+      source: 'website funnel', event: 'paid', message: `Paid ${paid} via Stripe (${o.id}).`,
     }),
   ]));
   return json(200, { received: true });

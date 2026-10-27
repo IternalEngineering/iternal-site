@@ -147,10 +147,10 @@ the token awaits org approval), so the worker can deploy regardless.
   a failure), or a platform sync GitHub rejects (expired token, slug clash,
   bad file), emails the team a "FAILED" brief naming the client. Worker logs
   are retained (`[observability]` in wrangler.toml).
-- Tracker posts carry `event` (`signed-up` or `accepted`); the tracker
-  words its Slack ping by it. Its "accepted" ping still says to invoice the
-  downpayment: update `apps-script/LeadApi.gs` (and redeploy the tracker)
-  now that the client pays it on accepting.
+- Tracker posts carry `event` (`signed-up`, `accepted` or `paid`); the
+  tracker words its Slack ping by it. A website record starts as "Awaiting
+  downpayment" and turns Active on `paid` (lead-tracker, 27 Oct 2026: needs
+  the tracker's public API redeployed as well as this worker).
 - After the first deploy of this code, delete the secret it no longer uses:
   `npx wrangler secret delete MAGIC_SECRET`. Keep `STRIPE_WEBHOOK_SECRET`:
   `/stripe-webhook` needs it.

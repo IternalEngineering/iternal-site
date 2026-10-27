@@ -363,6 +363,7 @@ const omarRef = omarOrder.reference;
   assert.strictEqual(outbound.length, 1);
   assert.strictEqual(outbound[0].body.reference, omarRef);
   assert.strictEqual(outbound[0].body.message, 'Paid £100 via Stripe (cs_test_2).');
+  assert.strictEqual(outbound[0].body.event, 'paid'); // the tracker turns the record Active by this
   assert.strictEqual(gh.calls.length, ghWrites);
   assert.ok(!('payment' in ghFile(slug)));
 }
