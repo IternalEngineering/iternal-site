@@ -87,7 +87,9 @@ async function sendTeamEmail(env, subject, text) {
   const recipients = String(env.TEAM_EMAIL || '').split(',').map(a => a.trim()).filter(Boolean);
   subject = String(subject).replace(/[\r\n]+/g, ' '); // client text reaches subjects; a line break would forge headers
   const results = await Promise.allSettled(recipients.map(to => {
+    // Cloudflare refuses a message without a Message-ID ("invalid message-id").
     const raw = 'From: ' + from + '\r\n' + 'To: ' + to + '\r\n' +
+      'Message-ID: <' + crypto.randomUUID() + '@' + bare(from).split('@')[1] + '>\r\n' +
       'Subject: ' + subject + '\r\n' + 'Date: ' + new Date().toUTCString() + '\r\n' +
       'Content-Type: text/plain; charset=utf-8' + '\r\n\r\n' + text;
     return env.TEAM_MAIL.send(EmailMessage ? new EmailMessage(bare(from), bare(to), raw) : { from, to, raw });
@@ -683,7 +685,8 @@ async function fetchPaidSession(env, id) {
       headers: { authorization: `Bearer ${env.STRIPE_API_KEY}` },
     });
     const o = await res.json();
-    return res.ok && o.payment_status === 'paid' && o.metadata && o.metadata.funnel === FUNNEL ? o : null;
+    if (!res.ok) throw new Error(`Stripe ${res.status}${o.error ? ' — ' + o.error.message : ''}`);
+    return o.payment_status === 'paid' && o.metadata && o.metadata.funnel === FUNNEL ? o : null;
   } catch (e) {
     console.error('payment check FAILED:', e && e.message ? e.message : e, id);
     return null;

@@ -144,6 +144,7 @@ assert.strictEqual(outbound.length, 0); // no tracker post, no client email
 assert.strictEqual(gh.calls.length, 0); // pipeline feed is off until PIPELINE_TOKEN is set
 assert.strictEqual(teamMail.length, 1);
 assert.strictEqual(teamMail[0].to, env.TEAM_EMAIL);
+assert.ok(/^Message-ID: <[0-9a-f-]+@iternal\.co\.uk>\r$/m.test(teamMail[0].raw)); // Cloudflare refuses mail without one
 // answers rendered as full question wording, question order, arrays joined
 assert.ok(teamMail[0].raw.includes('Who do you most want the site to reach?\n  gift buyers'));
 assert.ok(teamMail[0].raw.includes('Which pages do you think you need?\n  Home, Contact'));

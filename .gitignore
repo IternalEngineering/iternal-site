@@ -6,3 +6,5 @@ Iternal Logos/
 iternal-review.html
 node_modules/
 .vercel/
+.dev.vars
+.wrangler/
