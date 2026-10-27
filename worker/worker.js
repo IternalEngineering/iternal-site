@@ -457,19 +457,10 @@ async function handleSignup(request, env, ctx) {
   existing.reference = existing.reference || await newReference(env, email);
   await env.CLIENTS.put(key, JSON.stringify(existing));
 
-  // Two destinations plus the team brief, all independent: one failing must
-  // not stop the others.
+  // Both destinations, independent: one failing must not stop the other. No
+  // team email here: the acceptance brief follows within moments (Robbie, 27
+  // Oct 2026: two emails in quick succession), and the tracker pings Slack.
   ctx.waitUntil(Promise.allSettled([
-    sendTeamEmail(env,
-      `Website Pipeline: new sign-up — ${org}`,
-      `${name || email} signed up for a website build.
-
-Email: ${email}
-Organisation: ${org}
-Website: ${website || 'none given'}
-Reference: ${existing.reference}${inspiration ? '\nCame in from the ' + inspiration + ' example in the gallery.' : ''}
-
-Next they review their order and accept the terms; a brief follows when they do.`),
     postToLeadTracker(env, {
       org, contact: name || email, email, website, reference: existing.reference,
       source: 'website funnel', event: 'signed-up',
@@ -523,6 +514,7 @@ async function handleAccept(request, env, ctx) {
 
 ${orderText(acc)}
 Accepted: ${ukTime(acc.acceptedAt)} (UK time)
+Website: ${kv.website || 'none given'}${kv.inspiration ? '\nCame in from the ' + kv.inspiration + ' example in the gallery.' : ''}
 
 They pay the £${acc.downpayment} downpayment (including VAT) next, on Stripe's payment page. A brief follows when it lands, and their confirmation email goes then. £${acc.completion} (including VAT) follows on completion.
 Their questions come after paying; a brief follows when they answer.`),

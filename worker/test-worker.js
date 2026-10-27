@@ -174,11 +174,8 @@ await drain();
   assert.strictEqual(outbound[0].body.reference, lead.reference); // its own column in the tracker
   assert.strictEqual(store.get('ref:' + lead.reference), 'nadia@harbourlightcafe.co.uk'); // claimed for good
   assert.ok(outbound[0].body.message.includes('Pawlett Pavilion example'));
-  // the worker briefs the team itself — no third-party relay in the sign-up
-  assert.strictEqual(teamMail.length, 1);
-  assert.ok(teamMail[0].raw.includes('Subject: Website Pipeline: new sign-up — Harbourlight Cafe'));
-  assert.ok(teamMail[0].raw.includes('Email: nadia@harbourlightcafe.co.uk'));
-  assert.ok(teamMail[0].raw.includes('Reference: ' + lead.reference));
+  // no team email at sign-up: the acceptance brief follows within moments
+  assert.strictEqual(teamMail.length, 0);
 }
 // a bot that fills the honeypot gets an OK and leaves no trace anywhere
 outbound = []; teamMail.length = 0;
@@ -316,6 +313,8 @@ await drain();
   assert.ok(brief && brief.raw.includes('They pay the £100 downpayment (including VAT) next, on Stripe\'s payment page.'));
   assert.ok(brief.raw.includes('£650 (including VAT) follows on completion'));
   assert.ok(!brief.raw.includes('book their call:'));
+  // what the dropped sign-up email used to carry
+  assert.ok(brief.raw.includes('Website: kilnworks.co.uk\nCame in from the bPlaced example in the gallery.'));
   const note = outbound.find(o => o.url.includes('action=createLead'));
   assert.strictEqual(note.body.event, 'accepted');
   assert.ok(note.body.message.includes('Accepted the Iternal Website Build and Care Terms, version 1.0 (reference ' + acc.reference + ')'));
@@ -757,8 +756,12 @@ teamMail.length = 0;
 }
 
 // client text in a subject cannot forge mail headers
+r = await call('/signup', { method: 'POST', body: JSON.stringify({ email: 'crlf@test.co.uk', firstName: 'Eve', organisation: 'Evil\r\nBcc: victim@example.com' }) });
+assert.strictEqual(r.status, 200);
+const crlf = await r.json();
+await drain();
 teamMail.length = 0;
-r = await call('/signup', { method: 'POST', body: JSON.stringify({ email: 'crlf@test.co.uk', organisation: 'Evil\r\nBcc: victim@example.com' }) });
+r = await call('/accept', { method: 'POST', body: JSON.stringify({ email: 'crlf@test.co.uk', token: crlf.token, termsVersion: '1.0', accepted: true, authorised: true }) });
 assert.strictEqual(r.status, 200);
 await drain();
 {

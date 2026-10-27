@@ -123,8 +123,8 @@ fallback constant in questions.html.
 2. Deploy the worker (john@iternal.life, a verified Email Routing
    destination, receives the briefs and clients' replies).
 3. Deploy the site (held: only on Robbie's word, named in that moment).
-4. `?team` walkthrough: one real sign-up should yield a client file, a
-   tracker row and both briefs.
+4. `?team` walkthrough: one real sign-up and acceptance should yield a
+   client file, a tracker row and the acceptance brief.
 5. Payment: the £100 downpayment is paid on Stripe Checkout straight after
    accepting (the team's client journey, 22 Oct 2026); the final payment is
    separate, outside this project. Setup steps (Price, VAT rate, restricted

@@ -262,6 +262,10 @@ the token awaits org approval), so the worker can deploy regardless.
 
 ## Team briefs (email)
 
+The team is emailed when a client accepts the terms (with their order, website
+and gallery example), when they pay, and when they send their answers, plus
+the failure alerts. Signing up sends no email (Robbie, 27 Oct 2026: the
+acceptance brief follows within moments); the tracker's Slack ping covers it.
 Briefs go to every address in `TEAM_EMAIL` (comma-separated), one copy each.
 For launch that is john@iternal.life alone (Robbie, 27 Oct 2026: his schedule
 takes the calls), which also receives clients' replies (`CLIENT_REPLY_TO`).
