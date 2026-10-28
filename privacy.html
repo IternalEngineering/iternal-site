@@ -66,6 +66,10 @@
   --f:   'Maven Pro', sans-serif;
   --max: clamp(1220px, 80vw, 1520px);
   --px:  64px;
+  --tan-ink: var(--tan);
+  --aqua-ink: var(--aqua);
+  --gold-ink: var(--gold);
+  --sunrise-ink: var(--sunrise);
 }
 
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
@@ -155,14 +159,14 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   color:var(--white); transition:color .2s;
   position:relative;
 }
-.nav-links a:hover { color:var(--tan); }
+.nav-links a:hover { color:var(--tan-ink); }
 .nav-links a::after {
   content:''; position:absolute; bottom:-4px; left:0;
   width:0; height:1px; background:var(--tan);
   transition:width .25s;
 }
 .nav-links a:hover::after { width:100%; }
-.nav-links a.active { color:var(--tan); }
+.nav-links a.active { color:var(--tan-ink); }
 .nav-links a.active::after { width:100%; }
 
 .nav-btn {
@@ -186,7 +190,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .ey {
   font-size:12px; font-weight:700;
   letter-spacing:.18em; text-transform:uppercase;
-  color:var(--aqua);
+  color:var(--aqua-ink);
   display:flex; align-items:center; gap:12px;
 }
 .ey::before { content:''; width:18px; height:1px; background:var(--aqua); display:block; }
@@ -198,7 +202,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 .sec-h em {
   font-style: normal;
-  background:var(--sunrise);
+  background:var(--sunrise-ink);
   -webkit-background-clip:text; -webkit-text-fill-color:transparent;
   background-clip:text;
 }
@@ -216,11 +220,11 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   text-transform:uppercase; color:var(--t4);
   margin-bottom:40px; transition:color .2s;
 }
-.cs-back:hover { color:var(--tan); }
+.cs-back:hover { color:var(--tan-ink); }
 .cs-back svg { transform:rotate(180deg); }
 .cs-sector {
   font-size:12px; font-weight:700; letter-spacing:.12em;
-  text-transform:uppercase; color:var(--tan);
+  text-transform:uppercase; color:var(--tan-ink);
   margin-bottom:16px;
 }
 .cs-h1 {
@@ -230,7 +234,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 .cs-h1 em {
   font-style:normal;
-  background:var(--sunrise);
+  background:var(--sunrise-ink);
   -webkit-background-clip:text; -webkit-text-fill-color:transparent;
   background-clip:text;
 }
@@ -299,7 +303,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
   border:1px solid var(--border); text-align:center;
 }
 .cs-hl-val {
-  font-size:32px; font-weight:900; color:var(--tan);
+  font-size:32px; font-weight:900; color:var(--tan-ink);
   margin-bottom:6px; letter-spacing:-.02em;
 }
 .cs-hl-lbl {
@@ -321,7 +325,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 }
 .closing-h em {
   font-style:normal;
-  background:var(--sunrise);
+  background:var(--sunrise-ink);
   -webkit-background-clip:text; -webkit-text-fill-color:transparent;
   background-clip:text;
 }
@@ -386,7 +390,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   font-size:15px; font-weight:500; color:var(--t3);
   transition:color .2s;
 }
-.f-links a:hover { color:var(--tan); }
+.f-links a:hover { color:var(--tan-ink); }
 .f-bot {
   max-width:var(--max); margin:40px auto 0;
   padding-top:28px; border-top:1px solid var(--border);
@@ -425,7 +429,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   font-size:20px; font-weight:700; letter-spacing:.06em;
   text-transform:uppercase; color:var(--white); transition:color .2s;
 }
-.mobile-nav a:hover, .mobile-nav a.active { color:var(--tan); }
+.mobile-nav a:hover, .mobile-nav a.active { color:var(--tan-ink); }
 .mobile-nav .mob-cta {
   margin-top:16px; background:var(--sunrise); color:#060f26;
   font-size:14px; font-weight:700; letter-spacing:.04em;
@@ -483,6 +487,11 @@ html[data-theme="light"] {
   --tan-glow:  rgba(226,103,19,0.10);
   --gold-glow: rgba(224,166,20,0.06);
   --aqua-glow: rgba(11,175,170,0.06);
+  /* The accents as TEXT: dark enough to read on cream (WCAG AA 4.5:1). Fills keep the bright ones. */
+  --tan-ink: #a84a0b;
+  --aqua-ink: #08706c;
+  --gold-ink: #8a5f00;
+  --sunrise-ink: linear-gradient(135deg, #a84a0b 0%, #8a5f00 100%);
 }
 html[data-theme="light"] body { transition:background-color .3s, color .3s; }
 html[data-theme="light"] .blob { filter:blur(100px); }
@@ -507,7 +516,7 @@ html[data-theme="light"] .closing { background:rgba(10,33,86,0.03); }
   padding:6px; display:flex; align-items:center; justify-content:center;
   color:var(--white); transition:color .2s;
 }
-.theme-toggle:hover { color:var(--tan); }
+.theme-toggle:hover { color:var(--tan-ink); }
 .theme-toggle svg { width:20px; height:20px; }
 html[data-theme="dark"] .icon-sun { display:none; }
 html[data-theme="light"] .icon-moon { display:none; }
@@ -581,7 +590,7 @@ html { overflow-x:clip; }
     <div class="cs-body" style="max-width:760px">
 
       <h2>Who we are</h2>
-      <p>Iternal Ltd, Bristol, UK — the company behind iternal.co.uk and iternal.life. Anything in this policy, or anything about your data, comes to <a href="mailto:hello@iternal.life" style="color:var(--tan); text-decoration:underline; text-underline-offset:3px">hello@iternal.life</a> and a person will answer.</p>
+      <p>Iternal Ltd, Bristol, UK — the company behind iternal.co.uk and iternal.life. Anything in this policy, or anything about your data, comes to <a href="mailto:hello@iternal.life" style="color:var(--tan-ink); text-decoration:underline; text-underline-offset:3px">hello@iternal.life</a> and a person will answer.</p>
 
       <h2>What we collect, and why</h2>
       <p><strong>If you sign up for a website build:</strong> your name, email, organisation and current website — because that’s the start of working together. Your answers to the project questions — because they shape what we design for you. While you’re answering, drafts live only in your own browser and are wiped when you press send; nothing reaches us until you book the call or send them.</p>
@@ -597,7 +606,7 @@ html { overflow-x:clip; }
       <p>Project records for as long as we’re working together and a reasonable period afterwards, in case you come back. Payment and invoicing records for six years, because tax law says so. When there’s no reason left to keep something, it goes.</p>
 
       <h2>Your rights</h2>
-      <p>You can ask us what we hold about you, ask us to correct it, or ask us to delete it — email <a href="mailto:hello@iternal.life" style="color:var(--tan); text-decoration:underline; text-underline-offset:3px">hello@iternal.life</a> and we’ll act on it. If you think we’ve handled your data badly and we haven’t put it right, you can complain to the <a href="https://ico.org.uk" target="_blank" rel="noopener" style="color:var(--tan); text-decoration:underline; text-underline-offset:3px">Information Commissioner’s Office</a> — though we’d rather you told us first.</p>
+      <p>You can ask us what we hold about you, ask us to correct it, or ask us to delete it — email <a href="mailto:hello@iternal.life" style="color:var(--tan-ink); text-decoration:underline; text-underline-offset:3px">hello@iternal.life</a> and we’ll act on it. If you think we’ve handled your data badly and we haven’t put it right, you can complain to the <a href="https://ico.org.uk" target="_blank" rel="noopener" style="color:var(--tan-ink); text-decoration:underline; text-underline-offset:3px">Information Commissioner’s Office</a> — though we’d rather you told us first.</p>
 
       <h2>Cookies</h2>
       <p>This site sets no tracking or analytics cookies. The only thing stored in your browser is the draft of your own project answers while you type them — strictly necessary, on your device, wiped on send. That’s why there’s no cookie banner.</p>

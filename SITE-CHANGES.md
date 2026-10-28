@@ -11,7 +11,19 @@ Last deploy: **27 Oct 2026, Websites goes public** (main 046a9d6 and the bPlaced
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-Nothing waiting.
+#### Whole site
+- **Light mode reads properly**: orange and teal text (the current page in the menu, the
+  small headings above titles, prices, sector labels, links, numbers) and the orange-to-gold
+  headline words now use deeper shades in light mode, dark enough to read on the cream
+  background. Dark mode, buttons and coloured fills are unchanged. (28 Oct)
+- **A real "page not found" page**: a mistyped or old address now shows "This page isn't
+  here." with the normal menu and links to Home, Services, Websites, our work and Contact,
+  instead of the browser's own error screen. (28 Oct)
+
+#### Websites gallery
+- **The intro no longer runs over the screenshots**: on tablets the sites run in a row under
+  the intro, as on phones; on wider screens the fade behind the text reaches past its end.
+  (28 Oct)
 
 ---
 

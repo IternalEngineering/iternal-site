@@ -65,6 +65,10 @@
   --f:   'Maven Pro', sans-serif;
   --max: clamp(1220px, 80vw, 1520px);
   --px:  64px;
+  --tan-ink: var(--tan);
+  --aqua-ink: var(--aqua);
+  --gold-ink: var(--gold);
+  --sunrise-ink: var(--sunrise);
 }
 
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
@@ -91,7 +95,7 @@ nav, main, footer { position:relative; z-index:2; }
 
 /* ── Layout ── */
 .w { max-width:var(--max); margin:0 auto; padding:0 var(--px); }
-.ey { font-size:12px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--aqua); display:flex; align-items:center; gap:12px; }
+.ey { font-size:12px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--aqua-ink); display:flex; align-items:center; gap:12px; }
 .ey::before { content:''; width:18px; height:1px; background:var(--aqua); display:block; }
 
 /* ── Nav ── */
@@ -116,8 +120,8 @@ html[data-theme="light"] .nav-logo .logo-dark { display:none; }
 html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .nav-links { display:flex; align-items:center; gap:36px; list-style:none; }
 .nav-links a { font-size:13px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--white); transition:color .2s; position:relative; }
-.nav-links a:hover { color:var(--tan); }
-.nav-links a.active { color:var(--tan); }
+.nav-links a:hover { color:var(--tan-ink); }
+.nav-links a.active { color:var(--tan-ink); }
 .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background:var(--tan); transition:width .25s; }
 .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
 .nav-btn { background:var(--sunrise); color:#060f26; font-family:var(--f); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:10px 22px; border-radius:3px; border:none; transition:opacity .2s, transform .15s, box-shadow .2s; }
@@ -171,7 +175,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .detail-icon svg { width:14px; height:14px; stroke:var(--aqua); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
 .detail-label { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--t4); margin-bottom:3px; }
 .detail-value { font-size:14px; font-weight:700; color:var(--white); transition:color .2s; }
-a.contact-detail:hover .detail-value { color:var(--tan); }
+a.contact-detail:hover .detail-value { color:var(--tan-ink); }
 
 /* Response commitment */
 .response-note {
@@ -204,7 +208,7 @@ a.contact-detail:hover .detail-value { color:var(--tan); }
 .reason:hover { border-color:var(--border2); }
 .reason-n {
   font-size:11px; font-weight:700; letter-spacing:.1em;
-  color:var(--tan); min-width:20px; padding-top:3px; flex-shrink:0;
+  color:var(--tan-ink); min-width:20px; padding-top:3px; flex-shrink:0;
 }
 .reason-body {}
 .reason-title { font-size:15px; font-weight:700; color:var(--white); margin-bottom:5px; }
@@ -233,7 +237,7 @@ label {
   letter-spacing:.1em; text-transform:uppercase;
   color:var(--t4); margin-bottom:9px;
 }
-label span { color:var(--tan); margin-left:2px; }
+label span { color:var(--tan-ink); margin-left:2px; }
 
 input[type="text"],
 input[type="email"],
@@ -305,7 +309,7 @@ textarea { resize:vertical; min-height:130px; line-height:1.65; }
 .order thead th, .order thead td { background:var(--surf2); color:var(--t3); font-weight:500; }
 .order tbody th { font-weight:500; color:var(--t2); white-space:nowrap; width:1%; }
 .order td { color:var(--white); overflow-wrap:break-word; }
-.order a { color:var(--tan); text-decoration:underline; text-underline-offset:3px; }
+.order a { color:var(--tan-ink); text-decoration:underline; text-underline-offset:3px; }
 label.tick {
   display:flex; align-items:flex-start; gap:12px; margin-bottom:16px;
   font-size:14px; font-weight:500; letter-spacing:0; text-transform:none;
@@ -317,10 +321,10 @@ label.tick input { width:18px; height:18px; margin:2px 0 0; flex-shrink:0; accen
 .form-head + .review-h { margin-top:0; }
 .keypoints-note { font-size:14px; color:var(--t3); line-height:1.6; margin-bottom:12px; }
 .keypoints { display:grid; gap:8px; margin:0 0 18px; padding-left:20px; font-size:14px; line-height:1.6; color:var(--t2); }
-.keypoints li::marker { color:var(--tan); }
+.keypoints li::marker { color:var(--tan-ink); }
 .read-terms {
   margin-bottom:30px; padding:0; background:none; border:none; cursor:pointer;
-  font:inherit; font-size:14px; font-weight:700; color:var(--tan);
+  font:inherit; font-size:14px; font-weight:700; color:var(--tan-ink);
   text-decoration:underline; text-underline-offset:3px;
 }
 #termsDialog {
@@ -331,7 +335,7 @@ label.tick input { width:18px; height:18px; margin:2px 0 0; flex-shrink:0; accen
 #termsDialog::backdrop { background:rgba(6,15,38,.72); }
 .terms-bar { display:flex; align-items:center; flex-wrap:wrap; gap:10px 18px; padding:12px 16px; border-bottom:1px solid var(--border2); }
 .terms-bar strong { flex:1 1 220px; font-size:15px; color:var(--white); }
-.terms-bar a { font-size:14px; font-weight:700; color:var(--tan); text-decoration:underline; text-underline-offset:3px; }
+.terms-bar a { font-size:14px; font-weight:700; color:var(--tan-ink); text-decoration:underline; text-underline-offset:3px; }
 .terms-bar button {
   padding:6px 14px; border:1px solid var(--border2); border-radius:2px; background:none; cursor:pointer;
   font:inherit; font-size:14px; font-weight:700; color:var(--white);
@@ -404,7 +408,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 .f-col-lbl { font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--t4); margin-bottom:18px; display:block; }
 .f-links { list-style:none; display:flex; flex-direction:column; gap:12px; }
 .f-links a { font-size:15px; font-weight:500; color:var(--t3); transition:color .2s; }
-.f-links a:hover { color:var(--tan); }
+.f-links a:hover { color:var(--tan-ink); }
 .f-bot { max-width:var(--max); margin:40px auto 0; padding-top:28px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
 .f-copy { font-size:13px; color:var(--t4); }
 
@@ -435,7 +439,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   font-size:20px; font-weight:700; letter-spacing:.06em;
   text-transform:uppercase; color:var(--white); transition:color .2s;
 }
-.mobile-nav a:hover, .mobile-nav a.active { color:var(--tan); }
+.mobile-nav a:hover, .mobile-nav a.active { color:var(--tan-ink); }
 .mobile-nav .mob-cta {
   margin-top:16px; background:var(--sunrise); color:#060f26;
   font-size:14px; font-weight:700; letter-spacing:.04em;
@@ -493,6 +497,11 @@ html[data-theme="light"] {
   --tan-glow:  rgba(226,103,19,0.10);
   --gold-glow: rgba(224,166,20,0.06);
   --aqua-glow: rgba(11,175,170,0.06);
+  /* The accents as TEXT: dark enough to read on cream (WCAG AA 4.5:1). Fills keep the bright ones. */
+  --tan-ink: #a84a0b;
+  --aqua-ink: #08706c;
+  --gold-ink: #8a5f00;
+  --sunrise-ink: linear-gradient(135deg, #a84a0b 0%, #8a5f00 100%);
 }
 
 /* Body transition for smooth toggle */
@@ -593,7 +602,7 @@ html[data-theme="light"] .success-icon { background:rgba(11,175,170,0.08); borde
   padding:6px; display:flex; align-items:center; justify-content:center;
   color:var(--white); transition:color .2s;
 }
-.theme-toggle:hover { color:var(--tan); }
+.theme-toggle:hover { color:var(--tan-ink); }
 .theme-toggle svg { width:20px; height:20px; }
 html[data-theme="dark"] .icon-sun { display:none; }
 html[data-theme="light"] .icon-moon { display:none; }
@@ -663,16 +672,16 @@ html { overflow-x:clip; }
           Sign up below and we'll take it from there: you answer some questions about what you need, we talk it through on a call, then we design and build your site with you and launch it.
         </p>
         <div style="display:flex; align-items:center; gap:20px; flex-wrap:wrap; margin-top:26px; font-size:14px; color:var(--t2)">
-          <span><span style="color:var(--tan); font-weight:700">1</span>&nbsp; Sign up</span>
-          <span><span style="color:var(--tan); font-weight:700">2</span>&nbsp; Review and accept</span>
-          <span><span style="color:var(--tan); font-weight:700">3</span>&nbsp; Pay your downpayment</span>
-          <span><span style="color:var(--tan); font-weight:700">4</span>&nbsp; Your questions</span>
-          <span><span style="color:var(--tan); font-weight:700">5</span>&nbsp; Book your call</span>
+          <span><span style="color:var(--tan-ink); font-weight:700">1</span>&nbsp; Sign up</span>
+          <span><span style="color:var(--tan-ink); font-weight:700">2</span>&nbsp; Review and accept</span>
+          <span><span style="color:var(--tan-ink); font-weight:700">3</span>&nbsp; Pay your downpayment</span>
+          <span><span style="color:var(--tan-ink); font-weight:700">4</span>&nbsp; Your questions</span>
+          <span><span style="color:var(--tan-ink); font-weight:700">5</span>&nbsp; Book your call</span>
         </div>
       </div>
 
       <div class="response-note">
-            <p><strong>Signing up commits you to nothing.</strong> Next you review your order and our <a href="terms/website-build-and-care-v1.0.html" target="_blank" rel="noopener" style="color:var(--tan)">Website Build and Care Terms</a>, cost included. Nothing is agreed until you accept them.</p>
+            <p><strong>Signing up commits you to nothing.</strong> Next you review your order and our <a href="terms/website-build-and-care-v1.0.html" target="_blank" rel="noopener" style="color:var(--tan-ink)">Website Build and Care Terms</a>, cost included. Nothing is agreed until you accept them.</p>
       </div>
     </div>
 
@@ -806,7 +815,7 @@ html { overflow-x:clip; }
           <span>Accept and pay £<span data-o="downpayment"></span></span>
           <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </button>
-        <p class="form-privacy" id="acceptHint" style="color:var(--tan)">Tick both boxes above to accept.</p>
+        <p class="form-privacy" id="acceptHint" style="color:var(--tan-ink)">Tick both boxes above to accept.</p>
         <p class="form-privacy">Next: payment through Stripe, then your project questions and booking your call.</p>
       </div>
     </div>

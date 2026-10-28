@@ -65,6 +65,10 @@
   --f:   'Maven Pro', sans-serif;
   --max: clamp(1220px, 80vw, 1520px);
   --px:  64px;
+  --tan-ink: var(--tan);
+  --aqua-ink: var(--aqua);
+  --gold-ink: var(--gold);
+  --sunrise-ink: var(--sunrise);
 }
 
 *,*::before,*::after { margin:0; padding:0; box-sizing:border-box; }
@@ -91,7 +95,7 @@ nav, main, footer { position:relative; z-index:2; }
 
 /* ── Layout ── */
 .w { max-width:var(--max); margin:0 auto; padding:0 var(--px); }
-.ey { font-size:12px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--aqua); display:flex; align-items:center; gap:12px; }
+.ey { font-size:12px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--aqua-ink); display:flex; align-items:center; gap:12px; }
 .ey::before { content:''; width:18px; height:1px; background:var(--aqua); display:block; }
 
 /* ── Nav ── */
@@ -116,8 +120,8 @@ html[data-theme="light"] .nav-logo .logo-dark { display:none; }
 html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .nav-links { display:flex; align-items:center; gap:36px; list-style:none; }
 .nav-links a { font-size:13px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--white); transition:color .2s; position:relative; }
-.nav-links a:hover { color:var(--tan); }
-.nav-links a.active { color:var(--tan); }
+.nav-links a:hover { color:var(--tan-ink); }
+.nav-links a.active { color:var(--tan-ink); }
 .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background:var(--tan); transition:width .25s; }
 .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
 .nav-btn { background:var(--sunrise); color:#060f26; font-family:var(--f); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:10px 22px; border-radius:3px; border:none; transition:opacity .2s, transform .15s, box-shadow .2s; }
@@ -172,7 +176,7 @@ html[data-theme="light"] .nav-logo .logo-light { display:inline; }
 .detail-icon svg { width:14px; height:14px; stroke:var(--aqua); fill:none; stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; }
 .detail-label { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--t4); margin-bottom:3px; }
 .detail-value { font-size:14px; font-weight:700; color:var(--white); transition:color .2s; }
-a.contact-detail:hover .detail-value { color:var(--tan); }
+a.contact-detail:hover .detail-value { color:var(--tan-ink); }
 
 /* Response commitment */
 .response-note {
@@ -205,7 +209,7 @@ a.contact-detail:hover .detail-value { color:var(--tan); }
 .reason:hover { border-color:var(--border2); }
 .reason-n {
   font-size:11px; font-weight:700; letter-spacing:.1em;
-  color:var(--tan); min-width:20px; padding-top:3px; flex-shrink:0;
+  color:var(--tan-ink); min-width:20px; padding-top:3px; flex-shrink:0;
 }
 .reason-body {}
 .reason-title { font-size:15px; font-weight:700; color:var(--white); margin-bottom:5px; }
@@ -234,7 +238,7 @@ label {
   letter-spacing:.1em; text-transform:uppercase;
   color:var(--t4); margin-bottom:9px;
 }
-label span { color:var(--tan); margin-left:2px; }
+label span { color:var(--tan-ink); margin-left:2px; }
 
 input[type="text"],
 input[type="email"],
@@ -329,7 +333,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 .f-col-lbl { font-size:11px; font-weight:700; letter-spacing:.16em; text-transform:uppercase; color:var(--t4); margin-bottom:18px; display:block; }
 .f-links { list-style:none; display:flex; flex-direction:column; gap:12px; }
 .f-links a { font-size:15px; font-weight:500; color:var(--t3); transition:color .2s; }
-.f-links a:hover { color:var(--tan); }
+.f-links a:hover { color:var(--tan-ink); }
 .f-bot { max-width:var(--max); margin:40px auto 0; padding-top:28px; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
 .f-copy { font-size:13px; color:var(--t4); }
 
@@ -360,7 +364,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
   font-size:20px; font-weight:700; letter-spacing:.06em;
   text-transform:uppercase; color:var(--white); transition:color .2s;
 }
-.mobile-nav a:hover, .mobile-nav a.active { color:var(--tan); }
+.mobile-nav a:hover, .mobile-nav a.active { color:var(--tan-ink); }
 .mobile-nav .mob-cta {
   margin-top:16px; background:var(--sunrise); color:#060f26;
   font-size:14px; font-weight:700; letter-spacing:.04em;
@@ -418,6 +422,11 @@ html[data-theme="light"] {
   --tan-glow:  rgba(226,103,19,0.10);
   --gold-glow: rgba(224,166,20,0.06);
   --aqua-glow: rgba(11,175,170,0.06);
+  /* The accents as TEXT: dark enough to read on cream (WCAG AA 4.5:1). Fills keep the bright ones. */
+  --tan-ink: #a84a0b;
+  --aqua-ink: #08706c;
+  --gold-ink: #8a5f00;
+  --sunrise-ink: linear-gradient(135deg, #a84a0b 0%, #8a5f00 100%);
 }
 
 /* Body transition for smooth toggle */
@@ -517,7 +526,7 @@ html[data-theme="light"] .success-icon { background:rgba(11,175,170,0.08); borde
   padding:6px; display:flex; align-items:center; justify-content:center;
   color:var(--white); transition:color .2s;
 }
-.theme-toggle:hover { color:var(--tan); }
+.theme-toggle:hover { color:var(--tan-ink); }
 .theme-toggle svg { width:20px; height:20px; }
 html[data-theme="dark"] .icon-sun { display:none; }
 html[data-theme="light"] .icon-moon { display:none; }
@@ -583,7 +592,7 @@ html { overflow-x:clip; }
           <span class="dim">you book</span><br>
           your call.
         </h1>
-        <p id="paidNote" class="page-hero-sub" hidden style="color:var(--tan); font-weight:700">Thank you, your payment has been received.</p>
+        <p id="paidNote" class="page-hero-sub" hidden style="color:var(--tan-ink); font-weight:700">Thank you, your payment has been received.</p>
         <p class="page-hero-sub">
           A few questions about your organisation and what the site has to do. The first <span data-core-count>five</span> unlock your call booking. The rest are optional; each one sharpens what we build. Your answers are saved as you go.
         </p>
@@ -616,7 +625,7 @@ html { overflow-x:clip; }
           <div id="coreBody" style="display:flex; flex-direction:column; gap:30px"></div>
 
           <div id="unlockPanel" hidden aria-live="polite" style="margin-top:26px; padding:18px 20px; border:1px solid var(--tan); border-radius:6px">
-            <div style="font-weight:700; color:var(--tan); margin-bottom:6px">Your call is unlocked</div>
+            <div style="font-weight:700; color:var(--tan-ink); margin-bottom:6px">Your call is unlocked</div>
             <p style="font-size:14px; color:var(--t2); margin:0 0 12px; line-height:1.6">You can book now. The questions below help us prepare for your call, so a few more answers make a real difference.</p>
             <a id="bookBtn" href="/contact" class="submit-btn" style="margin-top:2px; text-decoration:none">Book your call →</a>
           </div>
@@ -987,7 +996,7 @@ document.head.appendChild(style);
     d.style.cssText = 'border-bottom:1px solid rgba(128,128,128,.22)';
     d.innerHTML =
       '<summary id="ql-' + q.id + '" style="cursor:pointer; padding:14px 4px; font-size:15px; font-weight:700; color:var(--t2)">' + esc(q.label) +
-      ' <span data-done style="color:var(--tan); font-weight:400; font-size:12px; margin-left:6px"></span></summary>' +
+      ' <span data-done style="color:var(--tan-ink); font-weight:400; font-size:12px; margin-left:6px"></span></summary>' +
       '<div style="padding:2px 4px 18px">' + fieldHTML(q, true) + '</div>';
     optBody.appendChild(d);
     wire(q, d);
@@ -1046,7 +1055,7 @@ document.head.appendChild(style);
 
   // What a refused send means, in words the client can act on.
   function refusal(status){
-    return status === 409 ? 'Please finish signing up first: <a href="start.html" style="color:var(--tan)">sign up, accept our terms and pay your downpayment</a>, then come back here.'
+    return status === 409 ? 'Please finish signing up first: <a href="start.html" style="color:var(--tan-ink)">sign up, accept our terms and pay your downpayment</a>, then come back here.'
       : status === 403 ? 'These answers don’t match the sign-up for that email. Please use the browser you signed up in, or email your answers to john@iternal.life.'
       : 'Sending failed — please try again, or email your answers to john@iternal.life.';
   }
@@ -1084,11 +1093,11 @@ document.head.appendChild(style);
         if (!partialSent) { partialSent = true; try { send('partial'); } catch(err) {} }
         if (a === bookBtn) {
           unlockPanel.innerHTML =
-            '<div style="font-weight:700; color:var(--tan); margin-bottom:6px">Call requested</div>' +
+            '<div style="font-weight:700; color:var(--tan-ink); margin-bottom:6px">Call requested</div>' +
             '<p style="font-size:14px; color:var(--t2); margin:0; line-height:1.6">Your answers are with us — we aim to email you times for your call within one working day. Keep answering below if you like; every extra answer helps us prepare.</p>';
         } else {
           var p = document.createElement('p');
-          p.style.cssText = 'color:var(--tan); font-weight:700; font-size:14px; margin:0';
+          p.style.cssText = 'color:var(--tan-ink); font-weight:700; font-size:14px; margin:0';
           p.textContent = 'Done — we aim to email you times for your call within one working day.';
           a.replaceWith(p);
         }

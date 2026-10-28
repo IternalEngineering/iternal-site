@@ -10,3 +10,6 @@ account_id = "65d5b12232edf6944b3c596a887f27d3" # Iternal
 
 [assets]
 directory = "."
+
+# Missing pages get 404.html (with the normal header and footer) and a 404 status.
+not_found_handling = "404-page"
