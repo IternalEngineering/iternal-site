@@ -5,11 +5,21 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **27 Oct 2026, Websites goes public** (main 046a9d6 and the bPlaced gallery fix after it; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
+Last deploy: **28 Oct 2026, light mode, a 404 page and the gallery intro** (main 45d06d9; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
+
+Nothing waiting.
+
+---
+
+## Live
+
+### 28 Oct 2026, light mode, a 404 page and the gallery intro (main 45d06d9)
+
+From the 28 October visual pass (every page at phone, tablet and desktop, light and dark).
 
 #### Whole site
 - **Light mode reads properly**: orange and teal text (the current page in the menu, the
@@ -24,10 +34,6 @@ Last deploy: **27 Oct 2026, Websites goes public** (main 046a9d6 and the bPlaced
 - **The intro no longer runs over the screenshots**: on tablets the sites run in a row under
   the intro, as on phones; on wider screens the fade behind the text reaches past its end.
   (28 Oct)
-
----
-
-## Live
 
 ### 27 Oct 2026, Websites goes public
 
