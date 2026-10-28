@@ -11,7 +11,11 @@ Last deploy: **28 Oct 2026, light mode, a 404 page and the gallery intro** (main
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-Nothing waiting.
+#### Services and Workshops & Training
+- **Workshops are no longer described as fixed price** (Robbie, 28 Oct): the price line goes
+  from the Workshops card on Services and from under the Workshops & Training heading, the
+  list reads "AI Discovery Workshop (half-day)", and the booking box starts "Usually completed
+  within two weeks of booking." llms.txt no longer says every engagement is fixed-price.
 
 ---
 

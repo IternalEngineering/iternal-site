@@ -11,7 +11,7 @@ Key facts:
 - Delivery model: Forge, Iternal's internal AI-augmented delivery model. A small senior team works with its own suite of agentic tools. The people who scope a project build it, with no account-management layer.
 - Sectors: civic and local government, health, social care, sustainability, and financial services.
 - Security and compliance: Iternal has deployed inside NHS infrastructure, to local-government security requirements, in AWS-compliant environments, and through public-sector penetration testing.
-- Pricing: every engagement is fixed-price, with no day rates. Automations and assistants typically cost £5k–£15k. Agentic builds start at around £25k. Strategy and advisory work is scoped individually. The AI Discovery Workshop is fixed-price, and the fee is credited against any build that follows.
+- Pricing: no day rates. Automations and assistants typically cost £5k–£15k. Agentic builds start at around £25k. Strategy and advisory work is scoped individually. The AI Discovery Workshop fee is credited against any build that follows.
 - Starting small: many client relationships begin with a single automation or chatbot.
 - Timing: a Discovery Workshop can usually be booked within one to two weeks. Builds usually start two to four weeks after scope is agreed.
 - Discovery calls: 30 minutes and free. Iternal aims to answer enquiries within one working day.
