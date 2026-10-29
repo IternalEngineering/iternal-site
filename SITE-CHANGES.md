@@ -5,11 +5,19 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **28 Oct 2026, light mode, a 404 page and the gallery intro** (main 45d06d9; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
+Last deploy: **29 Oct 2026, workshops pricing and accessibility fixes** (main 2913963; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
+
+Nothing waiting.
+
+---
+
+## Live
+
+### 29 Oct 2026, workshops pricing and accessibility fixes (main 2913963)
 
 #### Services and Workshops & Training
 - **Workshops are no longer described as fixed price** (Robbie, 28 Oct): the price line goes
@@ -26,10 +34,6 @@ Last deploy: **28 Oct 2026, light mode, a 404 page and the gallery intro** (main
 - **Sign-up:** the "Website Build and Care Terms" link in the intro is underlined. After
   pressing Sign Up, keyboard and screen-reader users are taken straight to "You're signed up."
   (now a level-2 heading), instead of being dropped at the top of the page.
-
----
-
-## Live
 
 ### 28 Oct 2026, light mode, a 404 page and the gallery intro (main 45d06d9)
 
