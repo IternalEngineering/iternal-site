@@ -5,11 +5,19 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **29 Oct 2026 (later), menu keyboard fixes, questions announcements, dark badge** (main 9bb8ceb; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
+Last deploy: **29 Oct 2026 (afternoon), larger top bar, contact bot check, no prices** (main 0af7f3f; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
+
+Nothing waiting.
+
+---
+
+## Live
+
+### 29 Oct 2026 (afternoon), larger top bar, contact bot check, no prices (main 0af7f3f)
 
 #### Whole site
 - **The top bar is slightly larger** (Robbie, 29 Oct), to sit in scale with the rest of the
@@ -22,7 +30,7 @@ Last deploy: **29 Oct 2026 (later), menu keyboard fixes, questions announcements
   invisible for most people, and a few may be asked to tick a box above Send. Enquiries now
   reach Paul through our own worker instead of FormSubmit, with replies going straight to
   the sender. Paul's email address is no longer written into the page; the error message
-  points to hello@iternal.life. Needs the worker deployed first (worker 29 Oct).
+  points to hello@iternal.life. (Worker deployed first, version b3760303.)
 - **No more "Approximate budget" question** on the contact form (Robbie, 29 Oct). The form
   goes straight from the kind of engagement to the project description.
 
@@ -36,10 +44,6 @@ Last deploy: **29 Oct 2026 (later), menu keyboard fixes, questions announcements
   - **Workshops & Training:** the booking box no longer says the cost is credited against a
     later build.
   - **llms.txt:** no longer lists prices.
-
----
-
-## Live
 
 ### 29 Oct 2026 (later), menu keyboard fixes, questions announcements, dark badge (main 9bb8ceb)
 
