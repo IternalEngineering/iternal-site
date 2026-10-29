@@ -11,7 +11,6 @@ Key facts:
 - Delivery model: Forge, Iternal's internal AI-augmented delivery model. A small senior team works with its own suite of agentic tools. The people who scope a project build it, with no account-management layer.
 - Sectors: civic and local government, health, social care, sustainability, and financial services.
 - Security and compliance: Iternal has deployed inside NHS infrastructure, to local-government security requirements, in AWS-compliant environments, and through public-sector penetration testing.
-- Pricing: no day rates. Automations and assistants typically cost £5k–£15k. Agentic builds start at around £25k. Strategy and advisory work is scoped individually. The AI Discovery Workshop fee is credited against any build that follows.
 - Starting small: many client relationships begin with a single automation or chatbot.
 - Timing: a Discovery Workshop can usually be booked within one to two weeks. Builds usually start two to four weeks after scope is agreed.
 - Discovery calls: 30 minutes and free. Iternal aims to answer enquiries within one working day.
@@ -19,7 +18,7 @@ Key facts:
 
 ## Services
 
-- [Services overview](https://iternal.co.uk/services): The ways to work with Iternal, each with its own page and the case studies that belong to it, plus pricing, how projects run, the sectors it covers and frequently asked questions.
+- [Services overview](https://iternal.co.uk/services): The ways to work with Iternal, each with its own page and the case studies that belong to it, plus how projects run, the sectors it covers and frequently asked questions.
 - [Workshops & Training](https://iternal.co.uk/workshops-training): The half-day AI Discovery Workshop produces a ranked list of AI opportunities and a 90-day roadmap with costings, and is usually complete within two weeks of booking. Team and executive AI training is also available.
 - [AI Automations & Assistants](https://iternal.co.uk/ai-automations): Chatbots, knowledge bases, document processing, and Slack, email and CRM automation, built in days rather than months. Includes Site Agent, Iternal's agentic studio: an AI assistant that updates the text and images on a client's own website from plain-English requests.
 - [Agentic AI Builds](https://iternal.co.uk/agentic-ai-builds): End-to-end design and delivery of production agentic systems, including multi-step autonomous workflows, retrieval (RAG) systems on proprietary knowledge, and public-sector and regulated deployments. This is Iternal's most requested service.

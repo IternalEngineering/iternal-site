@@ -861,7 +861,7 @@ const contactMail = [];
 env.CONTACT_MAIL = { async send(msg) { contactMail.push(msg); } };
 env.CONTACT_EMAIL = 'paul@iternal.life';
 env.CONTACT_FROM = 'Iternal website <contact@iternal.co.uk>';
-const contact = (extra = {}) => call('/contact', { method: 'POST', body: JSON.stringify({ firstName: 'Ada', lastName: 'Lovelace', email: 'ada@example.org', organisation: 'Engines Ltd', engagement: 'Agentic AI Build', budget: '£10k–£25k', message: 'We need help.', ...extra }) });
+const contact = (extra = {}) => call('/contact', { method: 'POST', body: JSON.stringify({ firstName: 'Ada', lastName: 'Lovelace', email: 'ada@example.org', organisation: 'Engines Ltd', engagement: 'Agentic AI Build', message: 'We need help.', ...extra }) });
 // a person's enquiry reaches Paul, with replies going to them
 r = await contact({ turnstile: 'human-token' });
 assert.strictEqual(r.status, 200);
@@ -871,7 +871,8 @@ assert.match(contactMail[0].raw, /^From: Iternal website <contact@iternal\.co\.u
 assert.match(contactMail[0].raw, /^Reply-To: ada@example\.org\r$/m);
 assert.match(contactMail[0].raw, /^Message-ID: <[0-9a-f-]+@iternal\.co\.uk>\r$/m);
 assert.match(contactMail[0].raw, /^Subject: New enquiry from iternal\.life: Ada Lovelace \(Engines Ltd\)\r$/m);
-assert.match(contactMail[0].raw, /Budget: £10k–£25k/);
+assert.match(contactMail[0].raw, /Engagement: Agentic AI Build/);
+assert.doesNotMatch(contactMail[0].raw, /Budget/);
 assert.match(contactMail[0].raw, /Message:\nWe need help\./);
 assert.strictEqual(teamMail.filter(m => /New enquiry/.test(m.raw)).length, 0); // never on the team brief binding
 // no token, a bot's token, Cloudflare unreachable: refused, nothing sent

@@ -518,7 +518,7 @@ async function handleContact(request, env) {
   if (!env.CONTACT_MAIL || !env.CONTACT_EMAIL) { console.error('contact form: CONTACT_MAIL or CONTACT_EMAIL not set'); return json(503, { error: 'not sent' }, cors); }
   const name = (s(body.firstName, 60) + ' ' + s(body.lastName, 60)).trim();
   const org = s(body.organisation, 120);
-  const text = [['Name', name], ['Email', email], ['Organisation', org], ['Engagement', s(body.engagement, 120)], ['Budget', s(body.budget, 60)]]
+  const text = [['Name', name], ['Email', email], ['Organisation', org], ['Engagement', s(body.engagement, 120)]]
     .filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join('\n') +
     '\n\nMessage:\n' + message + '\n\nSent from the contact form on iternal.co.uk. Reply to this email to answer them.\n';
   try {

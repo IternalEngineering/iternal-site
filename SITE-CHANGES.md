@@ -23,6 +23,19 @@ Last deploy: **29 Oct 2026 (later), menu keyboard fixes, questions announcements
   reach Paul through our own worker instead of FormSubmit, with replies going straight to
   the sender. Paul's email address is no longer written into the page; the error message
   points to hello@iternal.life. Needs the worker deployed first (worker 29 Oct).
+- **No more "Approximate budget" question** on the contact form (Robbie, 29 Oct). The form
+  goes straight from the kind of engagement to the project description.
+
+#### Services and the service pages
+- **No prices shown** (Robbie, 29 Oct):
+  - **Services:** the price lines are gone from the AI Automations, Agentic AI Builds and
+    AI Strategy cards. "Fixed pricing" is gone from the Scope step and the FAQ answer.
+  - **The service pages:** the AI Automations and Agentic AI Builds pages lose their price
+    line and the price in their search description. AI Strategy & Advisory loses "Scoped
+    individually".
+  - **Workshops & Training:** the booking box no longer says the cost is credited against a
+    later build.
+  - **llms.txt:** no longer lists prices.
 
 ---
 
