@@ -253,7 +253,7 @@ section { padding:min(64px, 7vh) 0; border-bottom:1px solid var(--border); }
 .tier-popular {
   display:inline-flex; align-items:center; gap:6px;
   background:rgba(226,103,19,.12); border:1px solid rgba(226,103,19,.25);
-  color:var(--tan-ink); font-size:11px; font-weight:700;
+  color:#f0802f; font-size:11px; font-weight:700;
   letter-spacing:.1em; text-transform:uppercase;
   padding:5px 12px 5px 10px; border-radius:999px; margin-bottom:12px; align-self:flex-start;
 }
@@ -698,7 +698,7 @@ html[data-theme="light"] .tier:hover, html[data-theme="light"] .tier:focus-withi
 html[data-theme="light"] .tier.featured { background:rgba(255,255,255,0.80); border-left-color:rgba(226,103,19,0.15); border-right-color:rgba(226,103,19,0.15); }
 html[data-theme="light"] .engage-grid { border-color:rgba(10,33,86,0.1); background:rgba(10,33,86,0.05); }
 html[data-theme="light"] .tier::after { background:radial-gradient(ellipse at top left, rgba(226,103,19,.04) 0%, transparent 60%); }
-html[data-theme="light"] .tier-popular { background:rgba(226,103,19,.08); border-color:rgba(226,103,19,.18); }
+html[data-theme="light"] .tier-popular { background:rgba(226,103,19,.08); border-color:rgba(226,103,19,.18); color:var(--tan-ink); }
 
 /* ── Badges ── */
 html[data-theme="light"] .badge { background:rgba(10,33,86,0.04); }
@@ -1029,18 +1029,22 @@ window.addEventListener('scroll', () => {
 /* ── Mobile nav toggle ── */
 const hamburger = document.querySelector('.nav-hamburger');
 const mobileNav = document.getElementById('mobileNav');
-hamburger.addEventListener('click', () => {
-  const isOpen = hamburger.classList.toggle('open');
-  mobileNav.classList.toggle('open');
-  hamburger.setAttribute('aria-expanded', isOpen);
-  document.body.style.overflow = isOpen ? 'hidden' : '';
-});
+function setMenu(open) {
+  hamburger.classList.toggle('open', open);
+  mobileNav.classList.toggle('open', open);
+  hamburger.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+hamburger.addEventListener('click', () => setMenu(!mobileNav.classList.contains('open')));
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape' && mobileNav.classList.contains('open')){
-    mobileNav.classList.remove('open');
-    hamburger.setAttribute('aria-expanded','false');
-    document.body.style.overflow = '';
+    setMenu(false);
+    hamburger.focus();
   }
+});
+// The open menu covers the page, so tabbing out of it closes it rather than focusing what's hidden behind
+mobileNav.addEventListener('focusout', function(e){
+  if(e.relatedTarget && e.relatedTarget !== hamburger && !mobileNav.contains(e.relatedTarget)) setMenu(false);
 });
 
 

@@ -11,7 +11,16 @@ Last deploy: **29 Oct 2026, workshops pricing and accessibility fixes** (main 29
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-Nothing waiting.
+#### Accessibility: three moderate findings from the 28 Oct audit (Robbie, 29 Oct; no pause button)
+- **Mobile menu, every page:** Escape now closes it properly. The icon goes back to the
+  three bars, the page can scroll again (on 11 pages it used to stay stuck), and focus
+  returns to the menu button. Tabbing past the last menu link closes the menu, so keyboard
+  focus never lands on the page hidden behind it.
+- **Questions:** screen readers now hear "The three essentials above are needed first" and
+  the other send messages, and hear "All three answered — your call is unlocked" when the
+  booking opens. Nothing on screen changes.
+- **Services, dark mode:** the "Most requested" badge text is a slightly lighter orange, so
+  it reads clearly (5.25:1, from 4.15:1). Light mode is unchanged.
 
 ---
 

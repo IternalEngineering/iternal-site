@@ -619,12 +619,12 @@ html { overflow-x:clip; }
         <div class="form-inner" id="quiz">
           <div class="form-head">
             <h2>The essentials</h2>
-            <p id="quizStatus">These five unlock your call booking.</p>
+            <p id="quizStatus" role="status">These five unlock your call booking.</p>
           </div>
 
           <div id="coreBody" style="display:flex; flex-direction:column; gap:30px"></div>
 
-          <div id="unlockPanel" hidden aria-live="polite" style="margin-top:26px; padding:18px 20px; border:1px solid var(--tan); border-radius:6px">
+          <div id="unlockPanel" hidden style="margin-top:26px; padding:18px 20px; border:1px solid var(--tan); border-radius:6px">
             <div style="font-weight:700; color:var(--tan-ink); margin-bottom:6px">Your call is unlocked</div>
             <p style="font-size:14px; color:var(--t2); margin:0 0 12px; line-height:1.6">You can book now. The questions below help us prepare for your call, so a few more answers make a real difference.</p>
             <a id="bookBtn" href="/contact" class="submit-btn" style="margin-top:2px; text-decoration:none">Book your call →</a>
@@ -642,7 +642,7 @@ html { overflow-x:clip; }
               Send Answers
               <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3.5 9h11M10 4.5l4.5 4.5L10 13.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
-            <span id="sendNote" style="font-size:13px; color:var(--t3)"></span>
+            <span id="sendNote" role="status" style="font-size:13px; color:var(--t3)"></span>
           </div>
 
           <p class="form-privacy" style="margin-top:22px">Your answers are saved as you go, for our team to prepare your call.</p>
@@ -712,18 +712,22 @@ window.addEventListener('scroll', () => {
 /* ── Mobile nav toggle ── */
 const hamburger = document.querySelector('.nav-hamburger');
 const mobileNav = document.getElementById('mobileNav');
-hamburger.addEventListener('click', () => {
-  const isOpen = hamburger.classList.toggle('open');
-  mobileNav.classList.toggle('open');
-  hamburger.setAttribute('aria-expanded', isOpen);
-  document.body.style.overflow = isOpen ? 'hidden' : '';
-});
-
+function setMenu(open) {
+  hamburger.classList.toggle('open', open);
+  mobileNav.classList.toggle('open', open);
+  hamburger.setAttribute('aria-expanded', open);
+  document.body.style.overflow = open ? 'hidden' : '';
+}
+hamburger.addEventListener('click', () => setMenu(!mobileNav.classList.contains('open')));
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape' && mobileNav.classList.contains('open')){
-    mobileNav.classList.remove('open');
-    hamburger.setAttribute('aria-expanded','false');
+    setMenu(false);
+    hamburger.focus();
   }
+});
+// The open menu covers the page, so tabbing out of it closes it rather than focusing what's hidden behind
+mobileNav.addEventListener('focusout', function(e){
+  if(e.relatedTarget && e.relatedTarget !== hamburger && !mobileNav.contains(e.relatedTarget)) setMenu(false);
 });
 
 
@@ -1005,7 +1009,9 @@ document.head.appendChild(style);
   function refresh(){
     var open = coreDone();
     unlockPanel.hidden = !(open || PREVIEW);
-    statusEl.textContent = open ? 'All ' + COUNT + ' answered — your call is unlocked.' : 'These ' + COUNT + ' unlock your call booking.';
+    // Only on a change: the line is a status region, and rewriting it on every keystroke repeats it aloud
+    var status = open ? 'All ' + COUNT + ' answered — your call is unlocked.' : 'These ' + COUNT + ' unlock your call booking.';
+    if (statusEl.textContent !== status) statusEl.textContent = status;
     optBody.querySelectorAll('details').forEach(function(d){
       var q = QUESTIONS.filter(function(x){ return x.id === d.dataset.q; })[0];
       d.querySelector('[data-done]').textContent = answered(q) ? '· answered' : '';
