@@ -144,9 +144,11 @@ edits and the live check) is HOUSEKEEPING.md §Go-live; keep it there.
    (clauses 3 and 10, and the key points).
 8. bplaced-site production deploy (`npx wrangler pages deploy --branch
    main` from that repo) so its gallery card opens in the lightbox.
-9. Stale artefacts: the StateCraft diagram
-   (`../statecraft/diagrams/client-funnel.scd`) and
-   `../build-a-site-journey.html` both predate this design.
+9. Stale artefact: the StateCraft diagram
+   (`../statecraft/diagrams/client-funnel.scd`) predates this design. The old
+   written walkthrough was retired on 29 Oct 2026 (Robbie) to
+   `../archive/build-a-site-journey-2026-09-10.html`; the walkthrough is now
+   `../website-clickthrough/`.
 
 ## Rules and gotchas for agents
 
