@@ -11,7 +11,11 @@ Last deploy: **29 Oct 2026 (later), menu keyboard fixes, questions announcements
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
 
-Nothing waiting.
+#### Whole site
+- **The top bar is slightly larger** (Robbie, 29 Oct), to sit in scale with the rest of the
+  site. It's a little taller, with a bigger logo, menu links, "Book a Call" button and
+  light/dark switch. The page content below stays where it was, and the phone menu opens
+  from the bar's new bottom edge.
 
 ---
 

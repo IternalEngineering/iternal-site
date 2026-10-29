@@ -101,7 +101,7 @@ nav, main, footer { position:relative; z-index:2; }
 /* ── Nav ── */
 nav {
   position:fixed; top:0; left:0; right:0; z-index:100;
-  height:68px; display:flex; align-items:center; justify-content:space-between;
+  height:76px; display:flex; align-items:center; justify-content:space-between;
   padding:0 var(--px);
   background: rgba(6,15,38,0);
   backdrop-filter:blur(0px);
@@ -114,17 +114,17 @@ nav.scrolled {
   border-color: var(--border);
 }
 .nav-logo { display:flex; align-items:center; }
-.nav-logo img { height:28px; width:auto; }
+.nav-logo img { height:32px; width:auto; }
 .nav-logo .logo-light { display:none; }
 html[data-theme="light"] .nav-logo .logo-dark { display:none; }
 html[data-theme="light"] .nav-logo .logo-light { display:inline; }
-.nav-links { display:flex; align-items:center; gap:36px; list-style:none; }
-.nav-links a { font-size:13px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--white); transition:color .2s; position:relative; }
+.nav-links { display:flex; align-items:center; gap:40px; list-style:none; }
+.nav-links a { font-size:14px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--white); transition:color .2s; position:relative; }
 .nav-links a:hover { color:var(--tan-ink); }
 .nav-links a.active { color:var(--tan-ink); }
 .nav-links a::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:1px; background:var(--tan); transition:width .25s; }
 .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
-.nav-btn { background:var(--sunrise); color:#060f26; font-family:var(--f); font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:10px 22px; border-radius:3px; border:none; transition:opacity .2s, transform .15s, box-shadow .2s; }
+.nav-btn { background:var(--sunrise); color:#060f26; font-family:var(--f); font-size:13px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:11px 24px; border-radius:3px; border:none; transition:opacity .2s, transform .15s, box-shadow .2s; }
 .nav-btn:hover { opacity:.88; transform:translateY(-1px); box-shadow:0 8px 28px rgba(226,103,19,.3); }
 /* ── Scroll reveal ── */
 
@@ -354,7 +354,7 @@ html[data-theme="light"] .f-logo .logo-light { display:inline; }
 
 /* ── Mobile nav overlay ── */
 .mobile-nav {
-  display:none; position:fixed; inset:0; top:68px; z-index:99;
+  display:none; position:fixed; inset:0; top:76px; z-index:99;
   background:rgba(6,15,38,0.97); backdrop-filter:blur(24px);
   flex-direction:column; align-items:center; justify-content:center; gap:32px;
   opacity:0; transition:opacity .3s;
@@ -527,7 +527,7 @@ html[data-theme="light"] .success-icon { background:rgba(11,175,170,0.08); borde
   color:var(--white); transition:color .2s;
 }
 .theme-toggle:hover { color:var(--tan-ink); }
-.theme-toggle svg { width:20px; height:20px; }
+.theme-toggle svg { width:22px; height:22px; }
 html[data-theme="dark"] .icon-sun { display:none; }
 html[data-theme="light"] .icon-moon { display:none; }
 
