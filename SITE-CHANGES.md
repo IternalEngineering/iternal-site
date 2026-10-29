@@ -17,6 +17,16 @@ Last deploy: **28 Oct 2026, light mode, a 404 page and the gallery intro** (main
   list reads "AI Discovery Workshop (half-day)", and the booking box starts "Usually completed
   within two weeks of booking." llms.txt no longer says every engagement is fixed-price.
 
+#### Accessibility: the four serious findings from the 28 Oct audit (Robbie, 29 Oct)
+- **Insights and the 404 page:** the closed mobile menu is now properly hidden, so keyboard
+  users no longer tab through six invisible links and screen readers no longer read the
+  navigation twice. The menu opens as before.
+- **Homepage:** with "reduce motion" switched on in the visitor's system settings, the hero's
+  dot pattern is drawn once and holds still instead of moving.
+- **Sign-up:** the "Website Build and Care Terms" link in the intro is underlined. After
+  pressing Sign Up, keyboard and screen-reader users are taken straight to "You're signed up."
+  (now a level-2 heading), instead of being dropped at the top of the page.
+
 ---
 
 ## Live

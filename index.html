@@ -1256,6 +1256,8 @@ document.addEventListener('keydown', function(e){
   const ctx = canvas.getContext('2d');
   const hero = document.getElementById('hero');
   let W, H, particles, animId;
+  // Reduced motion: draw one still frame instead of animating
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const DARK_COLOURS = ['rgba(226,103,19,','rgba(224,166,20,','rgba(11,175,170,','rgba(255,200,120,'];
   const LIGHT_COLOURS = ['rgba(226,103,19,','rgba(224,166,20,','rgba(10,33,86,','rgba(29,106,145,'];
@@ -1335,7 +1337,7 @@ document.addEventListener('keydown', function(e){
       ctx.fill();
     }
 
-    animId = requestAnimationFrame(draw);
+    if (!still) animId = requestAnimationFrame(draw);
   }
 
   window.addEventListener('resize', () => {

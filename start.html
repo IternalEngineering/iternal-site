@@ -681,7 +681,7 @@ html { overflow-x:clip; }
       </div>
 
       <div class="response-note">
-            <p><strong>Signing up commits you to nothing.</strong> Next you review your order and our <a href="terms/website-build-and-care-v1.0.html" target="_blank" rel="noopener" style="color:var(--tan-ink)">Website Build and Care Terms</a>, cost included. Nothing is agreed until you accept them.</p>
+            <p><strong>Signing up commits you to nothing.</strong> Next you review your order and our <a href="terms/website-build-and-care-v1.0.html" target="_blank" rel="noopener" style="color:var(--tan-ink); text-decoration:underline">Website Build and Care Terms</a>, cost included. Nothing is agreed until you accept them.</p>
       </div>
     </div>
 
@@ -737,7 +737,7 @@ html { overflow-x:clip; }
           <div class="success-icon">
             <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
           </div>
-          <h3 class="success-h">You're signed up.</h3>
+          <h2 class="success-h" tabindex="-1">You're signed up.</h2>
           <p class="success-p">Next, check your order details and our terms. Once you accept them, you pay your downpayment, then your questions follow.</p>
           <a href="#terms" class="submit-btn" style="margin-top:22px; text-decoration:none">
             Review and Accept
@@ -1052,6 +1052,8 @@ form.addEventListener('submit', (e)=>{
       localStorage.setItem('iternal_signup_order', JSON.stringify(data.order));
     } catch(e) {}
     showReview(data.order);
+    // The Sign Up button has just been hidden: take focus (and screen readers) to what replaced it
+    document.querySelector('.success-h').focus();
   })
   .catch((err)=>{
     submitBtn.style.opacity='1';
