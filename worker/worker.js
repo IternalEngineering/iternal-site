@@ -31,6 +31,9 @@
  *                         by the email they give in the first question. The
  *                         first answers queue the pre-call demo build
  *                         (demoRequested) in the pipeline repo.
+ *   POST /contact         The contact page's enquiry form. Turnstile-checked,
+ *                         then emailed to CONTACT_EMAIL (CONTACT_MAIL) with
+ *                         replies going to the sender. Nothing is stored.
  *   POST /stripe-webhook  Stripe calls this when a Checkout payment completes.
  *                         Only the payment pages this worker made concern the
  *                         funnel: matched to the sign-up by reference, the
@@ -72,9 +75,8 @@ function corsHeaders(env) {
   };
 }
 
-async function sendTeamEmail(env, subject, text) {
-  if (!env.TEAM_MAIL) return;
-  const from = env.FROM_EMAIL;
+async function sendTeamEmail(env, subject, text, { mail = env.TEAM_MAIL, to = env.TEAM_EMAIL, from = env.FROM_EMAIL, replyTo = '' } = {}) {
+  if (!mail) return;
   // The envelope wants bare addresses; the display name lives in the MIME From.
   const bare = a => { const m = /<([^>]+)>/.exec(a); return m ? m[1] : a; };
   // In the Workers runtime this import exists; in the Node self-check it
@@ -84,23 +86,25 @@ async function sendTeamEmail(env, subject, text) {
   // TEAM_EMAIL is a comma-separated list. One message per recipient: an
   // EmailMessage carries a single envelope recipient, and one bad address
   // must not sink the others.
-  const recipients = String(env.TEAM_EMAIL || '').split(',').map(a => a.trim()).filter(Boolean);
+  const recipients = String(to || '').split(',').map(a => a.trim()).filter(Boolean);
   subject = String(subject).replace(/[\r\n]+/g, ' '); // client text reaches subjects; a line break would forge headers
+  replyTo = String(replyTo).replace(/[\r\n]+/g, '');
   const results = await Promise.allSettled(recipients.map(to => {
     // Cloudflare refuses a message without a Message-ID ("invalid message-id").
     const raw = 'From: ' + from + '\r\n' + 'To: ' + to + '\r\n' +
+      (replyTo ? 'Reply-To: ' + replyTo + '\r\n' : '') +
       'Message-ID: <' + crypto.randomUUID() + '@' + bare(from).split('@')[1] + '>\r\n' +
       'Subject: ' + subject + '\r\n' + 'Date: ' + new Date().toUTCString() + '\r\n' +
       'Content-Type: text/plain; charset=utf-8' + '\r\n\r\n' + text;
-    return env.TEAM_MAIL.send(EmailMessage ? new EmailMessage(bare(from), bare(to), raw) : { from, to, raw });
+    return mail.send(EmailMessage ? new EmailMessage(bare(from), bare(to), raw) : { from, to, raw });
   }));
   const failed = results.filter(r => r.status === 'rejected');
   if (failed.length) {
     const why = failed[0].reason;
-    console.error(`team brief FAILED for ${failed.length}/${recipients.length} recipient(s):`, why && why.message ? why.message : why);
+    console.error(`email FAILED for ${failed.length}/${recipients.length} recipient(s):`, why && why.message ? why.message : why);
     if (failed.length === recipients.length) throw why;
   } else {
-    console.log('team brief sent:', subject);
+    console.log('email sent:', subject);
   }
 }
 
@@ -411,7 +415,7 @@ async function syncToPipelineOnce(env, email, what) {
   return 'still conflicting after a retry';
 }
 
-/** Cloudflare Turnstile, the sign-up's bot check: the page's widget hands over
+/** Cloudflare Turnstile, the sign-up's and contact form's bot check: the page's widget hands over
     a one-use token and Cloudflare says whether a person earned it. Off until
     TURNSTILE_SECRET is set; closed (no) if Cloudflare cannot be asked. */
 async function humanCheck(env, request, token) {
@@ -490,6 +494,39 @@ async function handleSignup(request, env, ctx) {
   ]));
 
   return json(200, { ok: true, token: existing.token, order: orderOf(existing) }, cors);
+}
+
+/** An enquiry from the contact page, emailed to CONTACT_EMAIL. Nothing is stored. */
+async function handleContact(request, env) {
+  const cors = corsHeaders(env);
+  let body;
+  try {
+    const raw = await request.text();
+    if (raw.length > 16384) return json(400, { error: 'too large' }, cors);
+    body = JSON.parse(raw);
+  } catch (e) { return json(400, { error: 'bad json' }, cors); }
+
+  // Honeypots (the hidden field and the off-screen one): the same OK a person
+  // would get, and nothing is sent.
+  if (s(body._honey, 200) || s(body.website_url, 200)) return json(200, { ok: true }, cors);
+  if (!await humanCheck(env, request, s(body.turnstile, 4096))) return json(403, { error: 'bot check failed' }, cors);
+
+  const email = s(body.email, 120);
+  const message = s(body.message, 8000);
+  if (!EMAIL.test(email) || !message) return json(400, { error: 'email and message required' }, cors);
+  // A missing binding must not tell the visitor their message went.
+  if (!env.CONTACT_MAIL || !env.CONTACT_EMAIL) { console.error('contact form: CONTACT_MAIL or CONTACT_EMAIL not set'); return json(503, { error: 'not sent' }, cors); }
+  const name = (s(body.firstName, 60) + ' ' + s(body.lastName, 60)).trim();
+  const org = s(body.organisation, 120);
+  const text = [['Name', name], ['Email', email], ['Organisation', org], ['Engagement', s(body.engagement, 120)], ['Budget', s(body.budget, 60)]]
+    .filter(([, v]) => v).map(([k, v]) => `${k}: ${v}`).join('\n') +
+    '\n\nMessage:\n' + message + '\n\nSent from the contact form on iternal.co.uk. Reply to this email to answer them.\n';
+  try {
+    // The subject keeps the old form's wording, so existing mail filters still match.
+    await sendTeamEmail(env, `New enquiry from iternal.life: ${name || email}${org ? ' (' + org + ')' : ''}`, text,
+      { mail: env.CONTACT_MAIL, to: env.CONTACT_EMAIL, from: env.CONTACT_FROM || env.FROM_EMAIL, replyTo: email });
+  } catch (e) { return json(502, { error: 'not sent' }, cors); }
+  return json(200, { ok: true }, cors);
 }
 
 /** The client accepts the terms at the end of sign-up. The agreement is formed
@@ -821,6 +858,7 @@ export default {
     if (url.pathname === '/accept' && request.method === 'POST') return handleAccept(request, env, ctx);
     if (url.pathname === '/answers' && request.method === 'POST') return handleAnswers(request, env, ctx);
     if (url.pathname === '/status' && request.method === 'POST') return handleStatus(request, env);
+    if (url.pathname === '/contact' && request.method === 'POST') return handleContact(request, env);
     if (url.pathname === '/stripe-webhook' && request.method === 'POST') return handleStripeWebhook(request, env, ctx);
     return json(404, { error: 'not found' });
   },

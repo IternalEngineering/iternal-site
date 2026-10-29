@@ -855,6 +855,48 @@ assert.strictEqual(turnstile.calls.length, asked);
 turnstile.down = true;
 assert.strictEqual((await signupAs('down@check.co.uk', { turnstile: 'human-token' })).status, 403);
 turnstile.down = false;
+
+// ── The contact form (/contact), bot check on ─────────────────────────────
+const contactMail = [];
+env.CONTACT_MAIL = { async send(msg) { contactMail.push(msg); } };
+env.CONTACT_EMAIL = 'paul@iternal.life';
+env.CONTACT_FROM = 'Iternal website <contact@iternal.co.uk>';
+const contact = (extra = {}) => call('/contact', { method: 'POST', body: JSON.stringify({ firstName: 'Ada', lastName: 'Lovelace', email: 'ada@example.org', organisation: 'Engines Ltd', engagement: 'Agentic AI Build', budget: '£10k–£25k', message: 'We need help.', ...extra }) });
+// a person's enquiry reaches Paul, with replies going to them
+r = await contact({ turnstile: 'human-token' });
+assert.strictEqual(r.status, 200);
+assert.strictEqual(contactMail.length, 1);
+assert.strictEqual(contactMail[0].to, 'paul@iternal.life');
+assert.match(contactMail[0].raw, /^From: Iternal website <contact@iternal\.co\.uk>\r$/m);
+assert.match(contactMail[0].raw, /^Reply-To: ada@example\.org\r$/m);
+assert.match(contactMail[0].raw, /^Message-ID: <[0-9a-f-]+@iternal\.co\.uk>\r$/m);
+assert.match(contactMail[0].raw, /^Subject: New enquiry from iternal\.life: Ada Lovelace \(Engines Ltd\)\r$/m);
+assert.match(contactMail[0].raw, /Budget: £10k–£25k/);
+assert.match(contactMail[0].raw, /Message:\nWe need help\./);
+assert.strictEqual(teamMail.filter(m => /New enquiry/.test(m.raw)).length, 0); // never on the team brief binding
+// no token, a bot's token, Cloudflare unreachable: refused, nothing sent
+assert.strictEqual((await contact()).status, 403);
+assert.strictEqual((await contact({ turnstile: 'bot-token' })).status, 403);
+turnstile.down = true;
+assert.strictEqual((await contact({ turnstile: 'human-token' })).status, 403);
+turnstile.down = false;
+// honeypots: the same OK, nothing sent, Cloudflare not asked
+const askedContact = turnstile.calls.length;
+assert.strictEqual((await contact({ _honey: 'x' })).status, 200);
+assert.strictEqual((await contact({ website_url: 'http://spam.example' })).status, 200);
+assert.strictEqual(turnstile.calls.length, askedContact);
+// a real email and a message are needed
+assert.strictEqual((await contact({ turnstile: 'human-token', email: 'not-an-email' })).status, 400);
+assert.strictEqual((await contact({ turnstile: 'human-token', message: '   ' })).status, 400);
+assert.strictEqual(contactMail.length, 1);
+// a line break in a field can't add a header
+assert.strictEqual((await contact({ turnstile: 'human-token', firstName: 'Eve\r\nBcc: x@evil.example' })).status, 200);
+assert.doesNotMatch(contactMail.at(-1).raw.split('\r\n\r\n')[0], /^Bcc:/m);
+// the email failing, or no binding at all: the page is told it wasn't sent
+env.CONTACT_MAIL = { async send() { throw new Error('rejected'); } };
+assert.strictEqual((await contact({ turnstile: 'human-token' })).status, 502);
+delete env.CONTACT_MAIL;
+assert.strictEqual((await contact({ turnstile: 'human-token' })).status, 503);
 delete env.TURNSTILE_SECRET;
 
 console.log('All worker checks passed.');

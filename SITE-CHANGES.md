@@ -17,6 +17,13 @@ Last deploy: **29 Oct 2026 (later), menu keyboard fixes, questions announcements
   light/dark switch. The page content below stays where it was, and the phone menu opens
   from the bar's new bottom edge.
 
+#### Contact
+- **The contact form has Cloudflare's bot check** (Robbie, 29 Oct, against spam). It's
+  invisible for most people, and a few may be asked to tick a box above Send. Enquiries now
+  reach Paul through our own worker instead of FormSubmit, with replies going straight to
+  the sender. Paul's email address is no longer written into the page; the error message
+  points to hello@iternal.life. Needs the worker deployed first (worker 29 Oct).
+
 ---
 
 ## Live

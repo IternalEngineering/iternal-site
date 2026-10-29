@@ -1,5 +1,5 @@
 /* Cloudflare Turnstile, the bot check on forms marked data-turnstile (the
-   sign-up on start.html). The worker checks the token with Cloudflare once
+   sign-up on start.html and the contact form). The worker checks the token with Cloudflare once
    TURNSTILE_SECRET is set on it.
    SITE_KEY is public. While it is empty no widget loads and the forms send no
    token, so set it here (and deploy) before setting the secret, never after. */

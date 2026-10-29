@@ -101,26 +101,31 @@ homepage is outside the automation: the team decides whether to build one
 | Party | We send | Comes back | Rules |
 |---|---|---|---|
 | **Worker /signup, /answers** (ours) | sign-up fields and answers, from the pages | `{ok}` | The page shows success only once the worker has it |
+| **Worker /contact** (ours) | the contact page's enquiry, with its Turnstile token | `{ok}` once it is emailed | Emailed to `CONTACT_EMAIL` (paul@iternal.life, via `CONTACT_MAIL`) with Reply-To the sender; nothing stored. The page shows success only once it has gone |
 | **GitHub** (platform repo) | one `clients/<slug>.json` per client: identity and answers (never payment) | file sha, used for the next write | Personal data in a private repo. Token scoped to that one repo. Named as a processor in the privacy draft |
 | **Lead Tracker** (Apps Script, separate `lead-tracker` repo) | `createLead` POSTs on sign-up, on accepting the terms and on payment (with `event`; the record is "Awaiting downpayment" until `paid`), secret-gated (`LEAD_API_SECRET`) | `{ok, id}` and NOTHING else | **WRITE-ONLY. Never read tracker/Sheet data — it is private.** Dedupes by email: repeat posts become notes on the existing record. Never sent answers |
 | **Google Calendar** | the client (we just link to the appointment schedule URL) | nothing to our systems — the invite goes to the client | The schedule lives in Google's UI, not in code. It takes no payment: the client has paid already |
 | **Stripe** (Checkout) | on accepting, a Checkout Session per visit: the dashboard's Price and VAT rate, the client's email and reference, `metadata.funnel = website-build` (restricted `STRIPE_API_KEY`: Checkout Sessions write only) | the payment page's URL; then `checkout.session.completed` to `/stripe-webhook`, signed with `STRIPE_WEBHOOK_SECRET` | Only our own paid pages concern the funnel; every other payment on the account is ignored. Matched to the order by reference, recorded once in KV, confirmed to the client, briefed to the team and noted in the tracker; never sent to the platform repo. A payment for an order already paid, or with no record, still emails the team |
-| **Cloudflare Email Routing** | team briefs | — | Every recipient must be a verified destination |
+| **Cloudflare Email Routing** | team briefs and contact enquiries | — | Every recipient must be a verified destination |
 | **Cloudflare Email Service** | the client's confirmation once they have paid, with the terms attached | message id | Sends from iternal.co.uk once it is onboarded as a sending domain (Workers Paid). A failure emails the team the text to forward |
 | **Slack** | nothing directly — pings come from the Lead Tracker | — | |
 | **GitHub Action** (`.github/workflows/screenshots.yml`) | weekly gallery screenshot refresh commits | — | Gallery additions touch FOUR places — see HOUSEKEEPING.md |
 
-FormSubmit is no longer in the sign-up path. It remains only as an unused
-fallback constant in questions.html (and still carries the contact page's
-enquiries, which are left as they are: Robbie, 27 Oct 2026).
+FormSubmit is no longer used for any live form. It remains only as an unused
+fallback constant in questions.html. Since 29 Oct 2026 (Robbie, against spam,
+as the first step of revamping the contact area) the contact form posts to the
+worker's `/contact` instead of FormSubmit, so Paul's address is no longer in
+the page.
 
-**Bot check (Cloudflare Turnstile)** on the sign-up only: `turnstile.js` adds
-the widget to forms marked `data-turnstile` (site key in that file, public;
-widget "iternal.co.uk website sign-up", Managed, iternal.co.uk + www, made
-with `wrangler turnstile widget create` on 27 Oct 2026);
-the worker's `/signup` verifies the token once `TURNSTILE_SECRET` is set.
-Order matters: site key in and the site deployed BEFORE the secret is set, or
-every sign-up is refused.
+**Bot check (Cloudflare Turnstile)** on the sign-up and the contact form:
+`turnstile.js` adds the widget to forms marked `data-turnstile` (site key in
+that file, public; widget "iternal.co.uk website sign-up", Managed,
+iternal.co.uk + www, made with `wrangler turnstile widget create` on 27 Oct
+2026); the worker's `/signup` and `/contact` verify the token once
+`TURNSTILE_SECRET` is set. Order matters: site key in and the site deployed
+BEFORE the secret is set, or every sign-up is refused. For `/contact`, deploy
+the worker BEFORE the site, or the live contact form posts to a route that
+doesn't exist yet.
 
 ## Current to-do (27 Oct 2026)
 

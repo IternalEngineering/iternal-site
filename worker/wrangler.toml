@@ -13,8 +13,11 @@ routes = [{ pattern = "api.iternal.co.uk", custom_domain = true }]
 # once they have paid. It is Cloudflare Email Service, not Email Routing: it reaches
 # any address once iternal.co.uk is onboarded as a sending domain (Workers
 # Paid plan). It may only send from CLIENT_FROM's address.
+# CONTACT_MAIL emails the contact page's enquiries (POST /contact) to
+# CONTACT_EMAIL, also Email Routing, so that address must be verified too.
 send_email = [
   { name = "TEAM_MAIL", allowed_destination_addresses = ["john@iternal.life"] },
+  { name = "CONTACT_MAIL", allowed_destination_addresses = ["paul@iternal.life"] },
   { name = "CLIENT_MAIL", allowed_sender_addresses = ["websites@iternal.co.uk"] },
 ]
 
@@ -32,6 +35,9 @@ TEAM_EMAIL = "john@iternal.life"
 # replies going to the team's mailbox.
 CLIENT_FROM = "Iternal <websites@iternal.co.uk>"
 CLIENT_REPLY_TO = "john@iternal.life"
+# The contact page's enquiries go here, with replies going to the sender.
+CONTACT_EMAIL = "paul@iternal.life"
+CONTACT_FROM = "Iternal website <contact@iternal.co.uk>"
 # The Lead Tracker's public "Anyone" /exec URL:
 LEAD_API_URL = "https://script.google.com/macros/s/AKfycbzwkFrrOZ_VqMP0CJnAjtCsUTU6BtOzbLyJ7SClkmaVJq6W3r4FSoxohBPLqZZbrTKI/exec"
 # The information & demo build dashboard's repo: the worker commits one
@@ -52,8 +58,8 @@ BOOKING_URL = "https://calendar.app.google/fNGuEjKBSpoPMhAL6"
 #   STRIPE_WEBHOOK_SECRET  signing secret of the /stripe-webhook endpoint in Stripe's dashboard
 #   LEAD_API_SECRET        from Lead Tracker Admin -> Website leads
 #   PIPELINE_TOKEN         fine-grained GitHub token: Contents read+write on PIPELINE_REPO only
-#   TURNSTILE_SECRET       the Turnstile widget's secret key: the sign-up's bot check is off
-#                          until it is set (the site key is in turnstile.js)
+#   TURNSTILE_SECRET       the Turnstile widget's secret key: the sign-up's and contact form's
+#                          bot check is off until it is set (the site key is in turnstile.js)
 
 # Keep worker logs so a failed sync or send can be found afterwards.
 [observability]
