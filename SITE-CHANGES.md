@@ -5,11 +5,19 @@ October 2026 design pass to now. Newest first within each part. Every visible ch
 a line here in the same commit; when a deploy goes out, its lines move from "Waiting" to
 "Live" under that date. The commit is in brackets for anyone who wants the detail.
 
-Last deploy: **29 Oct 2026, workshops pricing and accessibility fixes** (main 2913963; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
+Last deploy: **29 Oct 2026 (later), menu keyboard fixes, questions announcements, dark badge** (main 9bb8ceb; pushing to main deploys the site automatically). Local copy: `http://localhost:8734`.
 
 ---
 
 ## Waiting to deploy (in the repo, not yet on iternal.co.uk)
+
+Nothing waiting.
+
+---
+
+## Live
+
+### 29 Oct 2026 (later), menu keyboard fixes, questions announcements, dark badge (main 9bb8ceb)
 
 #### Accessibility: three moderate findings from the 28 Oct audit (Robbie, 29 Oct; no pause button)
 - **Mobile menu, every page:** Escape now closes it properly. The icon goes back to the
@@ -21,10 +29,6 @@ Last deploy: **29 Oct 2026, workshops pricing and accessibility fixes** (main 29
   booking opens. Nothing on screen changes.
 - **Services, dark mode:** the "Most requested" badge text is a slightly lighter orange, so
   it reads clearly (5.25:1, from 4.15:1). Light mode is unchanged.
-
----
-
-## Live
 
 ### 29 Oct 2026, workshops pricing and accessibility fixes (main 2913963)
 
